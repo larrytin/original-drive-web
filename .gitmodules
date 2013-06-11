@@ -1,0 +1,3 @@
+[submodule "drive-web/src/main/webapp/closure-library"]
+	path = drive-web/src/main/webapp/closure-library
+	url = https://code.google.com/p/closure-library/
