@@ -1,9 +1,7 @@
 "use strict";
+goog.provide('good.drive.demo');
 
-var gdr = gdr || {};
-gdr.demo = gdr.demo || {};
-
-gdr.demo.connect = function(token) {
+good.drive.demo.connect = function(token) {
     var socket = gdr.demo.socket;
     if (socket != null) {
       socket.close();
