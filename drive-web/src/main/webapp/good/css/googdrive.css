@@ -1,12 +1,10 @@
 html,body,form {
   margin: 0;
   padding: 0;
+  font: 13px/27px Arial, sans-serif;
 }
 
-#gb {
-  font: 13px/27px Arial, sans-serif;
-  height: 102px
-}
+
 
 #gbz,#gbg {
   position: absolute;
@@ -323,7 +321,7 @@ html,body,form {
 }
 
 #gb {
-  height: 102px;
+  height: 82px;
   -moz-user-select: -moz-none;
   -o-user-select: none;
   -webkit-user-select: none;
@@ -961,4 +959,69 @@ px
 .gbsbic::-webkit-scrollbar-track:active {
   -webkit-box-shadow: inset 1px 0 0 rgba(0, 0, 0, .14), inset -1px -1px 0 rgba(0, 0, 0, .07);
   background-color: rgba(0, 0, 0, .05)
+}
+
+/**/
+
+.product-logo a {
+    color: #DD4B39;
+    text-decoration: none;
+}
+.product-logo.density-tiny {
+    font-size:20px;
+    padding:8px 0 10px 44px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.product-logo {
+    border-bottom: 1px solid #EBEBEB;
+    height: 29px;
+    line-height: 29px;
+
+}
+.goog-toolbar-item-new {
+    margin-right: 1px;
+}
+.goog-toolbar-item-new, .goog-toolbar-item-upload {
+    vertical-align: top;
+}
+.jfk-button-primary {
+    background-color: #D14836;
+    background-image: -moz-linear-gradient(center top , #DD4B39, #D14836);
+    border: 1px solid transparent;
+    box-shadow: none;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+}
+.jfk-button {
+    border-radius: 2px 2px 2px 2px;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    height: 27px;
+    line-height: 27px;
+    min-width: 54px;
+    outline: 0 none;
+    padding: 0 8px;
+    text-align: center;
+    white-space: nowrap;
+}
+.goog-inline-block {
+    display: inline-block;
+    position: relative;
+}
+
+.contentcreationpane.density-tiny {
+    padding: 14px 0 13px 44px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+
+.jfk-button-narrow {
+    min-width: 34px;
+    padding: 0;
+}
+.drive-sprite-core-upload {
+    background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 0 / 21px 405px transparent;
+    height: 16px;
+    width: 19px;
 }
