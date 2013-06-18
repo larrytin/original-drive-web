@@ -1,20 +1,57 @@
-// Copyright 2010 The Closure Library Authors. All Rights Reserved.
-//
-// Licensed under the Apache License, Version 2.0 (the "License");
-// you may not use this file except in compliance with the License.
-// You may obtain a copy of the License at
-//
-//      http://www.apache.org/licenses/LICENSE-2.0
-//
-// Unless required by applicable law or agreed to in writing, software
-// distributed under the License is distributed on an "AS-IS" BASIS,
-// WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
-// See the License for the specific language governing permissions and
-// limitations under the License.
 /*var testData = [
  '我的云端硬盘',
  [ [ '视频', [ [ 'a' ], [ 'b' ], [ '小班', [ [ 'a' ], [ 'b' ] ] ] ] ],
  [ '音乐', [ [ 'a' ], [ 'b' ] ] ], [ '课件', [ [ 'a' ], [ 'b' ] ] ] ] ]*/
 var testData = [
 		[ '视频', [ [ 'a' ], [ 'b' ], [ '小班', [ [ 'a' ], [ 'b' ] ] ] ] ],
-		[ '音乐', [ [ 'a' ], [ 'b' ] ] ], [ '课件', [ [ 'a' ], [ 'b' ] ] ] ]
+		[ '音乐', [ [ 'a' ], [ 'b' ] ] ], [ '课件', [ [ 'a' ], [ 'b' ] ] ] ];
+
+function importData(mod) {
+	var testmod = mod;
+	var testdata = mod.getRoot();
+	var rootlist = testmod.createList();
+	var leaflist;
+	
+	testdata.set("folders", rootlist);
+	
+	rootlist = testmod.createList();
+	rootlist.push("课件");
+	leaflist = testmod.createList();
+	leaflist.push("a");
+	leaflist.push("b");
+	leaflist.push("c");
+	leaflist.push("d");
+	rootlist.push(leaflist);
+	testdata.get("folders").push(rootlist);
+	
+	rootlist = testmod.createList();
+	rootlist.push("音乐");
+	leaflist = testmod.createList();
+	leaflist.push("a");
+	leaflist.push("b");
+	leaflist.push("c");
+	leaflist.push("d");
+	rootlist.push(leaflist);
+	testdata.get("folders").push(rootlist);
+	
+	rootlist = testmod.createList();
+	rootlist.push("科学");
+	leaflist = testmod.createList();
+	leaflist.push("a");
+	leaflist.push("b");
+	leaflist.push("c");
+	leaflist.push("d");
+	rootlist.push(leaflist);
+	testdata.get("folders").push(rootlist);
+	
+	rootlist = testmod.createList();
+	rootlist.push("社会");
+	leaflist = testmod.createList();
+	leaflist.push("a");
+	leaflist.push("b");
+	leaflist.push("c");
+	leaflist.push("d");
+	rootlist.push(leaflist);
+	testdata.get("folders").push(rootlist);
+};
+
