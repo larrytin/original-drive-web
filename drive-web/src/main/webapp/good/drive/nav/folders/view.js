@@ -20,7 +20,7 @@ function makeTree() {
 }
 
 function createTreeFromTestData(node, data) {
-	for ( var i = 0; i < data.length; i++) {
+	for (var i = 0; i < data.length; i++) {
 		var nodeData = data[i];
 		var childNode = node.getTree().createNode('');
 		node.add(childNode);

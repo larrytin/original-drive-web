@@ -17,9 +17,9 @@
         <groupId>org.eclipse.jetty</groupId>
         <artifactId>jetty-maven-plugin</artifactId>
         <version>9.0.3.v20130506</version>
-        <configuration>
+        <!-- <configuration>
           <scanIntervalSeconds>3</scanIntervalSeconds>
-        </configuration>
+        </configuration> -->
       </plugin>
       <!-- Google App Engine maven plugin -->
       <plugin>

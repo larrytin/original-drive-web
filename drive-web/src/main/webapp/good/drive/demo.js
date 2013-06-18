@@ -1,27 +1,13 @@
 'use strict';
 goog.provide('good.drive.demo');
 
-good.drive.demo.connect = function(token) {
-  var socket = gdr.demo.socket;
-  if (socket != null) {
-    socket.close();
-  }
+goog.require('goog.net.CrossDomainRpc');
 
-  var channel = new goog.appengine.Channel(token);
-
-  var socket = channel.open();
-  gdr.demo.socket = socket;
-
-  socket.onopen = function() {
-    console.log('op');
-  };
-  socket.onmessage = function(msg) {
-    console.log('msg:' + msg.data);
-  };
-  socket.onerror = function(err) {
-    console.log('error ' + err.code + '' + err.description);
-  };
-  socket.onclose = function() {
-    console.log('close');
-  };
+good.drive.demo.start = function() {
+	var opt_continuation = function(e) {
+		console.log(e);
+	};
+	// goog.net.CrossDomainRpc.send('http://realtime.goodow.com/ah/api/device/v1/deviceinfo', opt_continuation);
 };
+
+goog.exportSymbol('good.drive.demo.start', good.drive.demo.start);
