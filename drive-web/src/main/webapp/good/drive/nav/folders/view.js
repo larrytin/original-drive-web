@@ -4,31 +4,60 @@ goog.provide('good.drive.nav.folders.view');
 goog.require('goog.dom');
 goog.require('goog.ui.tree.TreeControl');
 
-var $ = goog.dom.getElement;
+good.drive.nav.folders.view.Tree = function() {
+	var this_ = this;
+	window.gdrOnLoad = function() {
+		good.realtime.authorize('fakeUserId', 'fakeToken');
+		var onInit = function(mod) {
+			importData(mod);
+		};
 
-function makeTree() {
+		var onLoad = function(doc) {
+			window.doc = doc;
+			window.mod = doc.getModel();
+			window.root = mod.getRoot();
+			if(window.root.size() == 0) {
+				importData(mod);
+			}
+			// connectUi();
+			this_.connectRealtime(doc);
+		};
+		good.realtime.load('@tmp/myFolders1', onLoad, onInit, null);
+	};
+};
+
+good.drive.nav.folders.view.Tree.prototype.connectRealtime = function(doc) {
+	this.makeTree();
+};
+
+good.drive.nav.folders.view.Tree.prototype.makeTree = function() {
 	var treeConfig = goog.ui.tree.TreeControl.defaultConfig;
 	treeConfig['cleardotPath'] = '../../images/tree/cleardot.gif';
 	var tree = new goog.ui.tree.TreeControl('我的云端硬盘', treeConfig);
 
-	createTreeFromTestData(tree, testData);
+	this.createTreeFromTestData(tree, window.root.get('folders'));
 
-	tree.render($('navfoldersview'));
+	tree.render(goog.dom.getElement('navfolderslist'));
 	tree.setIsUserCollapsible(true);
-	tree.setShowExpandIcons(false);
+	tree.setShowExpandIcons(true);
 	tree.setExpanded(true);
-}
+};
 
-function createTreeFromTestData(node, data) {
-	for ( var i = 0; i < data.length; i++) {
-		var nodeData = data[i];
+good.drive.nav.folders.view.Tree.prototype.createTreeFromTestData = function(
+		node, data) {
+	for ( var i = 0; i < data.length(); i++) {
+		var value = data.get(i);
 		var childNode = node.getTree().createNode('');
-		node.add(childNode);
-		childNode.setHtml(nodeData[0]);
-		if (nodeData[1]) {
-			createTreeFromTestData(childNode, nodeData[1]);
+		childNode.data = node.add(childNode);
+		if(goog.isString(value)) {
+			childNode.setHtml(value);
+			 continue;
+		}
+		childNode.setHtml(value.get(0));
+		if (value.get(1)) {
+			createTreeFromTestData(childNode, value);
 		}
 	}
-}
+};
 
-makeTree();
+var tree = new good.drive.nav.folders.view.Tree();
