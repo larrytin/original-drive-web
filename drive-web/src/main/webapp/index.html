@@ -11,12 +11,16 @@
     <br>Your browser must support JavaScript to display the Goodow Drive web user interface.
   </div>
 </noscript>
-<script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
+<script type="text/javascript" src="http://localhost:8080/_ah/channel/jsapi"></script>
+<!-- <script type="text/javascript" src="http://192.168.1.109:8080/good/realtime/realtime.nocache.js"></script> -->
+<!-- <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script> -->
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
 <script src="closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script src="good/drive/demo.js"></script>
+<script src="good/testdata.js"></script>
+<script src="good/drive/nav/folders/view.js"></script>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -148,7 +152,8 @@
   </div>
 <script>
   window.gdrOnLoad = function() {
-	good.drive.demo.start();  
+	good.drive.demo.start();
+	good.drive.nav.folders.view.start();
   };
 </script>
 </body>
