@@ -1,0 +1,303 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<meta http-equiv="Content-type" content="text/html;charset=UTF-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>早教平台</title>
+<link href='good/css/googdrive.css' type='text/css' rel='stylesheet'>
+<noscript>
+  <div class="loadingstatusbox" style="width: 325px">
+    <br>Your browser must support JavaScript to display the Goodow Drive web user interface.
+  </div>
+</noscript>
+<script src="closure-library/closure/goog/base.js"></script>
+<style type="text/css">
+html,body {
+  position: absolute;
+  height: 100%;
+  min-width: 100%;
+}
+
+.wrapper {
+  position: relative;
+  min-height: 100%;
+}
+
+.wrapper+style+iframe {
+  display: none;
+}
+
+.content {
+  padding: 0 44px;
+}
+
+.topbar {
+  text-align: right;
+  padding-top: .5em;
+  padding-bottom: .5em;
+}
+
+.google-header-bar {
+  height: 71px;
+  background: #f1f1f1;
+  border-bottom: 1px solid #e5e5e5;
+  overflow: hidden;
+}
+
+.header .logo {
+  margin: 17px 0 0;
+  float: left;
+}
+
+.header .signin,.header .signup {
+  margin: 28px 0 0;
+  float: right;
+  font-weight: bold;
+}
+
+.header .signin-button,.header .signup-button {
+  margin: 22px 0 0;
+  float: right;
+}
+
+.header .signin-button a {
+  font-size: 13px;
+  font-weight: normal;
+}
+
+.header .signup-button a {
+  position: relative;
+  top: -1px;
+  margin: 0 0 0 1em;
+}
+
+.main {
+  margin: 0 auto;
+  width: 650px;
+  padding-top: 23px;
+  padding-bottom: 100px;
+}
+
+.main h1:first-child {
+  margin: 0 0 .92em;
+}
+
+.google-footer-bar {
+  position: absolute;
+  bottom: 0;
+  height: 35px;
+  width: 100%;
+  border-top: 1px solid #ebebeb;
+  overflow: hidden;
+}
+
+.footer {
+  padding-top: 9px;
+  font-size: .85em;
+  white-space: nowrap;
+  line-height: 0;
+}
+
+.footer ul {
+  color: #999;
+  float: left;
+  max-width: 80%;
+}
+
+.footer ul li {
+  display: inline;
+  padding: 0 1.5em 0 0;
+}
+
+.footer a {
+  color: #333;
+}
+
+.footer .lang-chooser-wrap {
+  float: right;
+  max-width: 20%;
+}
+
+.footer .lang-chooser-wrap img {
+  vertical-align: middle;
+}
+
+.footer .attribution {
+  float: right;
+}
+
+.footer .attribution span {
+  vertical-align: text-top;
+}
+
+.redtext {
+  color: #dd4b39;
+}
+
+.greytext {
+  color: #555;
+}
+
+.secondary {
+  font-size: 11px;
+  color: #666;
+}
+
+.source {
+  color: #093;
+}
+
+.hidden {
+  display: none;
+}
+
+.announce-bar {
+  position: absolute;
+  bottom: 35px;
+  height: 33px;
+  z-index: 2;
+  width: 100%;
+  background: #f9edbe;
+  border-top: 1px solid #efe1ac;
+  border-bottom: 1px solid #efe1ac;
+  overflow: hidden;
+}
+
+.announce-bar .message {
+  font-size: .85em;
+  line-height: 33px;
+  margin: 0;
+}
+
+.announce-bar .message .separated {
+  margin-left: 1.5em;
+}
+
+.announce-bar-ac {
+  background: #eee;
+  border-top: 1px solid #e5e5e5;
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.clearfix:after {
+  visibility: hidden;
+  display: block;
+  font-size: 0;
+  content: '.';
+  clear: both;
+  height: 0;
+}
+
+* html .clearfix {
+  zoom: 1;
+}
+
+*:first-child+html .clearfix {
+  zoom: 1;
+}
+
+pre {
+  font-family: monospace;
+  position: absolute;
+  left: 0;
+  margin: 0;
+  padding: 1.5em;
+  font-size: 13px;
+  background: #f1f1f1;
+  border-top: 1px solid #e5e5e5;
+  direction: ltr;
+}
+</style>
+<style type="text/css">
+.main {
+  width: 950px;
+}
+
+.signupdonepage .welcome {
+  width: 500px;
+}
+
+.signupdonepage .welcome h2 {
+  color: #555;
+}
+
+.signupdonepage .welcome p {
+  color: #999;
+  font-size: 16px;
+  line-height: 22px;
+}
+
+.signupdonepage .welcome strong {
+  font-weight: normal;
+}
+
+.signupdonepage .continue {
+  margin: 2em 0 0;
+}
+
+.signupdonepage #submitbutton {
+  height: 38px;
+  padding: 0 20px;
+  font-size: 13px;
+  line-height: 38px;
+}
+
+.profile-arrow {
+  position: absolute;
+  top: 120px;
+  padding: 10px 95px 0 0;
+  right: 50px;
+  color: #666;
+  font-style: italic;
+  height: 55px;
+  width: 250px;
+  background: transparent url(//ssl.gstatic.com/accounts/signup/profile-arrow-ltr.png) no-repeat right 2px;
+}
+</style>
+</head>
+<body  class="jfk-scrollbar goog-useragent-webkit">
+  <div class="wrapper">
+    <div id=gb>
+    <div id=gbw>      
+      <div id=gbq>
+        <div id=gbq1 class="gbt">
+          <a class=gbqla href="http://retech.goodow.com" title="早教平台"><table id=gbqlt>
+              <tr>
+                <td id=gbqlw class=gbgt><span id=gbql></span></td>
+              </tr>
+            </table>
+            <div class=gbqlca></div></a>
+        </div>        
+      </div>
+      <div id=gbu>
+        <div id=gbvg class=gbvg>
+          <h2 class=gbxx>Account Options</h2>
+          <span class=gbtcb></span>
+          <ol class="gbtc gbsr">
+            <li class=gbt></li>
+            <li class=gbt guidedhelpid=gbacsw><a class="gbgt gbg4p" id=gbg4 href="" aria-haspopup=true aria-owns=gbd4><span
+                id=gbgs4d><span id=gbgs4dn>我的帐户</span><span class=gbmai></span><span class=gbmab></span><span class=gbmac></span></span></a></li>
+          </ol>
+          <div id=gbdw></div>
+        </div>
+      </div>
+    </div>
+    <div id=gbx1></div>
+    
+  </div>
+    <div class="signupdonepage main content clearfix">
+      <div class="welcome">
+        <h2>欢迎您！</h2>
+        <p>现在，您可以使用科睿星教学平台进行搜索和备课。</p>
+        <p>
+          您的用户名好是 <strong></strong>。
+        </p>
+        <p>感谢您创建帐户！祝您使用愉快！</p>
+        <form class="continue" id="continue" name="continue" method="post">
+          <input id="submitbutton" name="submitbutton" type="submit" value="返回科睿星平台" class="g-button g-button-submit">
+        </form>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -7,6 +7,7 @@
     <version>0.0.1-SNAPSHOT</version>
   </parent>
   <artifactId>drive-server</artifactId>
+  <packaging>war</packaging>
   <url>https://github.com/goodow/drive/</url>
   <inceptionYear>2013</inceptionYear>
   
@@ -110,6 +111,8 @@
   </dependencies>
 
   <build>
+    <outputDirectory>${project.build.directory}/${project.build.finalName}/WEB-INF/classes</outputDirectory>
+    
     <plugins>
       <!-- Google App Engine maven plugin -->
       <plugin>
