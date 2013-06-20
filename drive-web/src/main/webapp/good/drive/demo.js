@@ -7,7 +7,7 @@ good.drive.demo.start = function() {
   var opt_continuation = function(e) {
     console.log(e);
   };
-  var rpc = new good.net.CrossDomainRpc('GET', 'http://realtime.goodow.com/ah/api/device/v1/deviceinfo');
+  var rpc = new good.net.CrossDomainRpc('GET', 'http://localhost:8888/_ah/api/device/v1/deviceinfo');
   rpc.send(function(json) {
     var a = json;
   });

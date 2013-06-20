@@ -4,6 +4,8 @@
 <meta charset="utf-8">
 <title>科睿星平台</title>
 <meta name="description" content="科睿星平台">
+<script src="closure-library/closure/goog/base.js"></script>
+<script src="good/deps.js"></script>
 <style type="text/css">
 html,body,div,h1,h2,h3,h4,h5,h6,p,img,dl,dt,dd,ol,ul,li,table,tr,td,form,object,embed,article,aside,canvas,command,details,fieldset,figcaption,figure,footer,group,header,hgroup,legend,mark,menu,meter,nav,output,progress,section,summary,time,audio,video
   {
@@ -1348,7 +1350,7 @@ body.jfk-scrollbar::-webkit-scrollbar-corner {
 </style>
 
 </head>
-<body>
+<body onload="good.auth.start()">
   <div class="wrapper">
     <div class="google-header-bar">
       <div class="header content clearfix">
@@ -1365,7 +1367,7 @@ body.jfk-scrollbar::-webkit-scrollbar-corner {
           <h2>
                                        登录<strong></strong>
           </h2>
-          <form novalidate id="gaia_loginform" action="https://accounts.google.com/ServiceLoginAuth" method="post">
+          <form novalidate id="gaia_loginform" method="post">
 
             <div class="email-div">
               <label for="Email"><strong class="email-label">用户名</strong></label> <input type="text" spellcheck="false" name="user"
@@ -1374,7 +1376,7 @@ body.jfk-scrollbar::-webkit-scrollbar-corner {
             <div class="passwd-div">
               <label for="Passwd"><strong class="passwd-label">密码</strong></label> <input type="password" name="Passwd" id="Passwd">
             </div>
-            <input type="submit" class="g-button g-button-submit" name="signIn" id="signIn" value="登录">
+            <input type="button" class="g-button g-button-submit" name="signIn" id="signIn" value="登录">
           </form>          
         </div>
       </div>
@@ -1394,5 +1396,8 @@ body.jfk-scrollbar::-webkit-scrollbar-corner {
       </div>      
     </div>
   </div>
+<script>
+  goog.require('good.auth');
+</script>
 </body>
 </html>
