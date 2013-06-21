@@ -17,6 +17,7 @@ good.drive.nav.folders.view.Tree = function() {
 
 	var that = this;
 	good.realtime.authorize('fakeUserId', 'fakeToken');
+	good.realtime.setChannel('http://192.168.1.15:8888');
 	var onInit = function(mod) {
 		importData(mod);
 	};
@@ -25,86 +26,139 @@ good.drive.nav.folders.view.Tree = function() {
 		that.doc = doc;
 		that.mod = that.doc.getModel();
 		that.root = that.mod.getRoot();
+
+		that.renderTree(doc);
 		// connectUi();
 		that.connectRealtime(doc);
 	};
 	good.realtime.load('@tmp/myFolders1', onLoad, onInit, null);
 };
 
-good.drive.nav.folders.view.Tree.prototype.connectRealtime = function(doc) {
-	var list = this.root.get('folders');
-	var that = this;
-	list.addValuesAddedListener(function(evt) {
-		var childer = evt.getValues();
-		that.parseTree(that.tree, childer);
-	});
+good.drive.nav.folders.view.Tree.prototype.renderTree = function(doc) {
+	this.render(this.tree, this.root.get('folders'));
 };
 
-good.drive.nav.folders.view.Tree.prototype.listenerBind = function(parent, list) {
-	var that = this;
-	list.addValuesAddedListener(function(evt) {
-		that.insertNodes(parent, evt.getIndex(), evt.getValues());
-	});
-}
-
-good.drive.nav.folders.view.Tree.prototype.insertNodes = function(parent, idx,
-		children) {
-	alert(idx);
-	/*this.parseTree(parent, children);*/
-};
-
-good.drive.nav.folders.view.Tree.prototype.parseTree = function(node, data) {
-	var length = goog.isArray(data) ? data.length : data.length();
-	for(var i = 0; i < length; i++) {
-		var childNode = node.getTree().createNode('');
-		node.add(childNode);
-		var value = goog.isArray(data) ? data[i] : data.get(i);
-		if (goog.isString(value)) {
-			childNode.setHtml(value);
-			continue;
-		}
-		this.listenerBind(childNode, value);
-		childNode.setHtml(value.get(0));
-		if(value.get(1)) {
-			var list = value.get(1);
-			this.listenerBind(childNode, list);
-			this.parseTree(childNode, list);
-		}
-	}
-}
-
-good.drive.nav.folders.view.Tree.prototype.createTreeFromTestData = function(
-		node, jsonData) {
-	var that = this;
-	for ( var i = 0; i < jsonData.length(); i++) {
-		var childNode = node.getTree().createNode('');
-		node.add(childNode);
-		var value;
-		if (goog.isArray(jsonData)) {
-			value = jsonData[0];
+good.drive.nav.folders.view.Tree.prototype.render = function(parent, data, idx) {
+	data = goog.isArray(data) ? data : data.asArray();
+	for ( var i = 0; i < data.length; i++) {
+		var childNode = parent.getTree().createNode('');
+		if(idx == undefined) {
+			parent.add(childNode);
 		} else {
-			value = jsonData.get(i);
+			if(idx < parent.getChildCount() - 1) {
+				parent.removeChildAt(idx + i);
+			}
+			parent.addChildAt(childNode, idx + i);
 		}
+		var value = data[i];
 		if (goog.isString(value)) {
 			childNode.setHtml(value);
 			continue;
 		}
 		childNode.setHtml(value.get(0));
 		if (value.get(1)) {
-			var childData = value.get(1);
-			childData.addEventListener(good.realtime.EventType.VALUES_ADDED,
-					function(evt) {
-						that.insertNodes(childNode, evt.getIndex(), evt
-								.getValues());
-					});
-			// this.createTreeFromTestData(childNode, childData, childData
-			// .length());
+			this.render(childNode, value.get(1));
 		}
 	}
 };
 
+good.drive.nav.folders.view.Tree.prototype.connectRealtime = function(doc) {
+	var list = this.root.get('folders');
+	this.listenerBind(this.tree, list);
+};
+
+good.drive.nav.folders.view.Tree.prototype.listenerBind = function(parent, list, idx) {
+	this.bind(parent, list);
+	if (list.length() > 1) {
+		for ( var i = 0; i < list.length(); i++) {
+			var children;
+			if(idx == undefined) {
+				children = parent.getChildAt(i);
+			} else {
+				children = parent.getChildAt(idx);
+				if(goog.isObject(list.get(i))) {
+					this.listenerBind(children, list.get(i));
+				}
+				continue;
+			}
+			var value = list.get(i);
+			if(goog.isString(value)) {
+				continue;
+			}
+			if(goog.isObject(value) && value.length() == 2) {
+				this.bind(parent, value);
+			}
+			this.listenerBind(children, value.get(1));
+		}
+	}
+}
+
+good.drive.nav.folders.view.Tree.prototype.listenerUnBind = function(parent, list, idx) {
+	this.bind(parent, list);
+	if (list.length() > 1) {
+		for ( var i = 0; i < list.length(); i++) {
+			var children;
+			if(idx == undefined) {
+				children = parent.getChildAt(i);
+			} else {
+				children = parent.getChildAt(idx);
+				if(goog.isObject(list.get(i))) {
+					this.listenerBind(children, list.get(i));
+				}
+				continue;
+			}
+			var value = list.get(i);
+			if(goog.isString(value)) {
+				continue;
+			}
+			if(goog.isObject(value) && value.length() == 2) {
+				this.bind(parent, value);
+			}
+			this.listenerBind(children, value.get(1));
+		}
+	}
+}
+
+good.drive.nav.folders.view.Tree.prototype.bind = function(parent, list) {
+	var that = this;
+	var init = true;
+	var event = function(evt) {
+		if(init) {
+			init = false;
+			return;
+		}
+		var parent_ = parent;
+		var children = evt.getValues();
+		var idx = evt.getIndex();
+		that.insertNodes(parent, idx, children)
+		for(var c in children) {
+			if(goog.isObject(children[c])) {
+				that.listenerBind(parent, children[c], idx);
+			}
+		}
+	}
+	list.addValuesAddedListener(event);
+}
+
+good.drive.nav.folders.view.Tree.prototype.insertNodes = function(parent, idx,
+		children) {
+	console.log(parent.getHtml() + "-" + idx + "-" + children);
+	this.render(parent, children, idx);
+};
+
+good.drive.nav.folders.view.Tree.prototype.addFolder = function(list, idx, data) {
+	var str = list.get(idx);
+	var leaf = this.mod.createList();
+	leaf.push(data);
+	var root = this.mod.createList();
+	root.push(str);
+	root.push(leaf);
+	list.replaceRange(idx, root);
+}
+
 good.drive.nav.folders.view.start = function() {
 	var tree = new good.drive.nav.folders.view.Tree();
+	window.tree = tree;
 }
 
 goog.exportSymbol('good.drive.nav.folders.view.start',

@@ -114,7 +114,11 @@
                     </div>
                     </div>
                   <div id="navpane-container-scrollable" class="navpane-container-scrollable jfk-scrollbar jfk-scrollbar-borderless">
-                    <div id="navfoldersview" class="nav-tree-folder-view"></div>
+                    <div id="navfoldersview" class="nav-tree-folder-view">
+                      <div class="goog-list density-tiny">
+                        <div id="navfolderslist"></div>
+                      </div>
+                    </div>
                     <div id="navpanelist" class="goog-list navpane-top-list density-normal">
                       <div>
                         <div class="goog-list-menu-container">
@@ -169,7 +173,7 @@
     </div>
   </div>
 <script>
-  goog.require('good.drive.nav.folders.view');
+  goog.require("good.drive.nav.folders.view");
 </script>
 <script>
   window.gdrOnLoad = function() {
