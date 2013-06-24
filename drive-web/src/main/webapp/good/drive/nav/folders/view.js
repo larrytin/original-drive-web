@@ -1,6 +1,7 @@
 'use strict';
-goog.provide('good.drive.nav.folders.view');
+goog.provide('good.drive.nav.folders');
 
+goog.require('good.drive.nav.folders.Model');
 goog.require('goog.dom');
 goog.require('goog.ui.tree.TreeControl');
 
@@ -40,12 +41,12 @@ good.drive.nav.folders.view.Tree.prototype.renderTree = function(doc) {
 
 good.drive.nav.folders.view.Tree.prototype.render = function(parent, data, idx) {
 	data = goog.isArray(data) ? data : data.asArray();
-	for ( var i = 0; i < data.length; i++) {
+	for (var i = 0; i < data.length; i++) {
 		var childNode = parent.getTree().createNode('');
-		if(idx == undefined) {
+		if (idx == undefined) {
 			parent.add(childNode);
 		} else {
-			if(idx < parent.getChildCount() - 1) {
+			if (idx < parent.getChildCount() - 1) {
 				parent.removeChildAt(idx + i);
 			}
 			parent.addChildAt(childNode, idx + i);
@@ -64,85 +65,95 @@ good.drive.nav.folders.view.Tree.prototype.render = function(parent, data, idx) 
 
 good.drive.nav.folders.view.Tree.prototype.connectRealtime = function(doc) {
 	var list = this.root.get('folders');
-	this.listenerBind(this.tree, list);
+	// this.listenerBind(this.tree, list);
+	this.addEventListener(list);
+};
+
+good.drive.nav.folders.view.Tree.prototype.addEventListener = function(list) {
+  list.addValuesAddedListener(function(evt) {
+
+  });
+  for (var i = 0, len = list.length(); i < len; i++) {
+
+  }
 };
 
 good.drive.nav.folders.view.Tree.prototype.listenerBind = function(parent, list, idx) {
 	this.bind(parent, list);
 	if (list.length() > 1) {
-		for ( var i = 0; i < list.length(); i++) {
+		for (var i = 0; i < list.length(); i++) {
 			var children;
-			if(idx == undefined) {
+			if (idx == undefined) {
 				children = parent.getChildAt(i);
 			} else {
 				children = parent.getChildAt(idx);
-				if(goog.isObject(list.get(i))) {
+				if (goog.isObject(list.get(i))) {
 					this.listenerBind(children, list.get(i));
 				}
 				continue;
 			}
 			var value = list.get(i);
-			if(goog.isString(value)) {
+			if (goog.isString(value)) {
 				continue;
 			}
-			if(goog.isObject(value) && value.length() == 2) {
+			if (goog.isObject(value) && value.length() == 2) {
 				this.bind(parent, value);
 			}
 			this.listenerBind(children, value.get(1));
 		}
 	}
-}
+};
 
 good.drive.nav.folders.view.Tree.prototype.listenerUnBind = function(parent, list, idx) {
 	this.bind(parent, list);
 	if (list.length() > 1) {
-		for ( var i = 0; i < list.length(); i++) {
+		for (var i = 0; i < list.length(); i++) {
 			var children;
-			if(idx == undefined) {
+			if (idx == undefined) {
 				children = parent.getChildAt(i);
 			} else {
 				children = parent.getChildAt(idx);
-				if(goog.isObject(list.get(i))) {
+				if (goog.isObject(list.get(i))) {
 					this.listenerBind(children, list.get(i));
 				}
 				continue;
 			}
 			var value = list.get(i);
-			if(goog.isString(value)) {
+			if (goog.isString(value)) {
 				continue;
 			}
-			if(goog.isObject(value) && value.length() == 2) {
+			if (goog.isObject(value) && value.length() == 2) {
 				this.bind(parent, value);
 			}
 			this.listenerBind(children, value.get(1));
 		}
 	}
-}
+};
 
 good.drive.nav.folders.view.Tree.prototype.bind = function(parent, list) {
 	var that = this;
 	var init = true;
 	var event = function(evt) {
-		if(init) {
+		if (init) {
 			init = false;
 			return;
 		}
 		var parent_ = parent;
 		var children = evt.getValues();
 		var idx = evt.getIndex();
-		that.insertNodes(parent, idx, children)
-		for(var c in children) {
-			if(goog.isObject(children[c])) {
+		that.insertNodes(parent, idx, children);
+		for (var c in children) {
+			if (goog.isObject(children[c])) {
 				that.listenerBind(parent, children[c], idx);
 			}
 		}
-	}
+	};
 	list.addValuesAddedListener(event);
-}
+};
 
 good.drive.nav.folders.view.Tree.prototype.insertNodes = function(parent, idx,
-		children) {
-	console.log(parent.getHtml() + "-" + idx + "-" + children);
+    children) {
+	console.log(parent.getHtml() + '-' + idx + '-' + children);
 	this.render(parent, children, idx);
 };
 
@@ -154,12 +165,12 @@ good.drive.nav.folders.view.Tree.prototype.addFolder = function(list, idx, data)
 	root.push(str);
 	root.push(leaf);
 	list.replaceRange(idx, root);
-}
+};
 
 good.drive.nav.folders.view.start = function() {
 	var tree = new good.drive.nav.folders.view.Tree();
 	window.tree = tree;
-}
+};
 
 goog.exportSymbol('good.drive.nav.folders.view.start',
 		good.drive.nav.folders.view.start);
