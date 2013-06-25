@@ -93,26 +93,7 @@
                   <div class="product-logo density-normal density-tiny">
                     <a href="http://retech.goodow.com">早教平台</a>
                   </div>
-                    <div id="contentcreationpane" class="contentcreationpane mini-imagelessbutton-container density-tiny">
-                    <div class="goog-inline-block jfk-button jfk-button-primary goog-toolbar-item-new" tabindex="0" role="button" style="-moz-user-select: none;" aria-haspopup="true">
-                        <div class="goog-inline-block jfk-button-outer-box">
-                            <div class="goog-inline-block jfk-button-inner-box">
-                                <div class="goog-inline-block jfk-button-caption">创建</div>
-                                <div class="goog-inline-block jfk-button-dropdown"> </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="goog-inline-block jfk-button jfk-button-primary jfk-button-narrow goog-toolbar-item-upload" tabindex="0" role="button" style="-moz-user-select: none;" aria-haspopup="true" data-tooltip="上传" aria-label="上传">
-                    <div class="goog-inline-block jfk-button-outer-box">
-                        <div class="goog-inline-block jfk-button-inner-box">
-                            <div class="goog-inline-block jfk-button-caption">
-                                <span class="drive-sprite-core-upload upload-icon-position goog-inline-block"></span>
-                            </div>
-                        <div class="goog-inline-block jfk-button-dropdown"> </div>
-                        </div>
-                    </div>
-                    </div>
-                    </div>
+                    <div id="contentcreationpane" class="contentcreationpane mini-imagelessbutton-container density-tiny"></div>
                   <div id="navpane-container-scrollable" class="navpane-container-scrollable jfk-scrollbar jfk-scrollbar-borderless">
                     <div id="navfoldersview" class="nav-tree-folder-view">
                       <div class="goog-list density-tiny">
@@ -174,14 +155,14 @@
   </div>
 <script>
   goog.require('good.auth');
-  goog.require('good.drive.nav.folders');
+  goog.require('good.drive.init');
 </script>
 <script>
   good.auth.check();
   window.gdrOnLoad = function() {
     var auth = good.auth.Auth.current;
     good.realtime.authorize(auth.userId, auth.access_token);
-	good.drive.nav.folders.start();
+    good.drive.init.start();
   };
 </script>
 </body>

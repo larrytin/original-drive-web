@@ -1,7 +1,6 @@
 'use strict';
 goog.provide('good.drive.nav.folders');
 
-goog.require('goog.dom');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('good.drive.nav.folders.Model');
 
@@ -114,8 +113,8 @@ good.drive.nav.folders.Tree.prototype.insertFolder = function(parent, idx,
 	}
 }
 
-good.drive.nav.folders.start = function() {
+/*good.drive.nav.folders.start = function() {
 	var tree_ = new good.drive.nav.folders.Tree();
 }
 
-goog.exportSymbol('good.drive.nav.folders.start', good.drive.nav.folders.start);
+goog.exportSymbol('good.drive.nav.folders.start', good.drive.nav.folders.start);*/
