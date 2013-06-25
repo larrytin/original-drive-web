@@ -8,8 +8,8 @@ good.drive.nav.folders.Model = function(view) {
 
 	window.modelbak = this;
 	var that = this;
-	good.realtime.authorize('fakeUserId', 'fakeToken');
-	good.realtime.setChannel('http://192.168.1.15:8888');
+// good.realtime.setChannel('http://192.168.1.15:8888');
+// good.net.CrossDomainRpc.BASE_URL = 'http://192.168.1.15:8888/_ah/api/';
 	var onInit = function(mod) {
 		that.init(mod);
 	};
@@ -22,7 +22,7 @@ good.drive.nav.folders.Model = function(view) {
 		// connectUi();
 		that.connect(doc);
 	};
-	good.realtime.load('@tmp/a9', onLoad, onInit, null);
+	good.realtime.load('@tmp/a14', onLoad, onInit, null);
 };
 
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
@@ -54,7 +54,7 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
 				if(goog.isObject(val)) {
 					childrenDoms[arrayIdx].dom = that.view.insertFolder(parentDom, idx
 							+ i, [val]);
-//					that.addEventListener(childrenDoms[arrayIdx], val.get(1));
+// that.addEventListener(childrenDoms[arrayIdx], val.get(1));
 					continue;
 				}
 			}
@@ -75,38 +75,90 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
 };
 
 good.drive.nav.folders.Model.prototype.init = function(mod) {
-	var name = [ "我的课件", "我的音乐", "我的视频", "我的科学" ];
+// var name = [ "我的课件", "我的音乐", "我的视频", "我的科学" ];
+// var testdata = mod.getRoot();
+// var rootlist;
+// var leaflist;
+//
+// var folders = mod.createList();
+// testdata.set("folders", folders);
+//	
+// for ( var i in name) {
+// rootlist = mod.createList();
+// folders.push(rootlist);
+// leaflist = mod.createList();
+// rootlist.push(name[i]);
+// rootlist.push(leaflist);
+// leaflist.push(name[i] + "a");
+// leaflist.push(name[i] + "b");
+// leaflist.push(name[i] + "c");
+// leaflist.push(name[i] + "d");
+
+// rootlist = mod.createList();
+// rootlist.push(name[i] + "一年级");
+// leaflist = mod.createList();
+// leaflist.push(name[i] + "a");
+// leaflist.push(name[i] + "b");
+// leaflist.push(name[i] + "c");
+// leaflist.push(name[i] + "d");
+// folders.get(i).get(1).push(rootlist);
+	var testmod = mod;
 	var testdata = mod.getRoot();
-	var rootlist;
+	var rootlist = testmod.createList();
 	var leaflist;
 
-	var folders = mod.createList();
-	
-	for(var i in name) {
-		rootlist = mod.createList();
-		folders.push(rootlist);
-	}
+	testdata.set('folders', rootlist);
 
-	for ( var i in name) {
-		leaflist = mod.createList();
-		folders.get(i).push(name[i]);
-		folders.get(i).push(leaflist);
-		leaflist.push(name[i] + "a");
-		leaflist.push(name[i] + "b");
-		leaflist.push(name[i] + "c");
-		leaflist.push(name[i] + "d");
+	rootlist = testmod.createList();
+	rootlist.push('课件');
+	leaflist = testmod.createList();
+	leaflist.push('a');
+	leaflist.push('b');
+	leaflist.push('c');
+	leaflist.push('d');
+	rootlist.push(leaflist);
+	testdata.get('folders').push(rootlist);
 
-//		rootlist = mod.createList();
-//		rootlist.push(name[i] + "一年级");
-//		leaflist = mod.createList();
-//		leaflist.push(name[i] + "a");
-//		leaflist.push(name[i] + "b");
-//		leaflist.push(name[i] + "c");
-//		leaflist.push(name[i] + "d");
-//		folders.get(i).get(1).push(rootlist);
-	}
-	testdata.set("folders", folders);
+	rootlist = testmod.createList();
+	rootlist.push('音乐');
+	leaflist = testmod.createList();
+	leaflist.push('a');
+	leaflist.push('b');
+	leaflist.push('c');
+	leaflist.push('d');
+	rootlist.push(leaflist);
+	testdata.get('folders').push(rootlist);
 
+	rootlist = testmod.createList();
+	rootlist.push('科学');
+	leaflist = testmod.createList();
+	leaflist.push('a');
+	leaflist.push('b');
+	leaflist.push('c');
+	leaflist.push('d');
+	rootlist.push(leaflist);
+	testdata.get('folders').push(rootlist);
+
+	rootlist = testmod.createList();
+	rootlist.push('社会');
+	leaflist = testmod.createList();
+	leaflist.push('a');
+	leaflist.push('b');
+	leaflist.push('c');
+	leaflist.push('d');
+	rootlist.push(leaflist);
+	testdata.get('folders').push(rootlist);
+
+	rootlist = testmod.createList();
+	rootlist.push('一年级');
+	leaflist = testmod.createList();
+	leaflist.push('a');
+	leaflist.push('b');
+	leaflist.push('c');
+	leaflist.push('d');
+	rootlist.push(leaflist);
+
+	testdata.get('folders').get(0).get(1).push(rootlist);
 };
 
 good.drive.nav.folders.Model.prototype.addFolder = function(list, idx, data) {

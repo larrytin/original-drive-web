@@ -18,19 +18,6 @@ good.drive.nav.folders.Tree = function() {
 
 	var model_ = new good.drive.nav.folders.Model(this);
 	this.model = model_
-	this.model.connect();
-
-	/*
-	 * var that = this; good.realtime.authorize('fakeUserId', 'fakeToken');
-	 * good.realtime.setChannel('http://192.168.1.15:8888'); var onInit =
-	 * function(mod) { importData(mod); };
-	 * 
-	 * var onLoad = function(doc) { that.doc = doc; that.mod =
-	 * that.doc.getModel(); that.root = that.mod.getRoot();
-	 * 
-	 * that.renderTree(doc); // connectUi(); that.connectRealtime(doc); };
-	 * good.realtime.load('@tmp/myFolders1', onLoad, onInit, null);
-	 */
 };
 
 /*
