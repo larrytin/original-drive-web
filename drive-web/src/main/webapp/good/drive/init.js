@@ -4,9 +4,12 @@ goog.provide('good.drive.init');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.button');
+goog.require('good.config');
 goog.require('goog.dom');
 
 good.drive.init.start = function() {
+	good.config.start();
+	
 	var tree = new good.drive.nav.folders.Tree();
 	
 	var label = goog.dom.createDom('div', {'class' : 'goog-inline-block jfk-button-caption'}, '创建');
