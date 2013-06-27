@@ -1,6 +1,7 @@
 package com.goodow.drive.android;
 
 import com.goodow.drive.android.auth.OAuthFragment;
+import com.goodow.drive.android.helloworld.DataListActivity;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.GenericUrl;
@@ -19,58 +20,46 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
 
+import android.content.Intent;
+
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.os.Bundle;
 import android.view.Menu;
 
 public class HelloAndroidActivity extends Activity {
+  private OAuthFragment newFragment;
+  static String TOKEN;
   static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
   static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
   /**
+   * @return the tOKEN
+   */
+  public String getTOKEN() {
+    return TOKEN;
+  }
+
+  /**
    * Called when the activity is first created.
    * 
-   * @param savedInstanceState If the activity is being re-initialized after previously being shut
-   *          down then this Bundle contains the data it most recently supplied in
-   *          onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
+   * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data
+   *          it most recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    // Intent intent_ = new Intent(this, DataListActivity.class);
+    // this.startActivity(intent_);
+
+    if (null == TOKEN) {
+      showDialog();
+      return;
+    }
+
     setContentView(R.layout.activity_main);
 
-    HttpRequestFactory requestFactory =
-        HTTP_TRANSPORT.createRequestFactory(new HttpRequestInitializer() {
-          @Override
-          public void initialize(HttpRequest request) {
-            request.setParser(new JsonObjectParser(JSON_FACTORY));
-          }
-        });
-
-    GenericUrl url =
-        new GenericUrl(
-            "http://imgsrc.baidu.com/forum/crop%3D144%2C0%2C278%2C236%3Bwh%3D200%2C170%3B/sign=16617bd69358d109d0acf3f2ec69f88b/5d2048fbfbedab64c87a5568f636afc379311e39.jpg");
-
-    HttpRequest request;
-    try {
-      request = requestFactory.buildGetRequest(url);
-      HttpResponse response = request.execute();
-      InputStream is = response.getContent();
-      ByteArrayOutputStream bao = new ByteArrayOutputStream();
-      byte[] buffer = new byte[1024];
-      int len = 0;
-      while ((len = is.read(buffer)) != -1) {
-        bao.write(buffer, 0, len);
-      }
-      byte[] dates = bao.toByteArray();
-
-      FileOutputStream fos = new FileOutputStream(new File("test.jpg"));
-      fos.write(dates);
-      fos.close();
-    } catch (IOException e) {
-      e.printStackTrace();
-    }
   }
 
   @Override
@@ -80,14 +69,28 @@ public class HelloAndroidActivity extends Activity {
     return true;
   }
 
+  /**
+   * @param tOKEN the tOKEN to set
+   */
+  public void setTOKEN(String tOKEN) {
+    TOKEN = tOKEN;
+  }
+
+  @Override
+  protected void onResume() {
+    if (null != TOKEN) {
+      newFragment.dismiss();
+    }
+    super.onResume();
+  }
+
   // Display the oAuth web page in a dialog
   void showDialog() {
     FragmentTransaction ft = getFragmentManager().beginTransaction();
-    ft.addToBackStack(null);
+    // ft.addToBackStack(null);
 
     // Create and show the dialog.
-    OAuthFragment newFragment = new OAuthFragment();
+    newFragment = new OAuthFragment();
     newFragment.show(ft, "dialog");
   }
-
 }

@@ -27,7 +27,7 @@
     <application
         android:name="com.goodow.realtime.android.RealtimeApplication"
         android:allowBackup="true"
-        android:icon="@drawable/ic_launcher"
+        android:icon="@drawable/icon_launcher"
         android:label="@string/app_name"
         android:theme="@style/AppTheme" >
 
@@ -69,6 +69,10 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        
+        <activity android:name=".helloworld.DownloadActivity"/>
+        <activity android:name=".helloworld.MediaDownloadActivity"/>
+        <activity android:name=".helloworld.DataListActivity"/>
     </application>
 
 </manifest>
