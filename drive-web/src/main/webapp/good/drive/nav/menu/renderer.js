@@ -2,6 +2,9 @@ goog.provide('good.drive.nav.menu.ViewRenderer');
 
 goog.require('goog.ui.MenuRenderer');
 
+/**
+ * @constructor
+ */
 good.drive.nav.menu.ViewRenderer = function() {
 	goog.ui.MenuRenderer.call(this);
 };

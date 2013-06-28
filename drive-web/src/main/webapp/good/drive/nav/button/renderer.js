@@ -7,6 +7,9 @@ goog.require('goog.string');
 goog.require('goog.ui.ButtonRenderer');
 goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 
+/**
+ * @constructor
+ */
 good.drive.nav.button.Renderer = function() {
   goog.ui.ButtonRenderer.call(this);
 };
