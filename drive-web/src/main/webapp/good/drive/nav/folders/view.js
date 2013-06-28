@@ -4,6 +4,9 @@ goog.provide('good.drive.nav.folders');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('good.drive.nav.folders.Model');
 
+/**
+ * @constructor
+ */
 good.drive.nav.folders.Tree = function() {
 	var treeConfig = goog.ui.tree.TreeControl.defaultConfig;
 	treeConfig['cleardotPath'] = '../../images/tree/cleardot.gif';

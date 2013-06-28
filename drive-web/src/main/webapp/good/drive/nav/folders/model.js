@@ -1,8 +1,9 @@
 'use strict';
 goog.provide('good.drive.nav.folders.Model');
 
-goog.require('good.drive.nav.folders');
-
+/**
+ * @constructor
+ */
 good.drive.nav.folders.Model = function(view) {
 	this.view = view;
 
