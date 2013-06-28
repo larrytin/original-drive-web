@@ -3,6 +3,7 @@ package com.goodow.drive.android.auth;
 import com.goodow.drive.android.HelloAndroidActivity;
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.helloworld.DataListActivity;
+import com.goodow.realtime.Realtime;
 
 import android.app.DialogFragment;
 import android.content.Intent;
@@ -23,15 +24,17 @@ public class OAuthFragment extends DialogFragment {
       // this test depend of your API
       if (url.contains(UIT)) {
         // save your token
-        // Intent intent = new Intent(activity, DataListActivity.class);
-        // intent.putExtra("authorize", url);
-        // activity.setTOKEN(url);
-        // activity.startActivity(intent);
 
         String uid = url.substring(url.indexOf(UID) + UID.length(), url.indexOf(UIT));
         String uit = url.substring(url.indexOf(UIT) + UIT.length(), url.length());
-
         Log.i("LoginApp", uid + ":" + uit);
+
+        Realtime.authorize(uid, uit);
+
+        Intent intent = new Intent(activity, DataListActivity.class);
+        intent.putExtra("authorize", uid + "&&" + uit);
+        activity.setTOKEN(uid + "&&" + uit);
+        activity.startActivity(intent);
 
         return true;
       }
