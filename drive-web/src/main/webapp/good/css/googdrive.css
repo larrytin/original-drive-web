@@ -1406,3 +1406,399 @@ px
 .goog-flat-menu-button-hover .viewpane-toolbar-settings-icon {
   opacity: 0.72;
 }
+
+/*首页左侧树样式*/
+.navpane-container-scrollable {
+    overflow-x: hidden;
+    overflow-y: auto;
+    position: relative;
+}
+.navpane-top-list {
+    border-top: 0 none !important;
+    font-size: 13px;
+    overflow: hidden;
+    position: relative;
+}
+.navpane-top-list.density-normal {
+    line-height: 26px;
+    padding: 0 0 0 27px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane-top-list.density-small {
+    line-height: 20px;
+    padding: 0 0 0 11px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane-top-list.density-tiny {
+    line-height: 16px;
+    padding: 0 0 0 3px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane-top-list .goog-menu {
+    padding-bottom: 0;
+    padding-top: 0;
+}
+.navpane-top-list .goog-menuseparator {
+    margin-bottom: 3px;
+    margin-left: 16px;
+    margin-top: 4px;
+}
+.download-link {
+    cursor: pointer;
+    padding-left: 16px;
+    text-decoration: none;
+}
+.download-link .goog-tree-item-label {
+    white-space: normal;
+}
+.offline-disabled .download-link {
+    cursor: default;
+    opacity: 0.5;
+}
+.offline-disabled a.download-link:hover .goog-tree-item-label {
+    color: #222222;
+}
+.download-link:hover .goog-tree-item-label {
+    color: #1155CC;
+}
+.navpane-download-link.density-normal {
+    line-height: 26px;
+    padding-left: 28px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane-download-link.density-small {
+    line-height: 20px;
+    padding-left: 12px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane-download-link.density-tiny {
+    line-height: 16px;
+    padding-left: 0;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane-download-separator {
+    margin-bottom: 10px;
+    margin-left: 16px;
+    margin-top: 4px;
+}
+.navpane .goog-menu {
+    outline: medium none;
+}
+.nav-tree-folder-view {
+    margin-bottom: 16px;
+    overflow: hidden;
+    width: 100%;
+}
+.sc-navpane .nav-tree-folder-view {
+    margin-bottom: 0;
+}
+.sc-navpane-separator {
+    border-top-color: #FFFFFF;
+    margin: 3px 0 2px !important;
+}
+.nav-tree-folder-view .goog-list.density-normal {
+    padding: 0 0 0 27px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.nav-tree-folder-view .goog-list.density-small {
+    padding: 0 0 0 11px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.nav-tree-folder-view .goog-list.density-tiny {
+    padding: 0 0 0 3px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.goog-useragent-ie .nav-tree-folder-view .goog-list {
+    width: 100%;
+}
+.nav-tree-folder-view .goog-tree-root {
+    border: 0 none;
+    height: auto;
+    outline: medium none;
+    overflow: hidden;
+}
+.nav-tree-folder-view .goog-tree-row {
+    cursor: pointer;
+}
+.nav-tree-folder-view .goog-tree-row-hover {
+    background: none repeat scroll 0 0 #EEEEEE;
+    border: 1px solid #EEEEEE !important;
+    color: #000000;
+}
+.nav-tree-folder-view .goog-tree-disabled .goog-tree-row-hover {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid #FFFFFF !important;
+    color: #000000;
+}
+.nav-tree-folder-view .goog-tree-row-hover.goog-tree-row-icon-hover {
+    background-color: #FFFFFF;
+    border: 1px solid #FFFFFF !important;
+    color: #000000;
+}
+.goog-tree-row-icon-hover .navpane-expand-icon {
+    background-color: #EEEEEE;
+    color: #000000;
+}
+.navpane .navpane-top-list .goog-listitem {
+    border: 1px solid #FFFFFF;
+    padding-left: 0;
+    position: relative;
+}
+.navpane-top-list.density-normal .goog-listitem {
+    line-height: 26px;
+}
+.navpane-top-list.density-small .goog-listitem {
+    line-height: 20px;
+}
+.navpane-top-list.density-tiny .goog-listitem {
+    line-height: 16px;
+}
+.goog-listitem-icon.starred-icon {
+    background-image: url("https://ssl.gstatic.com/docs/doclist/images/icons_35.png");
+    background-position: -240px 0;
+    margin-left: 2px;
+    margin-top: -2px;
+    padding-top: 0;
+}
+.goog-useragent-ie7only .goog-listitem-icon.starred-icon {
+    margin-top: 0.035em;
+}
+.navpane .treedoclistview-node-message {
+    left: -5px;
+    position: relative;
+    top: -3px;
+}
+.navpane .goog-listitem-container, .navpane .goog-listitemheader-container {
+    vertical-align: top;
+}
+.navpane .navpane-top-list .goog-listitem-content {
+    padding-left: 16px;
+}
+.navpane .navpane-top-list.density-tiny .goog-listitem-content {
+    padding-left: 12px;
+}
+.navpane .goog-tree-item-label {
+    vertical-align: top;
+    width: auto;
+}
+.navpane .goog-list.density-normal .goog-tree-item-label {
+    margin-top: 4px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane .goog-list.density-small .goog-tree-item-label {
+    margin-top: 1px;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.navpane .goog-list.density-tiny .goog-tree-item-label {
+    margin-top: 0;
+    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
+}
+.goog-tree-item-dragover {
+    background-color: #EEEEEE;
+    border: 1px solid #4D90FE !important;
+}
+.navpane .goog-tree-item .selected .goog-tree-item-label {
+    color: #DD4B39;
+}
+.navpane .goog-tree-item .goog-tree-row-activated .goog-tree-item-label {
+    color: #DD4B39;
+}
+.selection-highlighter {
+    display: none;
+}
+.navpane .selection-highlighter {
+    border-left: 4px solid #FFFFFF;
+    bottom: 0;
+    display: block;
+    position: absolute;
+    top: 0;
+}
+.density-normal .selection-highlighter {
+    left: -28px;
+}
+.density-small .selection-highlighter {
+    left: -12px;
+}
+.density-tiny .selection-highlighter {
+    left: -6px;
+}
+.navpane-top-list.density-tiny .selection-highlighter {
+    left: -6px;
+}
+.navpane .selected .selection-highlighter {
+    border-left-color: #DD4B39;
+}
+.navpane .goog-tree-row-activated .selection-highlighter {
+    border-left-color: #DD4B39;
+}
+.navpane .goog-option-selected .selection-highlighter {
+    border-left-color: #DD4B39;
+}
+.navpane .goog-tree-item {
+    overflow: visible;
+}
+.navpane .goog-list-menu-container {
+    overflow: visible !important;
+}
+.navpane .goog-menu {
+    box-shadow: none;
+}
+.navpane .selected .goog-tree-item-label, .navpane .selected .treedoclistview-node-name {
+    font-weight: bold;
+}
+.navpane .goog-tree-row-activated .goog-tree-item-label, .navpane .goog-tree-row-activated .treedoclistview-node-name {
+    font-weight: bold;
+}
+.nav-tree-folder-view .goog-tree-row {
+    padding-bottom: 0;
+    padding-top: 0;
+    position: relative;
+    vertical-align: top;
+}
+.nav-tree-folder-view .goog-tree-item-label {
+    margin-top: 0 !important;
+}
+.nav-tree-folder-view .goog-list.density-normal .goog-tree-item-label {
+    padding: 7px 0;
+}
+.nav-tree-folder-view .goog-list.density-small .goog-tree-item-label {
+    padding: 4px 0;
+}
+.nav-tree-folder-view .goog-list.density-tiny .goog-tree-item-label {
+    padding: 2px 0;
+}
+.nav-tree-folder-view .goog-list.density-normal .goog-tree-row {
+    border: 1px solid #FFFFFF;
+    height: 28px;
+    line-height: 24px;
+}
+.nav-tree-folder-view .goog-list.density-small .goog-tree-row {
+    border: 1px solid #FFFFFF;
+    height: 22px;
+    line-height: 18px;
+}
+.nav-tree-folder-view .goog-list.density-tiny .goog-tree-row {
+    border: 1px solid #FFFFFF;
+    height: 18px;
+    line-height: 14px;
+}
+.nav-tree-folder-view .goog-tree-row-selected {
+    vertical-align: top;
+}
+.navpane .doclist-folder-triangle-pilled .documentpill {
+    padding-top: 1px;
+}
+.navpane .treedoclistview-node-name {
+    padding: 0 1px;
+}
+.navpane .treedoclistview-root-node-name {
+    font-size: 13px;
+}
+.navpane .treedoclistview-disabled-root-node-name {
+    color: #888888;
+}
+.goog-tree-row-hover .action-arrow, .goog-listitem-highlight .action-arrow {
+    background-color: #EEEEEE;
+}
+.nav-tree-folder-view .goog-tree-row-hover.goog-tree-row-icon-hover .action-arrow {
+    background-color: #FFFFFF;
+    color: #000000;
+}
+.goog-tree-item .selected .action-arrow, .goog-option-selected .action-arrow {
+    background-color: #EEEEEE;
+}
+.navpane-top-list .action-arrow {
+    font-size: 0.77em;
+    margin-top: 1px;
+    padding: 0 4px;
+}
+.nav-tree-folder-view .goog-list.density-normal .action-arrow {
+    padding-top: 7px;
+}
+.nav-tree-folder-view .goog-list.density-small .action-arrow {
+    padding-top: 5px;
+}
+.nav-tree-folder-view .goog-list.density-tiny .action-arrow {
+    padding-top: 3px;
+}
+.nav-tree-folder-view .action-arrow {
+    height: 14px;
+    padding-left: 4px;
+    padding-right: 4px;
+}
+.goog-useragent-ie .nav-tree-folder-view .goog-list.density-small .action-arrow {
+    padding-right: 16px;
+}
+.goog-useragent-ie .nav-tree-folder-view .goog-list.density-normal .action-arrow {
+    padding-right: 32px;
+}
+.nav-tree-folder-view .action-arrow-dropdown-container {
+    background-color: #FFFFFF;
+    border: 1px solid #E5E5E5;
+    height: 12px;
+    width: 12px;
+}
+.nav-tree-folder-view .action-arrow-dropdown-container:hover {
+    background-color: #E5E5E5;
+    border: 1px solid #BCBCBC;
+}
+.nav-tree-folder-view .goog-flat-menu-button-dropdown {
+    right: 2px;
+    top: 4px;
+}
+.navpane-expand-icon.doclist-folder-triangle-collapsed {
+    height: 100% !important;
+    opacity: 0.8;
+    width: 15px !important;
+}
+.goog-list.density-tiny .navpane-expand-icon.doclist-folder-triangle-collapsed {
+    width: 11px !important;
+}
+.goog-tree-row-icon-hover .navpane-expand-icon.doclist-folder-triangle-collapsed {
+    opacity: 1;
+}
+.goog-list.density-normal .navpane-expand-icon.doclist-folder-triangle-collapsed {
+    background-position: -1600px 10px !important;
+}
+.goog-list.density-small .navpane-expand-icon.doclist-folder-triangle-collapsed {
+    background-position: -1600px 7px !important;
+}
+.goog-list.density-tiny .navpane-expand-icon.doclist-folder-triangle-collapsed {
+    background-position: -1602px 5px !important;
+}
+.navpane-expand-icon.doclist-folder-triangle-expanded {
+    height: 100% !important;
+    opacity: 0.8;
+    width: 15px !important;
+}
+.goog-list.density-tiny .navpane-expand-icon.doclist-folder-triangle-expanded {
+    width: 11px !important;
+}
+.goog-tree-row-icon-hover .navpane-expand-icon.doclist-folder-triangle-expanded {
+    opacity: 1;
+}
+.goog-list.density-normal .navpane-expand-icon.doclist-folder-triangle-expanded {
+    background-position: -1582px 11px !important;
+}
+.goog-list.density-small .navpane-expand-icon.doclist-folder-triangle-expanded {
+    background-position: -1582px 8px !important;
+}
+.goog-list.density-tiny .navpane-expand-icon.doclist-folder-triangle-expanded {
+    background-position: -1584px 6px !important;
+}
+.more-caption .more-icon, .more-caption .less-icon {
+    height: 6px;
+    margin-top: -1px;
+    vertical-align: top;
+    width: 7px;
+}
+.more-caption .more-icon:before {
+    content: url("//ssl.gstatic.com/ui/v1/zippy/arrow_down.png");
+}
+.more-caption .less-icon:before {
+    content: url("//ssl.gstatic.com/ui/v1/icons/mail/arrow_up.png");
+}
+.connected-services-separator {
+    margin-top: 16px !important;
+}
+/*首页左侧树样式-over*/
