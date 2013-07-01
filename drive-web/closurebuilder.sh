@@ -1,11 +1,13 @@
-src/main/webapp/good.js/closure-library/closure/bin/build/closurebuilder.py \
-  --root=src/main/webapp/good.js/closure-library/ \
-  --root=src/main/webapp/good.js/good/ \
-  --root=src/main/webapp/good/ \
-  --namespace="good.drive.demo" \
+cd src/main/webapp
+good.js/closure-library/closure/bin/build/closurebuilder.py \
+  --root=good.js/closure-library/ \
+  --root=good.js/good/ \
+  --root=good/ \
+  --namespace="good.drive.init" \
   --output_mode=compiled \
-  --compiler_jar=compiler.jar \
+  --compiler_jar=$HOME/.m2/repository/com/goodow/javascript/closure-compiler/v20130603-SNAPSHOT/closure-compiler-v20130603-SNAPSHOT.jar \
   --compiler_flags="--compilation_level=ADVANCED_OPTIMIZATIONS" \
-  > src/main/webapp/good/compiled.js
-
-##  --compiler_jar=$HOME/.m2/repository/com/google/javascript/closure-compiler/v20130603/closure-compiler-v20130603.jar \
+  --compiler_flags="--externs=good.js/good/realtime/realtime.externs.js" \
+  --compiler_flags="--create_source_map=drive.js.map" \
+  > drive.js
+echo //@ sourceMappingURL=drive.js.map >> drive.js

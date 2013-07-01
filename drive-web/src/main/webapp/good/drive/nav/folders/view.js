@@ -22,6 +22,12 @@ good.drive.nav.folders.Tree = function() {
 	this.model = model_;
 };
 
+/**
+ * @param {goog.ui.tree.TreeControl} parent
+ * @param {number} idx
+ * @param {good.realtime.CollaborativeList} value
+ * @return {goog.ui.tree.TreeNode}
+ */
 good.drive.nav.folders.Tree.prototype.insertNode = function(parent, idx, value) {
 	console.log(parent.getHtml() + "-" + idx + "-" + value);
 	// this.render(parent, children, idx);
