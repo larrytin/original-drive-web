@@ -2,7 +2,7 @@
 // Please do not edit.
 goog.addDependency('../../../../good/drive/demo.js', ['good.drive.demo'], []);
 goog.addDependency('../../../../good/drive/init.js', ['good.drive.init'], ['good.auth', 'good.config', 'good.drive.nav.button', 'good.drive.nav.folders', 'good.drive.nav.menu', 'goog.dom']);
-goog.addDependency('../../../../good/drive/nav/button/renderer.js', ['good.drive.nav.button.Renderer'], ['goog.a11y.aria.Role', 'goog.dom.NodeType', 'goog.dom.classes', 'goog.string', 'goog.ui.ButtonRenderer', 'goog.ui.INLINE_BLOCK_CLASSNAME']);
+goog.addDependency('../../../../good/drive/nav/button/renderer.js', ['good.drive.nav.button.Renderer'], ['goog.a11y.aria.Role', 'goog.dom.NodeType', 'goog.dom.classes', 'goog.string', 'goog.ui.CustomButtonRenderer', 'goog.ui.INLINE_BLOCK_CLASSNAME']);
 goog.addDependency('../../../../good/drive/nav/button/view.js', ['good.drive.nav.button'], ['good.drive.nav.button.Renderer', 'goog.dom', 'goog.ui.CustomButton']);
 goog.addDependency('../../../../good/drive/nav/folders/model.js', ['good.drive.nav.folders.Model'], []);
 goog.addDependency('../../../../good/drive/nav/folders/view.js', ['good.drive.nav.folders'], ['good.drive.nav.folders.Model', 'goog.ui.tree.TreeControl']);
