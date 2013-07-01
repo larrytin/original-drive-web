@@ -1,6 +1,8 @@
 'use strict';
 goog.provide('good.drive.demo');
 
+
+/** */
 good.drive.demo.start = function() {
   var onLoad = function(doc) {
     var mod = doc.getModel();
