@@ -1,16 +1,24 @@
 'use strict';
 goog.provide('good.drive.demo');
 
-goog.require('good.net.CrossDomainRpc');
 
+/** */
 good.drive.demo.start = function() {
-  var opt_continuation = function(e) {
-    console.log(e);
+  var onLoad = function(doc) {
+    var mod = doc.getModel();
+    var root = mod.getRoot();
+    console.log(root.get('a'));
+    root.addValueChangedListener(function(evt) {
+      var property = evt.getProperty();
+      console.log(property);
+      console.log(evt.isLocal());
+    });
   };
-  var rpc = new good.net.CrossDomainRpc('GET', 'http://localhost:8888/_ah/api/device/v1/deviceinfo');
-  rpc.send(function(json) {
-    var a = json;
-  });
+  var onInit = function(mod) {
+    var root = mod.getRoot();
+    root.set('a', 'v');
+  };
+  good.realtime.load('@tmp/test3', onLoad, onInit, null);
 };
 
 goog.exportSymbol('good.drive.demo.start', good.drive.demo.start);

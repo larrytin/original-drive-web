@@ -18,10 +18,14 @@
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<script src="good.js/closure-library/closure/goog/base.js"></script>
+<!-- <script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
+<script>
+  goog.require('good.drive.init');
+</script> -->
+<script src="drive.js"></script>
 </head>
-<body class="jfk-scrollbar goog-useragent-webkit">
+<body class="jfk-scrollbar goog-useragent-webkit" onload="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
   <div id=gb>
     <div id=gbw>
@@ -236,17 +240,5 @@
       </div>
     </div>
   </div>
-  <script>
-  goog.require('good.auth');
-  goog.require('good.drive.init');
-</script>
-  <script>
-  good.auth.check();
-  window.gdrOnLoad = function() {
-    var auth = good.auth.Auth.current;
-    good.realtime.authorize(auth.userId, auth.access_token);
-    good.drive.init.start();
-  };
-</script>
 </body>
 </html>
