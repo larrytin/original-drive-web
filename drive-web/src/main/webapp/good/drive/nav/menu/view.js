@@ -12,6 +12,9 @@ goog.require('goog.ui.ControlRenderer');
 goog.require('goog.ui.MenuItemRenderer');
 goog.require('goog.ui.registry');
 
+/**
+ * @constructor
+ */
 good.drive.nav.menu.View = function() {
 	var render = goog.ui.ContainerRenderer.getCustomRenderer(
 			good.drive.nav.menu.ViewRenderer, 'detroit-createmenu');

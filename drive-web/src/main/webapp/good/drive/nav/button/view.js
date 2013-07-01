@@ -5,6 +5,9 @@ goog.require('goog.dom');
 goog.require('goog.ui.CustomButton');
 goog.require('good.drive.nav.button.Renderer');
 
+/**
+ * @constructor
+ */
 good.drive.nav.button.View = function(content, var_args) {
 	var button_ = new goog.ui.CustomButton(content, good.drive.nav.button.Renderer.getInstance());
 	button_.render(goog.dom.getElement('contentcreationpane'));
@@ -16,4 +19,4 @@ good.drive.nav.button.View = function(content, var_args) {
 
 good.drive.nav.button.View.prototype.getElement = function() {
 	return this.button.getElement();
-}
+};

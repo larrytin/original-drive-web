@@ -1,15 +1,16 @@
 'use strict';
 goog.provide('good.drive.nav.folders.Model');
 
-goog.require('good.drive.nav.folders');
-
+/**
+ * @constructor
+ */
 good.drive.nav.folders.Model = function(view) {
 	this.view = view;
 
 	window.modelbak = this;
 	var that = this;
-// good.realtime.setChannel('http://192.168.1.15:8888');
-// good.net.CrossDomainRpc.BASE_URL = 'http://192.168.1.15:8888/_ah/api/';
+	// good.realtime.setChannel('http://192.168.1.15:8888');
+	// good.net.CrossDomainRpc.BASE_URL = 'http://192.168.1.15:8888/_ah/api/';
 	var onInit = function(mod) {
 		that.init(mod);
 	};
@@ -22,7 +23,7 @@ good.drive.nav.folders.Model = function(view) {
 		// connectUi();
 		that.connect(doc);
 	};
-	good.realtime.load('@tmp/a14', onLoad, onInit, null);
+	good.realtime.load('@tmp/b5', onLoad, onInit, null);
 };
 
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
@@ -42,19 +43,19 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
 		var vals = evt.getValues();
 		var parentDom = parentHolder.dom;
 		var isAdd = false;
-		if(parentDom.getChildCount() != 0) {
+		if (parentDom.getChildCount() != 0) {
 			isAdd = true;
 		}
 		for ( var i in vals) {
 			var val = vals[i];
 			var arrayIdx = i;
-			if(isAdd) {
+			if (isAdd) {
 				var arrayIdx = idx + parseInt(i);
 				childrenDoms[arrayIdx] = {};
-				if(goog.isObject(val)) {
-					childrenDoms[arrayIdx].dom = that.view.insertFolder(parentDom, idx
-							+ i, [val]);
-// that.addEventListener(childrenDoms[arrayIdx], val.get(1));
+				if (goog.isObject(val)) {
+					var childrenDomsbak = that.addEventListener(childrenDoms[arrayIdx], val.get(1));
+					that.view.insertFolder(
+							parentDom, arrayIdx, [ val ], childrenDoms[arrayIdx], childrenDomsbak);
 					continue;
 				}
 			}
@@ -64,7 +65,7 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
 		isAdd = false;
 	});
 	for ( var i = 0, len = list.length(); i < len; i++) {
-		var value = list.get(i);
+		var value = list.get(i); 
 		childrenDoms[i] = {};
 		if (goog.isString(value)) {
 			continue;
@@ -72,93 +73,41 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
 		var children = value.get(1);
 		this.addEventListener(childrenDoms[i], children);
 	}
+	
+	return childrenDoms;
 };
 
 good.drive.nav.folders.Model.prototype.init = function(mod) {
-// var name = [ "我的课件", "我的音乐", "我的视频", "我的科学" ];
-// var testdata = mod.getRoot();
-// var rootlist;
-// var leaflist;
-//
-// var folders = mod.createList();
-// testdata.set("folders", folders);
-//	
-// for ( var i in name) {
-// rootlist = mod.createList();
-// folders.push(rootlist);
-// leaflist = mod.createList();
-// rootlist.push(name[i]);
-// rootlist.push(leaflist);
-// leaflist.push(name[i] + "a");
-// leaflist.push(name[i] + "b");
-// leaflist.push(name[i] + "c");
-// leaflist.push(name[i] + "d");
-
-// rootlist = mod.createList();
-// rootlist.push(name[i] + "一年级");
-// leaflist = mod.createList();
-// leaflist.push(name[i] + "a");
-// leaflist.push(name[i] + "b");
-// leaflist.push(name[i] + "c");
-// leaflist.push(name[i] + "d");
-// folders.get(i).get(1).push(rootlist);
-	var testmod = mod;
+	var name = [ "我的课件", "我的音乐", "我的视频", "我的科学" ];
 	var testdata = mod.getRoot();
-	var rootlist = testmod.createList();
+	var rootlist;
 	var leaflist;
 
-	testdata.set('folders', rootlist);
+	var folders = mod.createList();
+	testdata.set("folders", folders);
 
-	rootlist = testmod.createList();
-	rootlist.push('课件');
-	leaflist = testmod.createList();
-	leaflist.push('a');
-	leaflist.push('b');
-	leaflist.push('c');
-	leaflist.push('d');
-	rootlist.push(leaflist);
-	testdata.get('folders').push(rootlist);
+	for ( var i in name) {
+		rootlist = mod.createList();
+		rootlist.push(name[i]);
+		leaflist = mod.createList();
+		leaflist.push(name[i] + "a");
+		leaflist.push(name[i] + "b");
+		leaflist.push(name[i] + "c");
+		leaflist.push(name[i] + "d");
+		rootlist.push(leaflist);
 
-	rootlist = testmod.createList();
-	rootlist.push('音乐');
-	leaflist = testmod.createList();
-	leaflist.push('a');
-	leaflist.push('b');
-	leaflist.push('c');
-	leaflist.push('d');
-	rootlist.push(leaflist);
-	testdata.get('folders').push(rootlist);
-
-	rootlist = testmod.createList();
-	rootlist.push('科学');
-	leaflist = testmod.createList();
-	leaflist.push('a');
-	leaflist.push('b');
-	leaflist.push('c');
-	leaflist.push('d');
-	rootlist.push(leaflist);
-	testdata.get('folders').push(rootlist);
-
-	rootlist = testmod.createList();
-	rootlist.push('社会');
-	leaflist = testmod.createList();
-	leaflist.push('a');
-	leaflist.push('b');
-	leaflist.push('c');
-	leaflist.push('d');
-	rootlist.push(leaflist);
-	testdata.get('folders').push(rootlist);
-
-	rootlist = testmod.createList();
-	rootlist.push('一年级');
-	leaflist = testmod.createList();
-	leaflist.push('a');
-	leaflist.push('b');
-	leaflist.push('c');
-	leaflist.push('d');
-	rootlist.push(leaflist);
-
-	testdata.get('folders').get(0).get(1).push(rootlist);
+		folders.push(rootlist);
+		
+//		rootlist = mod.createList();
+//		rootlist.push(name[i] + "一年级");
+//		leaflist = mod.createList();
+//		leaflist.push(name[i] + "a");
+//		leaflist.push(name[i] + "b");
+//		leaflist.push(name[i] + "c");
+//		leaflist.push(name[i] + "d");
+//		
+//		folders.get(i).get(1).push(rootlist);
+	}
 };
 
 good.drive.nav.folders.Model.prototype.addFolder = function(list, idx, data) {
@@ -169,4 +118,4 @@ good.drive.nav.folders.Model.prototype.addFolder = function(list, idx, data) {
 	root.push(leaf);
 	leaf.push(data);
 	list.replaceRange(idx, root);
-}
+};

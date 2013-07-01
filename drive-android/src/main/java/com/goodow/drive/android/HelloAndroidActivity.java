@@ -78,10 +78,14 @@ public class HelloAndroidActivity extends Activity {
 
   @Override
   protected void onResume() {
-    if (null != TOKEN) {
-      newFragment.dismiss();
-    }
     super.onResume();
+
+    if (null != TOKEN && null != newFragment) {
+      newFragment.dismiss();
+    } else {
+      showDialog();
+      return;
+    }
   }
 
   // Display the oAuth web page in a dialog

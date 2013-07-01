@@ -4,6 +4,9 @@ goog.provide('good.drive.nav.folders');
 goog.require('goog.ui.tree.TreeControl');
 goog.require('good.drive.nav.folders.Model');
 
+/**
+ * @constructor
+ */
 good.drive.nav.folders.Tree = function() {
 	var treeConfig = goog.ui.tree.TreeControl.defaultConfig;
 	treeConfig['cleardotPath'] = '../../images/tree/cleardot.gif';
@@ -16,63 +19,15 @@ good.drive.nav.folders.Tree = function() {
 	this.tree = tree_;
 
 	var model_ = new good.drive.nav.folders.Model(this);
-	this.model = model_
+	this.model = model_;
 };
 
-/*
- * good.drive.nav.folders.Tree.prototype.renderTree = function(doc) {
- * this.render(this.tree, this.root.get('folders')); };
+/**
+ * @param {goog.ui.tree.TreeControl} parent
+ * @param {number} idx
+ * @param {good.realtime.CollaborativeList} value
+ * @return {goog.ui.tree.TreeNode}
  */
-
-/*good.drive.nav.folders.Tree.prototype.render = function(parent, data, idx) {
- data = goog.isArray(data) ? data : data.asArray();
- for ( var i = 0; i < data.length; i++) {
- var childNode = parent.getTree().createNode('');
- if (idx == undefined) {
- parent.add(childNode);
- } else {
- if (idx < parent.getChildCount() - 1) {
- parent.removeChildAt(idx + i);
- }
- parent.addChildAt(childNode, idx + i);
- }
- var value = data[i];
- if (goog.isString(value)) {
- childNode.setHtml(value);
- continue;
- }
- childNode.setHtml(value.get(0));
- if (value.get(1)) {
- this.render(childNode, value.get(1));
- }
- }
- };*/
-
-/*
- * good.drive.nav.folders.Tree.prototype.connectRealtime = function(doc) { var
- * list = this.root.get('folders'); this.listenerBind(this.tree, list); };
- */
-
-/*
- * good.drive.nav.folders.Tree.prototype.listenerBind = function(parent, list,
- * idx) { this.bind(parent, list); if (list.length() > 1) { for ( var i = 0; i <
- * list.length(); i++) { var children; if(idx == undefined) { children =
- * parent.getChildAt(i); } else { children = parent.getChildAt(idx);
- * if(goog.isObject(list.get(i))) { this.listenerBind(children, list.get(i)); }
- * continue; } var value = list.get(i); if(goog.isString(value)) { continue; }
- * if(goog.isObject(value) && value.length() == 2) { this.bind(parent, value); }
- * this.listenerBind(children, value.get(1)); } } }
- */
-
-/*
- * good.drive.nav.folders.Tree.prototype.bind = function(parent, list) { var
- * that = this; var init = true; var event = function(evt) { if(init) { init =
- * false; return; } var parent_ = parent; var children = evt.getValues(); var
- * idx = evt.getIndex(); that.insertNodes(parent, idx, children) for(var c in
- * children) { if(goog.isObject(children[c])) { that.listenerBind(parent,
- * children[c], idx); } } } list.addValuesAddedListener(event); }
- */
-
 good.drive.nav.folders.Tree.prototype.insertNode = function(parent, idx, value) {
 	console.log(parent.getHtml() + "-" + idx + "-" + value);
 	// this.render(parent, children, idx);
@@ -89,32 +44,29 @@ good.drive.nav.folders.Tree.prototype.insertNode = function(parent, idx, value) 
 };
 
 good.drive.nav.folders.Tree.prototype.insertFolder = function(parent, idx,
-		value) {
-	value = goog.isArray(value) ? value : value.asArray();
-	for ( var i = 0; i < value.length; i++) {
+		data, parentHolder, childrenHolder) {
+	data = goog.isArray(data) ? data : data.asArray();
+	for ( var i = 0; i < data.length; i++) {
 		var childNode = parent.getTree().createNode('');
+		if(parentHolder != undefined) {
+			parentHolder.dom = childNode;
+		} else {
+			childrenHolder[i].dom = childNode;
+		}
 		if (idx == undefined) {
 			parent.add(childNode);
 		} else {
-			if (idx < parent.getChildCount() - 1) {
-				parent.removeChildAt(idx + i);
-			}
+			parent.removeChildAt(idx + i);
 			parent.addChildAt(childNode, idx + i);
 		}
-		var value = value[i];
+		var value = data[i];
 		if (goog.isString(value)) {
 			childNode.setHtml(value);
 			continue;
 		}
 		childNode.setHtml(value.get(0));
 		if (value.get(1)) {
-			this.insertFolder(childNode, value.get(1));
+			this.insertFolder(childNode, undefined, value.get(1), undefined, childrenHolder);
 		}
 	}
-}
-
-/*good.drive.nav.folders.start = function() {
-	var tree_ = new good.drive.nav.folders.Tree();
-}
-
-goog.exportSymbol('good.drive.nav.folders.start', good.drive.nav.folders.start);*/
+};
