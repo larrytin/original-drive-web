@@ -1802,3 +1802,91 @@ px
     margin-top: 16px !important;
 }
 /*首页左侧树样式-over*/
+
+/*首页左创建buttom 弹出框样式-begin   */  
+
+.detroit-createmenu-centralelements {
+    display: inline-block;
+}
+
+.detroit-createmenu-page-control-icon {
+    background-image: url(../images/icons_35.png);
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    opacity: 0.6;
+    width: 16px;
+}
+
+.detroit-createmenu-pageindicator {
+     background-image:url(../images/icons_35.png);
+    background-position: -2058px 0;
+    background-repeat: no-repeat;
+    display: inline-block;
+    height: 16px;
+    opacity: 0.15;
+    padding-left: 4px;
+    padding-right: 4px;
+    transition: opacity 0.2s linear 0s;
+    width: 50px;
+}
+
+.detroit-createmenu-pageindicator-active {
+    opacity: 0.6;
+}
+.detroit-createmenu-pageindicator-inactive {
+    cursor: pointer;
+    opacity: 0.15;
+}
+.detroit-createmenu-pageindicator-inactive:hover {
+    opacity: 0.3;
+}
+.detroit-createmenuitem {
+    cursor: pointer;
+    padding: 6px 12px;
+    white-space: nowrap;
+}
+.detroit-createmenuitem-disabled.detroit-createmenuitem {
+    cursor: default;
+}
+.detroit-createmenuitem-name {
+    overflow: hidden;
+    padding-top: 8px;
+    text-overflow: ellipsis;
+    vertical-align: top;
+    white-space: nowrap;
+}
+.detroit-createmenuitem-disabled .detroit-createmenuitem-name {
+    color: #CCCCCC;
+}
+.detroit-createmenuitem-name {
+    width: 130px;
+}
+.detroit-createmenu-getmoreapps-container {
+    background-color: #F3F3F3;
+    color: #555555;
+    font-size: 13px;
+    font-weight: bold;
+    text-align: center;
+}
+.detroit-createmenu-getmoreapps-container .goog-menuitem {
+    border: medium none;
+    box-shadow: 0 5px 8px -3px #CCCCCC inset;
+    padding: 10px 0;
+    width: 100%;
+}
+.goog-menu {
+    background: none repeat scroll 0 0 #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.2);
+    border-radius: 0 0 0 0;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    cursor: default;
+    font-size: 13px;
+    margin: 0;
+    outline: medium none;
+    padding: 6px 0;
+    position: absolute;
+    transition: opacity 0.218s ease 0s;
+}
+
+/*首页左创建buttom 弹出框样式 */
