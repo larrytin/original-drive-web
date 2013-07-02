@@ -57,7 +57,7 @@ good.drive.nav.folders.Model.FILECHILD = 'filechild';
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
   var folders = this.root.get(good.drive.nav.folders.Model.FOLDERS);
   var that = this;
-  this.addEventListener({
+  this.addEventListener(/** @struct */{
     dom: that.view.tree
   }, folders);
 };
@@ -75,9 +75,7 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
   for (var i = 0, len = list.length(); i < len; i++) {
     var value = list.get(i);
     childrenDoms[i] = {};
-    if (value instanceof good.realtime.CollaborativeMap) {
-      this.mapHander(value, parentHolder, childrenDoms);
-    }
+    this.mapHander(value, parentHolder, childrenDoms);
     var children = value.get(good.drive.nav.folders.Model.FOLDERSCHILD);
     this.addEventListener(childrenDoms[i], children);
   }
@@ -88,10 +86,10 @@ good.drive.nav.folders.Model.prototype.addEventListener = function(
 /**
  * @param {good.realtime.CollaborativeMap} map
  * @param {Object} parentHolder
- * @param {Array.<Object>} childrenDoms
+ * @param {Object} selfDom
  */
 good.drive.nav.folders.Model.prototype.mapHander = function(map,
-    parentHolder, childrenDoms) {
+    parentHolder, selfDom) {
   map.addValueChangedListener(function(evt) {
     var str = 'abc';
   });
@@ -117,7 +115,7 @@ good.drive.nav.folders.Model.prototype.getLeaf = function(str) {
 /**
  * @param {good.realtime.CollaborativeList} list
  * @param {Object} parentHolder
- * @param {Array.<Object>} childrenDoms
+ * @param {Object} childrenDoms
  */
 good.drive.nav.folders.Model.prototype.listHander = function(list,
     parentHolder, childrenDoms) {
@@ -127,7 +125,7 @@ good.drive.nav.folders.Model.prototype.listHander = function(list,
     var vals = evt.getValues();
     var parentDom = parentHolder.dom;
     var isAdd = false;
-    if (parentDom.getChildCount() != 0) {
+    if (parentDom.getChildCount() != 0 || childrenDoms.length == 0) {
       isAdd = true;
     }
     if (parentDom.data == undefined) {
@@ -141,22 +139,21 @@ good.drive.nav.folders.Model.prototype.listHander = function(list,
         var arrayIdx = idx + intI;
         childrenDoms[arrayIdx] = {};
         if (val instanceof good.realtime.CollaborativeMap) {
+          var folderchild = val.get(good.drive.nav.folders.Model.FOLDERSCHILD);
           that.mapHander(val, parentHolder, childrenDoms[arrayIdx]);
           that.addEventListener(
-              childrenDoms[arrayIdx],
-              val.get(good.drive.nav.folders.Model.FOLDERS));
-        } else if (val instanceof good.realtime.CollaborativeList) {
-          var childrenDomsbak = that.addEventListener(
-              childrenDoms[arrayIdx], val);
-          that.view.insertFolder(parentDom, arrayIdx, [val],
-              childrenDoms[arrayIdx], childrenDomsbak);
-          continue;
+              childrenDoms[arrayIdx], folderchild);
         }
       }
       childrenDoms[arrayIdx].dom = that.view.insertNode(
           parentDom, idx + intI, val);
     }
     isAdd = false;
+  });
+  list.addValuesRemovedListener(function(evt) {
+	  var idx = evt.getIndex();
+	  goog.array.removeAt(childrenDoms, idx);
+	  that.view.removeNode(parentHolder.dom, idx);
   });
 };
 
@@ -232,20 +229,4 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
 
     folders.push(map);
   }
-};
-
-
-/**
- * @param {good.realtime.CollaborativeList} list
- * @param {number} idx
- * @param {string} data
- */
-good.drive.nav.folders.Model.prototype.addFolder = function(list, idx, data) {
-  var str = list.get(idx);
-  var root = this.mod.createList();
-  var leaf = this.mod.createList();
-  root.push(str);
-  root.push(leaf);
-  leaf.push(data);
-  list.replaceRange(idx, root);
 };

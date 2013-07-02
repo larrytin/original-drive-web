@@ -43,6 +43,11 @@ good.drive.nav.folders.Tree.prototype.insertNode =
   return childNode;
 };
 
+good.drive.nav.folders.Tree.prototype.removeNode =
+    function(parent, idx) {
+	parent.removeChildAt(idx);
+};
+
 
 /**
  * @param {string} str
@@ -50,42 +55,17 @@ good.drive.nav.folders.Tree.prototype.insertNode =
 good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
   var selected = this.tree.getSelectedItem();
   var map = this.model.getLeaf(str);
+  if(selected.getChildCount() == 0) {
+	  var id = selected.getId();
+	  var parent = selected.getParent();
+	  var childIds = parent.getChildIds();
+	  var index = childIds.indexOf(id);
+	  var list = parent.data.get(index).get(good.drive.nav.folders.Model.FOLDERSCHILD);
+	  list.push(map);
+	  return;
+  }
   selected.data.push(map);
 };
 
-
-/**
- * @param {goog.ui.tree.TreeControl} parent
- * @param {number} idx
- * @param {good.realtime.CollaborativeList} data
- * @param {Object} parentHolder
- * @param {Array.<Object>} childrenHolder
- */
-good.drive.nav.folders.Tree.prototype.insertFolder = function(parent, idx,
-    data, parentHolder, childrenHolder) {
-  data = goog.isArray(data) ? data : data.asArray();
-  for (var i = 0; i < data.length; i++) {
-    var childNode = parent.getTree().createNode('');
-    if (parentHolder != undefined) {
-      parentHolder.dom = childNode;
-    } else {
-      childrenHolder[i].dom = childNode;
-    }
-    if (idx == undefined) {
-      parent.add(childNode);
-    } else {
-      parent.removeChildAt(idx + i);
-      parent.addChildAt(childNode, idx + i);
-    }
-    var value = data[i];
-    if (goog.isString(value)) {
-      childNode.setHtml(value);
-      continue;
-    }
-    childNode.setHtml(value.get(0));
-    if (value.get(1)) {
-      this.insertFolder(childNode, undefined,
-          value.get(1), undefined, childrenHolder);
-    }
-  }
+good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
 };
