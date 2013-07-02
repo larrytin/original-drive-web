@@ -1,4 +1,4 @@
-package com.goodow.drive.android.helloworld;
+package com.goodow.drive.android.activity;
 
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.adapter.MyArrayAdapter;

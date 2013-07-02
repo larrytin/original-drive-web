@@ -1,8 +1,8 @@
 package com.goodow.drive.android.auth;
 
-import com.goodow.drive.android.LogInActivity;
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.helloworld.DataListActivity;
+import com.goodow.drive.android.activity.DataListActivity;
+import com.goodow.drive.android.activity.LogInActivity;
 import com.goodow.realtime.Realtime;
 
 import android.app.DialogFragment;

@@ -1,20 +1,27 @@
-package com.goodow.drive.android;
+package com.goodow.drive.android.activity;
 
-import com.goodow.drive.android.helloworld.DataListActivity;
+import com.goodow.drive.android.R;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.Realtime;
+
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import android.webkit.WebSettings;
-import android.util.Log;
-import android.webkit.WebViewClient;
-import android.webkit.WebView;
-import android.content.Intent;
-import android.app.Activity;
-import android.os.Bundle;
-import android.view.Menu;
 
+import java.io.File;
+
+import android.annotation.SuppressLint;
+import android.app.Activity;
+import android.content.Intent;
+import android.os.Bundle;
+import android.os.Environment;
+import android.util.Log;
+import android.webkit.WebSettings;
+import android.webkit.WebView;
+import android.webkit.WebViewClient;
+
+@SuppressLint("SetJavaScriptEnabled")
 public class LogInActivity extends Activity {
   private class MyWebViewClient extends WebViewClient {
     @Override
@@ -26,15 +33,23 @@ public class LogInActivity extends Activity {
 
         String uid = url.substring(url.indexOf(UID) + UID.length(), url.indexOf(UIT));
         String uit = url.substring(url.indexOf(UIT) + UIT.length(), url.length());
+        GlobalDataCacheForMemorySingleton.getInstance.setUserId(uid);
+        GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(uit);
+
+        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
+          File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getUserResDirPath());
+          if (!file.exists()) {
+            file.mkdir();
+          }
+        }
+
         Log.i("LoginApp", uid + ":" + uit);
 
+        // 通知。。。
         Realtime.authorize(uid, uit);
 
         Intent intent = new Intent(LogInActivity.this, DataListActivity.class);
-        intent.putExtra("authorize", uid + "&&" + uit);
         LogInActivity.this.startActivity(intent);
-
-        LogInActivity.this.finish();
 
         return true;
       }
@@ -60,7 +75,7 @@ public class LogInActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
+    setContentView(R.layout.activity_login);
 
     webViewOauth = (WebView) findViewById(R.id.web_oauth);
 
@@ -75,20 +90,4 @@ public class LogInActivity extends Activity {
     webViewOauth.setWebViewClient(new MyWebViewClient());
     // activates JavaScript (just in case)
   }
-
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    // Inflate the menu; this adds items to the action bar if it is present.
-    getMenuInflater().inflate(R.menu.main, menu);
-    return true;
-  }
-
-  // // Display the oAuth web page in a dialog
-  // void showDialog() {
-  // FragmentTransaction ft = getFragmentManager().beginTransaction();
-  //
-  // // Create and show the dialog.
-  // newFragment = new OAuthFragment();
-  // newFragment.show(ft, "dialog");
-  // }
 }
