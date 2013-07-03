@@ -11,7 +11,7 @@ goog.require('goog.ui.tree.TreeControl');
  */
 good.drive.nav.folders.Tree = function() {
   var treeConfig = goog.ui.tree.TreeControl.defaultConfig;
-  treeConfig['cleardotPath'] = '../../images/tree/cleardot.gif';
+  treeConfig['cleardotPath'] = '../../images  ree/cleardot.gif';
   var tree_ = new goog.ui.tree.TreeControl('我的资料库', treeConfig);
   tree_.render(goog.dom.getElement('navfolderslist'));
   tree_.setIsUserCollapsible(true);
@@ -19,7 +19,7 @@ good.drive.nav.folders.Tree = function() {
   tree_.setExpanded(true);
 
   this.tree = tree_;
-  
+
   window.treebak = this;
 
   var model_ = new good.drive.nav.folders.Model(this);
@@ -43,9 +43,13 @@ good.drive.nav.folders.Tree.prototype.insertNode =
   return childNode;
 };
 
-good.drive.nav.folders.Tree.prototype.removeNode =
-    function(parent, idx) {
-	parent.removeChildAt(idx);
+
+/**
+ * @param {goog.ui.tree.TreeControl} parent
+ * @param {number} idx
+ */
+good.drive.nav.folders.Tree.prototype.removeNode = function(parent, idx) {
+  parent.removeChildAt(idx);
 };
 
 
@@ -55,17 +59,26 @@ good.drive.nav.folders.Tree.prototype.removeNode =
 good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
   var selected = this.tree.getSelectedItem();
   var map = this.model.getLeaf(str);
-  if(selected.getChildCount() == 0) {
-	  var id = selected.getId();
-	  var parent = selected.getParent();
-	  var childIds = parent.getChildIds();
-	  var index = childIds.indexOf(id);
-	  var list = parent.data.get(index).get(good.drive.nav.folders.Model.FOLDERSCHILD);
-	  list.push(map);
-	  return;
+  if (selected.getChildCount() == 0) {
+    var id = selected.getId();
+    var parent = selected.getParent();
+    var childIds = parent.getChildIds();
+    var index = childIds.indexOf(id);
+    var list = parent.data.get(index).get(
+        good.drive.nav.folders.Model.FOLDERSCHILD);
+    list.push(map);
+    return;
   }
   selected.data.push(map);
 };
 
+
+/**  */
 good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
+  var selected = this.tree.getSelectedItem();
+  var id = selected.getId();
+  var parent = selected.getParent();
+  var childIds = parent.getChildIds();
+  var index = childIds.indexOf(id);
+  parent.data.remove(index);
 };
