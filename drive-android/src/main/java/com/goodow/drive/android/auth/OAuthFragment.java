@@ -1,8 +1,8 @@
 package com.goodow.drive.android.auth;
 
-import com.goodow.drive.android.HelloAndroidActivity;
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.helloworld.DataListActivity;
+import com.goodow.drive.android.activity.DataListActivity;
+import com.goodow.drive.android.activity.LogInActivity;
 import com.goodow.realtime.Realtime;
 
 import android.app.DialogFragment;
@@ -33,7 +33,7 @@ public class OAuthFragment extends DialogFragment {
 
         Intent intent = new Intent(activity, DataListActivity.class);
         intent.putExtra("authorize", uid + "&&" + uit);
-        activity.setTOKEN(uid + "&&" + uit);
+        // activity.setTOKEN(uid + "&&" + uit);
         activity.startActivity(intent);
 
         return true;
@@ -47,7 +47,7 @@ public class OAuthFragment extends DialogFragment {
 
   private static final String UIT = "&access_token=";
 
-  private static HelloAndroidActivity activity;
+  private static LogInActivity activity;
 
   private WebView webViewOauth;
 
@@ -68,7 +68,7 @@ public class OAuthFragment extends DialogFragment {
   @Override
   public void onViewCreated(View arg0, Bundle arg1) {
     super.onViewCreated(arg0, arg1);
-    activity = (HelloAndroidActivity) this.getActivity();
+    activity = (LogInActivity) this.getActivity();
     WebSettings webSettings = webViewOauth.getSettings();
     webSettings.setJavaScriptEnabled(true);
 
