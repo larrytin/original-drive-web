@@ -91,6 +91,7 @@
             </intent-filter>
         </activity>
         
+        <activity android:name="com.goodow.drive.android.activity.MainActivity"/>
         <activity android:name="com.goodow.drive.android.activity.DownloadActivity"/>
         <activity android:name="com.goodow.drive.android.activity.MediaDownloadActivity"/>
         <activity android:name="com.goodow.drive.android.activity.DataListActivity"/>

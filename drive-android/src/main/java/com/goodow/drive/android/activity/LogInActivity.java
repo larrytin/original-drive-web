@@ -48,7 +48,7 @@ public class LogInActivity extends Activity {
         // 通知。。。
         Realtime.authorize(uid, uit);
 
-        Intent intent = new Intent(LogInActivity.this, DataListActivity.class);
+        Intent intent = new Intent(LogInActivity.this, MainActivity.class);
         LogInActivity.this.startActivity(intent);
 
         return true;
