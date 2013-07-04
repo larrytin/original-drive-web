@@ -6,7 +6,8 @@
     android:paddingBottom="@dimen/activity_vertical_margin"
     android:paddingLeft="@dimen/activity_horizontal_margin"
     android:paddingRight="@dimen/activity_horizontal_margin"
-    android:paddingTop="@dimen/activity_vertical_margin" >
+    android:paddingTop="@dimen/activity_vertical_margin" 
+    android:background="@color/gray">
 
     <ImageView
         android:id="@+id/leftImage_leftMenu"
@@ -16,6 +17,7 @@
 
     <TextView
         android:id="@+id/listItem_leftMenu"
+        android:textColor="@color/white"
         android:layout_width="wrap_content"
         android:layout_height="32dp"
         android:gravity="center_vertical" />

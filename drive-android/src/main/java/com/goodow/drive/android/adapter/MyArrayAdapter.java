@@ -23,7 +23,7 @@ public class MyArrayAdapter extends ArrayAdapter<String> {
   public View getView(int position, View convertView, ViewGroup parent) {
     View row = convertView;
     if (null == row) {
-      row = ((Activity) this.getContext()).getLayoutInflater().inflate(R.layout.row_datalist, parent, false);
+      row = ((Activity) this.getContext()).getLayoutInflater().inflate(R.layout.row_folderlist, parent, false);
     }
 
     String item = getItem(position);

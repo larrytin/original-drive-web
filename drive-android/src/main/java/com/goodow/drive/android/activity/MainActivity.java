@@ -5,6 +5,12 @@ import com.goodow.drive.android.auth.DataListFragment;
 import com.goodow.drive.android.auth.LeftMenuFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
+import android.view.animation.AnimationUtils;
+
+import android.view.animation.Animation;
+
+import android.graphics.drawable.Animatable;
+
 import android.app.Fragment;
 
 import android.R.integer;
@@ -38,14 +44,23 @@ public class MainActivity extends Activity {
   private LinearLayout leftMenu;
   private LinearLayout middleLayout;
   private LeftMenuFragment leftMenuFragment;
-  private DataListFragment dataListFragment;
+
+  public void hideLeftMenuLayout() {
+    if (null != leftMenu && null != middleLayout) {
+      Animation out = AnimationUtils.makeOutAnimation(this, false);
+      leftMenu.startAnimation(out);
+
+      leftMenu.setVisibility(LinearLayout.INVISIBLE);
+      middleLayout.setVisibility(LinearLayout.INVISIBLE);
+    }
+  }
 
   @Override
   public boolean onCreateOptionsMenu(Menu menu) {
     super.onCreateOptionsMenu(menu);
 
     MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
-    back2Login.setIcon(R.drawable.ic_launcher);
+    back2Login.setIcon(R.drawable.action_discussion_previous);
     back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
     return true;
@@ -66,10 +81,12 @@ public class MainActivity extends Activity {
 
     if (item.getItemId() == android.R.id.home) {
       if (leftMenu.getVisibility() == LinearLayout.VISIBLE) {
-        leftMenu.setVisibility(LinearLayout.INVISIBLE);
-        middleLayout.setVisibility(LinearLayout.INVISIBLE);
+        hideLeftMenuLayout();
 
       } else {
+        Animation in = AnimationUtils.makeInAnimation(this, true);
+        leftMenu.startAnimation(in);
+
         leftMenu.setVisibility(LinearLayout.VISIBLE);
         middleLayout.setVisibility(LinearLayout.VISIBLE);
 
@@ -109,18 +126,16 @@ public class MainActivity extends Activity {
 
     leftMenu = (LinearLayout) findViewById(R.id.leftMenuLayout);
     middleLayout = (LinearLayout) findViewById(R.id.middleLayout);
-    dataListFragment = new DataListFragment();
-    leftMenuFragment = new LeftMenuFragment();
 
+    leftMenuFragment = new LeftMenuFragment();
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-    fragmentTransaction.add(R.id.leftMenuLayout, leftMenuFragment);
+    fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
     fragmentTransaction.commit();
 
     middleLayout.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        leftMenu.setVisibility(LinearLayout.INVISIBLE);
-        middleLayout.setVisibility(LinearLayout.INVISIBLE);
+        hideLeftMenuLayout();
       }
     });
 
