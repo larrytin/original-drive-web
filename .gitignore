@@ -13,3 +13,6 @@ gen/
 
 gwt/tools/
 datanucleus.log
+
+*-compiled.js
+*.js.map
