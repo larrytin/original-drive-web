@@ -100,11 +100,11 @@ public class LocalResFragment extends ListFragment {
       public View getView(int position, View convertView, ViewGroup parent) {
         View row = convertView;
         if (null == row) {
-          row = LocalResFragment.this.getActivity().getLayoutInflater().inflate(R.layout.row_leftmenu, parent, false);
+          row = LocalResFragment.this.getActivity().getLayoutInflater().inflate(R.layout.row_folderlist, parent, false);
         }
 
-        ImageView img_left = (ImageView) row.findViewById(R.id.leftImage_leftMenu);
-        TextView listItem = (TextView) row.findViewById(R.id.listItem_leftMenu);
+        ImageView img_left = (ImageView) row.findViewById(R.id.leftImage);
+        TextView listItem = (TextView) row.findViewById(R.id.listItem);
         String item = folderNameList.get(position);
 
         int index = item.lastIndexOf(".");

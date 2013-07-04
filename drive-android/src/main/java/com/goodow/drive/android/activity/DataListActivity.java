@@ -93,7 +93,7 @@ public class DataListActivity extends ListActivity {
     ActionBar aBar = getActionBar();
     aBar.setDisplayHomeAsUpEnabled(true);// 使action bar可以被点击
 
-    adapter = new MyArrayAdapter(this, R.layout.row_datalist, 0, DATALIST);
+    adapter = new MyArrayAdapter(this, R.layout.row_folderlist, 0, DATALIST);
     setListAdapter(adapter);
 
     Realtime.load("@tmp/b10", new DocumentLoadedHandler() {

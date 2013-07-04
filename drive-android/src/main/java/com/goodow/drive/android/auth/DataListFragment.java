@@ -108,7 +108,7 @@ public class DataListFragment extends ListFragment {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    adapter = new MyArrayAdapter(getActivity(), R.layout.row_datalist, 0, dataSourceOfFolderList);
+    adapter = new MyArrayAdapter(getActivity(), R.layout.row_folderlist, 0, dataSourceOfFolderList);
     setListAdapter(adapter);
 
     Realtime.load("@tmp/b10", new DocumentLoadedHandler() {

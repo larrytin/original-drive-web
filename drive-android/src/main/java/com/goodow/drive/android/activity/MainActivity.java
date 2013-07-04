@@ -5,6 +5,12 @@ import com.goodow.drive.android.auth.DataListFragment;
 import com.goodow.drive.android.auth.LeftMenuFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
+import android.view.animation.AnimationUtils;
+
+import android.view.animation.Animation;
+
+import android.graphics.drawable.Animatable;
+
 import android.app.Fragment;
 
 import android.R.integer;
@@ -41,6 +47,9 @@ public class MainActivity extends Activity {
 
   public void hideLeftMenuLayout() {
     if (null != leftMenu && null != middleLayout) {
+      Animation out = AnimationUtils.makeOutAnimation(this, false);
+      leftMenu.startAnimation(out);
+
       leftMenu.setVisibility(LinearLayout.INVISIBLE);
       middleLayout.setVisibility(LinearLayout.INVISIBLE);
     }
@@ -75,6 +84,9 @@ public class MainActivity extends Activity {
         hideLeftMenuLayout();
 
       } else {
+        Animation in = AnimationUtils.makeInAnimation(this, true);
+        leftMenu.startAnimation(in);
+
         leftMenu.setVisibility(LinearLayout.VISIBLE);
         middleLayout.setVisibility(LinearLayout.VISIBLE);
 
@@ -114,10 +126,10 @@ public class MainActivity extends Activity {
 
     leftMenu = (LinearLayout) findViewById(R.id.leftMenuLayout);
     middleLayout = (LinearLayout) findViewById(R.id.middleLayout);
-    leftMenuFragment = new LeftMenuFragment();
 
+    leftMenuFragment = new LeftMenuFragment();
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-    fragmentTransaction.add(R.id.leftMenuLayout, leftMenuFragment);
+    fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
     fragmentTransaction.commit();
 
     middleLayout.setOnClickListener(new View.OnClickListener() {
