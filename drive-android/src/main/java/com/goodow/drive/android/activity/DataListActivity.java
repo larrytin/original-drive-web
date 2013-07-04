@@ -37,7 +37,6 @@ public class DataListActivity extends ListActivity {
   private PopupWindow popw;
   private TextView textView;
   private String authorize;
-  private ListView listView;
 
   public final static SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
   private ArrayList<String> DATALIST = new ArrayList<String>();
@@ -88,15 +87,14 @@ public class DataListActivity extends ListActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_datalist);
+    setContentView(R.layout.folder_list);
 
-    textView = (TextView) findViewById(R.id.showPop);
+    // textView = (TextView) findViewById(R.id.showPop);
     ActionBar aBar = getActionBar();
     aBar.setDisplayHomeAsUpEnabled(true);// 使action bar可以被点击
 
-    listView = getListView();
-    adapter = new MyArrayAdapter(this, R.layout.row_datalist, 0, DATALIST);
-    listView.setAdapter(adapter);
+    adapter = new MyArrayAdapter(this, R.layout.row_folderlist, 0, DATALIST);
+    setListAdapter(adapter);
 
     Realtime.load("@tmp/b10", new DocumentLoadedHandler() {
       @Override
@@ -139,55 +137,6 @@ public class DataListActivity extends ListActivity {
     }
 
     return super.onKeyDown(keyCode, event);
-  }
-
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    super.onOptionsItemSelected(item);
-
-    if (item.getItemId() == android.R.id.home) {
-      if (null != popw) {
-        popw.dismiss();
-      } else {
-        View popupWindow_view = getLayoutInflater().inflate(R.layout.popup_list, null, false);
-
-        popw = new PopupWindow(popupWindow_view, 200, 220, true);
-
-        ListView listView = (ListView) popupWindow_view.findViewById(R.id.pop_list);
-        String[] menus = { "我的课件", "我的下载", "未知性选项（慎入）" };
-        listView.setAdapter(new ArrayAdapter<String>(this, R.layout.popup_list_item, menus) {
-          @Override
-          public View getView(int position, View convertView, ViewGroup parent) {
-            View row = convertView;
-            if (null == row) {
-              row = ((Activity) this.getContext()).getLayoutInflater().inflate(R.layout.popup_list_item, parent, false);
-            }
-
-            TextView textView = (TextView) row.findViewById(R.id.pop_list_item);
-            textView.setText(getItem(position));
-
-            return row;
-          }
-        });
-
-        // 点击其他地方消失
-        popupWindow_view.setOnTouchListener(new OnTouchListener() {
-          @Override
-          public boolean onTouch(View v, MotionEvent event) {
-            if (popw != null && popw.isShowing()) {
-              popw.dismiss();
-              popw = null;
-            }
-            return false;
-          }
-        });
-      }
-
-      popw.showAsDropDown(textView);
-
-    }
-
-    return true;
   }
 
   /**

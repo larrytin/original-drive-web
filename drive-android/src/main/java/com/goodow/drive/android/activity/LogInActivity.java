@@ -32,6 +32,7 @@ public class LogInActivity extends Activity {
         // save your token
 
         String uid = url.substring(url.indexOf(UID) + UID.length(), url.indexOf(UIT));
+        Log.i("TAG", "user_id=" + uid);
         String uit = url.substring(url.indexOf(UIT) + UIT.length(), url.length());
         GlobalDataCacheForMemorySingleton.getInstance.setUserId(uid);
         GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(uit);
@@ -48,7 +49,7 @@ public class LogInActivity extends Activity {
         // 通知。。。
         Realtime.authorize(uid, uit);
 
-        Intent intent = new Intent(LogInActivity.this, DataListActivity.class);
+        Intent intent = new Intent(LogInActivity.this, MainActivity.class);
         LogInActivity.this.startActivity(intent);
 
         return true;
@@ -57,6 +58,8 @@ public class LogInActivity extends Activity {
       return false;
     }
   }
+
+  private final String TAG = this.getClass().getSimpleName();
 
   private static final String UID = "#userId=";
   private static final String UIT = "&access_token=";

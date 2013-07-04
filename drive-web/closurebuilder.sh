@@ -1,3 +1,5 @@
+# export HOME=C:/Users/Administrator
+
 cd src/main/webapp
 good.js/closure-library/closure/bin/build/closurebuilder.py \
   --root=good.js/closure-library/ \
@@ -9,5 +11,5 @@ good.js/closure-library/closure/bin/build/closurebuilder.py \
   --compiler_flags="--compilation_level=ADVANCED_OPTIMIZATIONS" \
   --compiler_flags="--externs=good.js/good/realtime/realtime.externs.js" \
   --compiler_flags="--create_source_map=drive.js.map" \
-  > drive.js
-echo //@ sourceMappingURL=drive.js.map >> drive.js
+  > drive-compiled.js
+echo //@ sourceMappingURL=drive.js.map >> drive-compiled.js

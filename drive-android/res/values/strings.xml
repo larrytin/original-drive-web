@@ -5,5 +5,15 @@
     <string name="hello">Hello retech-sync!</string>
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
-    <string name="com.goodow.realtime.channel">http://192.168.1.112:8080</string>
+    
+    <string name="backFolderErro">已是最顶层文件夹!</string>
+    
+    <string name="actionBar_back">退出</string>
+    
+    <string name="dailogMessage">是否确定退出</string>
+    <string name="dailogOK">确定</string>
+    <string name="dailogCancel">取消</string>
+    
+    <!--内网  -->
+    <string name="com.goodow.realtime.channel">http://192.168.1.15:8080</string>
 </resources>

@@ -12,69 +12,59 @@ import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValuesAddedEvent;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 
-import android.annotation.SuppressLint;
-import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.app.ListFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ListView;
+import android.widget.Toast;
 
-@SuppressLint("ValidFragment")
 public class DataListFragment extends ListFragment {
-  @SuppressLint("SimpleDateFormat")
-  public final static SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
-  private ArrayList<String> DATALIST = new ArrayList<String>();
+  private Button backButton;
+  private String authorize;
+
+  private ArrayList<String> dataSourceOfFolderList = new ArrayList<String>();
   private MyArrayAdapter adapter;
 
   private Document doc;
   private Model model;
   private CollaborativeMap root;
   public static final String DATA_KEY = "folders";
+
   private ArrayList<Integer> canOpen = new ArrayList<Integer>();// 标注哪些是文件夹,可以点击进入
   private Object[] dataValues;
+  private String[] folderPath;
 
-  private String[] folderPaht;
-  private FragmentTransaction ft;
+  public void backFragment() {
+    if (null != folderPath && 0 < folderPath.length) {
+      if (1 == folderPath.length) {
+        folderPath = null;
+      } else {
+        String[] frontFolderPath = new String[folderPath.length - 1];
+        for (int i = 0; i < folderPath.length - 1; i++) {
+          frontFolderPath[i] = folderPath[i];
+        }
+        folderPath = frontFolderPath;
+      }
 
-  public DataListFragment() {
-    super();
-  }
+      showData(dataValues);
 
-  public DataListFragment(String[] folderPaht) {
-    super();
-    this.folderPaht = folderPaht;
-  }
-
-  @SuppressLint("CommitTransaction")
-  public void addFragment(String[] path) {
-    ft = this.getActivity().getFragmentManager().beginTransaction();
-    DataListFragment df = new DataListFragment(path);
-    ft.replace(android.R.id.content, df);
-
-    ft.addToBackStack(null);
-    ft.commit();
+    } else {
+      Toast.makeText(getActivity(), R.string.backFolderErro, Toast.LENGTH_SHORT).show();
+    }
   }
 
   public void connectString() {
     CollaborativeList list = root.get(DATA_KEY);
     dataValues = list.asArray();
 
-    adapter = new MyArrayAdapter(getActivity(), R.layout.row_datalist, 0, DATALIST);
-    setListAdapter(adapter);
-
     // 应对事件嵌套,故将数据展现代码单独提出
-    if (null != folderPaht && 0 != folderPaht.length) {
-      showData(list.asArray());
-      adapter.notifyDataSetChanged();
-    }
+    showData(list.asArray());
 
     list.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
       @Override
@@ -82,46 +72,46 @@ public class DataListFragment extends ListFragment {
         dataValues = event.getValues();
 
         if (null != dataValues && dataValues.length != 0) {
-          if (null != folderPaht && 0 != folderPaht.length) {
-            showData(dataValues);
-
-          } else {
-            /**
-             * 默认第一次资源浏览
-             */
-
-            for (int i = 0; i < dataValues.length; i++) {
-              Object object = dataValues[i];
-              if (object instanceof String) {
-                DATALIST.add((String) object + "\n创建时间:" + DATEFORMAT.format(new Date()));
-              } else if (object instanceof CollaborativeList) {
-                DATALIST.add(((CollaborativeList) object).get(0).toString() + "\n创建时间:" + DATEFORMAT.format(new Date()));
-
-                if (((CollaborativeList) object).length() >= 2) {
-                  canOpen.add(i);
-                }
-
-              }
-            }
-
-            adapter.notifyDataSetChanged();
-          }
+          showData(dataValues);
         }
       }
     });
   }
 
-  public void intentManager(Class<? extends Activity> activityClass, int[] folderPath) {
-    Intent i = new Intent(this.getActivity(), activityClass);
-    i.putExtra("folderPath", folderPath);
-    startActivity(i);
+  public void deleteFolder(View v) {
+
+    Toast.makeText(getActivity(), "金正恩真可怜！---" + v.getTag(), Toast.LENGTH_SHORT).show();
+  }
+
+  /**
+   * @return the authorize
+   */
+  public String getAuthorize() {
+    return authorize;
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+
+    backButton = (Button) getActivity().findViewById(R.id.backButton);
+    backButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        backFragment();
+      }
+    });
+
   }
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    Realtime.load("@tmp/b5", new DocumentLoadedHandler() {
+    adapter = new MyArrayAdapter(getActivity(), R.layout.row_folderlist, 0, dataSourceOfFolderList);
+    setListAdapter(adapter);
+
+    Realtime.load("@tmp/b10", new DocumentLoadedHandler() {
       @Override
       public void onLoaded(Document document) {
         doc = document;
@@ -137,37 +127,13 @@ public class DataListFragment extends ListFragment {
         model = model_;
         root = model.getRoot();
 
-        CollaborativeList rootlist;
-        CollaborativeList leaflist;
-
-        CollaborativeList folders = model.createList();
-
-        String[] name = { "课件-joker", "文学-joker", "视频-joker" };
-
-        for (String i : name) {
-          rootlist = model.createList();
-          folders.push(rootlist);
-        }
-
-        for (int i = 0; i < name.length; i++) {
-          leaflist = model.createList();
-          leaflist.push(name[i] + "a");
-          leaflist.push(name[i] + "b");
-          leaflist.push(name[i] + "c");
-          leaflist.push(name[i] + "d");
-
-          ((CollaborativeList) folders.get(i)).push(name[i]);
-          ((CollaborativeList) folders.get(i)).push(leaflist);
-        }
-
-        root.set("folders", folders);
       }
     }, null);
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.fragment_datalist, container, false);
+    return inflater.inflate(R.layout.folder_list, container, false);
   }
 
   @Override
@@ -177,44 +143,76 @@ public class DataListFragment extends ListFragment {
 
         String[] nextFolderPaht = null;
 
-        if (null == folderPaht) {
+        if (null == folderPath) {
           nextFolderPaht = new String[1];
         } else {
-          nextFolderPaht = new String[folderPaht.length + 1];
-          for (int i = 0; i < folderPaht.length; i++) {
-            nextFolderPaht[i] = folderPaht[i];
+          nextFolderPaht = new String[folderPath.length + 1];
+          for (int i = 0; i < folderPath.length; i++) {
+            nextFolderPaht[i] = folderPath[i];
           }
         }
         nextFolderPaht[nextFolderPaht.length - 1] = Integer.toString(position);
 
-        folderPaht = nextFolderPaht;
+        folderPath = nextFolderPaht;
 
         showData(dataValues);
         break;
         // addFragment(nextFolderPaht);
       }
     }
+  }
 
+  /**
+   * @param authorize the authorize to set
+   */
+  public void setAuthorize(String authorize) {
+    this.authorize = authorize;
   }
 
   public void showData(Object[] values) {
-    DATALIST.clear();
+    dataSourceOfFolderList.clear();
     canOpen.clear();
 
-    for (int i = 0; i < folderPaht.length; i++) {
-      CollaborativeList path = (CollaborativeList) values[Integer.parseInt(folderPaht[i])];
-      values = ((CollaborativeList) path.asArray()[1]).asArray();
-    }
+    if (null != folderPath) {
+      CollaborativeMap folder = null;
 
-    for (int i = 0; i < values.length; i++) {
-      Object item = values[i];
+      for (int i = 0; i < folderPath.length; i++) {
+        folder = (CollaborativeMap) values[Integer.parseInt(folderPath[i])];
+        values = ((CollaborativeList) folder.get("folderschild")).asArray();
+      }
 
-      if (item instanceof String) {
-        DATALIST.add((String) item + "\n创建时间:" + DATEFORMAT.format(new Date()));
-      } else if (item instanceof CollaborativeList) {
-        DATALIST.add(((CollaborativeList) item).get(0).toString() + "\n创建时间:" + DATEFORMAT.format(new Date()));
+      Object[] folders = ((CollaborativeList) folder.get("folderschild")).asArray();
+      Object[] files = ((CollaborativeList) folder.get("filechild")).asArray();
 
-        if (((CollaborativeList) item).length() >= 2) {
+      for (int i = 0; i < folders.length; i++) {
+        CollaborativeMap folderItem = (CollaborativeMap) folders[i];
+
+        String folderName = (String) folderItem.get("label");
+        CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
+        CollaborativeList folderItem_files = (CollaborativeList) folderItem.get("filechild");
+
+        dataSourceOfFolderList.add(folderName);
+        if ((null != folderItem_folders && folderItem_folders.length() != 0)
+            || (null != folderItem_files && folderItem_files.length() != 0)) {
+          canOpen.add(i);
+        }
+      }
+
+      // TODO
+      for (int i = 0; i < files.length; i++) {
+
+      }
+    } else {
+      for (int i = 0; i < values.length; i++) {
+        CollaborativeMap folderItem = (CollaborativeMap) values[i];
+
+        String folderName = (String) folderItem.get("label");
+        CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
+        CollaborativeList folderItem_files = (CollaborativeList) folderItem.get("filechild");
+
+        dataSourceOfFolderList.add(folderName);
+        if ((null != folderItem_folders && folderItem_folders.length() != 0)
+            || (null != folderItem_files && folderItem_files.length() != 0)) {
           canOpen.add(i);
         }
       }
@@ -222,5 +220,4 @@ public class DataListFragment extends ListFragment {
 
     adapter.notifyDataSetChanged();
   }
-
 }
