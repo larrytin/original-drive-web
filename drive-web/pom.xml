@@ -11,6 +11,19 @@
   <url>https://github.com/goodow/drive/</url>
   <inceptionYear>2013</inceptionYear>
   
+  <properties>
+    <jsframework.version>1.16.1</jsframework.version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.goodow.javascript</groupId>
+      <artifactId>closure-compiler</artifactId>
+      <version>v20130603-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  
   <build>
     <plugins>
       <plugin>
@@ -31,6 +44,26 @@
           <disableUpdateCheck>true</disableUpdateCheck>
         </configuration>
       </plugin>
+      <!-- <plugin>
+        <groupId>com.github.jlgrock.javascript-framework</groupId>
+        <artifactId>jsar-maven-plugin</artifactId>
+        <version>${jsframework.version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.jlgrock.javascript-framework</groupId>
+        <artifactId>closure-compiler-maven-plugin</artifactId>
+        <version>${jsframework.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <compileLevel>WHITESPACE_ONLY</compileLevel>
+        </configuration>
+      </plugin> -->
     </plugins>
   </build>
 </project>
