@@ -12,7 +12,6 @@ import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValuesAddedEvent;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import android.app.ListFragment;
@@ -29,35 +28,34 @@ public class DataListFragment extends ListFragment {
   private Button backButton;
   private String authorize;
 
-  public final static SimpleDateFormat DATEFORMAT = new SimpleDateFormat("yyyy-MM-dd");
-  private ArrayList<String> DATALIST = new ArrayList<String>();
+  private ArrayList<String> dataSourceOfFolderList = new ArrayList<String>();
   private MyArrayAdapter adapter;
 
   private Document doc;
   private Model model;
   private CollaborativeMap root;
   public static final String DATA_KEY = "folders";
+
   private ArrayList<Integer> canOpen = new ArrayList<Integer>();// 标注哪些是文件夹,可以点击进入
   private Object[] dataValues;
-
-  private String[] folderPaht;
-
-  // private FragmentTransaction ft;
+  private String[] folderPath;
 
   public void backFragment() {
-    if (null != folderPaht && 0 < folderPaht.length) {
-      if (1 == folderPaht.length) {
-        folderPaht = null;
+    if (null != folderPath && 0 < folderPath.length) {
+      if (1 == folderPath.length) {
+        folderPath = null;
       } else {
-        String[] frontFolderPath = new String[folderPaht.length - 1];
-        for (int i = 0; i < folderPaht.length - 1; i++) {
-          frontFolderPath[i] = folderPaht[i];
+        String[] frontFolderPath = new String[folderPath.length - 1];
+        for (int i = 0; i < folderPath.length - 1; i++) {
+          frontFolderPath[i] = folderPath[i];
         }
-        folderPaht = frontFolderPath;
+        folderPath = frontFolderPath;
       }
 
       showData(dataValues);
 
+    } else {
+      Toast.makeText(getActivity(), R.string.backFolderErro, Toast.LENGTH_SHORT).show();
     }
   }
 
@@ -93,18 +91,24 @@ public class DataListFragment extends ListFragment {
   }
 
   @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    super.onActivityCreated(savedInstanceState);
+
+    backButton = (Button) getActivity().findViewById(R.id.backButton);
+    backButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        backFragment();
+      }
+    });
+
+  }
+
+  @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // backButton = (Button) getActivity().findViewById(R.id.backButton);
-    // backButton.setOnClickListener(new OnClickListener() {
-    // @Override
-    // public void onClick(View v) {
-    // backFragment();
-    // }
-    // });
-
-    adapter = new MyArrayAdapter(getActivity(), R.layout.row_datalist, 0, DATALIST);
+    adapter = new MyArrayAdapter(getActivity(), R.layout.row_datalist, 0, dataSourceOfFolderList);
     setListAdapter(adapter);
 
     Realtime.load("@tmp/b10", new DocumentLoadedHandler() {
@@ -129,7 +133,7 @@ public class DataListFragment extends ListFragment {
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.activity_datalist, container, false);
+    return inflater.inflate(R.layout.folder_list, container, false);
   }
 
   @Override
@@ -139,17 +143,17 @@ public class DataListFragment extends ListFragment {
 
         String[] nextFolderPaht = null;
 
-        if (null == folderPaht) {
+        if (null == folderPath) {
           nextFolderPaht = new String[1];
         } else {
-          nextFolderPaht = new String[folderPaht.length + 1];
-          for (int i = 0; i < folderPaht.length; i++) {
-            nextFolderPaht[i] = folderPaht[i];
+          nextFolderPaht = new String[folderPath.length + 1];
+          for (int i = 0; i < folderPath.length; i++) {
+            nextFolderPaht[i] = folderPath[i];
           }
         }
         nextFolderPaht[nextFolderPaht.length - 1] = Integer.toString(position);
 
-        folderPaht = nextFolderPaht;
+        folderPath = nextFolderPaht;
 
         showData(dataValues);
         break;
@@ -166,14 +170,14 @@ public class DataListFragment extends ListFragment {
   }
 
   public void showData(Object[] values) {
-    DATALIST.clear();
+    dataSourceOfFolderList.clear();
     canOpen.clear();
 
-    if (null != folderPaht) {
+    if (null != folderPath) {
       CollaborativeMap folder = null;
 
-      for (int i = 0; i < folderPaht.length; i++) {
-        folder = (CollaborativeMap) values[Integer.parseInt(folderPaht[i])];
+      for (int i = 0; i < folderPath.length; i++) {
+        folder = (CollaborativeMap) values[Integer.parseInt(folderPath[i])];
         values = ((CollaborativeList) folder.get("folderschild")).asArray();
       }
 
@@ -187,7 +191,7 @@ public class DataListFragment extends ListFragment {
         CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
         CollaborativeList folderItem_files = (CollaborativeList) folderItem.get("filechild");
 
-        DATALIST.add(folderName);
+        dataSourceOfFolderList.add(folderName);
         if ((null != folderItem_folders && folderItem_folders.length() != 0)
             || (null != folderItem_files && folderItem_files.length() != 0)) {
           canOpen.add(i);
@@ -206,7 +210,7 @@ public class DataListFragment extends ListFragment {
         CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
         CollaborativeList folderItem_files = (CollaborativeList) folderItem.get("filechild");
 
-        DATALIST.add(folderName);
+        dataSourceOfFolderList.add(folderName);
         if ((null != folderItem_folders && folderItem_folders.length() != 0)
             || (null != folderItem_files && folderItem_files.length() != 0)) {
           canOpen.add(i);

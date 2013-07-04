@@ -59,7 +59,27 @@ public class LeftMenuFragment extends ListFragment {
       ImageView img_left = (ImageView) row.findViewById(R.id.leftImage_leftMenu);
       TextView listItem = (TextView) row.findViewById(R.id.listItem_leftMenu);
 
-      img_left.setImageResource(R.drawable.folder);
+      switch (item) {
+      case YONGHUZHANGHUMING:
+        img_left.setImageResource(R.drawable.ic_drive_owned_by_me);
+        break;
+
+      case YUANCHENGWENJIANJIA:
+        img_left.setImageResource(R.drawable.ic_drive_my_drive);
+        break;
+
+      case BENDIKEJIAN:
+        img_left.setImageResource(R.drawable.ic_type_folder);
+        break;
+
+      case ZHENGZAIXIAZAI:
+        img_left.setImageResource(R.drawable.ic_type_zip);
+        break;
+
+      default:
+        break;
+      }
+
       listItem.setText(item.getMenuName());
 
       return row;
@@ -92,26 +112,35 @@ public class LeftMenuFragment extends ListFragment {
   @Override
   public void onListItemClick(ListView l, View v, int position, long id) {
     LeftMenuFragment.MenuTypeEnum menuTypeEnum = (LeftMenuFragment.MenuTypeEnum) v.getTag();
+
+    FragmentTransaction fragmentTransaction;
     switch (menuTypeEnum) {
-    case YUANCHENGWENJIANJIA:
-      FragmentTransaction fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.contentLayout, new DataListFragment());
-      fragmentTransaction.commit();
-      break;
     case YONGHUZHANGHUMING:
       // TODO
       Toast.makeText(mainActivity, "1", Toast.LENGTH_SHORT).show();
       break;
-    case BENDIKEJIAN:
-      // TODO
-      Toast.makeText(mainActivity, "2", Toast.LENGTH_SHORT).show();
+
+    case YUANCHENGWENJIANJIA:
+      fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.contentLayout, new DataListFragment());
+      fragmentTransaction.commit();
       break;
+
+    case BENDIKEJIAN:
+      fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
+      fragmentTransaction.replace(R.id.contentLayout, new LocalResFragment());
+      fragmentTransaction.commit();
+      break;
+
     case ZHENGZAIXIAZAI:
       // TODO
       Toast.makeText(mainActivity, "3", Toast.LENGTH_SHORT).show();
       break;
+
     default:
       break;
     }
+
+    mainActivity.hideLeftMenuLayout();
   }
 }

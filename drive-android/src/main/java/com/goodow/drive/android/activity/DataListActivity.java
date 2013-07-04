@@ -87,7 +87,7 @@ public class DataListActivity extends ListActivity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_datalist);
+    setContentView(R.layout.folder_list);
 
     // textView = (TextView) findViewById(R.id.showPop);
     ActionBar aBar = getActionBar();
