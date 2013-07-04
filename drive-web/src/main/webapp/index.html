@@ -24,7 +24,7 @@
 <script>
   goog.require('good.drive.init');
 </script>
-<!-- <script src="drive.js"></script> -->
+<!-- <script src="drive-compiled.js"></script> -->
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onload="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -82,6 +82,7 @@
             <li class=gbt></li>
             <li class=gbt guidedhelpid=gbacsw><a class="gbgt gbg4p" id=gbg4 href="" aria-haspopup=true aria-owns=gbd4><span
                 id=gbgs4d><span id=gbgs4dn>我的帐户</span><span class=gbmai></span><span class=gbmab></span><span class=gbmac></span></span></a></li>
+            
           </ol>
           <div id=gbdw></div>
         </div>
@@ -181,37 +182,48 @@
         <div class="detroit-createmenu-entries-col">
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://ssl.gstatic.com/docs/doclist/images/icon_11_collection_email.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image" src="https://ssl.gstatic.com/docs/doclist/images/icon_11_collection_email.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">文件夹</div>
           </div>
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://lh4.googleusercontent.com/-5LK7fKfJbro/UPV9afwFJoI/AAAAAAAAA0E/tPkqmw0JEQU/s32-c-k/docs-32.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="https://lh4.googleusercontent.com/-5LK7fKfJbro/UPV9afwFJoI/AAAAAAAAA0E/tPkqmw0JEQU/s32-c-k/docs-32.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">文档</div>
           </div>
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://lh5.googleusercontent.com/-I1ZBP63Dt5g/UPV-ELejL4I/AAAAAAAAA1Y/Zdx1R9kPH3c/s32-c-k/presentations-32.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="https://lh5.googleusercontent.com/-I1ZBP63Dt5g/UPV-ELejL4I/AAAAAAAAA1Y/Zdx1R9kPH3c/s32-c-k/presentations-32.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">演示文稿</div>
           </div>
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://lh3.googleusercontent.com/-Px-Az9RYrIA/UPV9_aLw98I/AAAAAAAAA1M/B2IqCCa1-Zs/s32-c-k/spreadsheets-32.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="https://lh3.googleusercontent.com/-Px-Az9RYrIA/UPV9_aLw98I/AAAAAAAAA1M/B2IqCCa1-Zs/s32-c-k/spreadsheets-32.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">电子表格</div>
           </div>
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://lh4.googleusercontent.com/-VH1IlKeqV48/UPV9mf89zqI/AAAAAAAAA0c/QjOrqRAehRQ/s32-c-k/forms-32.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="https://lh4.googleusercontent.com/-VH1IlKeqV48/UPV9mf89zqI/AAAAAAAAA0c/QjOrqRAehRQ/s32-c-k/forms-32.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">表单</div>
           </div>
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://lh5.googleusercontent.com/-BE-MQVmwIzA/UPV9hKwHzUI/AAAAAAAAA0Q/vqLnNAoC7gk/s32-c-k/drawings-32.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="https://lh5.googleusercontent.com/-BE-MQVmwIzA/UPV9hKwHzUI/AAAAAAAAA0Q/vqLnNAoC7gk/s32-c-k/drawings-32.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">绘图</div>
           </div>
@@ -219,11 +231,13 @@
         <div class="detroit-createmenu-entries-col">
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://lh5.googleusercontent.com/-FxmmjeC8f3U/UPV94mVZkaI/AAAAAAAAA1A/mIpW6-An9ws/s32-c-k/script-32.png" role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="https://lh5.googleusercontent.com/-FxmmjeC8f3U/UPV94mVZkaI/AAAAAAAAA1A/mIpW6-An9ws/s32-c-k/script-32.png"
+                role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">脚本</div>
           </div>
-      </div>
+        </div>
       </div>
       <div class="detroit-createmenu-page-indicators-container">
         <div class="detroit-createmenu-pageindicator detroit-createmenu-pageindicator-active"></div>
@@ -232,7 +246,8 @@
     <div class="detroit-createmenu-page-indicators-container">
       <div class="detroit-createmenu-pageindicator detroit-createmenu-pageindicator-active"></div>
     </div>
-    <div class="detroit-createmenu-page-control detroit-createmenu-page-next detroit-createmenu-page-right-icon detroit-createmenu-page-control-disabled">
+    <div
+      class="detroit-createmenu-page-control detroit-createmenu-page-next detroit-createmenu-page-right-icon detroit-createmenu-page-control-disabled">
       <div class="detroit-createmenu-page-control-icon"></div>
     </div>
     <div class="detroit-createmenu-getmoreapps-container">
