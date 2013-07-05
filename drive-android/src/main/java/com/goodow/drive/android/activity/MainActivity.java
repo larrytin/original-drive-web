@@ -108,7 +108,7 @@ public class MainActivity extends Activity {
         public void onClick(DialogInterface dialog, int which) {
 
         }
-      }).setMessage(R.string.dailogMessage).create();
+      }).setMessage(R.string.back_DailogMessage).create();
 
       alertDialog.show();
     }

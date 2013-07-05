@@ -7,33 +7,20 @@ import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import java.io.File;
 import java.util.ArrayList;
 
-import android.widget.Toast;
-
-import android.view.View.OnClickListener;
-import android.widget.Button;
-
-import android.widget.ListView;
-
-import android.R.integer;
-
-import android.widget.ImageView;
-import android.widget.TextView;
-
-import android.app.Activity;
-
-import android.widget.BaseAdapter;
-
-import android.widget.BaseAdapter;
-
-import android.database.DataSetObserver;
-
-import android.widget.ListAdapter;
-
+import android.app.AlertDialog;
+import android.app.ListFragment;
+import android.content.DialogInterface;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
-import android.os.Bundle;
-import android.app.ListFragment;
+import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class LocalResFragment extends ListFragment {
   // 保存文件路径
@@ -103,6 +90,43 @@ public class LocalResFragment extends ListFragment {
           row = LocalResFragment.this.getActivity().getLayoutInflater().inflate(R.layout.row_folderlist, parent, false);
         }
 
+        Button delButton = (Button) row.findViewById(R.id.delButton);
+        delButton.setVisibility(View.VISIBLE);
+        final int position_ = position;
+        delButton.setOnClickListener(new OnClickListener() {
+          @Override
+          public void onClick(View v) {
+            String aString = folderPathList.get(position_);
+            new File(aString);
+
+            AlertDialog alertDialog =
+                new AlertDialog.Builder(LocalResFragment.this.getActivity()).setPositiveButton(R.string.dailogOK,
+                    new DialogInterface.OnClickListener() {
+                      @Override
+                      public void onClick(DialogInterface dialog, int which) {
+                        File file = new File(folderPathList.get(position_));
+                        if (null != file) {
+                          String localPath = file.getParentFile().getAbsolutePath();
+
+                          delFile(file);
+
+                          folderNameList = getDataSourceWithDirPath(localPath);
+                          ((BaseAdapter) getListAdapter()).notifyDataSetChanged();
+                        }
+                      }
+
+                    }).setNegativeButton(R.string.dailogCancel, new DialogInterface.OnClickListener() {
+                  @Override
+                  public void onClick(DialogInterface dialog, int which) {
+
+                  }
+                }).setMessage(R.string.del_DailogMessage).create();
+
+            alertDialog.show();
+
+          }
+        });
+
         ImageView img_left = (ImageView) row.findViewById(R.id.leftImage);
         TextView listItem = (TextView) row.findViewById(R.id.listItem);
         String item = folderNameList.get(position);
@@ -142,6 +166,26 @@ public class LocalResFragment extends ListFragment {
     }
   }
 
+  private void delFile(File file) {
+    if (file == null) {
+      assert false : "入参file为空!";
+      return;
+    }
+
+    if (file.isDirectory()) {
+      for (File item : file.listFiles()) {
+        if (item.isDirectory()) {
+          delFile(item);
+        } else {
+          item.delete();
+        }
+      }
+    }
+
+    file.delete();
+
+  }
+
   private ArrayList<String> getDataSourceWithDirPath(final String dirPath) {
     ArrayList<String> dataSource = new ArrayList<String>();
 
@@ -157,5 +201,4 @@ public class LocalResFragment extends ListFragment {
     return dataSource;
 
   }
-
 }

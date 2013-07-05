@@ -23,7 +23,7 @@ import android.widget.ArrayAdapter;
 
 public class LeftMenuFragment extends ListFragment {
   public static enum MenuTypeEnum {
-    YONGHUZHANGHUMING("用户帐户名"), YUANCHENGWENJIANJIA("远程文件夹"), BENDIKEJIAN("本机课件"), ZHENGZAIXIAZAI("正在下载");
+    YONGHUZHANGHUMING("用户帐户名"), YUANCHENGWENJIANJIA("我的资料库"), BENDIKEJIAN("本机课件"), ZHENGZAIXIAZAI("正在下载");
     private final String menuName;
 
     private MenuTypeEnum(String menuName) {
@@ -96,10 +96,9 @@ public class LeftMenuFragment extends ListFragment {
 
     mainActivity = (MainActivity) getActivity();
 
-    MENULIST.add(MenuTypeEnum.YONGHUZHANGHUMING);
-    MENULIST.add(MenuTypeEnum.YUANCHENGWENJIANJIA);
-    MENULIST.add(MenuTypeEnum.BENDIKEJIAN);
-    MENULIST.add(MenuTypeEnum.ZHENGZAIXIAZAI);
+    for (MenuTypeEnum type : MenuTypeEnum.values()) {
+      MENULIST.add(type);
+    }
 
     setListAdapter(new LeftMenuAdapter(getActivity(), R.layout.row_leftmenu, 0, MENULIST));
   }

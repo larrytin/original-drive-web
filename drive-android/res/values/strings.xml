@@ -10,7 +10,11 @@
     
     <string name="actionBar_back">退出</string>
     
-    <string name="dailogMessage">是否确定退出</string>
+    <string name="backButton">返回上一级</string>
+    <string name="delButton">删除</string>
+    
+    <string name="back_DailogMessage">是否确定退出?</string>
+    <string name="del_DailogMessage">是否确定删除?</string>
     <string name="dailogOK">确定</string>
     <string name="dailogCancel">取消</string>
     

@@ -11,12 +11,13 @@
         android:id="@+id/backButton"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:text="Back"
+        android:text="@string/backButton"
         />
 
     <ListView
         android:id="@+id/android:list"
         android:layout_width="fill_parent"
         android:layout_height="wrap_content" />
+    
 
 </LinearLayout>

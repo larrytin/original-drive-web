@@ -33,7 +33,7 @@ public class MyArrayAdapter extends ArrayAdapter<String> {
     // Button button = (Button) row.findViewById(R.id.listButton);
     // button.setTag(position);
 
-    // img_left.setImageResource(R.drawable.folder);
+    img_left.setImageResource(R.drawable.ic_type_folder);
     listItem.setText(item);
 
     return row;

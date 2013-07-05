@@ -10,7 +10,10 @@ import com.goodow.realtime.EventHandler;
 import com.goodow.realtime.Model;
 import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
+import com.goodow.realtime.ValueChangedEvent;
 import com.goodow.realtime.ValuesAddedEvent;
+import com.goodow.realtime.ValuesRemovedEvent;
+import com.goodow.realtime.ValuesSetEvent;
 
 import java.util.ArrayList;
 
@@ -60,27 +63,44 @@ public class DataListFragment extends ListFragment {
   }
 
   public void connectString() {
-    CollaborativeList list = root.get(DATA_KEY);
+    final CollaborativeList list = root.get(DATA_KEY);
     dataValues = list.asArray();
 
-    // 应对事件嵌套,故将数据展现代码单独提出
-    showData(list.asArray());
+    showData(dataValues);
 
-    list.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
+    list.addValuesSetListener(new EventHandler<ValuesSetEvent>() {
       @Override
-      public void handleEvent(ValuesAddedEvent event) {
-        dataValues = event.getValues();
+      public void handleEvent(ValuesSetEvent arg0) {
+        dataValues = list.asArray();
 
         if (null != dataValues && dataValues.length != 0) {
           showData(dataValues);
         }
       }
     });
-  }
 
-  public void deleteFolder(View v) {
+    list.addValuesRemovedListener(new EventHandler<ValuesRemovedEvent>() {
+      @Override
+      public void handleEvent(ValuesRemovedEvent arg0) {
+        dataValues = list.asArray();
 
-    Toast.makeText(getActivity(), "金正恩真可怜！---" + v.getTag(), Toast.LENGTH_SHORT).show();
+        if (null != dataValues && dataValues.length != 0) {
+          showData(dataValues);
+        }
+      }
+
+    });
+
+    list.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
+      @Override
+      public void handleEvent(ValuesAddedEvent event) {
+        dataValues = list.asArray();
+
+        if (null != dataValues && dataValues.length != 0) {
+          showData(dataValues);
+        }
+      }
+    });
   }
 
   /**
@@ -111,7 +131,7 @@ public class DataListFragment extends ListFragment {
     adapter = new MyArrayAdapter(getActivity(), R.layout.row_folderlist, 0, dataSourceOfFolderList);
     setListAdapter(adapter);
 
-    Realtime.load("@tmp/b10", new DocumentLoadedHandler() {
+    Realtime.load("@tmp/b18", new DocumentLoadedHandler() {
       @Override
       public void onLoaded(Document document) {
         doc = document;
@@ -186,6 +206,15 @@ public class DataListFragment extends ListFragment {
 
       for (int i = 0; i < folders.length; i++) {
         CollaborativeMap folderItem = (CollaborativeMap) folders[i];
+
+        // map监听修改事件
+        // folderItem.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
+        // @Override
+        // public void handleEvent(ValueChangedEvent arg0) {
+        // // TODO Auto-generated method stub
+        //
+        // }
+        // });
 
         String folderName = (String) folderItem.get("label");
         CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
