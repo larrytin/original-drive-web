@@ -7,6 +7,7 @@ goog.require('good.drive.nav.button');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.menu');
+goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
 
 
@@ -65,6 +66,9 @@ good.drive.init.start = function() {
       }
     });
 
+    var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
+    headuserinfo.init();
+    headuserinfo.nameClick();
   };
 };
 
