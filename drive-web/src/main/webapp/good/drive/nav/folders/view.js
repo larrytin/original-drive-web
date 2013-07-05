@@ -3,6 +3,7 @@ goog.provide('good.drive.nav.folders');
 
 goog.require('good.drive.nav.folders.Model');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 
 
@@ -21,7 +22,7 @@ good.drive.nav.folders.Tree = function() {
   var tree_ = root.getTree().createNode(
       '<span class="treedoclistview-root-node-name">我的云端硬盘 &nbsp;</span>');
   root.add(tree_);
-  tree_.setExpanded(true);
+  tree_.setExpanded(false);
   root.setSelectedItem(tree_);
   this.customNode(tree_);
 
@@ -44,13 +45,66 @@ good.drive.nav.folders.Tree = function() {
  */
 good.drive.nav.folders.Tree.prototype.insertNode =
     function(parent, idx, value) {
-//  console.log(parent.getHtml() + '-' + idx + '-' + value);
-  var title = value.get(good.drive.nav.folders.Model.LABEL);
+  var title = value.get(good.drive.nav.folders.Model.strType.LABEL);
   var childNode = parent.getTree().createNode('');
   childNode.setHtml(title);
   parent.addChild(childNode);
-  //  this.customNode(childNode);
+  if (parent.getExpanded()) {
+    this.customNode(childNode);
+  }
   return childNode;
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @param {good.realtime.CollaborativeList} list
+ */
+good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
+  var that = this;
+  var init = true;
+  node.getHandler().listen(
+      node, goog.ui.tree.BaseNode.EventType.BEFORE_EXPAND,
+      function(e) {
+        if (list.length() == 0 && node.hasChildren()) {
+          return;
+        }
+
+        if (node.getChildCount() > 0) {
+          return;
+        }
+        for (var i = 0; i < list.length(); i++) {
+          var val = list.get(i);
+          var childNode = that.insertNode(node, 0, val);
+          that.model.mapHander(node, childNode, val);
+          that.model.addEvent(childNode,
+              val.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD));
+        }
+      });
+  node.getHandler().listen(node,
+      goog.ui.tree.BaseNode.EventType.EXPAND,
+      function(e) {
+        if (node.getChildCount() == 0) {
+          return;
+        }
+        if (init) {
+          init = false;
+          var children = node.getChildren();
+          for (var i in children) {
+            var child = children[i];
+            that.customNode(child);
+          }
+        }
+      });
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @return {boolean}
+ */
+good.drive.nav.folders.Tree.prototype.hasExtended = function(node) {
+  return node.getExpanded();
 };
 
 
@@ -111,29 +165,50 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
     return;
   }
   var selected = this.roottree.getSelectedItem();
+  selected.setExpanded(true);
   var map = this.model.getLeaf(str);
-  if (selected.getChildCount() == 0) {
-    var id = selected.getId();
-    var parent = selected.getParent();
-    var childIds = parent.getChildIds();
-    var index = childIds.indexOf(id);
-    var list = parent.data.get(index).get(
-        good.drive.nav.folders.Model.FOLDERSCHILD);
-    list.push(map);
-    return;
-  }
+  //  if (selected.getChildCount() == 0) {
+  //    var id = selected.getId();
+  //    var parent = selected.getParent();
+  //    var childIds = parent.getChildIds();
+  //    var index = childIds.indexOf(id);
+  //    var list = parent.data.get(index).get(
+  //        good.drive.nav.folders.Model.FOLDERSCHILD);
+  //    list.push(map);
+  //    selected.setExpanded(true);
+  //    return;
+  //  }
   selected.data.push(map);
+};
+
+
+/**
+ * @param {string} str
+ */
+good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
+  var selected = this.roottree.getSelectedItem();
+  selected.getParent().data.get(this.getIndexByChild(selected)).
+      set(good.drive.nav.folders.Model.strType.LABEL, str);
 };
 
 
 /**  */
 good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
   var selected = this.roottree.getSelectedItem();
-  var id = selected.getId();
-  var parent = selected.getParent();
+  selected.getParent().data.remove(this.getIndexByChild(selected));
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @return {integer}
+ */
+good.drive.nav.folders.Tree.prototype.getIndexByChild = function(node) {
+  var id = node.getId();
+  var parent = node.getParent();
   var childIds = parent.getChildIds();
   var index = childIds.indexOf(id);
-  parent.data.remove(index);
+  return index;
 };
 
 
@@ -151,9 +226,9 @@ good.drive.nav.folders.Tree.defaultConfig = {
   cssTreeIcon: goog.getCssName(''),
   cssExpandTreeIcon: goog.getCssName(''),
   cssExpandTreeIconPlus: goog.getCssName('goog-inline-block') + ' ' +
-    goog.getCssName('doclist-icon navpane-expand-icon') + ' ' +
-    goog.getCssName('doclist-folder-triangle-expanded'),
-  cssExpandTreeIconMinus: goog.getCssName('goog-inline-block') + ' ' + 
+      goog.getCssName('doclist-icon navpane-expand-icon') + ' ' +
+      goog.getCssName('doclist-folder-triangle-expanded'),
+  cssExpandTreeIconMinus: goog.getCssName('goog-inline-block') + ' ' +
       goog.getCssName('doclist-icon navpane-expand-icon') + ' ' +
       goog.getCssName('doclist-folder-triangle-collapsed'),
   cssExpandTreeIconTPlus: goog.getCssName(

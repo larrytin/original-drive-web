@@ -30,68 +30,49 @@ good.drive.nav.folders.Model = function(view) {
 };
 
 
+/**
+ * @enum {string}
+ */
+good.drive.nav.folders.Model.strType = {
+  LABEL: 'label',
+  FOLDERS: 'folders',
+  FOLDERSCHILD: 'folderschild',
+  FILECHILD: 'filechild'
+};
+
+
 /** @type {string} */
 good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的视频', '我的图片'];
-
-
-/** @type {string} */
-good.drive.nav.folders.Model.LABEL = 'label';
-
-
-/** @type {string} */
-good.drive.nav.folders.Model.FOLDERS = 'folders';
-
-
-/** @type {string} */
-good.drive.nav.folders.Model.FOLDERSCHILD = 'folderschild';
-
-
-/** @type {string} */
-good.drive.nav.folders.Model.FILECHILD = 'filechild';
 
 
 /**
  * @param {good.realtime.Document} doc
  */
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
-  var folders = this.root.get(good.drive.nav.folders.Model.FOLDERS);
+  var folders = this.root.get(good.drive.nav.folders.Model.strType.FOLDERS);
   var that = this;
-  this.addEventListener(/** @struct */
-      {
-        dom: that.view.tree
-      }, folders);
+  this.addEvent(that.view.tree, folders);
 };
 
 
 /**
- * @param {Object} parentHolder
- * @param {good.realtime.CollaborativeList} list
- * @return {Array.<Object>}
- */
-good.drive.nav.folders.Model.prototype.addEventListener = function(
-    parentHolder, list) {
-  var childrenDoms = [];
-  this.listHander(list, parentHolder, childrenDoms);
-  for (var i = 0, len = list.length(); i < len; i++) {
-    var value = list.get(i);
-    childrenDoms[i] = {};
-    this.mapHander(value, parentHolder, childrenDoms);
-    var children = value.get(good.drive.nav.folders.Model.FOLDERSCHILD);
-    this.addEventListener(childrenDoms[i], children);
-  }
-  return childrenDoms;
-};
-
-
-/**
+ * @param {goog.ui.tree.TreeControl} parentNode
+ * @param {goog.ui.tree.TreeControl} selfNode
  * @param {good.realtime.CollaborativeMap} map
- * @param {Object} parentHolder
- * @param {Object} selfDom
  */
-good.drive.nav.folders.Model.prototype.mapHander = function(map, parentHolder,
-    selfDom) {
+good.drive.nav.folders.Model.prototype.mapHander =
+    function(parentNode, selfNode, map) {
   map.addValueChangedListener(function(evt) {
-    var str = 'abc';
+    var property = evt.getProperty();
+    if (property != good.drive.nav.folders.Model.strType.LABEL) {
+      return;
+    }
+    var newValue = evt.getNewValue();
+    var oldValue = evt.getOldValue();
+    if (oldValue.length == 0) {
+      return;
+    }
+    selfNode.setHtml(newValue);
   });
 };
 
@@ -100,63 +81,74 @@ good.drive.nav.folders.Model.prototype.mapHander = function(map, parentHolder,
  * @param {string} str
  * @return {good.realtime.CollaborativeMap}
  */
-good.drive.nav.folders.Model.prototype.getLeaf = function(str) {
+good.drive.nav.folders.Model.prototype.getLeaf =
+    function(str) {
   var map = this.mod.createMap();
-  map.set(good.drive.nav.folders.Model.LABEL, str);
+  map.set(good.drive.nav.folders.Model.strType.LABEL,
+      str);
   var list = this.mod.createList();
-  map.set(good.drive.nav.folders.Model.FOLDERSCHILD, list);
+  map.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+      list);
   list = this.mod.createList();
-  map.set(good.drive.nav.folders.Model.FILECHILD, list);
+  map.set(good.drive.nav.folders.Model.strType.FILECHILD,
+      list);
 
   return map;
 };
 
 
 /**
+ * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeList} list
- * @param {Object} parentHolder
- * @param {Object} childrenDoms
  */
-good.drive.nav.folders.Model.prototype.listHander = function(list,
-    parentHolder, childrenDoms) {
+good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
   var that = this;
-  list.addValuesAddedListener(
-      function(/** @type {good.realtime.ValueChangedEvent} */
-      evt) {
-        var idx = evt.getIndex();
-        var vals = evt.getValues();
-        var parentDom = parentHolder.dom;
-        var isAdd = false;
-        if (parentDom.getChildCount() != 0 || childrenDoms.length == 0) {
-          isAdd = true;
-        }
-        if (parentDom.data == undefined) {
-          parentDom.data = list;
-        }
-        for (var i in vals) {
-          var val = vals[i];
-          var arrayIdx = i;
-          var intI = parseInt(i);
-          if (isAdd) {
-            var arrayIdx = idx + intI;
-            childrenDoms[arrayIdx] = {};
-            if (val instanceof good.realtime.CollaborativeMap) {
-              var folderchild = val.get(
-                  good.drive.nav.folders.Model.FOLDERSCHILD);
-              that.mapHander(val, parentHolder, childrenDoms[arrayIdx]);
-              that.addEventListener(childrenDoms[arrayIdx], folderchild);
-            }
-          }
-          childrenDoms[arrayIdx].dom = that.view.insertNode(
-              parentDom, idx + intI, val);
-        }
-        isAdd = false;
-      });
+  list.addValuesAddedListener(function(evt) {
+    if (!that.view.hasExtended(node)) {
+      return;
+    }
+    node.setExpanded(true);
+    var idx = evt.getIndex();
+    var vals = evt.getValues();
+    for (var i in vals) {
+      var val = vals[i];
+      var childNode = that.view.insertNode(node, idx, val);
+      that.mapHander(node, childNode, val);
+      that.addEvent(childNode, val.get(
+          good.drive.nav.folders.Model.strType.FOLDERSCHILD));
+    }
+  });
   list.addValuesRemovedListener(function(evt) {
     var idx = evt.getIndex();
-    that.view.removeNode(parentHolder.dom, idx);
-    goog.array.removeAt(childrenDoms, idx);
+    that.view.removeNode(node, idx);
   });
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @param {good.realtime.CollaborativeList} list
+ */
+good.drive.nav.folders.Model.prototype.addEvent = function(node, list) {
+  if (this.bindData(node, list)) {
+    return;
+  }
+  this.dataHandle(node, list);
+  this.view.nodeHandle(node, list);
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @param {good.realtime.CollaborativeList} list
+ * @return {boolean}
+ */
+good.drive.nav.folders.Model.prototype.bindData = function(node, list) {
+  if (node.data != undefined) {
+    return true;
+  }
+  node.data = list;
+  return false;
 };
 
 
@@ -170,7 +162,7 @@ good.drive.nav.folders.Model.prototype.initList = function(mod) {
   var leaflist;
 
   var folders = mod.createList();
-  testdata.set(good.drive.nav.folders.Model.FOLDERS, folders);
+  testdata.set(good.drive.nav.folders.Model.strType.FOLDERS, folders);
 
   for (var i in name) {
     rootlist = mod.createList();
@@ -205,7 +197,7 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
   var root_ = mod.getRoot();
 
   var rootFolders = mod.createList();
-  root_.set(good.drive.nav.folders.Model.FOLDERS, rootFolders);
+  root_.set(good.drive.nav.folders.Model.strType.FOLDERS, rootFolders);
 
   var folder;
   var subFolders;
@@ -214,22 +206,25 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
   var folders = [];
   for (var i in name) {
     folder = mod.createMap();
-    folder.set(good.drive.nav.folders.Model.LABEL, name[i]);
-    folder.set(good.drive.nav.folders.Model.FOLDERSCHILD, mod.createList());
-    folder.set(good.drive.nav.folders.Model.FILECHILD, mod.createList());
+    folder.set(good.drive.nav.folders.Model.strType.LABEL, name[i]);
+    folder.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+        mod.createList());
+    folder.set(good.drive.nav.folders.Model.strType.FILECHILD,
+        mod.createList());
     folders.push(folder);
   }
   rootFolders.pushAll(folders);
 
   for (var i in name) {
-    subFolders = folders[i].get(good.drive.nav.folders.Model.FOLDERSCHILD);
+    subFolders = folders[i].get(
+        good.drive.nav.folders.Model.strType.FOLDERSCHILD);
     for (var j in name) {
       subFolder = mod.createMap();
-      subFolder.set(good.drive.nav.folders.Model.FOLDERSCHILD,
+      subFolder.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
           mod.createList());
-      subFolder.set(good.drive.nav.folders.Model.FILECHILD,
+      subFolder.set(good.drive.nav.folders.Model.strType.FILECHILD,
           mod.createList());
-      subFolder.set(good.drive.nav.folders.Model.LABEL,
+      subFolder.set(good.drive.nav.folders.Model.strType.LABEL,
           name[i] + j);
       subFolders.push(subFolder);
     }
