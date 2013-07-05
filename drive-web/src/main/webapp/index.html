@@ -20,11 +20,11 @@
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
 <script src="good.js/closure-library/closure/goog/base.js"></script>
-<!-- <script src="good/deps.js"></script>
+<script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script> -->
-<script src="drive-compiled.js"></script>
+</script>
+<!-- <script src="drive-compiled.js"></script> -->
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -80,9 +80,37 @@
           <span class=gbtcb></span>
           <ol class="gbtc gbsr">
             <li class=gbt></li>
-            <li class=gbt guidedhelpid=gbacsw><a class="gbgt gbg4p" id=gbg4 href="" aria-haspopup=true aria-owns=gbd4><span
-                id=gbgs4d><span id=gbgs4dn>我的帐户</span><span class=gbmai></span><span class=gbmab></span><span class=gbmac></span></span></a></li>
-            
+            <li class=gbt guidedhelpid=gbacsw>
+              <a class="gbgt gbg4p" id=gbg4 href="javaScript:void(0);" aria-haspopup=true aria-owns=gbd4>
+               <span id=gbgs4d style="text-align: left; ">
+                 <span id=gbgs4dn style="max-width: 652px; text-align: left; ">我的帐户</span>
+                 <span class=gbmai></span>
+                 <span class=gbmab></span>
+                 <span class=gbmac></span>
+              </span>
+              </a>
+             </li>
+            <div class="gbm gbes" id="gbd4" aria-owner="gbg4" guidedhelpid="gbd4" style="visibility: hidden;">
+              <div class="gbmc">
+                <div id="gbmpdv">
+                  <div class="gbpc">
+                    <span id="gbmpn" class="gbps">我的帐户</span><span id="displayname" class="gbps2">我的帐户</span>                    
+                  </div>
+                </div>                
+                <table id="gbmpal">
+                  <tbody>
+                    <tr>
+                      <td class="gbmpala"><a target="_blank" role="button"
+                        href=""
+                        class="gbqfbb">帐户</a></td>
+                      <td class="gbmpalb"><a target="_top" role="button" id="gb_71"
+                        href=""
+                        class="gbqfbb">退出</a></td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>
           </ol>
           <div id=gbdw></div>
         </div>
