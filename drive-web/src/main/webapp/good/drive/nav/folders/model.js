@@ -26,12 +26,12 @@ good.drive.nav.folders.Model = function(view) {
     // connectUi();
     that.connect(doc);
   };
-  good.realtime.load('@tmp/b10', onLoad, onInit, null);
+  good.realtime.load('@tmp/b18', onLoad, onInit, null);
 };
 
 
 /** @type {string} */
-good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的视频', '我的科学'];
+good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的视频', '我的图片'];
 
 
 /** @type {string} */
@@ -204,31 +204,34 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
   var name = good.drive.nav.folders.Model.BASEDATA;
   var root_ = mod.getRoot();
 
-  var folders = mod.createList();
-  root_.set(good.drive.nav.folders.Model.FOLDERS, folders);
+  var rootFolders = mod.createList();
+  root_.set(good.drive.nav.folders.Model.FOLDERS, rootFolders);
 
-  var map;
-  var list;
-  var mapchild;
-  var listchild;
+  var folder;
+  var subFolders;
+  var subFolder;
+
+  var folders = [];
+  for (var i in name) {
+    folder = mod.createMap();
+    folder.set(good.drive.nav.folders.Model.LABEL, name[i]);
+    folder.set(good.drive.nav.folders.Model.FOLDERSCHILD, mod.createList());
+    folder.set(good.drive.nav.folders.Model.FILECHILD, mod.createList());
+    folders.push(folder);
+  }
+  rootFolders.pushAll(folders);
 
   for (var i in name) {
-    map = mod.createMap();
-    map.set(good.drive.nav.folders.Model.LABEL, name[i]);
-    list = mod.createList();
-    for (var i in name) {
-      mapchild = mod.createMap();
-      mapchild.set(good.drive.nav.folders.Model.LABEL, name[i] + i);
-      listchild = mod.createList();
-      mapchild.set(good.drive.nav.folders.Model.FOLDERSCHILD, listchild);
-      listchild = mod.createList();
-      mapchild.set(good.drive.nav.folders.Model.FILECHILD, listchild);
-      list.push(mapchild);
+    subFolders = folders[i].get(good.drive.nav.folders.Model.FOLDERSCHILD);
+    for (var j in name) {
+      subFolder = mod.createMap();
+      subFolder.set(good.drive.nav.folders.Model.FOLDERSCHILD,
+          mod.createList());
+      subFolder.set(good.drive.nav.folders.Model.FILECHILD,
+          mod.createList());
+      subFolder.set(good.drive.nav.folders.Model.LABEL,
+          name[i] + j);
+      subFolders.push(subFolder);
     }
-    map.set(good.drive.nav.folders.Model.FOLDERSCHILD, list);
-    list = mod.createList();
-    map.set(good.drive.nav.folders.Model.FILECHILD, list);
-
-    folders.push(map);
   }
 };
