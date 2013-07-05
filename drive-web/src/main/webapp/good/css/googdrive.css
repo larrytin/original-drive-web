@@ -1890,3 +1890,157 @@ px
 }
 
 /*首页左创建buttom 弹出框样式 */
+
+
+/*左侧导航-新建文件夹弹出框*/
+.modal-dialog {
+  background: #c1d9ff;
+  border: 1px solid #3a5774;
+  color: #000;
+  padding: 4px;
+  position: absolute;
+  z-index: 987;
+}
+
+.modal-dialog a,
+.modal-dialog a:link,
+.modal-dialog a:visited  {
+  color: #06c;
+  cursor: pointer;
+}
+
+.modal-dialog-bg {
+  background: #666;
+  left: 0;
+  position: absolute;
+  top: 0;
+}
+.modal-dialog, .modal-dialog-ie {
+    z-index: 1004;
+}
+.modal-dialog {
+    color: #000000;
+    padding: 30px 42px;
+}
+.goog-modalpopup, .modal-dialog {
+    background: none repeat scroll 0 0 padding-box #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.333);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    outline: 0 none;
+    position: absolute;
+}
+.modal-dialog {
+    color: #000000;
+    padding: 30px 42px;
+}
+.goog-modalpopup, .modal-dialog {
+    background: none repeat scroll 0 0 padding-box #FFFFFF;
+    border: 1px solid rgba(0, 0, 0, 0.333);
+    box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+    outline: 0 none;
+    position: absolute;
+}
+.modal-dialog-bg, .modal-dialog-ie-bg {
+    z-index: 1002;
+}
+.modal-dialog, .modal-dialog-ie {
+    z-index: 1004;
+}
+.confirm-dialog-bg {
+    z-index: 1010;
+}
+.confirm-dialog {
+    z-index: 1011;
+}
+.modal-dialog-content {
+    font-size: 13px;
+}
+.modal-dialog-userInput {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-color: #C0C0C0 #D9D9D9 #D9D9D9;
+    border-image: none;
+    border-right: 1px solid #D9D9D9;
+    border-style: solid;
+    border-width: 1px;
+    font-size: 13px;
+    height: 25px;
+    padding: 1px 8px;
+}
+.modal-dialog-userInput:focus {
+    border: 1px solid #4D90FE;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
+    outline: medium none;
+}
+.modal-dialog-buttons button::-moz-focus-inner {
+    border: 0 none;
+}
+.modal-dialog-title {
+    background-color: #FFFFFF;
+    color: #000000;
+    cursor: default;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 24px;
+    margin: 0 0 16px;
+}
+.modal-dialog-title-close:after {
+    background: url(../images/close-x.png) repeat scroll 0 0 transparent;
+    content: "";
+    height: 11px;
+    position: absolute;
+    right: 17px;
+    width: 11px;
+}
+.modal-dialog-title-close {
+    height: 11px;
+    opacity: 0.7;
+    padding: 17px;
+    position: absolute;
+    right: 0;
+    top: 0;
+    width: 11px;
+}
+.modal-dialog-buttons .goog-buttonset-action {
+    background-color: #4D90FE;
+    background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED);
+    border: 1px solid #3079ED;
+    color: #FFFFFF;
+}
+.modal-dialog-buttons button {
+    background-color: #F5F5F5;
+    background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
+    border: 1px solid rgba(0, 0, 0, 0.1);
+    border-radius: 2px 2px 2px 2px;
+    color: #444444;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    height: 29px;
+    line-height: 27px;
+    margin: 0 16px 0 0;
+    min-width: 72px;
+    outline: 0 none;
+    padding: 0 8px;
+}
+
+.modal-dialog-content {
+    font-size: 13px;
+}
+.modal-dialog-content {
+    background-color: #FFFFFF;
+    line-height: 1.4em;
+}
+.modal-dialog-title {
+    color: #000000;
+    cursor: default;
+    font-size: 16px;
+    font-weight: normal;
+    line-height: 24px;
+}
+.modal-dialog-buttons {
+    margin-top: 16px;
+}
+

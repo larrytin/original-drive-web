@@ -7,6 +7,7 @@ goog.require('good.drive.nav.button');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.menu');
+goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
 
 
@@ -43,6 +44,9 @@ good.drive.init.start = function() {
     var createdialog = dialog.createFolderDialog(function(evt) {
       switch (evt.key) {
         case 'cr':
+          var textinput = goog.dom.getElementByClass(
+              'new-item-dialog-folder-input').children[0];
+          tree.addLeaf(textinput.value);
           break;
         case 'c':
           break;
@@ -54,16 +58,17 @@ good.drive.init.start = function() {
     var menu = new good.drive.nav.menu.View();
     menu.createPopup(button1.getElement(), function(e) {
       switch (e.target.getId()) {
-        case ':1':
-          createdialog.setVisible(true);
-          break;
         case ':2':
+          createdialog.setVisible(true);
           break;
         default:
           break;
       }
     });
 
+    var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
+    headuserinfo.init();
+    headuserinfo.nameClick();
   };
 };
 
