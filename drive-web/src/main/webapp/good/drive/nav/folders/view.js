@@ -5,6 +5,7 @@ goog.require('good.drive.nav.folders.Model');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
+goog.require('goog.string.StringBuffer');
 
 
 
@@ -34,7 +35,20 @@ good.drive.nav.folders.Tree = function() {
 
   var model_ = new good.drive.nav.folders.Model(this);
   this.model = model_;
+  
+  var sb = new goog.string.StringBuffer();
+	for(var i in good.drive.nav.folders.labelElm) {
+		sb.append(good.drive.nav.folders.labelElm[i].outerHTML);
+	}
+	
+	this.sb_ = sb;
 };
+
+good.drive.nav.folders.labelElm = [
+                                   goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-init-spacing'}, ' '),
+                                   goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-node-icon drive-sprite-folder-list-icon icon-color-4'}, ' '),
+                                   goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-spacing'}, ' '),
+                                   ];
 
 
 /**
@@ -47,11 +61,12 @@ good.drive.nav.folders.Tree.prototype.insertNode =
     function(parent, idx, value) {
   var title = value.get(good.drive.nav.folders.Model.strType.LABEL);
   var childNode = parent.getTree().createNode('');
-  childNode.setHtml(title);
-  parent.addChild(childNode);
-  if (parent.getExpanded()) {
-    this.customNode(childNode);
-  }
+	var titleElm = goog.dom.createDom('span', {'class': 'treedoclistview-node-name'}, goog.dom.createDom('span', {'dir': 'ltr'}, title));
+	parent.addChild(childNode);
+	childNode.setHtml(this.sb_.toString() + titleElm.outerHTML);
+	if(parent.getExpanded()) {
+		this.customNode(childNode);
+	}
   return childNode;
 };
 
@@ -113,7 +128,6 @@ good.drive.nav.folders.Tree.prototype.hasExtended = function(node) {
  */
 good.drive.nav.folders.Tree.prototype.customNode =
     function(tree) {
-  //  tree.setIsUserCollapsible(true);
   tree.setAfterLabelHtml('<div class="selection-highlighter"></div>');
   var rowElement = tree.getRowElement();
   goog.events.
