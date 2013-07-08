@@ -9,6 +9,7 @@ goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
+goog.require('good.drive.nav.button.Renderer');
 
 
 /** */
@@ -17,6 +18,8 @@ good.drive.init.start = function() {
   window.gdrOnLoad = function() {
     var createInput;
     var modifeInput;
+    var contentcreationpane = goog.dom.getElement('contentcreationpane');
+    var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
 
     good.config.start();
     var auth = good.auth.Auth.current;
@@ -30,7 +33,7 @@ good.drive.init.start = function() {
     var empty = goog.dom.createDom('div', {
       'class' : 'goog-inline-block jfk-button-caption'
     }, ' ');
-    var button1 = new good.drive.nav.button.View([label, empty], [
+    var leftCreateBtn = new good.drive.nav.button.View([label, empty], contentcreationpane, [
       'jfk-button-primary', 'goog-toolbar-item-new']);
 
     var icon = goog.dom.createDom('div', {
@@ -39,9 +42,33 @@ good.drive.init.start = function() {
       'class' : 'drive-sprite-' +
           'core-upload upload-icon-position goog-inline-block'
     }));
-    var button2 = new good.drive.nav.button.View([icon, empty], [
+    var leftUpdateBtn = new good.drive.nav.button.View([icon, empty], contentcreationpane, [
       'jfk-button-primary', 'jfk-button-narrow', 'goog-toolbar-item-upload']);
+    
+    var reander = good.drive.nav.button.Renderer.getInstance();
+    reander.createDom = function(control) {
+      var button = /** @type {goog.ui.Button} */ (control);
+      var classNames = this.getClassNames(button);
+      var attributes = {
+        'class': goog.ui.INLINE_BLOCK_CLASSNAME + ' ' + classNames.join(' ')
+      };
+      var buttonElement = button.getDomHelper().createDom('div', attributes, button.getContent());
+      this.setTooltip(
+          buttonElement, /** @type {!string}*/ (button.getTooltip()));
+      this.setAriaStates(button, buttonElement);
 
+      return buttonElement;
+    };
+    
+    icon = goog.dom.createDom('div', {'class': 'viewpane-toolbar-share-icon drive-sprite-core-share'})
+    var toolbarCreateBtn = new  good.drive.nav.button.View(icon, viewpanetoolbar.firstElementChild, ['jfk-button-standard', 'goog-toolbar-item-share-button'], reander)
+
+    icon = goog.dom.createDom('div', {'class': 'viewpane-toolbar-trash-icon drive-sprite-core-trash'})
+    var toolbarDeleteBtn = new  good.drive.nav.button.View(icon, viewpanetoolbar.firstElementChild, ['jfk-button-standard', 'jfk-button-collapse-left', 'goog-toolbar-item-trash-button'], reander)
+    
+    icon = goog.dom.createDom('div', {'class': 'viewpane-toolbar-trash-icon drive-sprite-core-trash'})
+    var toolbarMoreBtn = new  good.drive.nav.button.View(icon, viewpanetoolbar.firstElementChild, ['jfk-button-standard', 'jfk-button-collapse-left', 'goog-toolbar-item-trash-button'], reander)
+    
     var dialog = new good.drive.nav.dialog.View();
     var createdialog = dialog.createFolderDialog(function(evt) {
       if (createInput == undefined) {
@@ -71,7 +98,7 @@ good.drive.init.start = function() {
     });
 
     var menu = new good.drive.nav.menu.View();
-    menu.createPopup(button1.getElement(), function(e) {
+    menu.createPopup(leftCreateBtn.getElement(), function(e) {
       switch (e.target.getId()) {
         case ':2':
           createdialog.setVisible(true);
