@@ -22,6 +22,11 @@
       <artifactId>realtime-android</artifactId>
       <version>${project.version}</version>
     </dependency>
+    <dependency>
+      <groupId>com.goodow.apis</groupId>
+      <artifactId>goodow-api-services-account</artifactId>
+      <version>${project.version}</version>
+    </dependency>
   </dependencies>
   
   <build>
