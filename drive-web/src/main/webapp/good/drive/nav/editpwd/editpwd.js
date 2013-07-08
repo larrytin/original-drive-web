@@ -1,19 +1,20 @@
 'use strict';
 goog.provide('good.drive.nav.editpwd');
 
+goog.require('good.auth.signup');
 goog.require('good.config');
+goog.require('good.drive.nav.userinfo');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
-goog.require('good.drive.nav.userinfo');
-goog.require('good.auth.signup');
+
 
 /**
- * 
+ *
  */
 good.drive.nav.editpwd.start = function() {
   good.config.start();
-  var $ = goog.dom.getElement;  
+  var $ = goog.dom.getElement;
   new good.drive.nav.userinfo.Headuserinfo();
   var array = new Array('OldPasswd', 'Passwd', 'PasswdAgain');
   good.auth.signup.focus(array);
@@ -25,17 +26,17 @@ good.drive.nav.editpwd.start = function() {
     }
     var query = new goog.Uri.QueryData(window.location.hash.substring(1));
     var userId = query.get('userId');
-    
+
     var name = goog.dom.getElement('gbgs4dn').innerText;
     var OldPasswd = $('OldPasswd').value;
     var pwd = $('Passwd').value;
     var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
-        good.config.VERSION, 'login/' + encodeURIComponent(name) + '/'
-            + encodeURIComponent(OldPasswd));
+        good.config.VERSION, 'login/' + encodeURIComponent(name) + '/' +
+        encodeURIComponent(OldPasswd));
     rpc.send(function(json) {
       if (json && json['token']) {
-        var rpc = new good.net.CrossDomainRpc('PUT', good.config.ACCOUNT,
-            good.config.VERSION, 'accountinfo');
+        var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
+            good.config.VERSION, 'updateAccountInfo');
         var body = {
           'userId': userId,
           'name' : name,
@@ -44,8 +45,8 @@ good.drive.nav.editpwd.start = function() {
         rpc.body = body;
         rpc.send(function(json) {
           if (json && !json['error']) {
-            window.location.assign('index.html' + '#userId='
-                + json['userId'] + '&access_token=' + json['token']);
+            window.location.assign('index.html' + '#userId=' +
+                json['userId'] + '&access_token=' + json['token']);
           }
         });
       } else {
@@ -54,7 +55,7 @@ good.drive.nav.editpwd.start = function() {
         var Passwd = goog.dom.getElement('OldPasswd');
         Passwd.className = 'form-error';
       }
-    });    
+    });
   });
 };
 
