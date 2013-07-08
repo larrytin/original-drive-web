@@ -13,13 +13,13 @@ good.drive.nav.dialog.View = function() {
   var createFolderDialog_ = new goog.ui.Dialog(null, true);
   createFolderDialog_
       .setContent('<p>请输入新文件夹的名称：</p><div class="new' +
-          '-item-dialog-folder-input"><input type="text"' +
+          '-item-dialog-folder-input"><input id="crateFolder" type="text"' +
           ' dir="ltr"></div>');
   createFolderDialog_.setTitle('新建文件夹');
 
   var buttonSet = new goog.ui.Dialog.ButtonSet().addButton({
     key: 'cr',
-    caption: '创建'
+    caption: '确定'
   }, true).addButton({
     key: 'c',
     caption: '取消'
@@ -43,6 +43,15 @@ good.drive.nav.dialog.View = function() {
   };
   createFolderDialog_.setButtonSet(buttonSet);
   this.createDialog = createFolderDialog_;
+
+  var modifyFolderDialog_ = new goog.ui.Dialog(null, true);
+  modifyFolderDialog_
+  .setContent('<p>请为该项输入新名称：</p><div class="new' +
+      '-item-dialog-folder-input"><input id="modifyFolder" type="text"' +
+      ' dir="ltr"></div>');
+  modifyFolderDialog_.setTitle('重命名');
+  modifyFolderDialog_.setButtonSet(buttonSet);
+  this.modifyDialog = modifyFolderDialog_;
 };
 
 
@@ -54,4 +63,16 @@ good.drive.nav.dialog.View.prototype.createFolderDialog = function(handle) {
   goog.events.listen(this.createDialog, goog.ui.Dialog.EventType.SELECT,
       handle);
   return this.createDialog;
+};
+
+
+/**
+ * @param {Function} handle
+ * @return {goog.ui.Dialog}
+ */
+good.drive.nav.dialog.View.prototype.modifyFolderDialog =
+    function(handle) {
+  goog.events.listen(this.modifyDialog, goog.ui.Dialog.EventType.SELECT,
+      handle);
+  return this.modifyDialog;
 };

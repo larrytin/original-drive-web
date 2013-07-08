@@ -3,9 +3,9 @@ goog.provide('good.drive.nav.folders');
 
 goog.require('good.drive.nav.folders.Model');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
-goog.require('goog.string.StringBuffer');
 
 
 
@@ -27,7 +27,6 @@ good.drive.nav.folders.Tree = function() {
   root.setSelectedItem(tree_);
   this.customNode(tree_);
 
-
   this.roottree = root;
   this.tree = tree_;
 
@@ -35,20 +34,27 @@ good.drive.nav.folders.Tree = function() {
 
   var model_ = new good.drive.nav.folders.Model(this);
   this.model = model_;
-  
+
   var sb = new goog.string.StringBuffer();
-	for(var i in good.drive.nav.folders.labelElm) {
-		sb.append(good.drive.nav.folders.labelElm[i].outerHTML);
-	}
-	
-	this.sb_ = sb;
+  for (var i in good.drive.nav.folders.labelElm) {
+    sb.append(good.drive.nav.folders.labelElm[i].outerHTML);
+  }
+  this.sb_ = sb;
+
+  this.currentItem_ = undefined;
 };
 
+
+/** {struct} */
 good.drive.nav.folders.labelElm = [
-                                   goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-init-spacing'}, ' '),
-                                   goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-node-icon drive-sprite-folder-list-icon icon-color-4'}, ' '),
-                                   goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-spacing'}, ' '),
-                                   ];
+  goog.dom.createDom('span',
+      {'class': 'goog-inline-block treedoclistview-init-spacing'}, ' '),
+  goog.dom.createDom('span',
+      {'class': 'goog-inline-block treedoclistview-node-icon' +
+            ' drive-sprite-folder-list-icon icon-color-4'}, ' '),
+  goog.dom.createDom('span',
+      {'class': 'goog-inline-block treedoclistview-spacing'}, ' ')
+];
 
 
 /**
@@ -61,12 +67,11 @@ good.drive.nav.folders.Tree.prototype.insertNode =
     function(parent, idx, value) {
   var title = value.get(good.drive.nav.folders.Model.strType.LABEL);
   var childNode = parent.getTree().createNode('');
-	var titleElm = goog.dom.createDom('span', {'class': 'treedoclistview-node-name'}, goog.dom.createDom('span', {'dir': 'ltr'}, title));
-	parent.addChild(childNode);
-	childNode.setHtml(this.sb_.toString() + titleElm.outerHTML);
-	if(parent.getExpanded()) {
-		this.customNode(childNode);
-	}
+  parent.addChild(childNode);
+  this.setNodeTitle(childNode, title);
+  if (parent.getExpanded()) {
+    this.customNode(childNode);
+  }
   return childNode;
 };
 
@@ -123,6 +128,39 @@ good.drive.nav.folders.Tree.prototype.hasExtended = function(node) {
 };
 
 
+/** */
+good.drive.nav.folders.Tree.prototype.extended =
+    function() {
+  var selected = this.getCurrentItem();
+  if (this.hasExtended(selected)) {
+    return;
+  }
+  selected.setExpanded(true);
+};
+
+
+/**
+ * @return {goog.ui.tree.TreeControl}
+ */
+good.drive.nav.folders.Tree.prototype.getCurrentItem = function() {
+  return this.roottree.getSelectedItem();
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @param {string} title
+ */
+good.drive.nav.folders.Tree.prototype.setNodeTitle =
+    function(node, title) {
+  var titleElm = goog.dom.createDom('span',
+      {'class': 'treedoclistview-node-name'},
+      goog.dom.createDom('span', {'dir': 'ltr'}, title));
+  node.setHtml(this.sb_.toString() + titleElm.outerHTML);
+  node.title = title;
+};
+
+
 /**
  * @param {goog.ui.tree.TreeControl} tree
  */
@@ -130,6 +168,7 @@ good.drive.nav.folders.Tree.prototype.customNode =
     function(tree) {
   tree.setAfterLabelHtml('<div class="selection-highlighter"></div>');
   var rowElement = tree.getRowElement();
+  var that = this;
   goog.events.
       listen(rowElement, goog.events.EventType.MOUSEOVER, function(e) {
     if (!goog.dom.classes.has(rowElement,
@@ -178,20 +217,9 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
   if (str.length == 0) {
     return;
   }
-  var selected = this.roottree.getSelectedItem();
+  var selected = this.getCurrentItem();
   selected.setExpanded(true);
   var map = this.model.getLeaf(str);
-  //  if (selected.getChildCount() == 0) {
-  //    var id = selected.getId();
-  //    var parent = selected.getParent();
-  //    var childIds = parent.getChildIds();
-  //    var index = childIds.indexOf(id);
-  //    var list = parent.data.get(index).get(
-  //        good.drive.nav.folders.Model.FOLDERSCHILD);
-  //    list.push(map);
-  //    selected.setExpanded(true);
-  //    return;
-  //  }
   selected.data.push(map);
 };
 
@@ -200,7 +228,7 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
  * @param {string} str
  */
 good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
-  var selected = this.roottree.getSelectedItem();
+  var selected = this.getCurrentItem();
   selected.getParent().data.get(this.getIndexByChild(selected)).
       set(good.drive.nav.folders.Model.strType.LABEL, str);
 };
@@ -208,7 +236,7 @@ good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
 
 /**  */
 good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
-  var selected = this.roottree.getSelectedItem();
+  var selected = this.getCurrentItem();
   selected.getParent().data.remove(this.getIndexByChild(selected));
 };
 
