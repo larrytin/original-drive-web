@@ -8,15 +8,19 @@ goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.ui.Popup');
 
 
 /**
  * @constructor
  */
-
 good.drive.nav.userinfo.Headuserinfo = function() {
+  var popupElt = document.getElementById('gbd4');
+  var popup = new goog.ui.Popup(popupElt);
+  popup.setHideOnEscape(true);
+  popup.setAutoHide(true);  
+  this.popup = popup;
 };
-
 
 /**
  *
@@ -44,19 +48,10 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
  *
  */
 good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
-  var name = goog.dom.getElement('gbg4');
-
+  var name = goog.dom.getElement('gbg4');  
+  var that = this;
   goog.events.listen(name, goog.events.EventType.CLICK, function(e) {
-    var info_div = goog.dom.getElement('gbd4');
-    var visibility = info_div.style.visibility;
-    if (visibility == 'hidden') {
-      info_div.style.visibility = 'visible';
-      info_div.style.right = '5px';
-      info_div.style.left = 'auto';
-    }else {
-      info_div.style.visibility = 'hidden';
-      info_div.style.right = '';
-      info_div.style.left = '';
-    }
+    that.popup.setVisible(false);
+    that.popup.setVisible(true);
   });
 };
