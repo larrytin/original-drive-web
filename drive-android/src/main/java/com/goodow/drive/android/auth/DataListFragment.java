@@ -2,6 +2,7 @@ package com.goodow.drive.android.auth;
 
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.adapter.MyArrayAdapter;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -16,6 +17,9 @@ import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import android.R.integer;
 
 import android.app.ListFragment;
 import android.os.Bundle;
@@ -131,7 +135,7 @@ public class DataListFragment extends ListFragment {
     adapter = new MyArrayAdapter(getActivity(), R.layout.row_folderlist, 0, dataSourceOfFolderList);
     setListAdapter(adapter);
 
-    Realtime.load("@tmp/b18", new DocumentLoadedHandler() {
+    Realtime.load("@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/androidTest02", new DocumentLoadedHandler() {
       @Override
       public void onLoaded(Document document) {
         doc = document;
@@ -147,6 +151,38 @@ public class DataListFragment extends ListFragment {
         model = model_;
         root = model.getRoot();
 
+        String[] mapKey = { "label", "filechild", "folderschild" };
+        CollaborativeMap[] values = new CollaborativeMap[3];
+
+        for (int k = 0; k < values.length; k++) {
+          CollaborativeMap map = model.createMap(null);
+          for (int i = 0; i < mapKey.length; i++) {
+            if ("label".equals(mapKey[i])) {
+              map.set(mapKey[i], "Folder" + k);
+            } else {
+              CollaborativeList subList = model.createList(null);
+
+              if ("folderschild".equals(mapKey[i])) {
+                CollaborativeMap subMap = model.createMap(null);
+                subMap.set("label", "SubFolder");
+                subMap.set("filechild", model.createList(null));
+                subMap.set("folderschild", model.createList(null));
+                subList.push(subMap);
+              }
+
+              map.set(mapKey[i], subList);
+            }
+
+          }
+
+          values[k] = map;
+        }
+
+        CollaborativeList list = model_.createList(null);
+        list.pushAll(values);
+
+        root.set("folders", list);
+        System.out.println();
       }
     }, null);
   }

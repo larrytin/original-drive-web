@@ -62,6 +62,7 @@ good.drive.nav.folders.Model.prototype.connect = function(doc) {
  */
 good.drive.nav.folders.Model.prototype.mapHander =
     function(parentNode, selfNode, map) {
+  var that = this;
   map.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
     if (property != good.drive.nav.folders.Model.strType.LABEL) {
@@ -72,7 +73,7 @@ good.drive.nav.folders.Model.prototype.mapHander =
     if (oldValue.length == 0) {
       return;
     }
-    selfNode.setHtml(newValue);
+    that.view.setNodeTitle(selfNode, newValue);
   });
 };
 

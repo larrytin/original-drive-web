@@ -5,6 +5,20 @@ import com.goodow.drive.android.auth.DataListFragment;
 import com.goodow.drive.android.auth.LeftMenuFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
+import com.google.inject.Inject;
+
+import android.accounts.Account;
+
+import roboguice.activity.RoboActivity;
+
+import roboguice.inject.InjectFragment;
+
+import roboguice.inject.InjectView;
+
+import roboguice.inject.InjectResource;
+
+import roboguice.inject.ContentView;
+
 import android.view.animation.AnimationUtils;
 
 import android.view.animation.Animation;
@@ -39,10 +53,16 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.app.Activity;
 
-public class MainActivity extends Activity {
+@ContentView(R.layout.activity_main)
+public class MainActivity extends RoboActivity {
+  @Inject
+  com.goodow.api.services.account.Account account;
 
+  @InjectView(R.id.leftMenuLayout)
   private LinearLayout leftMenu;
+  @InjectView(R.id.middleLayout)
   private LinearLayout middleLayout;
+  // @InjectFragment
   private LeftMenuFragment leftMenuFragment;
 
   public void hideLeftMenuLayout() {
@@ -119,13 +139,9 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
-
-    leftMenu = (LinearLayout) findViewById(R.id.leftMenuLayout);
-    middleLayout = (LinearLayout) findViewById(R.id.middleLayout);
 
     leftMenuFragment = new LeftMenuFragment();
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

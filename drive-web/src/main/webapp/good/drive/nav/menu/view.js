@@ -26,8 +26,8 @@ good.drive.nav.menu.View = function() {
       'detroit-createmenuitem', function() {
         return new goog.ui.MenuItem('', null, null, itemRender);
       });
-  var create_ = new goog.ui.PopupMenu(null, render);
-  create_.decorateContent = function(element) {
+  var create = new goog.ui.PopupMenu(null, render);
+  create.decorateContent = function(element) {
     var renderer = this.getRenderer();
     var contentElements = this.getDomHelper().getElementsByTagNameAndClass(
         'div', goog.getCssName(renderer.getCssClass(), 'entries-col'),
@@ -37,9 +37,17 @@ good.drive.nav.menu.View = function() {
       renderer.decorateChildren(this, contentElements[i]);
     }
   };
-  create_.setToggleMode(true);
-  create_.decorate(goog.dom.getElement('dMenu'));
-  this.create = create_;
+  create.setToggleMode(true);
+  create.decorate(goog.dom.getElement('dMenu'));
+  this.create_ = create;
+
+
+  var left = new goog.ui.PopupMenu();
+  left.decorate(goog.dom.getElement('leftsubmenu'));
+  this.left_ = left;
+
+  var box = goog.math.Box(10, 10, 10, 10);
+  this.box_ = box;
 };
 
 
@@ -49,8 +57,20 @@ good.drive.nav.menu.View = function() {
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
-  this.create.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
+  this.create_.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
       goog.positioning.Corner.TOP_LEFT);
-  goog.events.listen(this.create, 'action', handle);
-  return this.create;
+  goog.events.listen(this.create_, 'action', handle);
+  return this.create_;
+};
+
+
+/**
+ * @param {Element} dom
+ * @param {Function} handle
+ * @return {goog.ui.PopupMenu}
+ */
+good.drive.nav.menu.View.prototype.leftSubMenu = function(dom, handle) {
+  this.left_.attach(dom, undefined, undefined, true, this.box_);
+  goog.events.listen(this.left_, 'action', handle);
+  return this.left_;
 };
