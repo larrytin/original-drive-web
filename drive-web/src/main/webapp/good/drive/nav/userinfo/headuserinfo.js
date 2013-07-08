@@ -11,6 +11,7 @@ goog.require('goog.events.EventType');
 goog.require('goog.ui.Popup');
 
 
+
 /**
  * @constructor
  */
@@ -18,9 +19,13 @@ good.drive.nav.userinfo.Headuserinfo = function() {
   var popupElt = document.getElementById('gbd4');
   var popup = new goog.ui.Popup(popupElt);
   popup.setHideOnEscape(true);
-  popup.setAutoHide(true);  
+  popup.setAutoHide(true);
   this.popup = popup;
+  this.init();
+  this.nameClick();
+  this.accountClick();
 };
+
 
 /**
  *
@@ -48,10 +53,27 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
  *
  */
 good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
-  var name = goog.dom.getElement('gbg4');  
+  var name = goog.dom.getElement('gbg4');
   var that = this;
   goog.events.listen(name, goog.events.EventType.CLICK, function(e) {
     that.popup.setVisible(false);
     that.popup.setVisible(true);
   });
 };
+
+
+/**
+ *
+*/
+good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
+  var account = goog.dom.getElement('account');
+  goog.events.listen(account, goog.events.EventType.CLICK, function(e) {
+    var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+    var userId = query.get('userId');
+
+    var uri = new goog.Uri('EditPasswd.html' + '#userId=' + userId);
+    window.location.assign(uri.toString());
+  });
+};
+
+

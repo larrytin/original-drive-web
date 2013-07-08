@@ -136,8 +136,6 @@ good.drive.init.start = function() {
     });
 
     var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-    headuserinfo.init();
-    headuserinfo.nameClick();
   };
 };
 
