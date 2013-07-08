@@ -19,7 +19,10 @@ good.drive.nav.userinfo.Headuserinfo = function() {
   var popup = new goog.ui.Popup(popupElt);
   popup.setHideOnEscape(true);
   popup.setAutoHide(true);  
-  this.popup = popup;
+  this.popup = popup;  
+  this.init();
+  this.nameClick();
+  this.accountClick();
 };
 
 /**
@@ -55,3 +58,19 @@ good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
     that.popup.setVisible(true);
   });
 };
+
+/**
+ * 
+*/
+good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
+    var account = goog.dom.getElement('account');
+    goog.events.listen(account, goog.events.EventType.CLICK, function(e) {
+      var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+      var userId = query.get('userId');
+      
+      var uri = new goog.Uri('EditPasswd.html'  + '#userId=' + userId);
+      window.location.assign(uri.toString());
+    });
+};
+  
+
