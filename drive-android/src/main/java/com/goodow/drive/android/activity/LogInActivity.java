@@ -11,6 +11,12 @@ import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.File;
 
+import roboguice.inject.InjectView;
+
+import roboguice.inject.ContentView;
+
+import roboguice.activity.RoboActivity;
+
 import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
@@ -22,7 +28,8 @@ import android.webkit.WebView;
 import android.webkit.WebViewClient;
 
 @SuppressLint("SetJavaScriptEnabled")
-public class LogInActivity extends Activity {
+@ContentView(R.layout.activity_login)
+public class LogInActivity extends RoboActivity {
   private class MyWebViewClient extends WebViewClient {
     @Override
     public boolean shouldOverrideUrlLoading(WebView view, String url) {
@@ -64,7 +71,8 @@ public class LogInActivity extends Activity {
   private static final String UID = "#userId=";
   private static final String UIT = "&access_token=";
   private static final String URL = "http://retech.goodow.com/good.js/good/auth/ServiceLogin.html";
-  // private OAuthFragment newFragment;
+
+  @InjectView(R.id.web_oauth)
   private WebView webViewOauth;
   static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
   static final JsonFactory JSON_FACTORY = new JacksonFactory();
@@ -78,9 +86,6 @@ public class LogInActivity extends Activity {
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_login);
-
-    webViewOauth = (WebView) findViewById(R.id.web_oauth);
 
     WebSettings webSettings = webViewOauth.getSettings();
     webSettings.setJavaScriptEnabled(true);

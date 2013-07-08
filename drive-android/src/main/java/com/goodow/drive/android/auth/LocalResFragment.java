@@ -190,12 +190,13 @@ public class LocalResFragment extends ListFragment {
     ArrayList<String> dataSource = new ArrayList<String>();
 
     File dir = new File(dirPath);
+    if (dir.exists()) {
+      folderPathList.clear();
 
-    folderPathList.clear();
-
-    for (File file : dir.listFiles()) {
-      dataSource.add(file.getName());
-      folderPathList.add(file.getAbsolutePath());
+      for (File file : dir.listFiles()) {
+        dataSource.add(file.getName());
+        folderPathList.add(file.getAbsolutePath());
+      }
     }
 
     return dataSource;
