@@ -55,8 +55,6 @@ import android.app.Activity;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
-  @Inject
-  com.goodow.api.services.account.Account account;
 
   @InjectView(R.id.leftMenuLayout)
   private LinearLayout leftMenu;

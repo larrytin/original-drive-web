@@ -1,18 +1,12 @@
 package com.goodow.drive.android.activity;
 
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.R.id;
-import com.goodow.drive.android.R.layout;
-import com.goodow.drive.android.R.menu;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
-import com.goodow.realtime.DocumentLoadedHandler;
 import com.goodow.realtime.EventHandler;
 import com.goodow.realtime.EventType;
 import com.goodow.realtime.Model;
-import com.goodow.realtime.ModelInitializerHandler;
-import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValuesAddedEvent;
 
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -28,8 +22,7 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 import java.io.OutputStream;
-
-import android.widget.EditText;
+import java.sql.Date;
 
 import android.app.Activity;
 import android.content.Intent;
@@ -41,6 +34,7 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
+import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;

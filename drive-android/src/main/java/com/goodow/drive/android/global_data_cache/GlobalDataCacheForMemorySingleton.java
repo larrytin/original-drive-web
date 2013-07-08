@@ -34,6 +34,8 @@ public enum GlobalDataCacheForMemorySingleton {
 
   private String access_token;
 
+  private String userName;
+
   /**
    * @return the access_token
    */
@@ -62,6 +64,13 @@ public enum GlobalDataCacheForMemorySingleton {
    */
   public String getUserId() {
     return userId;
+  }
+
+  /**
+   * @return the userName
+   */
+  public String getUserName() {
+    return userName;
   }
 
   public String getUsernameForLastSuccessfulLogon() {
@@ -104,6 +113,13 @@ public enum GlobalDataCacheForMemorySingleton {
    */
   public void setUserId(String userId) {
     this.userId = userId;
+  }
+
+  /**
+   * @param userName the userName to set
+   */
+  public void setUserName(String userName) {
+    this.userName = userName;
   }
 
   public synchronized void setUsernameForLastSuccessfulLogon(String usernameForLastSuccessfulLogon) {
