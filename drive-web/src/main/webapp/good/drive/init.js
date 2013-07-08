@@ -15,6 +15,9 @@ goog.require('goog.dom');
 good.drive.init.start = function() {
   good.auth.check();
   window.gdrOnLoad = function() {
+    var createInput;
+    var modifeInput;
+
     good.config.start();
     var auth = good.auth.Auth.current;
     good.realtime.authorize(auth.userId, auth.access_token);
@@ -37,16 +40,28 @@ good.drive.init.start = function() {
           'core-upload upload-icon-position goog-inline-block'
     }));
     var button2 = new good.drive.nav.button.View([icon, empty], [
-      'jfk-button-primary', 'jfk-button-narrow',
-      'goog-toolbar-item-upload']);
+      'jfk-button-primary', 'jfk-button-narrow', 'goog-toolbar-item-upload']);
 
     var dialog = new good.drive.nav.dialog.View();
     var createdialog = dialog.createFolderDialog(function(evt) {
+      if (createInput == undefined) {
+        createInput = goog.dom.getElement('crateFolder');
+      }
       switch (evt.key) {
         case 'cr':
-          var textinput = goog.dom.getElementByClass(
-              'new-item-dialog-folder-input').children[0];
-          tree.addLeaf(textinput.value);
+          tree.addLeaf(createInput.value);
+          break;
+        case 'c':
+          break;
+        default:
+          break;
+      }
+    });
+
+    var modifydialog = dialog.modifyFolderDialog(function(evt) {
+      switch (evt.key) {
+        case 'cr':
+          tree.renameLeaf(modifeInput.value);
           break;
         case 'c':
           break;
@@ -66,9 +81,34 @@ good.drive.init.start = function() {
       }
     });
 
+    var leftSubmenuChildIds = undefined;
+    var leftSubenu = menu.leftSubMenu(tree.tree.getElement(), function(e) {
+      if (leftSubmenuChildIds == undefined) {
+        leftSubmenuChildIds = leftSubenu.getChildIds();
+      }
+      switch (leftSubmenuChildIds.indexOf(e.target.getId())) {
+        case 0:
+          tree.extended();
+          break;
+        case 2:
+          createdialog.setVisible(true);
+          break;
+        case 3:
+          modifydialog.setVisible(true);
+          if (modifeInput == undefined) {
+            modifeInput = goog.dom.getElement('modifyFolder');
+          }
+          modifeInput.value = tree.getCurrentItem().title;
+          break;
+        case 4:
+          tree.removeLeaf();
+          break;
+        default:
+          break;
+      }
+    });
+
     var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-    headuserinfo.init();
-    headuserinfo.nameClick();
   };
 };
 
