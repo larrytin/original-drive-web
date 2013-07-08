@@ -1,101 +1,145 @@
 package com.goodow.drive.android.activity;
 
+import com.goodow.api.services.account.Account;
+import com.goodow.api.services.account.model.AccountInfo;
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.SimpleProgressDialog;
 import com.goodow.realtime.Realtime;
 
-import com.google.api.client.extensions.android.http.AndroidHttp;
-import com.google.api.client.http.HttpTransport;
-import com.google.api.client.json.JsonFactory;
-import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.inject.Inject;
 
-import java.io.File;
-
-import roboguice.inject.InjectView;
-
-import roboguice.inject.ContentView;
-
-import roboguice.activity.RoboActivity;
+import java.io.IOException;
 
 import android.annotation.SuppressLint;
-import android.app.Activity;
+import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.Environment;
-import android.util.Log;
-import android.webkit.WebSettings;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.text.TextUtils;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.Toast;
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 
 @SuppressLint("SetJavaScriptEnabled")
 @ContentView(R.layout.activity_login)
 public class LogInActivity extends RoboActivity {
-  private class MyWebViewClient extends WebViewClient {
+  private class LoginNetRequestTask extends AsyncTask<String, String, AccountInfo> {
     @Override
-    public boolean shouldOverrideUrlLoading(WebView view, String url) {
-      // check if the login was successful and the access token returned
-      // this test depend of your API
-      if (url.contains(UIT)) {
-        // save your token
+    protected AccountInfo doInBackground(String... params) {
+      AccountInfo accountInfo = null;
+      try {
+        accountInfo = account.login(params[0], params[1]).execute();
+      } catch (IOException e) {
+        e.printStackTrace();
+      }
+      return accountInfo;
+    }
 
-        String uid = url.substring(url.indexOf(UID) + UID.length(), url.indexOf(UIT));
-        Log.i("TAG", "user_id=" + uid);
-        String uit = url.substring(url.indexOf(UIT) + UIT.length(), url.length());
-        GlobalDataCacheForMemorySingleton.getInstance.setUserId(uid);
-        GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(uit);
+    @Override
+    protected void onPostExecute(AccountInfo result) {
+      String errorMessage = "";
 
-        if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-          File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getUserResDirPath());
-          if (!file.exists()) {
-            file.mkdir();
-          }
+      do {
+        if (this.isCancelled()) {
+          break;
+        }
+        if (null == result || result.containsKey("error_message")) {
+          errorMessage = "用户名或者密码错误!";
+          break;
         }
 
-        Log.i("LoginApp", uid + ":" + uit);
+        String userId = result.getUserId();
+        String token = result.getToken();
+        if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(token)) {
+          errorMessage = "服务器异常!";
+          break;
+        }
+        GlobalDataCacheForMemorySingleton.getInstance.setUserId(userId);
+        GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(token);
 
         // 通知。。。
-        Realtime.authorize(uid, uit);
+        Realtime.authorize(userId, token);
 
         Intent intent = new Intent(LogInActivity.this, MainActivity.class);
         LogInActivity.this.startActivity(intent);
 
-        return true;
+      } while (false);
+
+      SimpleProgressDialog.dismiss(LogInActivity.this);
+
+      if (!TextUtils.isEmpty(errorMessage)) {
+        Toast.makeText(LogInActivity.this, "用户名或者密码错误!", Toast.LENGTH_SHORT).show();
       }
-      Log.i(MyWebViewClient.class.getName(), "Login Failed");
-      return false;
+
     }
   }
 
-  private final String TAG = this.getClass().getSimpleName();
+  @Inject
+  private Account account;
 
-  private static final String UID = "#userId=";
-  private static final String UIT = "&access_token=";
-  private static final String URL = "http://retech.goodow.com/good.js/good/auth/ServiceLogin.html";
+  @InjectView(R.id.username_EditText)
+  private EditText usernameEditText;
 
-  @InjectView(R.id.web_oauth)
-  private WebView webViewOauth;
-  static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
-  static final JsonFactory JSON_FACTORY = new JacksonFactory();
+  @InjectView(R.id.password_EditText)
+  private EditText passwordEditText;
 
-  /**
-   * Called when the activity is first created.
-   * 
-   * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data
-   *          it most recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
-   */
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    WebSettings webSettings = webViewOauth.getSettings();
-    webSettings.setJavaScriptEnabled(true);
+    Button loginButton = (Button) findViewById(R.id.login_Button);
+    loginButton.setOnClickListener(new View.OnClickListener() {
 
-    // load the url of the oAuth login page
-    webViewOauth.loadUrl(URL);
-    // webViewOauth.loadUrl("http://www.google.com");
+      @Override
+      public void onClick(View v) {
+        String errorMessageString = "登录成功!";
+        String username = "";
+        String password = "";
 
-    // set the web client
-    webViewOauth.setWebViewClient(new MyWebViewClient());
-    // activates JavaScript (just in case)
+        do {
+          username = usernameEditText.getText().toString();
+          if (TextUtils.isEmpty(username)) {
+            errorMessageString = "用户名不能为空!";
+            break;
+          }
+
+          password = passwordEditText.getText().toString();
+          if (TextUtils.isEmpty(password)) {
+            errorMessageString = "密码不能为空!";
+            break;
+          }
+
+          String[] params = { username, password };
+          final LoginNetRequestTask loginNetRequestTask = new LoginNetRequestTask();
+          SimpleProgressDialog.show(LogInActivity.this, new OnCancelListener() {
+
+            @Override
+            public void onCancel(DialogInterface dialog) {
+              loginNetRequestTask.cancel(true);
+            }
+          });
+          loginNetRequestTask.execute(params);
+
+          // 一切OK
+          return;
+        } while (false);
+
+        // 用户输入的信息错误
+        Toast.makeText(LogInActivity.this, errorMessageString, Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
+
+  @Override
+  protected void onPause() {
+    super.onPause();
+
+    SimpleProgressDialog.resetByThisContext(this);
   }
 }

@@ -50,19 +50,6 @@ public class LeftMenuFragment extends ListFragment {
 
     @Override
     public View getView(int position, View convertView, ViewGroup parent) {
-      String path = "https://goodow-realtime.appspot.com/_ah/api/account/v2/login/admin/admin";
-      URL url;
-      try {
-        url = new URL(path);
-        HttpURLConnection conn = (HttpURLConnection) url.openConnection();
-        conn.setReadTimeout(5 * 1000);
-        conn.setRequestMethod("GET");
-        String abcString = conn.getResponseMessage();
-        System.out.println(abcString);
-      } catch (Exception e) {
-        e.printStackTrace();
-      }
-
       View row = convertView;
       if (null == row) {
         row = ((Activity) this.getContext()).getLayoutInflater().inflate(R.layout.row_leftmenu, parent, false);
