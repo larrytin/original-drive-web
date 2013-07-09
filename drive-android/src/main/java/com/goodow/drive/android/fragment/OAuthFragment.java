@@ -1,4 +1,4 @@
-package com.goodow.drive.android.auth;
+package com.goodow.drive.android.fragment;
 
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.activity.DataListActivity;
