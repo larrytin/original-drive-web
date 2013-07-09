@@ -77,15 +77,16 @@ good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
   });
 };
 
+
 /**
 *
 */
 good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
- var cancel = goog.dom.getElement('cancel');
- goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
-   var uri = new goog.Uri('index.html');
-   window.location.assign(uri.toString());
- });
+  var cancel = goog.dom.getElement('cancel');
+  goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
+    var uri = new goog.Uri('index.html');
+    window.location.assign(uri.toString());
+  });
 };
 
 

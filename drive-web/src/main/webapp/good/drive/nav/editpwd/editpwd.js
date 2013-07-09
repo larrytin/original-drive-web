@@ -17,7 +17,7 @@ good.drive.nav.editpwd.start = function() {
   var $ = goog.dom.getElement;
   var query = new goog.Uri.QueryData(window.location.hash.substring(1));
   var userId = query.get('userId');
-  
+
   new good.drive.nav.userinfo.Headuserinfo();
   var array = new Array('OldPasswd', 'Passwd', 'PasswdAgain');
   good.auth.signup.focus(array);
@@ -26,7 +26,7 @@ good.drive.nav.editpwd.start = function() {
   goog.events.listen(submit, goog.events.EventType.CLICK, function(e) {
     if (!good.auth.signup.formCheck(array)) {
       return false;
-    } 
+    }
 
     var name = goog.dom.getElement('gbgs4dn').innerText;
     var OldPasswd = $('OldPasswd').value;
@@ -58,18 +58,18 @@ good.drive.nav.editpwd.start = function() {
       }
     });
   });
-  
-  var cancel = goog.dom.getElement('cancel');  
+
+  var cancel = goog.dom.getElement('cancel');
   goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
     var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
         good.config.VERSION, 'accountinfo/' + userId);
     rpc.send(function(json) {
-       if (json && !json['error']) {
-          window.location.assign('index.html' + '#userId=' +
-              json['userId'] + '&access_token=' + json['token']);
-        }       
+      if (json && !json['error']) {
+        window.location.assign('index.html' + '#userId=' +
+            json['userId'] + '&access_token=' + json['token']);
+      }
     });
-  });  
+  });
 };
 
 goog.exportSymbol('good.drive.nav.editpwd.start', good.drive.nav.editpwd.start);

@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menuitem.css">
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menuseparator.css">
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/submenu.css">
+<link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menubutton.css">
 <link href='good/css/googdrive.css' type='text/css' rel='stylesheet'>
 <noscript>
   <div class="loadingstatusbox" style="width: 325px">
@@ -19,12 +20,12 @@
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<script src="good.js/closure-library/closure/goog/base.js"></script>
+<!-- <script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script>
-<!-- <script src="drive-compiled.js"></script> -->
+</script> -->
+<script src="drive-compiled.js"></script>
 <style type="text/css">
 .popup {
   position: absolute;
@@ -169,22 +170,8 @@
                 style="-moz-box-sizing: border-box; width: 1280px; height: 313px;">
                 <div id="viewpane" class="viewpane" style="height: 292px;">
                   <div id="viewpane-toolbar" class="viewpane-toolbar density-tiny">
-                    <div class="goog-inline-block viewpane-toolbar-selection">
-                      <div class="goog-inline-block goog-toolbar-item-action-menu goog-flat-menu-button" style="-moz-user-select: none;"
-                        role="button" dlamo="true" aria-haspopup="true" aria-hidden="false" tabindex="0">
-                        <div class="goog-inline-block goog-flat-menu-button-caption">更多</div>
-                        <div class="goog-inline-block goog-flat-menu-button-dropdown"></div>
-                      </div>
-                    </div>
-                    <div class="goog-inline-block viewpane-toolbar-list">
-                      <div class="goog-inline-block goog-toolbar-item-viewpane-settings goog-flat-menu-button" tabindex="0" role="button"
-                        style="-moz-user-select: none;" aria-haspopup="true" data-tooltip="设置" aria-label="设置">
-                        <div class="goog-inline-block goog-flat-menu-button-caption">
-                          <div class="viewpane-toolbar-settings-icon drive-sprite-core-settings"></div>
-                        </div>
-                        <div class="goog-inline-block goog-flat-menu-button-dropdown"></div>
-                      </div>
-                    </div>
+                    <div class="goog-inline-block viewpane-toolbar-selection"></div>
+                    <div class="goog-inline-block viewpane-toolbar-list"></div>
                   </div>
                 </div>
               </td>
