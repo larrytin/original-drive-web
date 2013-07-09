@@ -24,6 +24,7 @@ good.drive.nav.userinfo.Headuserinfo = function() {
   this.init();
   this.nameClick();
   this.accountClick();
+  this.cancelClick();
 };
 
 
@@ -74,6 +75,17 @@ good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
     var uri = new goog.Uri('EditPasswd.html' + '#userId=' + userId);
     window.location.assign(uri.toString());
   });
+};
+
+/**
+*
+*/
+good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
+ var cancel = goog.dom.getElement('cancel');
+ goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
+   var uri = new goog.Uri('index.html');
+   window.location.assign(uri.toString());
+ });
 };
 
 
