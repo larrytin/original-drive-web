@@ -12,6 +12,7 @@ goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.menu');
+goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
 
@@ -76,6 +77,12 @@ good.drive.init.start = function() {
         default:
           break;
       }
+    });
+
+    var menulst = new Array('文件...', '文件夹...');
+    var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
+    popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
+      alert('ss');
     });
 
     var leftSubmenuChildIds = undefined;
