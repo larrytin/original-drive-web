@@ -1,8 +1,8 @@
 package com.goodow.drive.android.activity;
 
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.auth.DataListFragment;
-import com.goodow.drive.android.auth.LeftMenuFragment;
+import com.goodow.drive.android.fragment.DataListFragment;
+import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 import com.google.inject.Inject;
