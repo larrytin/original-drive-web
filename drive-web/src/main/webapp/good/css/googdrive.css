@@ -1707,6 +1707,9 @@ px
     margin-top: 1px;
     padding: 0 4px;
 }
+.goog-tree-hide-root {
+    display: none;
+}
 .nav-tree-folder-view .goog-list.density-normal .action-arrow {
     padding-top: 7px;
 }
@@ -1732,6 +1735,25 @@ px
     border: 1px solid #E5E5E5;
     height: 12px;
     width: 12px;
+}
+.drive-sprite-folder-list-icon.icon-color-1 {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image: url("../images/wjj.png");
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: no-repeat;
+    background-size: 16px 335px;
+    height: 13px;
+    width: 16px;
+}
+.treedoclistview-node-icon {
+    top: 1px;
+}
+.goog-inline-block {
+    display: inline-block;
+    position: relative;
 }
 .nav-tree-folder-view .action-arrow-dropdown-container:hover {
     background-color: #E5E5E5;

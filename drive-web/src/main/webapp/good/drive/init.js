@@ -11,11 +11,11 @@ goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
+goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
-goog.require('good.drive.nav.grid');
 
 
 /** */
