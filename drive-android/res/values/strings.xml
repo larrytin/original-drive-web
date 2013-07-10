@@ -19,5 +19,5 @@
     <string name="dailogCancel">取消</string>
     
     <!--内网  -->
-    <!-- <string name="com.goodow.realtime.serverAddress">http://192.168.1.15:8080</string> -->
+    <string name="com.goodow.realtime.serverAddress">http://192.168.1.15:8080</string>
 </resources>

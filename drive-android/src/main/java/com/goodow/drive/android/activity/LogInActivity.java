@@ -60,6 +60,7 @@ public class LogInActivity extends RoboActivity {
           errorMessage = "服务器异常!";
           break;
         }
+        GlobalDataCacheForMemorySingleton.getInstance.setUserName(usernameEditText.getText().toString());
         GlobalDataCacheForMemorySingleton.getInstance.setUserId(userId);
         GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(token);
 

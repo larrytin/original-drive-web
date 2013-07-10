@@ -3,6 +3,7 @@ package com.goodow.drive.android.activity;
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
+import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 import com.google.inject.Inject;
@@ -62,6 +63,22 @@ public class MainActivity extends RoboActivity {
   private LinearLayout middleLayout;
   // @InjectFragment
   private LeftMenuFragment leftMenuFragment;
+  private DataListFragment dataListFragment;
+  private LocalResFragment localResFragment;
+
+  /**
+   * @return the dataListFragment
+   */
+  public DataListFragment getDataListFragment() {
+    return dataListFragment;
+  }
+
+  /**
+   * @return the localResFragment
+   */
+  public LocalResFragment getLocalResFragment() {
+    return localResFragment;
+  }
 
   public void hideLeftMenuLayout() {
     if (null != leftMenu && null != middleLayout) {
@@ -140,6 +157,9 @@ public class MainActivity extends RoboActivity {
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
+
+    localResFragment = new LocalResFragment();
+    dataListFragment = new DataListFragment();
 
     leftMenuFragment = new LeftMenuFragment();
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

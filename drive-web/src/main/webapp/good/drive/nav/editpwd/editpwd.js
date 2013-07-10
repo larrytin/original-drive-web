@@ -17,6 +17,7 @@ good.drive.nav.editpwd.start = function() {
   var $ = goog.dom.getElement;
   var query = new goog.Uri.QueryData(window.location.hash.substring(1));
   var userId = query.get('userId');
+  var access_token = query.get('access_token');
 
   new good.drive.nav.userinfo.Headuserinfo();
   var array = new Array('OldPasswd', 'Passwd', 'PasswdAgain');
@@ -61,14 +62,22 @@ good.drive.nav.editpwd.start = function() {
 
   var cancel = goog.dom.getElement('cancel');
   goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
-    var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
-        good.config.VERSION, 'accountinfo/' + userId);
-    rpc.send(function(json) {
-      if (json && !json['error']) {
-        window.location.assign('index.html' + '#userId=' +
-            json['userId'] + '&access_token=' + json['token']);
-      }
-    });
+
+    var uri = new goog.Uri('index.html' + '#userId=' +
+        userId + '&access_token=' + access_token);
+
+    window.location.assign(uri.toString());
+
+
+    //    var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
+    //        good.config.VERSION, 'accountinfo/' + userId);
+    //    rpc.send(function(json) {
+    //      if (json && !json['error']) {
+    //        var uri = new goog.Uri('index.html' + '#userId=' +
+    //            json['userId'] + '&access_token=' + json['token']);
+    //        window.location.assign(uri.toString());
+    //      }
+    //    });
   });
 };
 
