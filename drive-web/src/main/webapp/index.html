@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menuitem.css">
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menuseparator.css">
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/submenu.css">
+<link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menubutton.css">
 <link href='good/css/googdrive.css' type='text/css' rel='stylesheet'>
 <noscript>
   <div class="loadingstatusbox" style="width: 325px">
@@ -19,12 +20,26 @@
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<script src="good.js/closure-library/closure/goog/base.js"></script>
+<!-- <script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script>
-<!-- <script src="drive-compiled.js"></script> -->
+</script> -->
+<script src="drive-compiled.js"></script>
+<style type="text/css">
+.popup {
+  position: absolute;
+  background-color: #e0ecff;
+  color: black;
+  visibility: hidden;
+  width: 100px;
+  height: 100px;
+  font-size: 80%;
+  border: solid red 1px;
+  -moz-outline: 0;
+  outline: 0;
+}
+</style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -80,30 +95,26 @@
           <span class=gbtcb></span>
           <ol class="gbtc gbsr">
             <li class=gbt></li>
-            <li class=gbt guidedhelpid=gbacsw>
-              <a class="gbgt gbg4p" id=gbg4 href="javaScript:void(0);" aria-haspopup=true aria-owns=gbd4>
-               <span id=gbgs4d style="text-align: left; ">
-                 <span id=gbgs4dn style="max-width: 652px; text-align: left; ">我的帐户</span>
-                 <span class=gbmai></span>
-                 <span class=gbmab></span>
-                 <span class=gbmac></span>
+            <li class=gbt guidedhelpid=gbacsw><a class="gbgt gbg4p" id=gbg4 href="javaScript:void(0);" aria-haspopup=true
+              aria-owns=gbd4> <span id=gbgs4d style="text-align: left;"> <span id=gbgs4dn
+                  style="max-width: 652px; text-align: left;">我的帐户</span> <span class=gbmai></span> <span class=gbmab></span> <span
+                  class=gbmac></span>
               </span>
-              </a>
-             </li>
-            <div class="gbm gbes" id="gbd4" aria-owner="gbg4" guidedhelpid="gbd4" style="visibility: hidden;">
+            </a></li>
+            <div class="gbm gbes popup" id="gbd4" aria-owner="gbg4" guidedhelpid="gbd4">
               <div class="gbmc">
                 <div id="gbmpdv">
                   <div class="gbpc">
-                    <span id="gbmpn" class="gbps">我的帐户</span><span id="displayname" class="gbps2">我的帐户</span>                    
+                    <span id="gbmpn" class="gbps">我的帐户</span><span id="displayname" class="gbps2">我的帐户</span>
                   </div>
-                </div>                
+                </div>
                 <table id="gbmpal">
                   <tbody>
                     <tr>
-                      <td class="gbmpala"><a target="_blank" role="button"
-                        href=""
+                    
+                      <td class="gbmpala"><a role="button" id="account"                        
                         class="gbqfbb">帐户</a></td>
-                      <td class="gbmpalb"><a target="_top" role="button" id="gb_71"
+                      <td class="gbmpalb"><a role="button" id="cancel"
                         href=""
                         class="gbqfbb">退出</a></td>
                     </tr>
@@ -159,37 +170,8 @@
                 style="-moz-box-sizing: border-box; width: 1280px; height: 313px;">
                 <div id="viewpane" class="viewpane" style="height: 292px;">
                   <div id="viewpane-toolbar" class="viewpane-toolbar density-tiny">
-                    <div class="goog-inline-block viewpane-toolbar-selection">
-                      <div class="goog-inline-block jfk-button jfk-button-standard goog-toolbar-item-share-button"
-                        style="-moz-user-select: none; margin-right: 15px;" role="button" data-tooltip="共享" aria-label="共享"
-                        aria-hidden="false" tabindex="0">
-                        <div class="viewpane-toolbar-share-icon drive-sprite-core-share"></div>
-                      </div>
-                      <div
-                        class="goog-inline-block jfk-button jfk-button-standard jfk-button-collapse-left jfk-button-collapse-right goog-toolbar-item-organize-button"
-                        style="-moz-user-select: none;" role="button" data-tooltip="移到" aria-label="移到" aria-hidden="false" tabindex="0">
-                        <div class="viewpane-toolbar-organize-icon drive-sprite-core-organize"></div>
-                      </div>
-                      <div class="goog-inline-block jfk-button jfk-button-standard jfk-button-collapse-left goog-toolbar-item-trash-button"
-                        style="-moz-user-select: none; margin-left: -5px;" role="button" data-tooltip="删除" aria-label="删除"
-                        aria-hidden="false" tabindex="0">
-                        <div class="viewpane-toolbar-trash-icon drive-sprite-core-trash"></div>
-                      </div>
-                      <div class="goog-inline-block goog-toolbar-item-action-menu goog-flat-menu-button" style="-moz-user-select: none;"
-                        role="button" dlamo="true" aria-haspopup="true" aria-hidden="false" tabindex="0">
-                        <div class="goog-inline-block goog-flat-menu-button-caption">更多</div>
-                        <div class="goog-inline-block goog-flat-menu-button-dropdown"></div>
-                      </div>
-                    </div>
-                    <div class="goog-inline-block viewpane-toolbar-list">
-                      <div class="goog-inline-block goog-toolbar-item-viewpane-settings goog-flat-menu-button" tabindex="0" role="button"
-                        style="-moz-user-select: none;" aria-haspopup="true" data-tooltip="设置" aria-label="设置">
-                        <div class="goog-inline-block goog-flat-menu-button-caption">
-                          <div class="viewpane-toolbar-settings-icon drive-sprite-core-settings"></div>
-                        </div>
-                        <div class="goog-inline-block goog-flat-menu-button-dropdown"></div>
-                      </div>
-                    </div>
+                    <div class="goog-inline-block viewpane-toolbar-selection"></div>
+                    <div class="goog-inline-block viewpane-toolbar-list"></div>
                   </div>
                 </div>
               </td>
@@ -283,6 +265,44 @@
         <div class="goog-menuitem-content">关联更多应用</div>
       </div>
     </div> -->
+  </div>
+
+  <div id="leftsubmenu" class="goog-menu goog-menu-vertical detroit-contextmenu density-tiny" style="display: none;">
+    <div class="goog-menuitem">
+      <div class="goog-menuitem-content">
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span> <span class="goog-menuitem-container goog-inline-block"> <span
+          class="goog-menuitem-caption goog-inline-block">
+            <div>打开</div>
+        </span> <span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+      </div>
+    </div>
+    <div class="goog-menuseparator" role="separator"></div>
+    <div class="goog-menuitem">
+      <div class="goog-menuitem-content">
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span class="goog-menuitem-container goog-inline-block"><span
+          class="goog-menuitem-caption goog-inline-block"><div>新建文件夹...</div></span><span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+      </div>
+    </div>
+    <div class="goog-menuitem">
+      <div class="goog-menuitem-content">
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span class="goog-menuitem-container goog-inline-block"><span
+          class="goog-menuitem-caption goog-inline-block"><div>修改...</div></span><span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+      </div>
+    </div>
+    <div class="goog-menuitem goog-toolbar-item-trash">
+      <div class="goog-menuitem-content">
+        <span class="goog-menuitem-icon goog-inline-block  goog-toolbar-item-trash-icon">&nbsp;</span><span
+          class="goog-menuitem-container goog-inline-block  goog-toolbar-item-trash-container"><span
+          class="goog-menuitem-caption goog-inline-block  goog-toolbar-item-trash-caption"><div>删除</div></span><span
+          class="goog-menuitem-subcaption goog-inline-block  goog-toolbar-item-trash-subcaption"><div></div></span></span>
+      </div>
+    </div>
+    <div class="goog-menuitem">
+      <div class="goog-menuitem-content">
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span class="goog-menuitem-container goog-inline-block"><span
+          class="goog-menuitem-caption goog-inline-block"><div>详细信息</div></span><span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+      </div>
+    </div>
   </div>
 </body>
 </html>

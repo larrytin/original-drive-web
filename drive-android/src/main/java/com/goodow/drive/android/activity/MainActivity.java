@@ -1,9 +1,24 @@
 package com.goodow.drive.android.activity;
 
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.auth.DataListFragment;
-import com.goodow.drive.android.auth.LeftMenuFragment;
+import com.goodow.drive.android.fragment.DataListFragment;
+import com.goodow.drive.android.fragment.LeftMenuFragment;
+import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+
+import com.google.inject.Inject;
+
+import android.accounts.Account;
+
+import roboguice.activity.RoboActivity;
+
+import roboguice.inject.InjectFragment;
+
+import roboguice.inject.InjectView;
+
+import roboguice.inject.InjectResource;
+
+import roboguice.inject.ContentView;
 
 import android.view.animation.AnimationUtils;
 
@@ -39,11 +54,31 @@ import android.app.ActionBar;
 import android.os.Bundle;
 import android.app.Activity;
 
-public class MainActivity extends Activity {
+@ContentView(R.layout.activity_main)
+public class MainActivity extends RoboActivity {
 
+  @InjectView(R.id.leftMenuLayout)
   private LinearLayout leftMenu;
+  @InjectView(R.id.middleLayout)
   private LinearLayout middleLayout;
+  // @InjectFragment
   private LeftMenuFragment leftMenuFragment;
+  private DataListFragment dataListFragment;
+  private LocalResFragment localResFragment;
+
+  /**
+   * @return the dataListFragment
+   */
+  public DataListFragment getDataListFragment() {
+    return dataListFragment;
+  }
+
+  /**
+   * @return the localResFragment
+   */
+  public LocalResFragment getLocalResFragment() {
+    return localResFragment;
+  }
 
   public void hideLeftMenuLayout() {
     if (null != leftMenu && null != middleLayout) {
@@ -119,13 +154,12 @@ public class MainActivity extends Activity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-    setContentView(R.layout.activity_main);
 
     ActionBar actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
-    leftMenu = (LinearLayout) findViewById(R.id.leftMenuLayout);
-    middleLayout = (LinearLayout) findViewById(R.id.middleLayout);
+    localResFragment = new LocalResFragment();
+    dataListFragment = new DataListFragment();
 
     leftMenuFragment = new LeftMenuFragment();
     FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();

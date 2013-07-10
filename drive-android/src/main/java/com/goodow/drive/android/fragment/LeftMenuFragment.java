@@ -1,29 +1,32 @@
-package com.goodow.drive.android.auth;
+package com.goodow.drive.android.fragment;
 
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 
-import android.app.FragmentTransaction;
-
-import android.widget.Toast;
-import android.widget.ListView;
-import android.widget.ImageView;
-import android.widget.TextView;
 import android.app.Activity;
+import android.app.FragmentTransaction;
+import android.app.ListFragment;
 import android.content.Context;
-import android.widget.SimpleAdapter;
+import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.app.ListFragment;
-import android.os.Bundle;
 import android.widget.ArrayAdapter;
+import android.widget.ImageView;
+import android.widget.ListView;
+import android.widget.TextView;
+import android.widget.Toast;
 
 public class LeftMenuFragment extends ListFragment {
   public static enum MenuTypeEnum {
-    YONGHUZHANGHUMING("用户帐户名"), YUANCHENGWENJIANJIA("我的资料库"), BENDIKEJIAN("本机课件"), ZHENGZAIXIAZAI("正在下载");
+    USER_NAME("用户帐户名"), USER_REMOTE_DATA("我的资料库"), USER_LOCAL_DATA("本机课件"), USER_DOWNLOADING_DATA("正在下载");
     private final String menuName;
 
     private MenuTypeEnum(String menuName) {
@@ -56,31 +59,32 @@ public class LeftMenuFragment extends ListFragment {
       MenuTypeEnum item = getItem(position);
       row.setTag(item);
 
-      ImageView img_left = (ImageView) row.findViewById(R.id.leftImage_leftMenu);
       TextView listItem = (TextView) row.findViewById(R.id.listItem_leftMenu);
+      listItem.setText(item.getMenuName());
+
+      ImageView img_left = (ImageView) row.findViewById(R.id.leftImage_leftMenu);
 
       switch (item) {
-      case YONGHUZHANGHUMING:
+      case USER_NAME:
+        listItem.setText(GlobalDataCacheForMemorySingleton.getInstance().getUserName());
         img_left.setImageResource(R.drawable.ic_drive_owned_by_me);
         break;
 
-      case YUANCHENGWENJIANJIA:
+      case USER_REMOTE_DATA:
         img_left.setImageResource(R.drawable.ic_drive_my_drive);
         break;
 
-      case BENDIKEJIAN:
+      case USER_LOCAL_DATA:
         img_left.setImageResource(R.drawable.ic_type_folder);
         break;
 
-      case ZHENGZAIXIAZAI:
+      case USER_DOWNLOADING_DATA:
         img_left.setImageResource(R.drawable.ic_type_zip);
         break;
 
       default:
         break;
       }
-
-      listItem.setText(item.getMenuName());
 
       return row;
     }
@@ -114,24 +118,24 @@ public class LeftMenuFragment extends ListFragment {
 
     FragmentTransaction fragmentTransaction;
     switch (menuTypeEnum) {
-    case YONGHUZHANGHUMING:
+    case USER_NAME:
       // TODO
       Toast.makeText(mainActivity, "1", Toast.LENGTH_SHORT).show();
       break;
 
-    case YUANCHENGWENJIANJIA:
+    case USER_REMOTE_DATA:
       fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.contentLayout, new DataListFragment());
+      fragmentTransaction.replace(R.id.contentLayout, mainActivity.getDataListFragment());
       fragmentTransaction.commit();
       break;
 
-    case BENDIKEJIAN:
+    case USER_LOCAL_DATA:
       fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
       fragmentTransaction.replace(R.id.contentLayout, new LocalResFragment());
       fragmentTransaction.commit();
       break;
 
-    case ZHENGZAIXIAZAI:
+    case USER_DOWNLOADING_DATA:
       // TODO
       Toast.makeText(mainActivity, "3", Toast.LENGTH_SHORT).show();
       break;

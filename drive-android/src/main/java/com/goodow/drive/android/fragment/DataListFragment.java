@@ -1,7 +1,8 @@
-package com.goodow.drive.android.auth;
+package com.goodow.drive.android.fragment;
 
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.adapter.MyArrayAdapter;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -16,6 +17,11 @@ import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
 
 import java.util.ArrayList;
+import java.util.Map;
+
+import elemental.js.util.StringUtil;
+
+import android.R.integer;
 
 import android.app.ListFragment;
 import android.os.Bundle;
@@ -29,7 +35,6 @@ import android.widget.Toast;
 
 public class DataListFragment extends ListFragment {
   private Button backButton;
-  private String authorize;
 
   private ArrayList<String> dataSourceOfFolderList = new ArrayList<String>();
   private MyArrayAdapter adapter;
@@ -103,27 +108,6 @@ public class DataListFragment extends ListFragment {
     });
   }
 
-  /**
-   * @return the authorize
-   */
-  public String getAuthorize() {
-    return authorize;
-  }
-
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    backButton = (Button) getActivity().findViewById(R.id.backButton);
-    backButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        backFragment();
-      }
-    });
-
-  }
-
   @Override
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
@@ -131,24 +115,6 @@ public class DataListFragment extends ListFragment {
     adapter = new MyArrayAdapter(getActivity(), R.layout.row_folderlist, 0, dataSourceOfFolderList);
     setListAdapter(adapter);
 
-    Realtime.load("@tmp/b18", new DocumentLoadedHandler() {
-      @Override
-      public void onLoaded(Document document) {
-        doc = document;
-        model = doc.getModel();
-        root = model.getRoot();
-
-        connectString();
-
-      }
-    }, new ModelInitializerHandler() {
-      @Override
-      public void onInitializer(Model model_) {
-        model = model_;
-        root = model.getRoot();
-
-      }
-    }, null);
   }
 
   @Override
@@ -182,11 +148,68 @@ public class DataListFragment extends ListFragment {
     }
   }
 
-  /**
-   * @param authorize the authorize to set
-   */
-  public void setAuthorize(String authorize) {
-    this.authorize = authorize;
+  @Override
+  public void onResume() {
+    super.onResume();
+
+    backButton = (Button) getActivity().findViewById(R.id.backButton);
+    backButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        backFragment();
+      }
+    });
+
+    Realtime.load("@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/androidTest02", new DocumentLoadedHandler() {
+      @Override
+      public void onLoaded(Document document) {
+        doc = document;
+        model = doc.getModel();
+        root = model.getRoot();
+
+        connectString();
+
+      }
+    }, new ModelInitializerHandler() {
+      @Override
+      public void onInitializer(Model model_) {
+        model = model_;
+        root = model.getRoot();
+
+        String[] mapKey = { "label", "filechild", "folderschild" };
+        CollaborativeMap[] values = new CollaborativeMap[3];
+
+        for (int k = 0; k < values.length; k++) {
+          CollaborativeMap map = model.createMap(null);
+          for (int i = 0; i < mapKey.length; i++) {
+            if ("label".equals(mapKey[i])) {
+              map.set(mapKey[i], "Folder" + k);
+            } else {
+              CollaborativeList subList = model.createList(null);
+
+              if ("folderschild".equals(mapKey[i])) {
+                CollaborativeMap subMap = model.createMap(null);
+                subMap.set("label", "SubFolder");
+                subMap.set("filechild", model.createList(null));
+                subMap.set("folderschild", model.createList(null));
+                subList.push(subMap);
+              }
+
+              map.set(mapKey[i], subList);
+            }
+
+          }
+
+          values[k] = map;
+        }
+
+        CollaborativeList list = model_.createList(null);
+        list.pushAll(values);
+
+        root.set("folders", list);
+        System.out.println();
+      }
+    }, null);
   }
 
   public void showData(Object[] values) {
@@ -201,20 +224,64 @@ public class DataListFragment extends ListFragment {
         values = ((CollaborativeList) folder.get("folderschild")).asArray();
       }
 
-      Object[] folders = ((CollaborativeList) folder.get("folderschild")).asArray();
-      Object[] files = ((CollaborativeList) folder.get("filechild")).asArray();
+      CollaborativeList childFolderList = ((CollaborativeList) folder.get("folderschild"));
+
+      childFolderList.addValuesSetListener(new EventHandler<ValuesSetEvent>() {
+        @Override
+        public void handleEvent(ValuesSetEvent arg0) {
+          dataValues = ((CollaborativeList) root.get(DATA_KEY)).asArray();
+
+          if (null != dataValues && dataValues.length != 0) {
+            showData(dataValues);
+          }
+        }
+      });
+
+      childFolderList.addValuesRemovedListener(new EventHandler<ValuesRemovedEvent>() {
+        @Override
+        public void handleEvent(ValuesRemovedEvent arg0) {
+          dataValues = ((CollaborativeList) root.get(DATA_KEY)).asArray();
+
+          if (null != dataValues && dataValues.length != 0) {
+            showData(dataValues);
+          }
+        }
+
+      });
+
+      childFolderList.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
+        @Override
+        public void handleEvent(ValuesAddedEvent event) {
+          dataValues = ((CollaborativeList) root.get(DATA_KEY)).asArray();
+
+          if (null != dataValues && dataValues.length != 0) {
+            showData(dataValues);
+          }
+        }
+      });
+
+      Object[] folders = childFolderList.asArray();
 
       for (int i = 0; i < folders.length; i++) {
-        CollaborativeMap folderItem = (CollaborativeMap) folders[i];
+        final CollaborativeMap folderItem = (CollaborativeMap) folders[i];
 
         // map监听修改事件
-        // folderItem.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
-        // @Override
-        // public void handleEvent(ValueChangedEvent arg0) {
-        // // TODO Auto-generated method stub
-        //
-        // }
-        // });
+        folderItem.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
+          @Override
+          public void handleEvent(ValueChangedEvent event) {
+            String key = event.getProperty();
+            Object newValue = event.getNewValue();
+
+            if (null != key) {
+              if (key.equals("label")) {
+                folderItem.set("label", newValue);
+
+                showData(dataValues);
+              }
+            }
+
+          }
+        });
 
         String folderName = (String) folderItem.get("label");
         CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
@@ -228,12 +295,31 @@ public class DataListFragment extends ListFragment {
       }
 
       // TODO
+      CollaborativeList childFileList = ((CollaborativeList) folder.get("filechild"));
+      Object[] files = childFileList.asArray();
+
       for (int i = 0; i < files.length; i++) {
 
       }
     } else {
       for (int i = 0; i < values.length; i++) {
-        CollaborativeMap folderItem = (CollaborativeMap) values[i];
+        final CollaborativeMap folderItem = (CollaborativeMap) values[i];
+
+        folderItem.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
+          @Override
+          public void handleEvent(ValueChangedEvent event) {
+            String key = event.getProperty();
+            Object newValue = event.getNewValue();
+
+            if (null != key) {
+              if (key.equals("label")) {
+                folderItem.set("label", newValue);
+
+                showData(dataValues);
+              }
+            }
+          }
+        });
 
         String folderName = (String) folderItem.get("label");
         CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");

@@ -8,13 +8,23 @@ goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.EventType');
+goog.require('goog.ui.Popup');
+
 
 
 /**
  * @constructor
  */
-
 good.drive.nav.userinfo.Headuserinfo = function() {
+  var popupElt = document.getElementById('gbd4');
+  var popup = new goog.ui.Popup(popupElt);
+  popup.setHideOnEscape(true);
+  popup.setAutoHide(true);
+  this.popup = popup;
+  this.init();
+  this.nameClick();
+  this.accountClick();
+  this.cancelClick();
 };
 
 
@@ -45,18 +55,42 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
  */
 good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
   var name = goog.dom.getElement('gbg4');
-
+  var that = this;
   goog.events.listen(name, goog.events.EventType.CLICK, function(e) {
-    var info_div = goog.dom.getElement('gbd4');
-    var visibility = info_div.style.visibility;
-    if (visibility == 'hidden') {
-      info_div.style.visibility = 'visible';
-      info_div.style.right = '5px';
-      info_div.style.left = 'auto';
-    }else {
-      info_div.style.visibility = 'hidden';
-      info_div.style.right = '';
-      info_div.style.left = '';
-    }
+    that.popup.setVisible(false);
+    that.popup.setVisible(true);
   });
 };
+
+
+/**
+ *
+*/
+good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
+  var account = goog.dom.getElement('account');
+  goog.events.listen(account, goog.events.EventType.CLICK, function(e) {
+    var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+    var userId = query.get('userId');
+    var access_token = query.get('access_token');
+
+    var uri = new goog.Uri('EditPasswd.html' + '#userId=' +
+        userId + '&access_token=' + access_token);
+
+
+    window.location.assign(uri.toString());
+  });
+};
+
+
+/**
+*
+*/
+good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
+  var cancel = goog.dom.getElement('cancel');
+  goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
+    var uri = new goog.Uri('index.html');
+    window.location.assign(uri.toString());
+  });
+};
+
+
