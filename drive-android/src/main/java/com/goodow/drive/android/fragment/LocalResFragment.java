@@ -33,8 +33,29 @@ public class LocalResFragment extends ListFragment {
   private Button backButton;
 
   @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.folder_list, container, false);
+  }
+
+  @Override
+  public void onListItemClick(ListView l, View v, int position, long id) {
+    File file = new File(folderPathList.get(position));
+
+    if (file.isDirectory()) {
+      parentDirectory = file.getParentFile().getAbsolutePath();
+      folderNameList = getDataSourceWithDirPath(folderPathList.get(position));
+      ((BaseAdapter) getListAdapter()).notifyDataSetChanged();
+    }
+  }
+
+  @Override
+  public void onResume() {
+    super.onResume();
 
     backButton = (Button) getActivity().findViewById(R.id.backButton);
     backButton.setOnClickListener(new OnClickListener() {
@@ -61,7 +82,6 @@ public class LocalResFragment extends ListFragment {
     folderNameList = getDataSourceWithDirPath(GlobalDataCacheForMemorySingleton.getInstance.getUserResDirPath());
 
     setListAdapter(new BaseAdapter() {
-
       @Override
       public int getCount() {
         if (folderNameList != null) {
@@ -143,27 +163,6 @@ public class LocalResFragment extends ListFragment {
         return row;
       }
     });
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.folder_list, container, false);
-  }
-
-  @Override
-  public void onListItemClick(ListView l, View v, int position, long id) {
-    File file = new File(folderPathList.get(position));
-
-    if (file.isDirectory()) {
-      parentDirectory = file.getParentFile().getAbsolutePath();
-      folderNameList = getDataSourceWithDirPath(folderPathList.get(position));
-      ((BaseAdapter) getListAdapter()).notifyDataSetChanged();
-    }
   }
 
   private void delFile(File file) {

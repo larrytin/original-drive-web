@@ -38,9 +38,11 @@ public final class ToolsFunctionForThisProgect {
         } else if (suffixOfFile.equals(GlobalConstant.SupportResTypeEnum.MP4.getTypeName())) {
           resId = R.drawable.ic_type_video;
         } else if (suffixOfFile.equals(GlobalConstant.SupportResTypeEnum.FLASH.getTypeName())) {
-          resId = R.drawable.ic_type_drawing;
+          resId = R.drawable.ic_type_video;
         } else if (suffixOfFile.equals(GlobalConstant.SupportResTypeEnum.TEXT.getTypeName())) {
           resId = R.drawable.ic_type_doc;
+        } else if (suffixOfFile.equals(GlobalConstant.SupportResTypeEnum.PNG.getTypeName())) {
+          resId = R.drawable.ic_type_drawing;
         }
       }
 

@@ -2,6 +2,7 @@ package com.goodow.drive.android.fragment;
 
 import com.goodow.drive.android.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
@@ -58,11 +59,14 @@ public class LeftMenuFragment extends ListFragment {
       MenuTypeEnum item = getItem(position);
       row.setTag(item);
 
-      ImageView img_left = (ImageView) row.findViewById(R.id.leftImage_leftMenu);
       TextView listItem = (TextView) row.findViewById(R.id.listItem_leftMenu);
+      listItem.setText(item.getMenuName());
+
+      ImageView img_left = (ImageView) row.findViewById(R.id.leftImage_leftMenu);
 
       switch (item) {
       case USER_NAME:
+        listItem.setText(GlobalDataCacheForMemorySingleton.getInstance().getUserName());
         img_left.setImageResource(R.drawable.ic_drive_owned_by_me);
         break;
 
@@ -81,8 +85,6 @@ public class LeftMenuFragment extends ListFragment {
       default:
         break;
       }
-
-      listItem.setText(item.getMenuName());
 
       return row;
     }
@@ -123,7 +125,7 @@ public class LeftMenuFragment extends ListFragment {
 
     case USER_REMOTE_DATA:
       fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.contentLayout, new DataListFragment());
+      fragmentTransaction.replace(R.id.contentLayout, mainActivity.getDataListFragment());
       fragmentTransaction.commit();
       break;
 
