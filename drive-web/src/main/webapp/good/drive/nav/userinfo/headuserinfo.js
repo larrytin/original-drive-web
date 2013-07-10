@@ -71,21 +71,26 @@ good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
   goog.events.listen(account, goog.events.EventType.CLICK, function(e) {
     var query = new goog.Uri.QueryData(window.location.hash.substring(1));
     var userId = query.get('userId');
+    var access_token = query.get('access_token');
 
-    var uri = new goog.Uri('EditPasswd.html' + '#userId=' + userId);
+    var uri = new goog.Uri('EditPasswd.html' + '#userId=' +
+        userId + '&access_token=' + access_token);
+
+
     window.location.assign(uri.toString());
   });
 };
+
 
 /**
 *
 */
 good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
- var cancel = goog.dom.getElement('cancel');
- goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
-   var uri = new goog.Uri('index.html');
-   window.location.assign(uri.toString());
- });
+  var cancel = goog.dom.getElement('cancel');
+  goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
+    var uri = new goog.Uri('index.html');
+    window.location.assign(uri.toString());
+  });
 };
 
 

@@ -1,11 +1,6 @@
 goog.provide('good.drive.nav.button.Renderer');
 
-goog.require('goog.a11y.aria.Role');
-goog.require('goog.dom.NodeType');
-goog.require('goog.dom.classes');
-goog.require('goog.string');
 goog.require('goog.ui.CustomButtonRenderer');
-goog.require('goog.ui.INLINE_BLOCK_CLASSNAME');
 
 
 
