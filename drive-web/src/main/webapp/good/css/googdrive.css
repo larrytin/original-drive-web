@@ -11,7 +11,10 @@ html,body,form {
   height: 30px;
   z-index: 1000
 }
-
+.goog-inline-block {
+    display: inline-block;
+    position: relative;
+}
 #gbz {
   left: 0;
   padding-left: 4px
@@ -1751,10 +1754,6 @@ px
 .treedoclistview-node-icon {
     top: 1px;
 }
-.goog-inline-block {
-    display: inline-block;
-    position: relative;
-}
 .nav-tree-folder-view .action-arrow-dropdown-container:hover {
     background-color: #E5E5E5;
     border: 1px solid #BCBCBC;
@@ -2380,3 +2379,4 @@ px
     transition-property: font-size, height, line-height, margin, padding, width;
     transition-timing-function: ease, ease, ease, ease, ease, ease;
 }
+
