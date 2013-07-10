@@ -21,7 +21,7 @@ good.drive.nav.folders.Tree = function() {
   root.setShowLines(false);
 
   var tree_ = root.getTree().createNode(
-      '<span class="treedoclistview-root-node-name">我的云端硬盘 &nbsp;</span>');
+      '<span class="treedoclistview-root-node-name">我的资料库 &nbsp;</span>');
   root.add(tree_);
   tree_.setExpanded(false);
   root.setSelectedItem(tree_);

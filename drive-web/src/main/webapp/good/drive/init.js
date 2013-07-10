@@ -14,6 +14,7 @@ goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
+goog.require('good.drive.nav.grid');
 
 
 /** */
@@ -29,6 +30,9 @@ good.drive.init.start = function() {
     good.realtime.authorize(auth.userId, auth.access_token);
 
     var tree = new good.drive.nav.folders.Tree();
+    var grid = new good.drive.nav.grid.View();
+    grid.render(goog.dom.getElement('viewmanager'));
+    window.grid = grid;
 
     var leftButton = new good.drive.nav.button.LeftButton();
     var leftCreateBtn = leftButton.createBtn();
