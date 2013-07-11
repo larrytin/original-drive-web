@@ -1,7 +1,6 @@
 package com.goodow.drive.android.fragment;
 
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.activity.DataListActivity;
 import com.goodow.drive.android.activity.LogInActivity;
 import com.goodow.realtime.Realtime;
 
@@ -31,10 +30,10 @@ public class OAuthFragment extends DialogFragment {
 
         Realtime.authorize(uid, uit);
 
-        Intent intent = new Intent(activity, DataListActivity.class);
-        intent.putExtra("authorize", uid + "&&" + uit);
-        // activity.setTOKEN(uid + "&&" + uit);
-        activity.startActivity(intent);
+        // Intent intent = new Intent(activity, DataListActivity.class);
+        // intent.putExtra("authorize", uid + "&&" + uit);
+        // // activity.setTOKEN(uid + "&&" + uit);
+        // activity.startActivity(intent);
 
         return true;
       }
@@ -59,8 +58,9 @@ public class OAuthFragment extends DialogFragment {
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
     // Retrieve the webview
-    View v = inflater.inflate(R.layout.oauth_screen, container, false);
-    webViewOauth = (WebView) v.findViewById(R.id.web_oauth);
+    View v = null;
+    // v = inflater.inflate(R.layout.oauth_screen, container, false);
+    // webViewOauth = (WebView) v.findViewById(R.id.web_oauth);
     getDialog().setTitle("登录");
     return v;
   }
