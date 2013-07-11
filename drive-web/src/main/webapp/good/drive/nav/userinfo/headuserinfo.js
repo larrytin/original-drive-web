@@ -20,6 +20,7 @@ good.drive.nav.userinfo.Headuserinfo = function() {
   var popup = new goog.ui.Popup(popupElt);
   popup.setHideOnEscape(true);
   popup.setAutoHide(true);
+  popup.setVisible(false);
   this.popup = popup;
   this.init();
   this.nameClick();
@@ -57,8 +58,11 @@ good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
   var name = goog.dom.getElement('gbg4');
   var that = this;
   goog.events.listen(name, goog.events.EventType.CLICK, function(e) {
-    that.popup.setVisible(false);
-    that.popup.setVisible(true);
+    if(that.popup.isVisible()){
+      that.popup.setVisible(false);
+    }else{
+      that.popup.setVisible(true);
+    }
   });
 };
 

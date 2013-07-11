@@ -26,20 +26,6 @@
   goog.require('good.drive.init');
 </script>
 <!-- <script src="drive-compiled.js"></script> -->
-<style type="text/css">
-.popup {
-  position: absolute;
-  background-color: #e0ecff;
-  color: black;
-  visibility: hidden;
-  width: 100px;
-  height: 100px;
-  font-size: 80%;
-  border: solid red 1px;
-  -moz-outline: 0;
-  outline: 0;
-}
-</style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -101,7 +87,7 @@
                   class=gbmac></span>
               </span>
             </a></li>
-            <div class="gbm gbes popup" id="gbd4" aria-owner="gbg4" guidedhelpid="gbd4">
+            <div class="gbm gbes" id="gbd4" aria-owner="gbg4" guidedhelpid="gbd4">
               <div class="gbmc">
                 <div id="gbmpdv">
                   <div class="gbpc">
@@ -314,5 +300,6 @@
       </div>
     </div>
   </div>
+  <input type="file" id="file" multiple style="height: 0px; visibility: hidden; position: absolute; -webkit-user-select: none; width: 0px; font-size: inherit;">
 </body>
 </html>
