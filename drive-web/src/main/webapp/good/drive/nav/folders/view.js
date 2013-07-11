@@ -98,7 +98,8 @@ good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
           var childNode = that.insertNode(node, 0, val);
           that.model.mapHander(node, childNode, val);
           that.model.addEvent(childNode,
-              val.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD));
+              val.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD),
+              val.get(good.drive.nav.folders.Model.strType.FILECHILD));
         }
       });
   node.getHandler().listen(node,
@@ -220,7 +221,7 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
   var selected = this.getCurrentItem();
   selected.setExpanded(true);
   var map = this.model.getLeaf(str);
-  selected.data.push(map);
+  selected.folder.push(map);
 };
 
 
@@ -229,7 +230,7 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
  */
 good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
   var selected = this.getCurrentItem();
-  selected.getParent().data.get(this.getIndexByChild(selected)).
+  selected.getParent().folder.get(this.getIndexByChild(selected)).
       set(good.drive.nav.folders.Model.strType.LABEL, str);
 };
 
@@ -237,7 +238,7 @@ good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
 /**  */
 good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
   var selected = this.getCurrentItem();
-  selected.getParent().data.remove(this.getIndexByChild(selected));
+  selected.getParent().folder.remove(this.getIndexByChild(selected));
 };
 
 
