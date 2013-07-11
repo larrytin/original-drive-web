@@ -21,7 +21,7 @@ good.drive.nav.folders.Tree = function() {
   root.setShowLines(false);
 
   var tree_ = root.getTree().createNode(
-      '<span class="treedoclistview-root-node-name">我的云端硬盘 &nbsp;</span>');
+      '<span class="treedoclistview-root-node-name">我的资料库 &nbsp;</span>');
   root.add(tree_);
   tree_.setExpanded(false);
   root.setSelectedItem(tree_);
@@ -51,7 +51,7 @@ good.drive.nav.folders.labelElm = [
       {'class': 'goog-inline-block treedoclistview-init-spacing'}, ' '),
   goog.dom.createDom('span',
       {'class': 'goog-inline-block treedoclistview-node-icon' +
-            ' drive-sprite-folder-list-icon icon-color-4'}, ' '),
+            ' drive-sprite-folder-list-icon icon-color-1'}, ' '),
   goog.dom.createDom('span',
       {'class': 'goog-inline-block treedoclistview-spacing'}, ' ')
 ];
@@ -98,7 +98,8 @@ good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
           var childNode = that.insertNode(node, 0, val);
           that.model.mapHander(node, childNode, val);
           that.model.addEvent(childNode,
-              val.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD));
+              val.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD),
+              val.get(good.drive.nav.folders.Model.strType.FILECHILD));
         }
       });
   node.getHandler().listen(node,
@@ -220,7 +221,7 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
   var selected = this.getCurrentItem();
   selected.setExpanded(true);
   var map = this.model.getLeaf(str);
-  selected.data.push(map);
+  selected.folder.push(map);
 };
 
 
@@ -229,7 +230,7 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
  */
 good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
   var selected = this.getCurrentItem();
-  selected.getParent().data.get(this.getIndexByChild(selected)).
+  selected.getParent().folder.get(this.getIndexByChild(selected)).
       set(good.drive.nav.folders.Model.strType.LABEL, str);
 };
 
@@ -237,7 +238,7 @@ good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
 /**  */
 good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
   var selected = this.getCurrentItem();
-  selected.getParent().data.remove(this.getIndexByChild(selected));
+  selected.getParent().folder.remove(this.getIndexByChild(selected));
 };
 
 
@@ -269,10 +270,10 @@ good.drive.nav.folders.Tree.defaultConfig = {
   cssExpandTreeIcon: goog.getCssName(''),
   cssExpandTreeIconPlus: goog.getCssName('goog-inline-block') + ' ' +
       goog.getCssName('doclist-icon navpane-expand-icon') + ' ' +
-      goog.getCssName('doclist-folder-triangle-expanded'),
+      goog.getCssName('doclist-folder-triangle-collapsed'),
   cssExpandTreeIconMinus: goog.getCssName('goog-inline-block') + ' ' +
       goog.getCssName('doclist-icon navpane-expand-icon') + ' ' +
-      goog.getCssName('doclist-folder-triangle-collapsed'),
+      goog.getCssName('doclist-folder-triangle-expanded'),
   cssExpandTreeIconTPlus: goog.getCssName(
       'goog-tree-expand-icon-tplus'),
   cssExpandTreeIconTMinus: goog.getCssName(
