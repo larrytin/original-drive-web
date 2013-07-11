@@ -26,7 +26,7 @@ good.drive.nav.folders.Model = function(view) {
     // connectUi();
     that.connect(doc);
   };
-  good.realtime.load('@tmp/b18', onLoad, onInit, null);
+  good.realtime.load('@tmp/b20', onLoad, onInit, null);
 };
 
 
@@ -49,9 +49,10 @@ good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的
  * @param {good.realtime.Document} doc
  */
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
-  var folders = this.root.get(good.drive.nav.folders.Model.strType.FOLDERS);
+  var folders = this.root.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD);
+  var files = this.root.get(good.drive.nav.folders.Model.strType.FILECHILD);
   var that = this;
-  this.addEvent(that.view.tree, folders);
+  this.addEvent(that.view.tree, folders, files);
 };
 
 
@@ -116,7 +117,8 @@ good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
       var childNode = that.view.insertNode(node, idx, val);
       that.mapHander(node, childNode, val);
       that.addEvent(childNode, val.get(
-          good.drive.nav.folders.Model.strType.FOLDERSCHILD));
+          good.drive.nav.folders.Model.strType.FOLDERSCHILD),
+          val.get(good.drive.nav.folders.Model.strType.FILECHILD));
     }
   });
   list.addValuesRemovedListener(function(evt) {
@@ -130,12 +132,12 @@ good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeList} list
  */
-good.drive.nav.folders.Model.prototype.addEvent = function(node, list) {
-  if (this.bindData(node, list)) {
+good.drive.nav.folders.Model.prototype.addEvent = function(node, folder, file) {
+  if (this.bindFolderData(node, folder) || this.bindFileData(node, file)) {
     return;
   }
-  this.dataHandle(node, list);
-  this.view.nodeHandle(node, list);
+  this.dataHandle(node, folder);
+  this.view.nodeHandle(node, folder);
 };
 
 
@@ -144,11 +146,19 @@ good.drive.nav.folders.Model.prototype.addEvent = function(node, list) {
  * @param {good.realtime.CollaborativeList} list
  * @return {boolean}
  */
-good.drive.nav.folders.Model.prototype.bindData = function(node, list) {
-  if (node.data != undefined) {
+good.drive.nav.folders.Model.prototype.bindFolderData = function(node, list) {
+  if (node.folder != undefined) {
     return true;
   }
-  node.data = list;
+  node.folder = list;
+  return false;
+};
+
+good.drive.nav.folders.Model.prototype.bindFileData = function(node, list) {
+  if (node.file != undefined) {
+    return true;
+  }
+  node.file = list;
   return false;
 };
 
@@ -198,7 +208,9 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
   var root_ = mod.getRoot();
 
   var rootFolders = mod.createList();
-  root_.set(good.drive.nav.folders.Model.strType.FOLDERS, rootFolders);
+  var rootFiles = mod.createList();
+  root_.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD, rootFolders);
+  root_.set(good.drive.nav.folders.Model.strType.FILECHILD, rootFiles);
 
   var folder;
   var subFolders;
