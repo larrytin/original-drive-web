@@ -6,6 +6,7 @@
     
     <dimen name="progressBar_height">5dp</dimen>
     
+    <dimen name="listGroupHeigh">28dp</dimen>
     <dimen name="listItemHeigh">33dp</dimen>
     <dimen name="listItemTextSize">14sp</dimen>
     <dimen name="listItemPadding">1dp</dimen>
