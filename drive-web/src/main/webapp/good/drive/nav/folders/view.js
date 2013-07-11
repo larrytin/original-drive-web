@@ -119,6 +119,10 @@ good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
       });
 };
 
+good.drive.nav.folders.Tree.prototype.changeHandle = function(handle) {
+  this.roottree.getHandler().
+  listen(this.roottree, goog.events.EventType.CHANGE, handle);
+}
 
 /**
  * @param {goog.ui.tree.TreeControl} node
