@@ -14,7 +14,6 @@ goog.addDependency('../../../../good/drive/nav/dialog/view.js', ['good.drive.nav
 goog.addDependency('../../../../good/drive/nav/editpwd/editpwd.js', ['good.drive.nav.editpwd'], ['good.auth.signup', 'good.config', 'good.drive.nav.userinfo', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
 goog.addDependency('../../../../good/drive/nav/folders/model.js', ['good.drive.nav.folders.Model'], []);
 goog.addDependency('../../../../good/drive/nav/folders/view.js', ['good.drive.nav.folders'], ['good.drive.nav.folders.Model', 'goog.events.KeyHandler', 'goog.string.StringBuffer', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
-goog.addDependency('../../../../good/drive/nav/grid/cell.js', ['good.drive.nav.grid.Cell'], ['goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../../good/drive/nav/grid/view.js', ['good.drive.nav.grid'], ['goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../../good/drive/nav/menu/popupmenu.js', ['good.drive.nav.menu.popupmenu'], ['goog.object', 'goog.positioning.Corner', 'goog.ui.MenuItem', 'goog.ui.PopupMenu']);
 goog.addDependency('../../../../good/drive/nav/menu/renderer.js', ['good.drive.nav.menu.ViewRenderer'], ['goog.ui.MenuRenderer']);

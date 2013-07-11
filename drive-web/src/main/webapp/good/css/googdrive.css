@@ -2380,3 +2380,83 @@ px
     transition-timing-function: ease, ease, ease, ease, ease, ease;
 }
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+element.style {
+    left: auto;
+    right: -1px;
+    visibility: visible;
+}
+#gb.gbesi .gbto #gbd1, #gb.gbesi .gbto #gbd3, #gb.gbesi .gbto #gbd4, #gb.gbesi .gbto #gbs, .gbto #gbd1.gbes, .gbto #gbd3.gbes, .gbto #gbd4.gbes, #gbu.gbes .gbto #gbs {
+    top: 36px;
+}
+#gb.gbesi .gbto #gbd1, #gb.gbesi .gbto #gbd3, #gb.gbesi .gbto #gbd4, #gb.gbesi .gbto #gbs, .gbto #gbd1.gbes, .gbto #gbd3.gbes, .gbto #gbd4.gbes, .gbto #gbs.gbes {
+    top: 42px;
+}
+#gbu .gbm, #gbu #gbs {
+    right: 5px;
+}
+.gbto .gbm, .gbto #gbs {
+    top: 51px;
+    visibility: visible;
+}
+.gbm {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #FFFFFF;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-bottom-color: #BEBEBE;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #BEBEBE;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #BEBEBE;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #BEBEBE;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    position: absolute;
+    text-align: left;
+    top: -999px;
+    visibility: hidden;
+    z-index: 999;
+}
