@@ -18,6 +18,8 @@ goog.require('good.drive.nav.userinfo');
 goog.require('goog.dom');
 goog.require('good.drive.creation.fileupload');
 
+goog.require('good.drive.creation.mouserevent');
+
 /** */
 good.drive.init.start = function() {
   good.auth.check();
@@ -83,6 +85,7 @@ good.drive.init.start = function() {
       }
     });
 
+    var moverEvent = good.drive.creation.Mouserevent(leftUpdateBtn.getElement());
     var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
     var fileupload = new good.drive.creation.Fileupload();

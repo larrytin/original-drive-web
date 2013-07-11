@@ -11,6 +11,7 @@ goog.require('good.drive.nav.folders.Model');
  */
 good.drive.creation.Fileupload = function() {
   var filepath = goog.dom.getElement('file');  
+  
   this._file = filepath;
 };
 
