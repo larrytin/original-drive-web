@@ -19,6 +19,8 @@ goog.require('goog.dom');
 goog.require('good.drive.creation.fileupload');
 
 goog.require('good.drive.creation.mouserevent');
+goog.require('good.drive.search');
+
 
 /** */
 good.drive.init.start = function() {
@@ -32,6 +34,8 @@ good.drive.init.start = function() {
     var auth = good.auth.Auth.current;
     good.realtime.authorize(auth.userId, auth.access_token);
 
+    var advancedMenu = good.drive.search.AdvancedMenu();
+    
     var tree = new good.drive.nav.folders.Tree();
     tree.changeHandle(function(e) {
       var tree = e.target;
