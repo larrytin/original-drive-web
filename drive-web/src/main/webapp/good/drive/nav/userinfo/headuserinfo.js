@@ -58,9 +58,9 @@ good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
   var name = goog.dom.getElement('gbg4');
   var that = this;
   goog.events.listen(name, goog.events.EventType.CLICK, function(e) {
-    if(that.popup.isVisible()){
+    if (that.popup.isVisible()) {
       that.popup.setVisible(false);
-    }else{
+    }else {
       that.popup.setVisible(true);
     }
   });

@@ -1,17 +1,17 @@
 'use strict';
 goog.provide('good.drive.nav.grid');
 
+goog.require('good.drive.nav.grid.Cell');
+goog.require('goog.asserts');
 goog.require('goog.dom.classes');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
-goog.require('goog.asserts');
-goog.require('good.drive.nav.grid.Cell');
-goog.require('good.drive.nav.folders');
+
 
 
 /**
+ * @param {goog.ui.tree.TreeControl} node
  * @param {goog.dom.DomHelper=} opt_domHelper
- * @param {Object} model
  * @constructor
  * @extends {goog.ui.Component}
  */
@@ -22,31 +22,107 @@ good.drive.nav.grid.View = function(node, opt_domHelper) {
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
+
+/**
+ * @type {struct}
+ */
 good.drive.nav.grid.View.grids = {};
 
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ */
 good.drive.nav.grid.View.createGrid = function(node) {
   var id = node.getId();
-  if(goog.object.containsKey(good.drive.nav.grid.View.grids, id)) {
-    good.drive.nav.grid.View.visiable(goog.object.get(good.drive.nav.grid.View.grids, id));
+  if (goog.object.containsKey(good.drive.nav.grid.View.grids, id)) {
+    good.drive.nav.grid.View.visiable(
+        goog.object.get(good.drive.nav.grid.View.grids, id));
     return;
   }
   var grid = new good.drive.nav.grid.View(node);
   grid.render(goog.dom.getElement('viewmanager'));
-  var cell = grid.createCell(null);
-  grid.add(cell);
-  var cell = grid.createCell(null);
-  grid.add(cell);
-  window.grid = grid;
+  grid.renderCell(node);
   goog.object.add(good.drive.nav.grid.View.grids, id, grid);
   good.drive.nav.grid.View.visiable(grid);
-}
+};
 
+
+/**
+ * @param {good.drive.nav.grid.View} grid
+ */
 good.drive.nav.grid.View.visiable = function(grid) {
   goog.object.forEach(good.drive.nav.grid.View.grids, function(value, key) {
     goog.style.showElement(value.getElement());
   });
-  goog.style.showElement(grid.getElement(), "none");
-}
+  goog.style.showElement(grid.getElement(), 'none');
+};
+
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ */
+good.drive.nav.grid.View.prototype.renderCell = function(node) {
+  var file = node.file;
+  var folder = node.folder;
+  for (var i = 0; i < file.length(); i++) {
+    var data = file.get(i);
+    this.insertCell(data, false);
+  }
+
+  for (var i = 0; i < folder.length(); i++) {
+    var data = folder.get(i);
+    this.insertCell(data, true);
+  }
+};
+
+
+/**
+ */
+good.drive.nav.grid.View.prototype.removeFromParent = function() {
+  this.getElement().remove();
+};
+
+
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ * @param {boolean} isFolder
+ */
+good.drive.nav.grid.View.prototype.insertCell = function(data, isFolder) {
+  var cell = this.createCell(data);
+  this.add(cell);
+  cell.renderCell();
+  cell.setIsFolder(isFolder);
+};
+
+
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ */
+good.drive.nav.grid.View.prototype.removeCell = function(data) {
+  for (var i = 0; i < this.getChildCount(); i++) {
+    var cell = this.getChildAt(i);
+    if (cell.data.getId() == data.getId()) {
+      this.removeChildAt(i);
+      break;
+    }
+  }
+};
+
+
+/**
+ * @override
+ */
+good.drive.nav.grid.View.prototype.removeChild =
+    function(childNode, opt_unrender) {
+  var child = /** @type {good.drive.nav.grid.Cell} */ (childNode);
+
+  good.drive.nav.grid.View.superClass_.removeChild.call(this, child);
+
+  var contentElm = this.getGridContainerElement();
+  contentElm.removeChild(childNode.getElement());
+
+};
+
 
 /** @override */
 good.drive.nav.grid.View.prototype.createDom = function() {
@@ -56,11 +132,25 @@ good.drive.nav.grid.View.prototype.createDom = function() {
   this.setElementInternal(/** @type {Element} */ (element));
 };
 
+
+/**
+ * @param {goog.string.StringBuffer} sb
+ */
 good.drive.nav.grid.View.prototype.toHtml = function(sb) {
   sb.append('<div>',
       this.getInnerHtml(),
       '</div>');
 };
+
+
+/**
+ * @return {Element}
+ */
+good.drive.nav.grid.View.prototype.getChildrenElement = function() {
+  var el = this.getElement();
+  return el ? /** @type {Element} */ (el.lastChild) : null;
+};
+
 
 /** @override */
 good.drive.nav.grid.View.prototype.enterDocument = function() {
@@ -69,9 +159,15 @@ good.drive.nav.grid.View.prototype.enterDocument = function() {
   el.className = this.getConfig().cssRoot;
 };
 
+
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ * @return {good.drive.nav.grid.Cell}
+ */
 good.drive.nav.grid.View.prototype.createCell = function(data) {
   return new good.drive.nav.grid.Cell(data, this.getConfig());
 };
+
 
 /**
  * @param {good.drive.nav.grid.Cell} child
@@ -80,7 +176,7 @@ good.drive.nav.grid.View.prototype.createCell = function(data) {
  */
 good.drive.nav.grid.View.prototype.add = function(child, opt_before) {
   goog.asserts.assert(!opt_before || opt_before.getParent() == this,
-  'Can only add nodes before siblings');
+      'Can only add nodes before siblings');
   if (child.getParent()) {
     child.getParent().removeChild(child);
   }
@@ -89,12 +185,14 @@ good.drive.nav.grid.View.prototype.add = function(child, opt_before) {
   return child;
 };
 
+
+/** @override */
 good.drive.nav.grid.View.prototype.addChildAt = function(child, index,
     opt_render) {
   goog.asserts.assert(!child.getParent());
-  
+
   good.drive.nav.grid.View.superClass_.addChildAt.call(this, child, index);
-  
+
   if (this.getElement()) {
     var contentElm = this.getGridContainerElement();
     var sb = new goog.string.StringBuffer();
@@ -103,6 +201,7 @@ good.drive.nav.grid.View.prototype.addChildAt = function(child, index,
     child.enterDocument();
   }
 };
+
 
 /**
  * @return {Element}
@@ -117,6 +216,10 @@ good.drive.nav.grid.View.prototype.getElement = function() {
   return el;
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getInnerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="', this.getInnerClassName(), '">',
@@ -126,15 +229,27 @@ good.drive.nav.grid.View.prototype.getInnerHtml = function() {
   return sb.toString();
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getInnerElement = function() {
   var el = this.getElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
 
+
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getInnerClassName = function() {
-  return goog.getCssName(this.getConfig().cssRoot, this.getConfig().cssInnerClass);
+  return this.getConfig().cssRoot + '-' + this.getConfig().cssInnerClass;
 };
 
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
 good.drive.nav.grid.View.prototype.getHeadContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="', this.getHeadContainerClassName(),
@@ -146,15 +261,28 @@ good.drive.nav.grid.View.prototype.getHeadContainerHtml = function() {
   return sb.toString();
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getHeadContainerElement = function() {
   var el = this.getInnerElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
 
+
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getHeadContainerClassName = function() {
-  return goog.getCssName(this.getConfig().cssRoot, this.getConfig().cssHeadContainerHtml);
+  return this.getConfig().cssRoot + '-' +  
+  this.getConfig().cssHeadContainerHtml;
 };
 
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
 good.drive.nav.grid.View.prototype.getFolderPathHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
@@ -163,15 +291,27 @@ good.drive.nav.grid.View.prototype.getFolderPathHtml = function() {
   return sb.toString();
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getFolderPathElement = function() {
   var el = this.getHeadContainerElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
 
+
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getFolderPathClassName = function() {
   return this.getConfig().cssPathContainer;
 };
 
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
 good.drive.nav.grid.View.prototype.getScrollContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
@@ -188,15 +328,27 @@ good.drive.nav.grid.View.prototype.getScrollContainerHtml = function() {
   return sb.toString();
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getScrollContainerElement = function() {
   var el = this.getInnerElement();
   return el ? /** @type {Element} */ (el.lastChild) : null;
 };
 
+
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getScrollContainerClassName = function() {
-  return goog.getCssName(this.getConfig().cssRoot, this.getConfig().cssScrollContainerHtml);
+  return this.getConfig().cssRoot + '-' +this.getConfig().cssScrollContainerHtml;
 };
 
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
 good.drive.nav.grid.View.prototype.getGridViewHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
@@ -207,39 +359,63 @@ good.drive.nav.grid.View.prototype.getGridViewHtml = function() {
   return sb.toString();
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getGridViewElement = function() {
   var el = this.getScrollContainerElement();
   return el ? /** @type {Element} */ (el.lastChild) : null;
 };
 
+
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getGridViewClassName = function() {
   return this.getConfig().cssGridView;
 };
 
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
 good.drive.nav.grid.View.prototype.getGridContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
       this.getGridContainerClassName(),
-  '"></div>');
+      '"></div>');
   return sb.toString();
 };
 
+
+/**
+ * @return {Element}
+ */
 good.drive.nav.grid.View.prototype.getGridContainerElement = function() {
   var el = this.getGridViewElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
 
+
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getGridContainerClassName = function() {
   return this.getConfig().cssGridContainer;
 };
 
+
 /**
- * @return {Object}
+ * @return {Object.<string, string>}
  */
 good.drive.nav.grid.View.prototype.getConfig = function() {
   return good.drive.nav.grid.View.defaultConfig;
 };
 
+
+/**
+ */
 good.drive.nav.grid.View.defaultConfig = {
   cssRoot: goog.getCssName('doclistview'),
   cssInnerClass: goog.getCssName('inner'),
@@ -250,15 +426,16 @@ good.drive.nav.grid.View.defaultConfig = {
   cssScrollContainerHtml: goog.getCssName('scroll-container'),
   cssSidePanel: goog.getCssName('doclistview-side-panel'),
   cssEmptyView: goog.getCssName('doclistview-empty-view'),
-  cssGridView: goog.getCssName('gridview-grid') + ' ' + 
-  goog.getCssName('doclistview-transitions') + ' ' + goog.getCssName('density-tiny'),
-  cssGridContainer: goog.getCssName('gv-grid-inner') + ' ' + 
-  goog.getCssName('doclist-container'),
+  cssGridView: goog.getCssName('gridview-grid') + ' ' +
+      goog.getCssName('doclistview-transitions') + ' ' +
+      goog.getCssName('density-tiny'),
+  cssGridContainer: goog.getCssName('gv-grid-inner') + ' ' +
+      goog.getCssName('doclist-container'),
   cssCellRoot: goog.getCssName('goog-inline-block') + ' ' +
-  goog.getCssName('gv-activegv-doc'),
+      goog.getCssName('gv-activegv-doc'),
   cssCellImage: goog.getCssName('gv-image') + ' ' +
-  goog.getCssName('gv-no-border'),
+      goog.getCssName('gv-no-border'),
   cssCellLabel: goog.getCssName('doclist-gv-name-container'),
   cssCellImageContainer: goog.getCssName('gv-image-container'),
-  cssCellHover: goog.getCssName('gv-doc-hovered'),
+  cssCellHover: goog.getCssName('gv-doc-hovered')
 };

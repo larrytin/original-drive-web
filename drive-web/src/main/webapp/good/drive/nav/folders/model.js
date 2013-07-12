@@ -1,6 +1,8 @@
 'use strict';
 goog.provide('good.drive.nav.folders.Model');
 
+goog.require('good.drive.nav.grid');
+
 
 
 /**
@@ -49,10 +51,12 @@ good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的
  * @param {good.realtime.Document} doc
  */
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
-  var folders = this.root.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD);
-  var files = this.root.get(good.drive.nav.folders.Model.strType.FILECHILD);
-  var that = this;
-  this.addEvent(that.view.tree, folders, files);
+  var folders = this.root.get(
+      good.drive.nav.folders.Model.strType.FOLDERSCHILD);
+  var files = this.root.get(
+      good.drive.nav.folders.Model.strType.FILECHILD);
+  this.addEvent(this.view.tree, folders, files);
+  good.drive.nav.grid.View.createGrid(this.view.tree);
 };
 
 
@@ -112,6 +116,8 @@ good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
     node.setExpanded(true);
     var idx = evt.getIndex();
     var vals = evt.getValues();
+    var id = node.getId();
+    var grid = that.getGridById(id);
     for (var i in vals) {
       var val = vals[i];
       var childNode = that.view.insertNode(node, idx, val);
@@ -119,18 +125,58 @@ good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
       that.addEvent(childNode, val.get(
           good.drive.nav.folders.Model.strType.FOLDERSCHILD),
           val.get(good.drive.nav.folders.Model.strType.FILECHILD));
+      if (grid == null) {
+        continue;
+      }
+      grid.insertCell(val, true);
     }
   });
   list.addValuesRemovedListener(function(evt) {
     var idx = evt.getIndex();
-    that.view.removeNode(node, idx);
+    var vals = evt.getValues();
+    for (var i in vals) {
+      var val = vals[i];
+      var removeNode = that.view.removeNode(node, idx);
+      var parentGrid = that.getGridById(node.getId());
+      if (parentGrid == null) {
+        continue;
+      }
+      var id = removeNode.getId();
+      var grid = that.getGridById(id);
+      if (that.removeGridById(id)) {
+        grid.removeFromParent();
+        parentGrid.removeCell(val);
+      }
+    }
   });
 };
 
 
 /**
+ * @param {string} id
+ * @return {good.drive.nav.grid.View}
+ */
+good.drive.nav.folders.Model.prototype.getGridById = function(id) {
+  if (!goog.object.containsKey(good.drive.nav.grid.View.grids, id)) {
+    return null;
+  }
+  return goog.object.get(good.drive.nav.grid.View.grids, id);
+};
+
+
+/**
+ * @param {string} id
+ * @return {good.drive.nav.grid.View}
+ */
+good.drive.nav.folders.Model.prototype.removeGridById = function(id) {
+  return goog.object.remove(good.drive.nav.grid.View.grids, id);
+};
+
+
+/**
  * @param {goog.ui.tree.TreeControl} node
- * @param {good.realtime.CollaborativeList} list
+ * @param {good.realtime.CollaborativeList} folder
+ * @param {good.realtime.CollaborativeList} file
  */
 good.drive.nav.folders.Model.prototype.addEvent = function(node, folder, file) {
   if (this.bindFolderData(node, folder) || this.bindFileData(node, file)) {
@@ -154,6 +200,12 @@ good.drive.nav.folders.Model.prototype.bindFolderData = function(node, list) {
   return false;
 };
 
+
+/**
+ * @param {goog.ui.tree.TreeControl} node
+ * @param {good.realtime.CollaborativeList} list
+ * @return {boolean}
+ */
 good.drive.nav.folders.Model.prototype.bindFileData = function(node, list) {
   if (node.file != undefined) {
     return true;

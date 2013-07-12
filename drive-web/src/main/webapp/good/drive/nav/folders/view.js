@@ -119,10 +119,15 @@ good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
       });
 };
 
+
+/**
+ * @param {Function} handle
+ */
 good.drive.nav.folders.Tree.prototype.changeHandle = function(handle) {
   this.roottree.getHandler().
-  listen(this.roottree, goog.events.EventType.CHANGE, handle);
-}
+      listen(this.roottree, goog.events.EventType.CHANGE, handle);
+};
+
 
 /**
  * @param {goog.ui.tree.TreeControl} node
@@ -209,9 +214,10 @@ good.drive.nav.folders.Tree.prototype.customNode =
 /**
  * @param {goog.ui.tree.TreeControl} parent
  * @param {number} idx
+ * @return {goog.ui.tree.TreeControl}
  */
 good.drive.nav.folders.Tree.prototype.removeNode = function(parent, idx) {
-  parent.removeChildAt(idx);
+  return parent.removeChildAt(idx);
 };
 
 
