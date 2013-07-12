@@ -8,7 +8,9 @@ goog.require('goog.events');
 goog.require('goog.ui.Popup');
 
 
-
+/**
+ * @constructor
+ */
 good.drive.search.AdvancedMenu = function() {
   
   var popupElt = goog.dom.getElement('search_menu');
