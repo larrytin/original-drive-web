@@ -115,7 +115,11 @@ public class CollaborativeAdapter extends BaseAdapter {
       row.setTag(item);
 
       ImageView img_left = (ImageView) row.findViewById(R.id.leftImage);
-      img_left.setImageResource(R.drawable.ic_type_folder);
+      if (null != folderList && position < folderList.length() + 1) {
+        img_left.setImageResource(R.drawable.ic_type_folder);
+      } else {
+        img_left.setImageResource(R.drawable.ic_type_doc);
+      }
 
       textViewContentString = (String) item.get("label");
 
