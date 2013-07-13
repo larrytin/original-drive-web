@@ -275,8 +275,8 @@ good.drive.nav.grid.View.prototype.getHeadContainerElement = function() {
  * @return {string}
  */
 good.drive.nav.grid.View.prototype.getHeadContainerClassName = function() {
-  return this.getConfig().cssRoot + '-' +  
-  this.getConfig().cssHeadContainerHtml;
+  return this.getConfig().cssRoot + '-' +
+      this.getConfig().cssHeadContainerHtml;
 };
 
 
@@ -342,7 +342,7 @@ good.drive.nav.grid.View.prototype.getScrollContainerElement = function() {
  * @return {string}
  */
 good.drive.nav.grid.View.prototype.getScrollContainerClassName = function() {
-  return this.getConfig().cssRoot + '-' +this.getConfig().cssScrollContainerHtml;
+  return this.getConfig().cssRoot + '-' + this.getConfig().cssScrollContainerHtml;
 };
 
 

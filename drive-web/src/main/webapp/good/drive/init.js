@@ -3,6 +3,8 @@ goog.provide('good.drive.init');
 
 goog.require('good.auth');
 goog.require('good.config');
+goog.require('good.drive.creation.fileupload');
+goog.require('good.drive.creation.mouserevent');
 goog.require('good.drive.nav.button.CustomView');
 goog.require('good.drive.nav.button.LeftButton');
 goog.require('good.drive.nav.button.MenuBarButton');
@@ -15,11 +17,8 @@ goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
-goog.require('goog.dom');
-goog.require('good.drive.creation.fileupload');
-
-goog.require('good.drive.creation.mouserevent');
 goog.require('good.drive.search');
+goog.require('goog.dom');
 
 
 /** */
@@ -35,7 +34,7 @@ good.drive.init.start = function() {
     good.realtime.authorize(auth.userId, auth.access_token);
 
     var advancedMenu = good.drive.search.AdvancedMenu();
-    
+
     var tree = new good.drive.nav.folders.Tree();
     tree.changeHandle(function(e) {
       var tree = e.target;
@@ -97,7 +96,7 @@ good.drive.init.start = function() {
     var fileupload = new good.drive.creation.Fileupload();
     fileupload.fileChange(tree);
     popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
-      
+
       fileupload.fileClick();
     });
 

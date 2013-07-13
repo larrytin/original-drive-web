@@ -14,10 +14,10 @@ goog.addDependency('../../../../good/drive/nav/button/toolbarview.js', ['good.dr
 goog.addDependency('../../../../good/drive/nav/button/view.js', ['good.drive.nav.button'], ['good.drive.nav.button.Renderer', 'goog.dom', 'goog.ui.CustomButton']);
 goog.addDependency('../../../../good/drive/nav/dialog/view.js', ['good.drive.nav.dialog'], ['goog.dom', 'goog.ui.Dialog']);
 goog.addDependency('../../../../good/drive/nav/editpwd/editpwd.js', ['good.drive.nav.editpwd'], ['good.auth.signup', 'good.config', 'good.drive.nav.userinfo', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
-goog.addDependency('../../../../good/drive/nav/folders/model.js', ['good.drive.nav.folders.Model'], []);
+goog.addDependency('../../../../good/drive/nav/folders/model.js', ['good.drive.nav.folders.Model'], ['good.drive.nav.grid']);
 goog.addDependency('../../../../good/drive/nav/folders/view.js', ['good.drive.nav.folders'], ['good.drive.nav.folders.Model', 'goog.events.KeyHandler', 'goog.string.StringBuffer', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
 goog.addDependency('../../../../good/drive/nav/grid/cell.js', ['good.drive.nav.grid.Cell'], ['goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
-goog.addDependency('../../../../good/drive/nav/grid/view.js', ['good.drive.nav.grid'], ['good.drive.nav.folders', 'good.drive.nav.grid.Cell', 'goog.asserts', 'goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
+goog.addDependency('../../../../good/drive/nav/grid/view.js', ['good.drive.nav.grid'], ['good.drive.nav.grid.Cell', 'goog.asserts', 'goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../../good/drive/nav/menu/popupmenu.js', ['good.drive.nav.menu.popupmenu'], ['goog.object', 'goog.positioning.Corner', 'goog.ui.MenuItem', 'goog.ui.PopupMenu']);
 goog.addDependency('../../../../good/drive/nav/menu/renderer.js', ['good.drive.nav.menu.ViewRenderer'], ['goog.ui.MenuRenderer']);
 goog.addDependency('../../../../good/drive/nav/menu/view.js', ['good.drive.nav.menu'], ['good.drive.nav.menu.ViewRenderer', 'goog.dom', 'goog.positioning.Corner', 'goog.ui.ContainerRenderer', 'goog.ui.ControlRenderer', 'goog.ui.Menu', 'goog.ui.MenuItemRenderer', 'goog.ui.PopupMenu', 'goog.ui.SubMenu', 'goog.ui.registry']);
