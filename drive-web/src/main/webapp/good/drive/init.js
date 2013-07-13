@@ -37,9 +37,7 @@ good.drive.init.start = function() {
 
     var tree = new good.drive.nav.folders.Tree();
     tree.changeHandle(function(e) {
-      var tree = e.target;
-      var selected = tree.getSelectedItem();
-      good.drive.nav.grid.View.createGrid(selected);
+      tree.buildPath();
     });
 
     var leftButton = new good.drive.nav.button.LeftButton();

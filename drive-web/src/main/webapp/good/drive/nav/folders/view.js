@@ -75,6 +75,68 @@ good.drive.nav.folders.Tree.prototype.insertNode =
   return childNode;
 };
 
+/**
+ * @param {good.realtime.CollaborativeList} path
+ */
+good.drive.nav.folders.Tree.prototype.locationNode = function(path) {
+	this.locationNode_(this.roottree, path, parseInt(0), path.length());
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} map
+ */
+good.drive.nav.folders.Tree.prototype.locationNode_ = function(parentNode, path, idx, pathleg) {
+	if(idx >= pathleg) {
+		return;
+	}
+	if(!this.hasExtended(parentNode)) {
+		parentNode.setExpanded(true);
+	}
+	var length = parentNode.getChildCount();
+	if(length == 0) {
+		return;
+	}
+	var pathId = path.get(idx).getId();
+	for(var i=0; i < length; i++) {
+		var child = parentNode.getChildAt(i);
+		var childId = child.map.getId();
+		if(childId == pathId) {
+			if(idx == (pathleg - 1)) {
+				this.roottree.setSelectedItem(child);
+				this.model.goToGrid(child);
+			}
+			this.locationNode_(child, path, idx + 1, pathleg);
+			break;
+		}
+	}
+};
+
+/**
+ * @param {goog.ui.tree.TreeControl} parentNode
+ * @param {...Array.<Object>} path
+ */
+good.drive.nav.folders.Tree.prototype.buildPath = function() {
+	var parentNode = this.getCurrentItem();
+	if(this.model.isCurrentPath(parentNode.map)) {
+		return;
+	}
+	var paths = [];
+	this.model.clearPath();
+	this.buildPath_(parentNode, paths);
+	this.model.pushPath(paths);
+};
+
+/**
+ * @param {goog.ui.tree.TreeControl} parentNode
+ * @param {Array.<Object>} paths
+ */
+good.drive.nav.folders.Tree.prototype.buildPath_ = function(parentNode, paths) {
+	if(parentNode == this.roottree) {
+		return;
+	}
+	this.buildPath_(parentNode.getParent(), paths);
+	paths.push(parentNode.map);
+};
 
 /**
  * @param {goog.ui.tree.TreeControl} node
@@ -97,9 +159,7 @@ good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
           var val = list.get(i);
           var childNode = that.insertNode(node, 0, val);
           that.model.mapHander(node, childNode, val);
-          that.model.addEvent(childNode,
-              val.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD),
-              val.get(good.drive.nav.folders.Model.strType.FILECHILD));
+          that.model.addEvent(childNode, val);
         }
       });
   node.getHandler().listen(node,
