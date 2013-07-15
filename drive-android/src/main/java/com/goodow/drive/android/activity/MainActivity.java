@@ -56,122 +56,158 @@ import android.app.Activity;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
+	private boolean isDataListFragmentIn = false;
+	private boolean isLocalResFragmentIn = false;
 
-  @InjectView(R.id.leftMenuLayout)
-  private LinearLayout leftMenu;
-  @InjectView(R.id.middleLayout)
-  private LinearLayout middleLayout;
-  // @InjectFragment
-  private LeftMenuFragment leftMenuFragment;
-  private DataListFragment dataListFragment;
-  private LocalResFragment localResFragment;
+	@InjectView(R.id.leftMenuLayout)
+	private LinearLayout leftMenu;
+	@InjectView(R.id.middleLayout)
+	private LinearLayout middleLayout;
+	// @InjectFragment
+	private LeftMenuFragment leftMenuFragment;
+	private DataListFragment dataListFragment;
+	private LocalResFragment localResFragment;
 
-  /**
-   * @return the dataListFragment
-   */
-  public DataListFragment getDataListFragment() {
-    return dataListFragment;
-  }
+	/**
+	 * @return the dataListFragment
+	 */
+	public DataListFragment getDataListFragment() {
+		return dataListFragment;
+	}
 
-  /**
-   * @return the localResFragment
-   */
-  public LocalResFragment getLocalResFragment() {
-    return localResFragment;
-  }
+	/**
+	 * @return the localResFragment
+	 */
+	public LocalResFragment getLocalResFragment() {
+		return localResFragment;
+	}
 
-  public void hideLeftMenuLayout() {
-    if (null != leftMenu && null != middleLayout) {
-      Animation out = AnimationUtils.makeOutAnimation(this, false);
-      leftMenu.startAnimation(out);
+	public void hideLeftMenuLayout() {
+		if (null != leftMenu && null != middleLayout) {
+			Animation out = AnimationUtils.makeOutAnimation(this, false);
+			leftMenu.startAnimation(out);
 
-      leftMenu.setVisibility(LinearLayout.INVISIBLE);
-      middleLayout.setVisibility(LinearLayout.INVISIBLE);
-    }
-  }
+			leftMenu.setVisibility(LinearLayout.INVISIBLE);
+			middleLayout.setVisibility(LinearLayout.INVISIBLE);
+		}
+	}
 
-  @Override
-  public boolean onCreateOptionsMenu(Menu menu) {
-    super.onCreateOptionsMenu(menu);
+	@Override
+	public boolean onCreateOptionsMenu(Menu menu) {
+		super.onCreateOptionsMenu(menu);
 
-    MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
-    back2Login.setIcon(R.drawable.action_discussion_previous);
-    back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
+		MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
+		back2Login.setIcon(R.drawable.action_discussion_previous);
+		back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
-    return true;
-  }
+		return true;
+	}
 
-  @Override
-  public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK) {
-      return true;
-    }
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			if (isDataListFragmentIn) {
+				dataListFragment.backFragment();
+			}
 
-    return super.onKeyDown(keyCode, event);
-  }
+			if (isLocalResFragmentIn) {
+				localResFragment.backFragment();
+			}
 
-  @Override
-  public boolean onOptionsItemSelected(MenuItem item) {
-    super.onOptionsItemSelected(item);
+			return true;
+		}
 
-    if (item.getItemId() == android.R.id.home) {
-      if (leftMenu.getVisibility() == LinearLayout.VISIBLE) {
-        hideLeftMenuLayout();
+		return super.onKeyDown(keyCode, event);
+	}
 
-      } else {
-        Animation in = AnimationUtils.makeInAnimation(this, true);
-        leftMenu.startAnimation(in);
+	@Override
+	public boolean onOptionsItemSelected(MenuItem item) {
+		super.onOptionsItemSelected(item);
 
-        leftMenu.setVisibility(LinearLayout.VISIBLE);
-        middleLayout.setVisibility(LinearLayout.VISIBLE);
+		if (item.getItemId() == android.R.id.home) {
+			if (leftMenu.getVisibility() == LinearLayout.VISIBLE) {
+				hideLeftMenuLayout();
 
-      }
+			} else {
+				Animation in = AnimationUtils.makeInAnimation(this, true);
+				leftMenu.startAnimation(in);
 
-    } else if (item.getItemId() == 0) {
-      AlertDialog alertDialog = new AlertDialog.Builder(this).setPositiveButton(R.string.dailogOK, new DialogInterface.OnClickListener() {
+				leftMenu.setVisibility(LinearLayout.VISIBLE);
+				middleLayout.setVisibility(LinearLayout.VISIBLE);
 
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
-          GlobalDataCacheForMemorySingleton.getInstance.setUserId(null);
-          GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(null);
+			}
 
-          finish();
-        }
-      }).setNegativeButton(R.string.dailogCancel, new DialogInterface.OnClickListener() {
+		} else if (item.getItemId() == 0) {
+			AlertDialog alertDialog = new AlertDialog.Builder(this)
+					.setPositiveButton(R.string.dailogOK,
+							new DialogInterface.OnClickListener() {
 
-        @Override
-        public void onClick(DialogInterface dialog, int which) {
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
+									GlobalDataCacheForMemorySingleton.getInstance
+											.setUserId(null);
+									GlobalDataCacheForMemorySingleton.getInstance
+											.setAccess_token(null);
 
-        }
-      }).setMessage(R.string.back_DailogMessage).create();
+									finish();
+								}
+							})
+					.setNegativeButton(R.string.dailogCancel,
+							new DialogInterface.OnClickListener() {
 
-      alertDialog.show();
-    }
+								@Override
+								public void onClick(DialogInterface dialog,
+										int which) {
 
-    return true;
-  }
+								}
+							}).setMessage(R.string.back_DailogMessage).create();
 
-  @Override
-  protected void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
+			alertDialog.show();
+		}
 
-    ActionBar actionBar = getActionBar();
-    actionBar.setDisplayHomeAsUpEnabled(true);
+		return true;
+	}
 
-    localResFragment = new LocalResFragment();
-    dataListFragment = new DataListFragment();
+	@Override
+	protected void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
 
-    leftMenuFragment = new LeftMenuFragment();
-    FragmentTransaction fragmentTransaction = getFragmentManager().beginTransaction();
-    fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
-    fragmentTransaction.commit();
+		ActionBar actionBar = getActionBar();
+		actionBar.setDisplayHomeAsUpEnabled(true);
 
-    middleLayout.setOnClickListener(new View.OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        hideLeftMenuLayout();
-      }
-    });
+		if (null == localResFragment) {
+			localResFragment = new LocalResFragment();
+		}
 
-  }
+		if (null == dataListFragment) {
+			dataListFragment = new DataListFragment();
+		}
+
+		if (null == leftMenuFragment) {
+			leftMenuFragment = new LeftMenuFragment();
+		}
+
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
+		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
+		fragmentTransaction.commit();
+
+		middleLayout.setOnClickListener(new View.OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				hideLeftMenuLayout();
+			}
+		});
+
+	}
+
+	public void setIsDataListFragmentIn(boolean flag) {
+		this.isDataListFragmentIn = flag;
+	}
+
+	public void setIsLocalResFragmentIn(boolean flag) {
+		this.isLocalResFragmentIn = flag;
+	}
+
 }

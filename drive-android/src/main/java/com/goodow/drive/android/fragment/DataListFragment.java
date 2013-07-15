@@ -1,6 +1,14 @@
 package com.goodow.drive.android.fragment;
 
+import android.app.ListFragment;
+import android.os.Bundle;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
+import android.widget.ListView;
+import android.widget.Toast;
 import com.goodow.drive.android.R;
+import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.CollaborativeList;
@@ -8,28 +16,20 @@ import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
 import com.goodow.realtime.DocumentLoadedHandler;
 import com.goodow.realtime.EventHandler;
+import com.goodow.realtime.EventType;
 import com.goodow.realtime.Model;
 import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
+import com.goodow.realtime.ValueChangedEvent;
 import com.goodow.realtime.ValuesAddedEvent;
 import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
-import java.util.ArrayList;
-import android.app.ListFragment;
-import android.os.Bundle;
-import android.view.LayoutInflater;
-import android.view.View;
-import android.view.View.OnClickListener;
-import android.view.ViewGroup;
-import android.widget.Button;
-import android.widget.ListView;
-import android.widget.Toast;
 
 public class DataListFragment extends ListFragment {
-	private Button backButton;
+	private MainActivity activity;
 
 	private CollaborativeList historyOpenedFolders;
-	private CollaborativeMap currentFolder = null;
+	private CollaborativeMap currentFolder;
 
 	private CollaborativeAdapter adapter;
 
@@ -43,20 +43,38 @@ public class DataListFragment extends ListFragment {
 
 	private EventHandler<ValuesAddedEvent> pathValuesAddedEventHandler;
 	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
-//	private EventHandler<ValuesSetEvent> pathValuesSetEventHandler;
+	// private EventHandler<ValuesSetEvent> pathValuesSetEventHandler;
 
 	private EventHandler<ValuesAddedEvent> valuesAddedEventHandler;
 	private EventHandler<ValuesRemovedEvent> valuesRemovedEventHandler;
 	private EventHandler<ValuesSetEvent> valuesSetEventHandler;
 
-	private ArrayList<Integer> canOpen = new ArrayList<Integer>();// 标注哪些文件夹可以点击进入
-
-	public void addCanOpenItem(Integer position) {
-		canOpen.add(position);
-	}
+	private EventHandler<ValueChangedEvent> valuesChangeEventHandler;
 
 	public void backFragment() {
-		if (1 != historyOpenedFolders.length()) {
+		if (1 < historyOpenedFolders.length()) {
+			CollaborativeList chilFolders = (CollaborativeList) ((CollaborativeMap) historyOpenedFolders
+					.get(historyOpenedFolders.length() - 1)).get(FOLDER_KEY);
+
+			// remove监听
+			if (null != chilFolders) {
+				CollaborativeList chilFiles = (CollaborativeList) ((CollaborativeMap) historyOpenedFolders
+						.get(historyOpenedFolders.length() - 1)).get(FILE_KEY);
+
+				for (int i = 0; i < chilFolders.length(); i++) {
+					CollaborativeMap map = chilFolders.get(i);
+					removeMapListener(map);
+				}
+
+				for (int i = 0; i < chilFiles.length(); i++) {
+					CollaborativeMap map = chilFiles.get(i);
+					removeMapListener(map);
+				}
+
+				removeListListener(chilFolders);
+				removeListListener(chilFiles);
+			}
+
 			historyOpenedFolders.remove(historyOpenedFolders.length() - 1);
 		} else {
 			Toast.makeText(getActivity(), R.string.backFolderErro,
@@ -66,17 +84,19 @@ public class DataListFragment extends ListFragment {
 
 	public void connectUi() {
 		historyOpenedFolders = root.get(PATH_KEY);
+
 		historyOpenedFolders
 				.addValuesAddedListener(pathValuesAddedEventHandler);
 		historyOpenedFolders
 				.addValuesRemovedListener(pathValuesRemovedEventHandler);
 
-		historyOpenedFolders.push(root);
-	}
+		if (0 == historyOpenedFolders.length()) {
+			historyOpenedFolders.push(root);
+		}
 
-	public void freshListData() {
-		canOpen.clear();
-		adapter.notifyDataSetChanged();
+		if (null != currentFolder) {
+			initData();
+		}
 	}
 
 	public void initData() {
@@ -88,7 +108,7 @@ public class DataListFragment extends ListFragment {
 
 			adapter.setFolderList(folderList);
 			adapter.setFileList(fileList);
-			freshListData();
+			adapter.notifyDataSetChanged();
 
 			if (null != folderList) {
 				setListListener(folderList);
@@ -101,16 +121,17 @@ public class DataListFragment extends ListFragment {
 	}
 
 	@Override
+	public void onPause() {
+		super.onPause();
+		activity.setIsDataListFragmentIn(false);
+	}
+
+	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
+		activity = (MainActivity) this.getActivity();
+		activity.setIsDataListFragmentIn(true);
 
-		backButton = (Button) getActivity().findViewById(R.id.backButton);
-		backButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				backFragment();
-			}
-		});
 	}
 
 	private void initEventHandler() {
@@ -118,7 +139,7 @@ public class DataListFragment extends ListFragment {
 			valuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
 				@Override
 				public void handleEvent(ValuesAddedEvent event) {
-					freshListData();
+					adapter.notifyDataSetChanged();
 				}
 			};
 		}
@@ -127,7 +148,7 @@ public class DataListFragment extends ListFragment {
 			valuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
 				@Override
 				public void handleEvent(ValuesRemovedEvent event) {
-					freshListData();
+					adapter.notifyDataSetChanged();
 				}
 			};
 		}
@@ -136,7 +157,7 @@ public class DataListFragment extends ListFragment {
 			valuesSetEventHandler = new EventHandler<ValuesSetEvent>() {
 				@Override
 				public void handleEvent(ValuesSetEvent event) {
-					freshListData();
+					adapter.notifyDataSetChanged();
 				}
 			};
 		}
@@ -146,15 +167,21 @@ public class DataListFragment extends ListFragment {
 				@Override
 				public void handleEvent(ValuesAddedEvent event) {
 					if (0 != historyOpenedFolders.length()) {
-						currentFolder = historyOpenedFolders
-								.get(historyOpenedFolders.length() - 1);
-						
-						if (null == currentFolder.get(FOLDER_KEY)) {
+
+						if (null == ((CollaborativeMap) historyOpenedFolders
+								.get(historyOpenedFolders.length() - 1))
+								.get(FOLDER_KEY)) {
+
 							// TODO
 							Toast.makeText(DataListFragment.this.getActivity(),
 									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
 									.show();
+
+							backFragment();
 						} else {
+							currentFolder = historyOpenedFolders
+									.get(historyOpenedFolders.length() - 1);
+
 							initData();
 						}
 					}
@@ -169,15 +196,22 @@ public class DataListFragment extends ListFragment {
 					if (0 != historyOpenedFolders.length()) {
 						currentFolder = historyOpenedFolders
 								.get(historyOpenedFolders.length() - 1);
-						
-						if (null == currentFolder.get(FOLDER_KEY)) {
-							// TODO
-							Toast.makeText(DataListFragment.this.getActivity(),
-									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
-									.show();
-						} else {
-							initData();
-						}
+					} else {
+						historyOpenedFolders.push(root);
+					}
+
+					initData();
+				}
+			};
+		}
+
+		if (valuesChangeEventHandler == null) {
+			valuesChangeEventHandler = new EventHandler<ValueChangedEvent>() {
+				@Override
+				public void handleEvent(ValueChangedEvent event) {
+					String eventProperty = event.getProperty();
+					if (eventProperty.equals("label")) {
+						adapter.notifyDataSetChanged();
 					}
 				}
 			};
@@ -187,7 +221,7 @@ public class DataListFragment extends ListFragment {
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new CollaborativeAdapter(this, this.getActivity(), null, null);
+		adapter = new CollaborativeAdapter(this, null, null);
 		setListAdapter(adapter);
 
 		initEventHandler();
@@ -261,8 +295,15 @@ public class DataListFragment extends ListFragment {
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		if (canOpen.contains(position)) {
-			CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
+		CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
+
+		CollaborativeList list = (CollaborativeList) clickItem.get(FOLDER_KEY);
+		if (null != list && 0 == list.length()) {
+
+			Toast.makeText(DataListFragment.this.getActivity(), "该文件夹为空文件夹!",
+					Toast.LENGTH_SHORT).show();
+
+		} else {
 			historyOpenedFolders.push(clickItem);
 		}
 	}
@@ -273,5 +314,25 @@ public class DataListFragment extends ListFragment {
 		listenerList.addValuesRemovedListener(valuesRemovedEventHandler);
 
 		listenerList.addValuesAddedListener(valuesAddedEventHandler);
+	}
+
+	private void removeListListener(CollaborativeList listenerList) {
+		listenerList.removeEventListener(EventType.VALUES_SET,
+				valuesSetEventHandler, false);
+
+		listenerList.removeEventListener(EventType.VALUES_REMOVED,
+				valuesRemovedEventHandler, false);
+
+		listenerList.removeEventListener(EventType.VALUES_ADDED,
+				valuesAddedEventHandler, false);
+	}
+
+	public void setMapListener(CollaborativeMap listenerMap) {
+		listenerMap.addValueChangedListener(valuesChangeEventHandler);
+	}
+
+	public void removeMapListener(CollaborativeMap listenerMap) {
+		listenerMap.removeEventListener(EventType.VALUE_CHANGED,
+				valuesChangeEventHandler, false);
 	}
 }
