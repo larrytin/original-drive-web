@@ -1,7 +1,7 @@
 package com.goodow.drive.android.fragment;
 
 import com.goodow.drive.android.R;
-import com.goodow.drive.android.adapter.MyArrayAdapter;
+import com.goodow.drive.android.adapter.CollaborativeAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -11,18 +11,10 @@ import com.goodow.realtime.EventHandler;
 import com.goodow.realtime.Model;
 import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
-import com.goodow.realtime.ValueChangedEvent;
 import com.goodow.realtime.ValuesAddedEvent;
 import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
-
 import java.util.ArrayList;
-import java.util.Map;
-
-import elemental.js.util.StringUtil;
-
-import android.R.integer;
-
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -34,305 +26,252 @@ import android.widget.ListView;
 import android.widget.Toast;
 
 public class DataListFragment extends ListFragment {
-  private Button backButton;
-
-  private ArrayList<String> dataSourceOfFolderList = new ArrayList<String>();
-  private MyArrayAdapter adapter;
-
-  private Document doc;
-  private Model model;
-  private CollaborativeMap root;
-  public static final String DATA_KEY = "folders";
-
-  private ArrayList<Integer> canOpen = new ArrayList<Integer>();// 标注哪些是文件夹,可以点击进入
-  private Object[] dataValues;
-  private String[] folderPath;
-
-  public void backFragment() {
-    if (null != folderPath && 0 < folderPath.length) {
-      if (1 == folderPath.length) {
-        folderPath = null;
-      } else {
-        String[] frontFolderPath = new String[folderPath.length - 1];
-        for (int i = 0; i < folderPath.length - 1; i++) {
-          frontFolderPath[i] = folderPath[i];
-        }
-        folderPath = frontFolderPath;
-      }
-
-      showData(dataValues);
-
-    } else {
-      Toast.makeText(getActivity(), R.string.backFolderErro, Toast.LENGTH_SHORT).show();
-    }
-  }
-
-  public void connectString() {
-    final CollaborativeList list = root.get(DATA_KEY);
-    dataValues = list.asArray();
-
-    showData(dataValues);
-
-    list.addValuesSetListener(new EventHandler<ValuesSetEvent>() {
-      @Override
-      public void handleEvent(ValuesSetEvent arg0) {
-        dataValues = list.asArray();
-
-        if (null != dataValues && dataValues.length != 0) {
-          showData(dataValues);
-        }
-      }
-    });
-
-    list.addValuesRemovedListener(new EventHandler<ValuesRemovedEvent>() {
-      @Override
-      public void handleEvent(ValuesRemovedEvent arg0) {
-        dataValues = list.asArray();
-
-        if (null != dataValues && dataValues.length != 0) {
-          showData(dataValues);
-        }
-      }
-
-    });
-
-    list.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
-      @Override
-      public void handleEvent(ValuesAddedEvent event) {
-        dataValues = list.asArray();
-
-        if (null != dataValues && dataValues.length != 0) {
-          showData(dataValues);
-        }
-      }
-    });
-  }
-
-  @Override
-  public void onCreate(Bundle savedInstanceState) {
-    super.onCreate(savedInstanceState);
-
-    adapter = new MyArrayAdapter(getActivity(), R.layout.row_folderlist, 0, dataSourceOfFolderList);
-    setListAdapter(adapter);
-
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-    return inflater.inflate(R.layout.folder_list, container, false);
-  }
-
-  @Override
-  public void onListItemClick(ListView l, View v, int position, long id) {
-    for (Integer item : canOpen) {
-      if (item == position) {
-
-        String[] nextFolderPaht = null;
-
-        if (null == folderPath) {
-          nextFolderPaht = new String[1];
-        } else {
-          nextFolderPaht = new String[folderPath.length + 1];
-          for (int i = 0; i < folderPath.length; i++) {
-            nextFolderPaht[i] = folderPath[i];
-          }
-        }
-        nextFolderPaht[nextFolderPaht.length - 1] = Integer.toString(position);
-
-        folderPath = nextFolderPaht;
-
-        showData(dataValues);
-        break;
-        // addFragment(nextFolderPaht);
-      }
-    }
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-
-    backButton = (Button) getActivity().findViewById(R.id.backButton);
-    backButton.setOnClickListener(new OnClickListener() {
-      @Override
-      public void onClick(View v) {
-        backFragment();
-      }
-    });
-
-    Realtime.load("@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/androidTest02", new DocumentLoadedHandler() {
-      @Override
-      public void onLoaded(Document document) {
-        doc = document;
-        model = doc.getModel();
-        root = model.getRoot();
-
-        connectString();
-
-      }
-    }, new ModelInitializerHandler() {
-      @Override
-      public void onInitializer(Model model_) {
-        model = model_;
-        root = model.getRoot();
-
-        String[] mapKey = { "label", "filechild", "folderschild" };
-        CollaborativeMap[] values = new CollaborativeMap[3];
-
-        for (int k = 0; k < values.length; k++) {
-          CollaborativeMap map = model.createMap(null);
-          for (int i = 0; i < mapKey.length; i++) {
-            if ("label".equals(mapKey[i])) {
-              map.set(mapKey[i], "Folder" + k);
-            } else {
-              CollaborativeList subList = model.createList(null);
-
-              if ("folderschild".equals(mapKey[i])) {
-                CollaborativeMap subMap = model.createMap(null);
-                subMap.set("label", "SubFolder");
-                subMap.set("filechild", model.createList(null));
-                subMap.set("folderschild", model.createList(null));
-                subList.push(subMap);
-              }
-
-              map.set(mapKey[i], subList);
-            }
-
-          }
-
-          values[k] = map;
-        }
-
-        CollaborativeList list = model_.createList(null);
-        list.pushAll(values);
-
-        root.set("folders", list);
-        System.out.println();
-      }
-    }, null);
-  }
-
-  public void showData(Object[] values) {
-    dataSourceOfFolderList.clear();
-    canOpen.clear();
-
-    if (null != folderPath) {
-      CollaborativeMap folder = null;
-
-      for (int i = 0; i < folderPath.length; i++) {
-        folder = (CollaborativeMap) values[Integer.parseInt(folderPath[i])];
-        values = ((CollaborativeList) folder.get("folderschild")).asArray();
-      }
-
-      CollaborativeList childFolderList = ((CollaborativeList) folder.get("folderschild"));
-
-      childFolderList.addValuesSetListener(new EventHandler<ValuesSetEvent>() {
-        @Override
-        public void handleEvent(ValuesSetEvent arg0) {
-          dataValues = ((CollaborativeList) root.get(DATA_KEY)).asArray();
-
-          if (null != dataValues && dataValues.length != 0) {
-            showData(dataValues);
-          }
-        }
-      });
-
-      childFolderList.addValuesRemovedListener(new EventHandler<ValuesRemovedEvent>() {
-        @Override
-        public void handleEvent(ValuesRemovedEvent arg0) {
-          dataValues = ((CollaborativeList) root.get(DATA_KEY)).asArray();
-
-          if (null != dataValues && dataValues.length != 0) {
-            showData(dataValues);
-          }
-        }
-
-      });
-
-      childFolderList.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
-        @Override
-        public void handleEvent(ValuesAddedEvent event) {
-          dataValues = ((CollaborativeList) root.get(DATA_KEY)).asArray();
-
-          if (null != dataValues && dataValues.length != 0) {
-            showData(dataValues);
-          }
-        }
-      });
-
-      Object[] folders = childFolderList.asArray();
-
-      for (int i = 0; i < folders.length; i++) {
-        final CollaborativeMap folderItem = (CollaborativeMap) folders[i];
-
-        // map监听修改事件
-        folderItem.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
-          @Override
-          public void handleEvent(ValueChangedEvent event) {
-            String key = event.getProperty();
-            Object newValue = event.getNewValue();
-
-            if (null != key) {
-              if (key.equals("label")) {
-                folderItem.set("label", newValue);
-
-                showData(dataValues);
-              }
-            }
-
-          }
-        });
-
-        String folderName = (String) folderItem.get("label");
-        CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
-        CollaborativeList folderItem_files = (CollaborativeList) folderItem.get("filechild");
-
-        dataSourceOfFolderList.add(folderName);
-        if ((null != folderItem_folders && folderItem_folders.length() != 0)
-            || (null != folderItem_files && folderItem_files.length() != 0)) {
-          canOpen.add(i);
-        }
-      }
-
-      // TODO
-      CollaborativeList childFileList = ((CollaborativeList) folder.get("filechild"));
-      Object[] files = childFileList.asArray();
-
-      for (int i = 0; i < files.length; i++) {
-
-      }
-    } else {
-      for (int i = 0; i < values.length; i++) {
-        final CollaborativeMap folderItem = (CollaborativeMap) values[i];
-
-        folderItem.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
-          @Override
-          public void handleEvent(ValueChangedEvent event) {
-            String key = event.getProperty();
-            Object newValue = event.getNewValue();
-
-            if (null != key) {
-              if (key.equals("label")) {
-                folderItem.set("label", newValue);
-
-                showData(dataValues);
-              }
-            }
-          }
-        });
-
-        String folderName = (String) folderItem.get("label");
-        CollaborativeList folderItem_folders = (CollaborativeList) folderItem.get("folderschild");
-        CollaborativeList folderItem_files = (CollaborativeList) folderItem.get("filechild");
-
-        dataSourceOfFolderList.add(folderName);
-        if ((null != folderItem_folders && folderItem_folders.length() != 0)
-            || (null != folderItem_files && folderItem_files.length() != 0)) {
-          canOpen.add(i);
-        }
-      }
-    }
-
-    adapter.notifyDataSetChanged();
-  }
+	private Button backButton;
+
+	private CollaborativeList historyOpenedFolders;
+	private CollaborativeMap currentFolder = null;
+
+	private CollaborativeAdapter adapter;
+
+	private Document doc;
+	private Model model;
+	private CollaborativeMap root;
+
+	private static final String FOLDER_KEY = "folderschild";
+	private static final String FILE_KEY = "filechild";
+	private static final String PATH_KEY = "path";
+
+	private EventHandler<ValuesAddedEvent> pathValuesAddedEventHandler;
+	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
+//	private EventHandler<ValuesSetEvent> pathValuesSetEventHandler;
+
+	private EventHandler<ValuesAddedEvent> valuesAddedEventHandler;
+	private EventHandler<ValuesRemovedEvent> valuesRemovedEventHandler;
+	private EventHandler<ValuesSetEvent> valuesSetEventHandler;
+
+	private ArrayList<Integer> canOpen = new ArrayList<Integer>();// 标注哪些文件夹可以点击进入
+
+	public void addCanOpenItem(Integer position) {
+		canOpen.add(position);
+	}
+
+	public void backFragment() {
+		if (1 != historyOpenedFolders.length()) {
+			historyOpenedFolders.remove(historyOpenedFolders.length() - 1);
+		} else {
+			Toast.makeText(getActivity(), R.string.backFolderErro,
+					Toast.LENGTH_SHORT).show();
+		}
+	}
+
+	public void connectUi() {
+		historyOpenedFolders = root.get(PATH_KEY);
+		historyOpenedFolders
+				.addValuesAddedListener(pathValuesAddedEventHandler);
+		historyOpenedFolders
+				.addValuesRemovedListener(pathValuesRemovedEventHandler);
+
+		historyOpenedFolders.push(root);
+	}
+
+	public void freshListData() {
+		canOpen.clear();
+		adapter.notifyDataSetChanged();
+	}
+
+	public void initData() {
+		if (null != currentFolder) {
+			CollaborativeList folderList = (CollaborativeList) currentFolder
+					.get(FOLDER_KEY);
+			CollaborativeList fileList = (CollaborativeList) currentFolder
+					.get(FILE_KEY);
+
+			adapter.setFolderList(folderList);
+			adapter.setFileList(fileList);
+			freshListData();
+
+			if (null != folderList) {
+				setListListener(folderList);
+			}
+
+			if (null != fileList) {
+				setListListener(fileList);
+			}
+		}
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		backButton = (Button) getActivity().findViewById(R.id.backButton);
+		backButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+				backFragment();
+			}
+		});
+	}
+
+	private void initEventHandler() {
+		if (valuesAddedEventHandler == null) {
+			valuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
+				@Override
+				public void handleEvent(ValuesAddedEvent event) {
+					freshListData();
+				}
+			};
+		}
+
+		if (valuesRemovedEventHandler == null) {
+			valuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
+				@Override
+				public void handleEvent(ValuesRemovedEvent event) {
+					freshListData();
+				}
+			};
+		}
+
+		if (valuesSetEventHandler == null) {
+			valuesSetEventHandler = new EventHandler<ValuesSetEvent>() {
+				@Override
+				public void handleEvent(ValuesSetEvent event) {
+					freshListData();
+				}
+			};
+		}
+
+		if (pathValuesAddedEventHandler == null) {
+			pathValuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
+				@Override
+				public void handleEvent(ValuesAddedEvent event) {
+					if (0 != historyOpenedFolders.length()) {
+						currentFolder = historyOpenedFolders
+								.get(historyOpenedFolders.length() - 1);
+						
+						if (null == currentFolder.get(FOLDER_KEY)) {
+							// TODO
+							Toast.makeText(DataListFragment.this.getActivity(),
+									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
+									.show();
+						} else {
+							initData();
+						}
+					}
+				}
+			};
+		}
+
+		if (pathValuesRemovedEventHandler == null) {
+			pathValuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
+				@Override
+				public void handleEvent(ValuesRemovedEvent event) {
+					if (0 != historyOpenedFolders.length()) {
+						currentFolder = historyOpenedFolders
+								.get(historyOpenedFolders.length() - 1);
+						
+						if (null == currentFolder.get(FOLDER_KEY)) {
+							// TODO
+							Toast.makeText(DataListFragment.this.getActivity(),
+									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
+									.show();
+						} else {
+							initData();
+						}
+					}
+				}
+			};
+		}
+	}
+
+	@Override
+	public void onCreate(Bundle savedInstanceState) {
+		super.onCreate(savedInstanceState);
+		adapter = new CollaborativeAdapter(this, this.getActivity(), null, null);
+		setListAdapter(adapter);
+
+		initEventHandler();
+
+		// 文件Document
+		DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
+			@Override
+			public void onLoaded(Document document) {
+				doc = document;
+				model = doc.getModel();
+				root = model.getRoot();
+
+				connectUi();
+			}
+		};
+
+		ModelInitializerHandler initializer = new ModelInitializerHandler() {
+			@Override
+			public void onInitializer(Model model_) {
+				model = model_;
+				root = model.getRoot();
+
+				String[] mapKey = { "label", "filechild", "folderschild" };
+				CollaborativeMap[] values = new CollaborativeMap[3];
+
+				for (int k = 0; k < values.length; k++) {
+					CollaborativeMap map = model.createMap(null);
+					for (int i = 0; i < mapKey.length; i++) {
+						if ("label".equals(mapKey[i])) {
+							map.set(mapKey[i], "Folder" + k);
+						} else {
+							CollaborativeList subList = model.createList();
+
+							if ("folderschild".equals(mapKey[i])) {
+								CollaborativeMap subMap = model.createMap(null);
+								subMap.set("label", "SubFolder");
+								subMap.set("filechild", model.createList());
+								subMap.set("folderschild", model.createList());
+								subList.push(subMap);
+							}
+
+							map.set(mapKey[i], subList);
+						}
+					}
+
+					values[k] = map;
+				}
+
+				CollaborativeList list = model_.createList();
+				list.pushAll((Object[]) values);
+
+				root.set("folders", list);
+
+				list = model_.createList();
+				root.set("path", list);
+			}
+		};
+
+		String docId = "@tmp/"
+				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+				+ "/androidTest02";
+		Realtime.load(docId, onLoaded, initializer, null);
+
+	}
+
+	@Override
+	public View onCreateView(LayoutInflater inflater, ViewGroup container,
+			Bundle savedInstanceState) {
+		return inflater.inflate(R.layout.folder_list, container, false);
+	}
+
+	@Override
+	public void onListItemClick(ListView l, View v, int position, long id) {
+		if (canOpen.contains(position)) {
+			CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
+			historyOpenedFolders.push(clickItem);
+		}
+	}
+
+	private void setListListener(CollaborativeList listenerList) {
+		listenerList.addValuesSetListener(valuesSetEventHandler);
+
+		listenerList.addValuesRemovedListener(valuesRemovedEventHandler);
+
+		listenerList.addValuesAddedListener(valuesAddedEventHandler);
+	}
 }

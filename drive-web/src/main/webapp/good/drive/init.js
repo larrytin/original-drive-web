@@ -3,6 +3,8 @@ goog.provide('good.drive.init');
 
 goog.require('good.auth');
 goog.require('good.config');
+goog.require('good.drive.creation.fileupload');
+goog.require('good.drive.creation.mouserevent');
 goog.require('good.drive.nav.button.CustomView');
 goog.require('good.drive.nav.button.LeftButton');
 goog.require('good.drive.nav.button.MenuBarButton');
@@ -15,6 +17,7 @@ goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
+goog.require('good.drive.search');
 goog.require('goog.dom');
 
 
@@ -30,10 +33,12 @@ good.drive.init.start = function() {
     var auth = good.auth.Auth.current;
     good.realtime.authorize(auth.userId, auth.access_token);
 
+    var advancedMenu = good.drive.search.AdvancedMenu();
+
     var tree = new good.drive.nav.folders.Tree();
-    var grid = new good.drive.nav.grid.View();
-    grid.render(goog.dom.getElement('viewmanager'));
-    window.grid = grid;
+    tree.changeHandle(function(e) {
+      tree.buildPath();
+    });
 
     var leftButton = new good.drive.nav.button.LeftButton();
     var leftCreateBtn = leftButton.createBtn();
@@ -83,10 +88,14 @@ good.drive.init.start = function() {
       }
     });
 
-    var menulst = new Array('文件...', '文件夹...');
+    var moverEvent = good.drive.creation.Mouserevent(leftUpdateBtn.getElement());
+    var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
+    var fileupload = new good.drive.creation.Fileupload();
+    fileupload.fileChange(tree);
     popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
-      alert('ss');
+
+      fileupload.fileClick();
     });
 
     var leftSubmenuChildIds = undefined;

@@ -26,6 +26,22 @@
   goog.require('good.drive.init');
 </script>
 <!-- <script src="drive-compiled.js"></script> -->
+<style type="text/css">
+.filter-selector {
+background-color: #fff;
+border-color: rgba(0,0,0,0.2);
+border-style: solid;
+border-width: 1px;
+position: absolute;
+z-index: 993;
+}
+
+.filter-selector table {
+border-collapse: collapse;
+border: none;
+width: 100%;
+}
+</style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -53,16 +69,30 @@
         </div>
         <div id=gbq2 class=gbt>
           <div id=gbqfw>
-            <form id=gbqf name=gbqf method=get action="">
+            <form id=gbqf name=gbqf method=get action="" style="max-width: 512px;">
               <fieldset class=gbqff id=gbqff>
                 <legend class=gbxx></legend>
                 <div id=gbfwa class="gbqfwa ">
                   <div id=gbqfqw class=gbqfqw>
                     <div id=gbqfaa></div>
                     <div id=gbqfqwb class=gbqfqwb>
-                      <input id=gbqfq class=gbqfif name=q type=text autocomplete=off value="未实现" disabled="disabled">
+                      <input id=gbqfq class=gbqfif name=q type=text autocomplete=off value="未实现">
                     </div>
-                    <div id=gbqfab></div>
+                    <div id="gbqfab">
+                      <div class="goog-inline-block search-input-clear-container" id="search-input-clear-container">
+                        <div class="goog-inline-block search-input-clear" aria-hidden="true" role="button" data-tooltip="清除搜索"
+                          aria-label="清除搜索" style="-webkit-user-select: none; display: none;">
+                          <div class="search-input-clear-icon"></div>
+                        </div>
+                      </div>
+                      <div class="goog-inline-block advanced-search-button-container" id="advanced-search-button-container">
+                        <div class="goog-inline-block goog-flat-menu-button advanced-search-button" role="button" tabindex="0"
+                          aria-haspopup="true" data-tooltip="高级搜索选项" aria-label="高级搜索选项" style="-webkit-user-select: none;">
+                          <div class="goog-inline-block goog-flat-menu-button-caption"></div>
+                          <div class="goog-inline-block goog-flat-menu-button-dropdown">&nbsp;</div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </fieldset>
@@ -300,6 +330,270 @@
       </div>
     </div>
   </div>
+
+  <div id="search_menu" class="filter-selector" style="display: none;">
+    <table>
+      <tbody>
+        <tr>
+          <td>
+           <div class="filter-selector-section">
+              <div class="filter-menu" >
+                <div class="goog-menu goog-menu-vertical" role="menu" aria-haspopup="true" style="-webkit-user-select: none;">
+                  <div class="goog-menuitem filter-menu-label" role="menuitem" id=":30" style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"
+                        style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">类型</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:所有文件" id=":31"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">所有文件</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:文件夹" id=":32"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">文件夹</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:绘图" id=":33"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">绘图</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:图片" id=":34"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">图片</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:PDF 文件" id=":35"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">PDF 文件</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:演示文稿" id=":36"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">演示文稿</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:电子表格" id=":37"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">电子表格</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:表单" id=":38"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">表单</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:文本文档" id=":39"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">文本文档</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:视频" id=":3a"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">视频</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="类型:表格" id=":3b"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">表格</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </td>
+          <td>
+          <div class="filter-selector-section">
+              <div class="filter-menu">
+                <div class="goog-menu goog-menu-vertical" role="menu" aria-haspopup="true" style="-webkit-user-select: none;">
+                  <div class="goog-menuitem filter-menu-label" role="menuitem" id=":3e" style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"
+                        style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">公开范围</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="公开范围:在网络上公开" id=":3f"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">在网络上公开</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="公开范围:知道此链接的任何人" id=":3g"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">知道此链接的任何人</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="公开范围:未公开" id=":3h"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">未公开</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="公开范围:未共享" id=":3i"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">未共享</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-label" role="menuitem" id=":3j" style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"
+                        style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption" style="-webkit-user-select: none;"></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-label" role="menuitem" id=":3k" style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"
+                        style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">所有权</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="所有权:归我所有" id=":3l"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">归我所有</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="所有权:不归我所有" id=":3m"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">不归我所有</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-label" role="menuitem" id=":3n" style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"
+                        style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption" style="-webkit-user-select: none;"></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="我打开过的文件" id=":3o"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">我打开过的文件</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                  <div class="goog-menuitem filter-menu-item goog-option" role="menuitem" aria-label="创建方式..." id=":3p"
+                    style="-webkit-user-select: none;">
+                    <div class="goog-menuitem-content" style="-webkit-user-select: none;">
+                      <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container" style="-webkit-user-select: none;"><span
+                        class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;">创建方式...</div></span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption" style="-webkit-user-select: none;"><div
+                            style="-webkit-user-select: none;"></div></span></span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
   <input type="file" id="file" multiple style="height: 0px; visibility: hidden; position: absolute; -webkit-user-select: none; width: 0px; font-size: inherit;">
 </body>
 </html>
