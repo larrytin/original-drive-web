@@ -7,8 +7,6 @@ goog.require('goog.dom.classes');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 
-
-
 /**
  * @param {goog.ui.tree.TreeControl} node
  * @param {goog.dom.DomHelper=} opt_domHelper
@@ -22,12 +20,10 @@ good.drive.nav.grid.View = function(node, opt_domHelper) {
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
-
 /**
  * @type {struct}
  */
 good.drive.nav.grid.View.grids = {};
-
 
 /**
  * @param {goog.ui.tree.TreeControl} node
@@ -79,9 +75,8 @@ good.drive.nav.grid.View.prototype.renderCell = function(node) {
 /**
  */
 good.drive.nav.grid.View.prototype.removeFromParent = function() {
-  this.getElement().remove();
+  goog.dom.removeNode(this.getElement());
 };
-
 
 /**
  * @param {good.realtime.CollaborativeMap} data
@@ -197,7 +192,7 @@ good.drive.nav.grid.View.prototype.addChildAt = function(child, index,
     var contentElm = this.getGridContainerElement();
     var sb = new goog.string.StringBuffer();
     child.createDom();
-    contentElm.appendChild(child.getElement());
+    goog.dom.appendChild(contentElm, child.getElement());
     child.enterDocument();
   }
 };
@@ -342,7 +337,8 @@ good.drive.nav.grid.View.prototype.getScrollContainerElement = function() {
  * @return {string}
  */
 good.drive.nav.grid.View.prototype.getScrollContainerClassName = function() {
-  return this.getConfig().cssRoot + '-' + this.getConfig().cssScrollContainerHtml;
+  return this.getConfig().cssRoot + '-' + this.
+  getConfig().cssScrollContainerHtml;
 };
 
 

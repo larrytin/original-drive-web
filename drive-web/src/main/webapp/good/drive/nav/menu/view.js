@@ -45,9 +45,6 @@ good.drive.nav.menu.View = function() {
   var left = new goog.ui.PopupMenu();
   left.decorate(goog.dom.getElement('leftsubmenu'));
   this.left_ = left;
-
-  var box = goog.math.Box(10, 10, 10, 10);
-  this.box_ = box;
 };
 
 
@@ -70,7 +67,7 @@ good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.leftSubMenu = function(dom, handle) {
-  this.left_.attach(dom, undefined, undefined, true, this.box_);
+  this.left_.attach(dom, undefined, undefined, true);
   goog.events.listen(this.left_, 'action', handle);
   return this.left_;
 };
