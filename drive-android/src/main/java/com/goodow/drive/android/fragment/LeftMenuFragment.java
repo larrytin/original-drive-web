@@ -131,7 +131,7 @@ public class LeftMenuFragment extends ListFragment {
 
     case USER_LOCAL_DATA:
       fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.contentLayout, new LocalResFragment());
+      fragmentTransaction.replace(R.id.contentLayout, mainActivity.getLocalResFragment());
       fragmentTransaction.commit();
       break;
 
