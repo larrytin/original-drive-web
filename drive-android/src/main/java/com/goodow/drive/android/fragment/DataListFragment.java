@@ -280,9 +280,13 @@ public class DataListFragment extends ListFragment {
 			}
 		};
 
+		// String docId = "@tmp/"
+		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+		// + "/androidTest02";
+
 		String docId = "@tmp/"
 				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/androidTest02";
+				+ "/androidTest001";
 		Realtime.load(docId, onLoaded, initializer, null);
 
 	}
