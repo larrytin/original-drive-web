@@ -2945,3 +2945,175 @@ a.gbiba {
     margin-right: 20px;
     margin-top: 0;
 }
+
+.gbqfba, .gbqfbb {
+border: 1px solid #dcdcdc;
+border-color: rgba(0,0,0,.1);
+color: #444 !important;
+font-size: 11px;
+}
+
+
+#gbmpal .gbqfbb:hover {
+border-color: #c6c6c6;
+-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+-moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+color: #222 !important;
+ background-color: #fff;
+ background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f8f8f8));
+ background-image: -webkit-linear-gradient(top, #fff, #f8f8f8);
+ background-image: -moz-linear-gradient(top, #fff, #f8f8f8);
+ background-image: -ms-linear-gradient(top, #fff, #f8f8f8);
+ background-image: -o-linear-gradient(top, #fff, #f8f8f8);
+ background-image: linear-gradient(top, #fff, #f8f8f8);
+ filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#f8f8f8')
+}
+
+
+<!--searchmenu-->
+#search-filters-container {
+height: 27px;
+line-height: 27px;
+padding: 0;
+}
+
+
+.filter-banner-table {
+height: 21px;
+line-height: 21px;
+vertical-align: top;
+border-collapse: collapse;
+border-spacing: 0;
+zoom: 1;
+}
+
+.filter-chip {
+-webkit-border-radius: 2px;
+-moz-border-radius: 2px;
+border-radius: 2px;
+background: none repeat scroll 0 0 #dae4f6;
+border: 1px solid #dae4f6;
+color: #222;
+cursor: default;
+height: 23px;
+line-height: 23px;
+margin: 1px;
+outline: medium none;
+padding: 0;
+vertical-align: top;
+}
+
+.filter-chip-label {
+font-size: 12px;
+height: 23px;
+padding: 0 0 0 5px;
+text-align: middle;
+vertical-align: top;
+}
+
+.filter-chip-x {
+color: #444;
+cursor: pointer;
+font-size: 17px;
+font-weight: 700;
+height: 23px;
+padding: 1px 4px;
+text-align: center;
+vertical-align: top;
+}
+
+.search-input-clear-container {
+height: 27px;
+position: absolute;
+right: 20px;
+top: 0;
+}
+
+.search-input-clear {
+cursor: pointer;
+outline: none;
+margin: 0;
+padding: 4px 3px 3px;
+}
+
+.search-input-clear-icon {
+background-position: -1805px 0;
+-moz-opacity: .55;
+-khtml-opacity: .55;
+opacity: .55;
+filter: alpha(opacity=55);
+}
+
+.search-input-clear-icon {
+background-image: url(https://ssl.gstatic.com/docs/doclist/images/icons_35.png);
+background-repeat: no-repeat;
+height: 10px;
+margin: 5px 2px;
+width: 10px;
+}
+
+.advanced-search-button-container {
+height: 27px;
+line-height: 24px;
+position: absolute;
+right: 0;
+top: 0;
+}
+
+.advanced-search-button.goog-flat-menu-button {
+background-color: transparent;
+background-image: none;
+border: none;
+margin: 0 4px 0 0;
+min-width: 8px;
+padding: 4px;
+}
+
+.advanced-search-button {
+cursor: pointer;
+height: 18px;
+width: 10px;
+}
+
+.filter-selector {
+background-color: #fff;
+border-color: rgba(0,0,0,0.2);
+border-style: solid;
+border-width: 1px;
+position: absolute;
+z-index: 993;
+}
+
+.filter-selector table {
+border-collapse: collapse;
+border: none;
+width: 100%;
+}
+
+.filter-selector .goog-menu {
+border: none;
+outline: none;
+position: relative;
+}
+
+.filter-selector .goog-menu {
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
+}
+
+.filter-selector .goog-menuitem {
+padding: 0 6px;
+height: 18px;
+line-height: 18px;
+}
+
+.filter-selector .goog-menuitem {
+cursor: pointer;
+font-size: 13px;
+}
+
+.goog-menuitem {
+position: relative;
+}

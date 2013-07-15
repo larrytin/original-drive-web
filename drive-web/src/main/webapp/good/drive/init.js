@@ -33,7 +33,7 @@ good.drive.init.start = function() {
     var auth = good.auth.Auth.current;
     good.realtime.authorize(auth.userId, auth.access_token);
 
-    var advancedMenu = good.drive.search.AdvancedMenu();
+    var advancedMenu = new good.drive.search.AdvancedMenu();
 
     var tree = new good.drive.nav.folders.Tree();
     tree.changeHandle(function(e) {
