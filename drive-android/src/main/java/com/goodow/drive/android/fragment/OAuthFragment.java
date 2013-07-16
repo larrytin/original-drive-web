@@ -1,6 +1,6 @@
 package com.goodow.drive.android.fragment;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.LogInActivity;
 import com.goodow.realtime.Realtime;
 

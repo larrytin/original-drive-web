@@ -7,8 +7,6 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 
-
-
 /**
  * @constructor
  */
@@ -79,63 +77,67 @@ good.drive.nav.folders.Tree.prototype.insertNode =
  * @param {good.realtime.CollaborativeList} path
  */
 good.drive.nav.folders.Tree.prototype.locationNode = function(path) {
-	this.locationNode_(this.roottree, path, parseInt(0), path.length());
-};
-
-/**
- * @param {good.realtime.CollaborativeMap} map
- */
-good.drive.nav.folders.Tree.prototype.locationNode_ = function(parentNode, path, idx, pathleg) {
-	if(idx >= pathleg) {
-		return;
-	}
-	if(!this.hasExtended(parentNode)) {
-		parentNode.setExpanded(true);
-	}
-	var length = parentNode.getChildCount();
-	if(length == 0) {
-		return;
-	}
-	var pathId = path.get(idx).getId();
-	for(var i=0; i < length; i++) {
-		var child = parentNode.getChildAt(i);
-		var childId = child.map.getId();
-		if(childId == pathId) {
-			if(idx == (pathleg - 1)) {
-				this.roottree.setSelectedItem(child);
-				this.model.goToGrid(child);
-			}
-			this.locationNode_(child, path, idx + 1, pathleg);
-			break;
-		}
-	}
+  this.locationNode_(this.roottree, path, parseInt(0), path.length());
 };
 
 /**
  * @param {goog.ui.tree.TreeControl} parentNode
- * @param {...Array.<Object>} path
+ * @param {good.realtime.CollaborativeList} path
+ * @param {number} idx
+ * @param {number} pathleg
+ * @private
+ */
+good.drive.nav.folders.Tree.prototype.locationNode_ =
+  function(parentNode, path, idx, pathleg) {
+  if (idx >= pathleg) {
+    return;
+  }
+  if (!this.hasExtended(parentNode)) {
+    parentNode.setExpanded(true);
+  }
+  var length = parentNode.getChildCount();
+  if (length == 0) {
+    return;
+  }
+  var pathId = path.get(idx).getId();
+  for (var i = 0; i < length; i++) {
+    var child = parentNode.getChildAt(i);
+    var childId = child.map.getId();
+    if (childId == pathId) {
+      if (idx == (pathleg - 1)) {
+        this.roottree.setSelectedItem(child);
+        this.model.goToGrid(child);
+      }
+      this.locationNode_(child, path, idx + 1, pathleg);
+      break;
+    }
+  }
+};
+
+/**
  */
 good.drive.nav.folders.Tree.prototype.buildPath = function() {
-	var parentNode = this.getCurrentItem();
-	if(this.model.isCurrentPath(parentNode.map)) {
-		return;
-	}
-	var paths = [];
-	this.model.clearPath();
-	this.buildPath_(parentNode, paths);
-	this.model.pushPath(paths);
+  var parentNode = this.getCurrentItem();
+  if (this.model.isCurrentPath(parentNode.map)) {
+    return;
+  }
+  var paths = [];
+  this.model.clearPath();
+  this.buildPath_(parentNode, paths);
+  this.model.pushPath(paths);
 };
 
 /**
  * @param {goog.ui.tree.TreeControl} parentNode
  * @param {Array.<Object>} paths
+ * @private
  */
 good.drive.nav.folders.Tree.prototype.buildPath_ = function(parentNode, paths) {
-	if(parentNode == this.roottree) {
-		return;
-	}
-	this.buildPath_(parentNode.getParent(), paths);
-	paths.push(parentNode.map);
+  if (parentNode == this.roottree) {
+    return;
+  }
+  this.buildPath_(parentNode.getParent(), paths);
+  paths.push(parentNode.map);
 };
 
 /**
@@ -155,6 +157,7 @@ good.drive.nav.folders.Tree.prototype.nodeHandle = function(node, list) {
         if (node.getChildCount() > 0) {
           return;
         }
+        var str = '';
         for (var i = 0; i < list.length(); i++) {
           var val = list.get(i);
           var childNode = that.insertNode(node, 0, val);
@@ -320,7 +323,7 @@ good.drive.nav.folders.Tree.prototype.getIndexByChild = function(node) {
   var id = node.getId();
   var parent = node.getParent();
   var childIds = parent.getChildIds();
-  var index = childIds.indexOf(id);
+  var index = goog.array.indexOf(childIds, id);
   return index;
 };
 

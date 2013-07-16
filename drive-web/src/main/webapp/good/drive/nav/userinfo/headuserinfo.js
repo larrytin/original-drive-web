@@ -80,8 +80,12 @@ good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
     var uri = new goog.Uri('EditPasswd.html' + '#userId=' +
         userId + '&access_token=' + access_token);
 
-
-    window.location.assign(uri.toString());
+    var pathname = window.location.pathname;
+    if (pathname.indexOf('EditPasswd.html') != -1) {
+      window.location.reload(uri.toString());
+    } else {
+      window.location.assign(uri.toString());
+    }
   });
 };
 

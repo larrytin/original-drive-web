@@ -33,7 +33,7 @@ good.drive.init.start = function() {
     var auth = good.auth.Auth.current;
     good.realtime.authorize(auth.userId, auth.access_token);
 
-    var advancedMenu = good.drive.search.AdvancedMenu();
+    var advancedMenu = new good.drive.search.AdvancedMenu();
 
     var tree = new good.drive.nav.folders.Tree();
     tree.changeHandle(function(e) {
@@ -78,7 +78,7 @@ good.drive.init.start = function() {
     });
 
     var menu = new good.drive.nav.menu.View();
-    menu.createPopup(leftCreateBtn.getElement(), function(e) {
+    var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
       switch (e.target.getId()) {
         case ':2':
           createdialog.setVisible(true);
@@ -88,22 +88,23 @@ good.drive.init.start = function() {
       }
     });
 
-    var moverEvent = good.drive.creation.Mouserevent(leftUpdateBtn.getElement());
+    var moverEvent = good.drive.creation.Mouserevent(
+        leftUpdateBtn.getElement());
     var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
     var fileupload = new good.drive.creation.Fileupload();
     fileupload.fileChange(tree);
     popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
-
       fileupload.fileClick();
     });
 
     var leftSubmenuChildIds = undefined;
-    var leftSubmenu = menu.leftSubMenu(tree.tree.getElement(), function(e) {
+    var leftSubmenu = menu.leftSubMenu(
+    tree.roottree.getElement(), function(e) {
       if (leftSubmenuChildIds == undefined) {
         leftSubmenuChildIds = leftSubmenu.getChildIds();
       }
-      switch (leftSubmenuChildIds.indexOf(e.target.getId())) {
+      switch (goog.array.indexOf(leftSubmenuChildIds, e.target.getId())) {
         case 0:
           tree.extended();
           break;
@@ -117,7 +118,7 @@ good.drive.init.start = function() {
           }
           modifeInput.value = tree.getCurrentItem().title;
           break;
-        case 4:
+        case 6:
           tree.removeLeaf();
           break;
         default:

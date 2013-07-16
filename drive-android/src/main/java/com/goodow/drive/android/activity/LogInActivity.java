@@ -1,14 +1,15 @@
 package com.goodow.drive.android.activity;
 
+import com.goodow.android.drive.R;
 import com.goodow.api.services.account.Account;
 import com.goodow.api.services.account.model.AccountInfo;
-import com.goodow.drive.android.R;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
 import com.goodow.realtime.Realtime;
 
 import com.google.inject.Inject;
 
+import java.io.File;
 import java.io.IOException;
 
 import android.annotation.SuppressLint;
@@ -60,9 +61,15 @@ public class LogInActivity extends RoboActivity {
           errorMessage = "服务器异常!";
           break;
         }
-        GlobalDataCacheForMemorySingleton.getInstance.setUserName(usernameEditText.getText().toString());
+        
         GlobalDataCacheForMemorySingleton.getInstance.setUserId(userId);
         GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(token);
+        GlobalDataCacheForMemorySingleton.getInstance.setUserName(usernameEditText.getText().toString());
+        
+        File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getUserResDirPath());
+        if(!file.exists()){
+        	file.mkdir();
+        }
 
         // 通知。。。
         Realtime.authorize(userId, token);

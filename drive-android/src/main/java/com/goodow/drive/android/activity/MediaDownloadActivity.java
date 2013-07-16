@@ -1,14 +1,6 @@
 package com.goodow.drive.android.activity;
 
-import com.goodow.drive.android.R;
-import com.goodow.realtime.CollaborativeList;
-import com.goodow.realtime.CollaborativeMap;
-import com.goodow.realtime.Document;
-import com.goodow.realtime.EventHandler;
-import com.goodow.realtime.EventType;
-import com.goodow.realtime.Model;
-import com.goodow.realtime.ValuesAddedEvent;
-
+import com.goodow.android.drive.R;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
 import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener;
@@ -20,10 +12,8 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
-
 import java.io.OutputStream;
-import java.sql.Date;
-
+import android.annotation.SuppressLint;
 import android.app.Activity;
 import android.content.Intent;
 import android.graphics.Bitmap;
@@ -34,7 +24,6 @@ import android.os.Message;
 import android.util.Log;
 import android.view.Menu;
 import android.view.View;
-import android.widget.EditText;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -112,11 +101,8 @@ public class MediaDownloadActivity extends Activity {
 
   private ProgressBar progressBar;
 
-  private Document doc;
-  private Model model;
-  private CollaborativeMap root;
-
-  private Handler handler = new Handler() {
+  @SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
     @Override
     public void handleMessage(Message msg) {
       switch (msg.what) {
@@ -133,22 +119,6 @@ public class MediaDownloadActivity extends Activity {
       }
     }
   };
-
-  //
-  public void connectString() {
-    CollaborativeList list = root.get(DATA_KEY);
-    list.addValuesAddedListener(new EventHandler<ValuesAddedEvent>() {
-      @Override
-      public void handleEvent(ValuesAddedEvent event) {
-        int index = event.getIndex();
-        Object[] values = event.getValues();
-
-        EditText edT = (EditText) findViewById(R.id.edT);
-        edT.setText(values[0].toString());
-        EventType type = event.getType();
-      }
-    });
-  }
 
   public void intentManager(View view) {
     try {

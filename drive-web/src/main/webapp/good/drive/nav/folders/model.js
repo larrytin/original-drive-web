@@ -27,7 +27,8 @@ good.drive.nav.folders.Model = function(view) {
     // connectUi();
     that.connect(doc);
   };
-  good.realtime.load('@tmp/b22', onLoad, onInit, null);
+  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
+      '/androidTest002', onLoad, onInit, null);
 };
 
 
@@ -53,53 +54,53 @@ good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
   this.addEvent(this.view.tree, this.root);
   this.pathHandle(this.view.tree);
-  if(this.path.length() == 0) {
-  	this.view.buildPath();
+  this.view.roottree.path = this.path;
+  if (this.path.length() == 0) {
+    this.view.buildPath();
   }
 };
 
 /**
  * @param {goog.ui.tree.TreeControl} root
- * @param {good.realtime.CollaborativeList} pathlist
  */
 good.drive.nav.folders.Model.prototype.pathHandle = function(root) {
-	var that = this;
-	this.path.addValuesAddedListener(function(evt) {
-		that.view.locationNode(that.path);
-	});
+  var that = this;
+  this.path.addValuesAddedListener(function(evt) {
+    that.view.locationNode(that.path);
+  });
 };
 
 /**
- * @param {good.realtime.CollaborativeList} list
+ * @param {good.realtime.CollaborativeMap} map
  * @return {boolean}
  */
 good.drive.nav.folders.Model.prototype.isCurrentPath = function(map) {
-	if(this.path.length() == 0) {
-		return false;
-	}
-	var map_ = this.path.get(this.path.length() - 1);
-	if(map_.getId() == map.getId()) {
-		return true;
-	}
-	return false;
+  if (this.path.length() == 0) {
+    return false;
+  }
+  var map_ = this.path.get(this.path.length() - 1);
+  if ((map_.getId()) == (map.getId())) {
+    return true;
+  }
+  return false;
 };
 
 /**
  */
 good.drive.nav.folders.Model.prototype.clearPath = function() {
-	this.path.clear();
-//	var length = this.path.length();
-//	if(length == 1) {
-//		return;
-//	}
-//	this.path.removeRange(1, length);
+  this.path.clear();
+//  var length = this.path.length();
+//  if(length == 1) {
+//    return;
+//  }
+//  this.path.removeRange(1, length);
 };
 
 /**
  * @param {Array.<Object>} paths
  */
 good.drive.nav.folders.Model.prototype.pushPath = function(paths) {
-	this.path.pushAll(paths);
+  this.path.pushAll(paths);
 };
 
 /**
@@ -117,7 +118,7 @@ good.drive.nav.folders.Model.prototype.mapHander =
     }
     var newValue = evt.getNewValue();
     var oldValue = evt.getOldValue();
-    if (oldValue == null || oldValue.length() == 0) {
+    if (oldValue == null) {
       return;
     }
     that.view.setNodeTitle(selfNode, newValue);
@@ -151,7 +152,7 @@ good.drive.nav.folders.Model.prototype.getLeaf =
 good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
   var that = this;
   list.addValuesAddedListener(function(evt) {
-    if (!that.view.hasExtended(node)) {
+    if (!that.view.hasExtended(node) || node.getChildCount() == list.length()) {
       return;
     }
     node.setExpanded(true);
@@ -194,7 +195,7 @@ good.drive.nav.folders.Model.prototype.dataHandle = function(node, list) {
  * @param {goog.ui.tree.TreeControl} node
  */
 good.drive.nav.folders.Model.prototype.goToGrid = function(node) {
-	good.drive.nav.grid.View.createGrid(node);
+  good.drive.nav.grid.View.createGrid(node);
 };
 
 /**
@@ -218,8 +219,7 @@ good.drive.nav.folders.Model.prototype.removeGridById = function(id) {
 
 /**
  * @param {goog.ui.tree.TreeControl} node
- * @param {good.realtime.CollaborativeList} folder
- * @param {good.realtime.CollaborativeList} file
+ * @param {good.realtime.CollaborativeMap} map
  */
 good.drive.nav.folders.Model.prototype.addEvent = function(node, map) {
   if (this.bindData(node, map)) {
@@ -232,7 +232,7 @@ good.drive.nav.folders.Model.prototype.addEvent = function(node, map) {
 
 /**
  * @param {goog.ui.tree.TreeControl} node
- * @param {good.realtime.CollaborativeList} list
+ * @param {good.realtime.CollaborativeMap} map
  * @return {boolean}
  */
 good.drive.nav.folders.Model.prototype.bindData = function(node, map) {
@@ -243,7 +243,7 @@ good.drive.nav.folders.Model.prototype.bindData = function(node, map) {
   node.folder = map.get(
       good.drive.nav.folders.Model.strType.FOLDERSCHILD);
   node.file = map.get(
-  		good.drive.nav.folders.Model.strType.FILECHILD);
+      good.drive.nav.folders.Model.strType.FILECHILD);
   return false;
 };
 
@@ -256,12 +256,14 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
 
   var rootFolders = mod.createList();
   var rootFiles = mod.createList();
-  root_.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD, rootFolders);
-  root_.set(good.drive.nav.folders.Model.strType.FILECHILD, rootFiles);
-  
+  root_.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+      rootFolders);
+  root_.set(good.drive.nav.folders.Model.strType.FILECHILD,
+      rootFiles);
 //  var pathList = mod.createList();
 //  pathList.push(root_);
   root_.set(good.drive.nav.folders.Model.strType.PATH, mod.createList());
+  root_.set(good.drive.nav.folders.Model.strType.LABEL, '我的资料库');
 
   var folder;
   var subFolders;

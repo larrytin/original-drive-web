@@ -1,6 +1,5 @@
 package com.goodow.drive.android.global_data_cache;
 
-import android.os.Environment;
 
 /**
  * 需要全局缓存的数据
@@ -8,122 +7,133 @@ import android.os.Environment;
  * @author zhihua.tang
  */
 public enum GlobalDataCacheForMemorySingleton {
-  getInstance;
+	getInstance;
 
-  public static synchronized GlobalDataCacheForMemorySingleton getInstance() {
+	public static synchronized GlobalDataCacheForMemorySingleton getInstance() {
 
-    return getInstance;
-  }
+		return getInstance;
+	}
 
-  // 客户端应用版本号
-  private String clientVersion;
+	// 客户端应用版本号
+	private String clientVersion;
 
-  // 客户端 Android 版本号
-  private String clientAVersion;
+	// 客户端 Android 版本号
+	private String clientAVersion;
 
-  // 屏幕大小
-  private String screenSize;
+	// 屏幕大小
+	private String screenSize;
 
-  // 用户最后一次登录成功时的用户名
-  private String usernameForLastSuccessfulLogon;
+	// 用户最后一次登录成功时的用户名
+	private String usernameForLastSuccessfulLogon;
 
-  // 用户最后一次登录成功时的密码
-  private String passwordForLastSuccessfulLogon;
+	// 用户最后一次登录成功时的密码
+	private String passwordForLastSuccessfulLogon;
 
-  private String userId;
+	private String userId;
 
-  private String access_token;
+	private String access_token;
 
-  private String userName;
+	private String userName;
 
-  /**
-   * @return the access_token
-   */
-  public String getAccess_token() {
-    return access_token;
-  }
+	private String storagePaht;
 
-  public String getClientAVersion() {
-    return clientAVersion;
-  }
+	/**
+	 * @return the access_token
+	 */
+	public String getAccess_token() {
+		return access_token;
+	}
 
-  public String getClientVersion() {
-    return clientVersion;
-  }
+	public String getClientAVersion() {
+		return clientAVersion;
+	}
 
-  public String getPasswordForLastSuccessfulLogon() {
-    return passwordForLastSuccessfulLogon;
-  }
+	public String getClientVersion() {
+		return clientVersion;
+	}
 
-  public String getScreenSize() {
-    return screenSize;
-  }
+	public String getPasswordForLastSuccessfulLogon() {
+		return passwordForLastSuccessfulLogon;
+	}
 
-  /**
-   * @return the userId
-   */
-  public String getUserId() {
-    return userId;
-  }
+	public String getScreenSize() {
+		return screenSize;
+	}
 
-  /**
-   * @return the userName
-   */
-  public String getUserName() {
-    return userName;
-  }
+	/**
+	 * @return the userId
+	 */
+	public String getUserId() {
+		return userId;
+	}
 
-  public String getUsernameForLastSuccessfulLogon() {
-    return usernameForLastSuccessfulLogon;
-  }
+	/**
+	 * @return the userName
+	 */
+	public String getUserName() {
+		return userName;
+	}
 
-  public String getUserResDirPath() {
-    if (null == userId) {
-      return null;
-    } else {
-      return Environment.getExternalStorageDirectory() + "/" + "retach/" + userId;
-    }
-  }
+	public String getUsernameForLastSuccessfulLogon() {
+		return usernameForLastSuccessfulLogon;
+	}
 
-  /**
-   * @param access_token the access_token to set
-   */
-  public void setAccess_token(String access_token) {
-    this.access_token = access_token;
-  }
+	public String getUserResDirPath() {
+		if (null == userId) {
+			return null;
+		} else {
+			return storagePaht + "/" + userId;
+		}
+	}
 
-  public synchronized void setClientAVersion(String clientAVersion) {
-    this.clientAVersion = clientAVersion;
-  }
+	/**
+	 * @param access_token
+	 *            the access_token to set
+	 */
+	public void setAccess_token(String access_token) {
+		this.access_token = access_token;
+	}
 
-  public synchronized void setClientVersion(String clientVersion) {
-    this.clientVersion = clientVersion;
-  }
+	public synchronized void setClientAVersion(String clientAVersion) {
+		this.clientAVersion = clientAVersion;
+	}
 
-  public synchronized void setPasswordForLastSuccessfulLogon(String passwordForLastSuccessfulLogon) {
-    this.passwordForLastSuccessfulLogon = passwordForLastSuccessfulLogon;
-  }
+	public synchronized void setClientVersion(String clientVersion) {
+		this.clientVersion = clientVersion;
+	}
 
-  public synchronized void setScreenSize(String screenSize) {
-    this.screenSize = screenSize;
-  }
+	public synchronized void setPasswordForLastSuccessfulLogon(
+			String passwordForLastSuccessfulLogon) {
+		this.passwordForLastSuccessfulLogon = passwordForLastSuccessfulLogon;
+	}
 
-  /**
-   * @param userId the userId to set
-   */
-  public void setUserId(String userId) {
-    this.userId = userId;
-  }
+	public synchronized void setScreenSize(String screenSize) {
+		this.screenSize = screenSize;
+	}
 
-  /**
-   * @param userName the userName to set
-   */
-  public void setUserName(String userName) {
-    this.userName = userName;
-  }
+	/**
+	 * @param userId
+	 *            the userId to set
+	 */
+	public void setUserId(String userId) {
+		this.userId = userId;
+	}
 
-  public synchronized void setUsernameForLastSuccessfulLogon(String usernameForLastSuccessfulLogon) {
-    this.usernameForLastSuccessfulLogon = usernameForLastSuccessfulLogon;
-  }
+	/**
+	 * @param userName
+	 *            the userName to set
+	 */
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public void setStoragePaht(String storagePaht) {
+		this.storagePaht = storagePaht;
+	}
+
+	public synchronized void setUsernameForLastSuccessfulLogon(
+			String usernameForLastSuccessfulLogon) {
+		this.usernameForLastSuccessfulLogon = usernameForLastSuccessfulLogon;
+	}
 
 }

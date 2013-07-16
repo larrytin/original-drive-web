@@ -7,8 +7,6 @@ goog.require('goog.dom.classes');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 
-
-
 /**
  * @param {goog.ui.tree.TreeControl} node
  * @param {goog.dom.DomHelper=} opt_domHelper
@@ -22,12 +20,10 @@ good.drive.nav.grid.View = function(node, opt_domHelper) {
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
-
 /**
  * @type {struct}
  */
 good.drive.nav.grid.View.grids = {};
-
 
 /**
  * @param {goog.ui.tree.TreeControl} node
@@ -42,6 +38,7 @@ good.drive.nav.grid.View.createGrid = function(node) {
   var grid = new good.drive.nav.grid.View(node);
   grid.render(goog.dom.getElement('viewmanager'));
   grid.renderCell(node);
+  grid.renderFolderPath(good.drive.nav.folders.Model.strType.LABEL);
   goog.object.add(good.drive.nav.grid.View.grids, id, grid);
   good.drive.nav.grid.View.visiable(grid);
 };
@@ -56,7 +53,6 @@ good.drive.nav.grid.View.visiable = function(grid) {
   });
   goog.style.showElement(grid.getElement(), 'none');
 };
-
 
 /**
  * @param {goog.ui.tree.TreeControl} node
@@ -75,13 +71,71 @@ good.drive.nav.grid.View.prototype.renderCell = function(node) {
   }
 };
 
+/**
+ */
+good.drive.nav.grid.View.prototype.renderFolderPath = function() {
+  var pathElm = this.getFolderPathElement();
+  var child = goog.dom.getChildren(pathElm);
+  if (!goog.array.isEmpty(child)) {
+    return;
+  }
+  this.insertFolderPath();
+};
+
+/**
+ */
+good.drive.nav.grid.View.prototype.insertFolderPath = function() {
+  var pathElm = this.getFolderPathElement();
+  goog.dom.removeChildren(pathElm);
+  var path = this.node.getTree().path;
+  for (var i = 0; i < path.length(); i++) {
+    var value = path.get(i);
+    var label = value.get('label');
+    if (i == (path.length() - 1)) {
+      var cruuentElm = goog.dom.createDom('div',
+          {'class': 'goog-inline-block folder-path-' +
+        'folder folder-current-element'});
+      goog.dom.setTextContent(cruuentElm, label);
+      goog.dom.appendChild(pathElm, cruuentElm);
+      return;
+    }
+    var contentElm = goog.dom.createDom('div',
+        {'class': 'goog-inline-block folder-path-folder folder-path-element'});
+    var separatorElm = goog.dom.createDom('div',
+        {'class': 'goog-inline-block folder-path-separator-icon'});
+    goog.dom.setTextContent(contentElm, label);
+    goog.dom.appendChild(pathElm, contentElm);
+    goog.dom.appendChild(pathElm, separatorElm);
+    this.pathHandle(contentElm, value);
+  }
+};
+
+/**
+ * @param {Element} elm
+ * @param {good.realtime.CollaborativeMap} map
+ */
+good.drive.nav.grid.View.prototype.pathHandle = function(elm, map) {
+  var id = map.getId();
+  var that = this;
+  var parent = this.node.getParent();
+  var tree = parent.getTree();
+  goog.events.listen(elm, goog.events.EventType.CLICK, function(e) {
+    while (parent) {
+      if (parent.map.getId() == id) {
+        tree.setSelectedItem(parent);
+        break;
+      }
+      parent = parent.getParent();
+    }
+    parent = that.node.getParent();
+  });
+};
 
 /**
  */
 good.drive.nav.grid.View.prototype.removeFromParent = function() {
-  this.getElement().remove();
+  goog.dom.removeNode(this.getElement());
 };
-
 
 /**
  * @param {good.realtime.CollaborativeMap} data
@@ -107,7 +161,6 @@ good.drive.nav.grid.View.prototype.removeCell = function(data) {
     }
   }
 };
-
 
 /**
  * @override
@@ -197,7 +250,7 @@ good.drive.nav.grid.View.prototype.addChildAt = function(child, index,
     var contentElm = this.getGridContainerElement();
     var sb = new goog.string.StringBuffer();
     child.createDom();
-    contentElm.appendChild(child.getElement());
+    goog.dom.appendChild(contentElm, child.getElement());
     child.enterDocument();
   }
 };
@@ -342,7 +395,8 @@ good.drive.nav.grid.View.prototype.getScrollContainerElement = function() {
  * @return {string}
  */
 good.drive.nav.grid.View.prototype.getScrollContainerClassName = function() {
-  return this.getConfig().cssRoot + '-' + this.getConfig().cssScrollContainerHtml;
+  return this.getConfig().cssRoot + '-' + this.
+  getConfig().cssScrollContainerHtml;
 };
 
 
@@ -412,7 +466,6 @@ good.drive.nav.grid.View.prototype.getGridContainerClassName = function() {
 good.drive.nav.grid.View.prototype.getConfig = function() {
   return good.drive.nav.grid.View.defaultConfig;
 };
-
 
 /**
  */

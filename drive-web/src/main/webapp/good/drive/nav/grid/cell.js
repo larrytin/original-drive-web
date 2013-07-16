@@ -5,8 +5,6 @@ goog.require('goog.dom.classes');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 
-
-
 /**
  * @param {good.realtime.CollaborativeMap} data
  * @param {Object} defaultConfig
@@ -71,10 +69,10 @@ good.drive.nav.grid.Cell.prototype.attachEvents_ = function() {
 
   this.getHandler().
       listen(el, goog.events.EventType.MOUSEOVER, this.handleKeyEvent).
-      listen(el, goog.events.EventType.MOUSEOUT, this.handleKeyEvent);
+      listen(el, goog.events.EventType.MOUSEOUT, this.handleKeyEvent).
+      listen(el, goog.events.EventType.CLICK, this.clickHandle);
 
 };
-
 
 /**
  * @private
@@ -105,6 +103,25 @@ good.drive.nav.grid.Cell.prototype.handleKeyEvent = function(e) {
   }
 };
 
+/**
+ * @param {goog.events.BrowserEvent} e
+ */
+good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
+  if (!this.isFolder()) {
+    return;
+  }
+  var parent = this.getParent().node;
+  if (!parent.getExpanded()) {
+    parent.setExpanded(true);
+  }
+  for (var i = 0; i < parent.getChildCount(); i++) {
+    var node = parent.getChildAt(i);
+    if (node.map.getId() == this.data.getId()) {
+      node.getTree().setSelectedItem(node);
+      break;
+    }
+  }
+};
 
 /** @override */
 good.drive.nav.grid.Cell.prototype.createDom = function() {
@@ -239,5 +256,5 @@ good.drive.nav.grid.Cell.prototype.getLabelClassName = function() {
  * @param {Element} dom
  */
 good.drive.nav.grid.Cell.prototype.setLabel = function(dom) {
-  this.getLabelElement().appendChild(dom);
+  goog.dom.appendChild(this.getLabelElement(), dom);
 };
