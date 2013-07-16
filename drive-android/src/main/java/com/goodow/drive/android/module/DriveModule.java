@@ -29,10 +29,10 @@ public class DriveModule extends AbstractModule {
 		if (Environment.getExternalStorageState().equals(
 				Environment.MEDIA_MOUNTED)) {
 			storage = Environment.getExternalStorageDirectory();
-			filePathString = "/retach";
+			filePathString = "/retech";
 		} else {
 			storage = Environment.getDataDirectory();
-			filePathString = "/data/com.goodow.drive.android/retach";
+			filePathString = "/data/com.goodow.drive.android/retech";
 		}
 
 		file = new File(storage, filePathString);

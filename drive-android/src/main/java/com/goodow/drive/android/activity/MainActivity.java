@@ -5,54 +5,21 @@ import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-
-import com.google.inject.Inject;
-
-import android.accounts.Account;
-
 import roboguice.activity.RoboActivity;
-
-import roboguice.inject.InjectFragment;
-
 import roboguice.inject.InjectView;
-
-import roboguice.inject.InjectResource;
-
 import roboguice.inject.ContentView;
-
 import android.view.animation.AnimationUtils;
-
 import android.view.animation.Animation;
-
-import android.graphics.drawable.Animatable;
-
-import android.app.Fragment;
-
-import android.R.integer;
-
 import android.view.KeyEvent;
-
-import android.widget.Toast;
-
-import android.widget.AdapterView;
-
-import android.widget.AdapterView.OnItemClickListener;
-
-import android.widget.ListView;
-
 import android.widget.LinearLayout;
-
 import android.view.View;
-
 import android.app.FragmentTransaction;
-
 import android.content.DialogInterface;
 import android.app.AlertDialog;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.app.Activity;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
