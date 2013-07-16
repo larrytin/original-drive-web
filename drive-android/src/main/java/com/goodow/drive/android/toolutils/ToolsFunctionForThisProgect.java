@@ -1,7 +1,8 @@
 package com.goodow.drive.android.toolutils;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
+
 import android.text.TextUtils;
 import android.util.Log;
 

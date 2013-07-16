@@ -1,6 +1,7 @@
 package com.goodow.drive.android.adapter;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
+
 import java.util.List;
 import android.app.Activity;
 import android.content.Context;

@@ -1,8 +1,8 @@
 package com.goodow.drive.android.activity;
 
+import com.goodow.android.drive.R;
 import com.goodow.api.services.account.Account;
 import com.goodow.api.services.account.model.AccountInfo;
-import com.goodow.drive.android.R;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
 import com.goodow.realtime.Realtime;

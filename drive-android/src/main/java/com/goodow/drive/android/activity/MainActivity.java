@@ -1,10 +1,11 @@
 package com.goodow.drive.android.activity;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+
 import roboguice.activity.RoboActivity;
 import roboguice.inject.InjectView;
 import roboguice.inject.ContentView;
@@ -23,6 +24,8 @@ import android.os.Bundle;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
+	private ActionBar actionBar;
+	
 	private boolean isDataListFragmentIn = false;
 	private boolean isLocalResFragmentIn = false;
 
@@ -66,7 +69,7 @@ public class MainActivity extends RoboActivity {
 		MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
 		back2Login.setIcon(R.drawable.action_discussion_previous);
 		back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
+		
 		return true;
 	}
 
@@ -135,12 +138,20 @@ public class MainActivity extends RoboActivity {
 
 		return true;
 	}
+	
+	public void setActionBarTitle(String title){
+		actionBar.setTitle(title);
+	}
+	
+	public void restActionBarTitle(){
+		actionBar.setTitle(R.string.app_name);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		if (null == localResFragment) {

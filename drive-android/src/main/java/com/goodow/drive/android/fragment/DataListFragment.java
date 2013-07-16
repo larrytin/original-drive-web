@@ -7,7 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
@@ -56,7 +56,7 @@ public class DataListFragment extends ListFragment {
 			CollaborativeList chilFolders = (CollaborativeList) ((CollaborativeMap) historyOpenedFolders
 					.get(historyOpenedFolders.length() - 1)).get(FOLDER_KEY);
 
-			// remove监听
+			// 删除监听
 			if (null != chilFolders) {
 				CollaborativeList chilFiles = (CollaborativeList) ((CollaborativeMap) historyOpenedFolders
 						.get(historyOpenedFolders.length() - 1)).get(FILE_KEY);
@@ -76,6 +76,7 @@ public class DataListFragment extends ListFragment {
 			}
 
 			historyOpenedFolders.remove(historyOpenedFolders.length() - 1);
+
 		} else {
 			Toast.makeText(getActivity(), R.string.backFolderErro,
 					Toast.LENGTH_SHORT).show();
@@ -116,6 +117,23 @@ public class DataListFragment extends ListFragment {
 
 			if (null != fileList) {
 				setListListener(fileList);
+			}
+			
+			//设置action bar的显示
+			if (historyOpenedFolders.length() <= 1) {
+				activity.restActionBarTitle();
+				
+			} else {
+				StringBuffer title = new StringBuffer();
+				for (int i = 0; i < historyOpenedFolders.length(); i++) {
+					String label = ((CollaborativeMap) historyOpenedFolders.get(i))
+							.get("label");
+					if (null != label) {
+						title.append("/" + label);
+					}
+				}
+				
+				activity.setActionBarTitle(title.toString());
 			}
 		}
 	}
@@ -280,13 +298,14 @@ public class DataListFragment extends ListFragment {
 			}
 		};
 
-		// String docId = "@tmp/"
-		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		// + "/androidTest02";
-
 		String docId = "@tmp/"
 				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/androidTest001";
+				+ "/androidTest02";
+
+		// String docId = "@tmp/"
+		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+		// + "/androidTest001";
+
 		Realtime.load(docId, onLoaded, initializer, null);
 
 	}
@@ -301,15 +320,7 @@ public class DataListFragment extends ListFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
 
-		CollaborativeList list = (CollaborativeList) clickItem.get(FOLDER_KEY);
-		if (null != list && 0 == list.length()) {
-
-			Toast.makeText(DataListFragment.this.getActivity(), "该文件夹为空文件夹!",
-					Toast.LENGTH_SHORT).show();
-
-		} else {
-			historyOpenedFolders.push(clickItem);
-		}
+		historyOpenedFolders.push(clickItem);
 	}
 
 	private void setListListener(CollaborativeList listenerList) {

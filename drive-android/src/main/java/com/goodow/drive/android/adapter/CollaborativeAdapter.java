@@ -1,6 +1,6 @@
 package com.goodow.drive.android.adapter;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;

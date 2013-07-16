@@ -1,8 +1,9 @@
 package com.goodow.drive.android.fragment;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
