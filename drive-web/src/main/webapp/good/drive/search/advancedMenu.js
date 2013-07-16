@@ -60,10 +60,10 @@ good.drive.search.AdvancedMenu = function() {
  */
 good.drive.search.AdvancedMenu.prototype.popaction = function() {
   var that = this;
-  goog.events.listen(this._pop, 'action', function(e) {  
+  goog.events.listen(this._pop, 'action', function(e) {
     var title = e.target.element_.innerText;
     title = that.trim(title);
-    if (title != '类型' && title != '领域' && title != '年级' ){
+    if (title != '类型' && title != '领域' && title != '年级') {
       var div = goog.dom.createDom('div',
           {'class': 'goog-inline-block filter-chip',
             'title': '在' +
@@ -92,7 +92,7 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
         goog.dom.removeNode(e.target.parentElement);
         that.inputstyle();
       });
-    };    
+    }
   });
 };
 
@@ -120,7 +120,7 @@ good.drive.search.AdvancedMenu.prototype.ishave = function(array) {
     for (var i = 0; i < this._search_input.children.length; i++) {
       var child = this._search_input.children[i];
       var spantext = child.children[0].innerText;
-      if (goog.array.contains(array,spantext)) {
+      if (goog.array.contains(array, spantext)) {
         return i;
       }
     }
@@ -136,9 +136,9 @@ good.drive.search.AdvancedMenu.prototype.getArray = function(str) {
   var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
   var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
   var gradeArray = new Array('大班', '中班', '小班');
-  if (goog.array.contains(typeArray,str)) {
+  if (goog.array.contains(typeArray, str)) {
     return typeArray;
-  } else if (goog.array.contains(fieldArray,str)) {
+  } else if (goog.array.contains(fieldArray, str)) {
     return fieldArray;
   } else {
     return gradeArray;
