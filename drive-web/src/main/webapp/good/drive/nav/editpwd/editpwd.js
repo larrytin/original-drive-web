@@ -8,7 +8,6 @@ goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
 
-
 /**
  *
  */
@@ -27,24 +26,23 @@ good.drive.nav.editpwd.start = function() {
   goog.events.listen(submit, goog.events.EventType.CLICK, function(e) {
     if (!good.auth.signup.formCheck(array)) {
       return false;
-    }    
+    }
     var name = goog.dom.getElement('gbgs4dn').innerText;
     var OldPasswd = $('OldPasswd').value;
     var pwd = $('Passwd').value;
     var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
-        good.config.VERSION, 'login/' + encodeURIComponent(name) + '/' +
-        encodeURIComponent(OldPasswd));
+        good.config.VERSION, 'login/' + encodeURIComponent(name) +
+        '/' + encodeURIComponent(OldPasswd));
     rpc.send(function(json) {
-      if (json && json['token']) { 
-        
+      if (json && json['token']) {
         var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
             good.config.VERSION, 'updateAccountInfo');
         json['token'] = pwd;
         delete json.kind;
         delete json.etag;
-        rpc.body = json;        
-        rpc.send(function(json) {          
-          if (json && !json['error']) {            
+        rpc.body = json;
+        rpc.send(function(json) {
+          if (json && !json['error']) {
             window.location.assign('index.html' + '#userId=' +
                 json['userId'] + '&access_token=' + json['token']);
           }
@@ -61,11 +59,10 @@ good.drive.nav.editpwd.start = function() {
   var cancel = goog.dom.getElement('edit_cancel');
   goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
 
-    var uri = new goog.Uri('index.html'+'#userId=' +
+    var uri = new goog.Uri('index.html' + '#userId=' +
         userId + '&access_token=' + access_token);
 
     window.location.assign(uri.toString());
-
 
     //    var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
     //        good.config.VERSION, 'accountinfo/' + userId);
