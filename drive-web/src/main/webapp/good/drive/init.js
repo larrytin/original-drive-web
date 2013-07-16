@@ -79,7 +79,6 @@ good.drive.init.start = function() {
 
     var menu = new good.drive.nav.menu.View();
     var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
-      alert('createPopup');
       switch (e.target.getId()) {
         case ':2':
           createdialog.setVisible(true);

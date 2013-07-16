@@ -27,7 +27,8 @@ good.drive.nav.folders.Model = function(view) {
     // connectUi();
     that.connect(doc);
   };
-  good.realtime.load('@tmp/b22', onLoad, onInit, null);
+  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
+      '/androidTest001', onLoad, onInit, null);
 };
 
 
@@ -116,7 +117,7 @@ good.drive.nav.folders.Model.prototype.mapHander =
     }
     var newValue = evt.getNewValue();
     var oldValue = evt.getOldValue();
-    if (oldValue == null || oldValue.length() == 0) {
+    if (oldValue == null) {
       return;
     }
     that.view.setNodeTitle(selfNode, newValue);
