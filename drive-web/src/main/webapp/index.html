@@ -20,12 +20,15 @@
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<!-- <script src="good.js/closure-library/closure/goog/base.js"></script>
+<script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script> -->
-<script src="drive-compiled.js"></script>
+</script>
+<!-- <script src="drive-compiled.js"></script> -->
+<style type="text/css">
+
+</style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
@@ -77,7 +80,8 @@
                       </div>
                     </div>
                     <div id=gbqfqwb class=gbqfqwb style="left: 1px; right: 0px; width: 471px;">
-                      <input id=gbqfq class=gbqfif name=q type=text autocomplete=off >
+                      <input id="gbqfq" class="gbqfif" name="q" type="text" autocomplete="off" value="" aria-label="搜索云端硬盘" role="combobox"
+                        aria-autocomplete="list" aria-haspopup="false">
                     </div>
                     <div id="gbqfab">
                       <div class="goog-inline-block search-input-clear-container" id="search-input-clear-container">
@@ -340,7 +344,7 @@
             <div class="filter-selector-section">
               <div class="filter-menu">
                 <div class="goog-menu goog-menu-vertical">
-                  <div class="goog-menuitem filter-menu-label">
+                  <div class="filter-menu-label">
                     <div class="goog-menuitem-content">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption">
@@ -433,49 +437,49 @@
             <div class="filter-selector-section">
               <div class="filter-menu">
                 <div class="goog-menu goog-menu-vertical" role="menu" aria-haspopup="true">
-                  <div class="goog-menuitem filter-menu-label">
+                  <div class="filter-menu-label">
                     <div class="goog-menuitem-content">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption"><div>领域</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption"><div></div></span></span>
                     </div>
                   </div>
-                  <div class="goog-menuitem filter-menu-item" role="menuitem" aria-label="公开范围:在网络上公开">
+                  <div class="goog-menuitem filter-menu-item">
                     <div class="goog-menuitem-content">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>语言</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                     </div>
                   </div>
-                  <div class="goog-menuitem filter-menu-item" role="menuitem" aria-label="公开范围:知道此链接的任何人">
+                  <div class="goog-menuitem filter-menu-item">
                     <div class="goog-menuitem-content">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>数学</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                     </div>
                   </div>
-                  <div class="goog-menuitem filter-menu-item" role="menuitem" aria-label="公开范围:未公开">
+                  <div class="goog-menuitem filter-menu-item">
                     <div class="goog-menuitem-content">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>科学</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                     </div>
                   </div>
-                  <div class="goog-menuitem filter-menu-item" role="menuitem" aria-label="公开范围:未共享">
+                  <div class="goog-menuitem filter-menu-item">
                     <div class="goog-menuitem-content" style="-webkit-user-select: none;">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>社会</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                     </div>
                   </div>
-                  <div class="goog-menuitem filter-menu-item" role="menuitem" aria-label="公开范围:未共享">
+                  <div class="goog-menuitem filter-menu-item">
                     <div class="goog-menuitem-content" style="-webkit-user-select: none;">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>健康</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                     </div>
                   </div>
-                  <div class="goog-menuitem filter-menu-item" role="menuitem" aria-label="公开范围:未共享">
+                  <div class="goog-menuitem filter-menu-item">
                     <div class="goog-menuitem-content" style="-webkit-user-select: none;">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>艺术</div></span><span
@@ -543,7 +547,7 @@
             <div class="filter-selector-section">
               <div class="filter-menu">
                 <div class="goog-menu goog-menu-vertical">
-                  <div class="goog-menuitem filter-menu-label">
+                  <div class="filter-menu-label">
                     <div class="goog-menuitem-content">
                       <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption">

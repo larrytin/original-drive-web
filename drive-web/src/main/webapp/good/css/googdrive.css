@@ -13,6 +13,7 @@ html,body,form {
 }
 .goog-inline-block {
     display: inline-block;
+    display: -moz-inline-box;
     position: relative;
 }
 #gbz {
@@ -1151,10 +1152,6 @@ px
 .goog-toolbar-item-new,.goog-toolbar-item-upload {
   vertical-align: top;
 }
-.goog-inline-block {
-  display: inline-block;
-  position: relative;
-}
 
 .contentcreationpane.density-tiny {
   padding: 14px 0 13px 44px;
@@ -1168,25 +1165,42 @@ px
 }
 
 /*右侧共享，删除..功能键*/
-.navpane-resize-transition .navpane,.navpane-resize-transition {
-  transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
-    width 0.218s ease 0s;
+.viewpane {
+  position: relative;
+}
+
+.viewpane {
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
 }
 
 .viewpane-toolbar.density-tiny {
   padding: 7px 16px;
   transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
-    width 0.218s ease 0s;
+   width 0.218s ease 0s;
 }
 
 .viewpane-toolbar {
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid rgb(235, 235, 235);
 }
 
 .viewpane-toolbar {
   font-size: 13px;
   height: 29px;
   overflow: hidden;
+}
+
+.viewpane-content {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.navpane-resize-transition .navpane,.navpane-resize-transition {
+  transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
+    width 0.218s ease 0s;
 }
 
 .viewpane-toolbar-selection {
