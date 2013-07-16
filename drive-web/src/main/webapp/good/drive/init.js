@@ -89,8 +89,8 @@ good.drive.init.start = function() {
       }
     });
 
-    var moverEvent = good.drive.creation.Mouserevent(
-        leftUpdateBtn.getElement());
+//    var moverEvent = good.drive.creation.Mouserevent(
+//        leftUpdateBtn.getElement());
     var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
     var fileupload = new good.drive.creation.Fileupload();
