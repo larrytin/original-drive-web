@@ -5,7 +5,10 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
@@ -26,8 +29,6 @@ import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
 
 public class DataListFragment extends ListFragment {
-	private MainActivity activity;
-
 	private CollaborativeList historyOpenedFolders;
 	private CollaborativeMap currentFolder;
 
@@ -118,22 +119,23 @@ public class DataListFragment extends ListFragment {
 			if (null != fileList) {
 				setListListener(fileList);
 			}
-			
-			//设置action bar的显示
+
+			// 设置action bar的显示
 			if (historyOpenedFolders.length() <= 1) {
-				activity.restActionBarTitle();
-				
+				((MainActivity) getActivity()).restActionBarTitle();
+
 			} else {
 				StringBuffer title = new StringBuffer();
 				for (int i = 0; i < historyOpenedFolders.length(); i++) {
-					String label = ((CollaborativeMap) historyOpenedFolders.get(i))
-							.get("label");
+					String label = ((CollaborativeMap) historyOpenedFolders
+							.get(i)).get("label");
 					if (null != label) {
 						title.append("/" + label);
 					}
 				}
-				
-				activity.setActionBarTitle(title.toString());
+
+				((MainActivity) getActivity()).setActionBarTitle(title
+						.toString());
 			}
 		}
 	}
@@ -141,14 +143,17 @@ public class DataListFragment extends ListFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		activity.setIsDataListFragmentIn(false);
+		((MainActivity) getActivity()).setIsDataListFragmentIn(false);
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		activity = (MainActivity) this.getActivity();
-		activity.setIsDataListFragmentIn(true);
+		((MainActivity) getActivity()).setIsDataListFragmentIn(true);
+		
+		TextView textView = (TextView)((MainActivity) getActivity()).findViewById(R.id.openfailure_text);
+		ImageView imageView = (ImageView)((MainActivity) getActivity()).findViewById(R.id.openfailure_img);
+		((MainActivity) getActivity()).setOpenStatView(textView, imageView);
 
 	}
 
@@ -201,6 +206,8 @@ public class DataListFragment extends ListFragment {
 									.get(historyOpenedFolders.length() - 1);
 
 							initData();
+							
+							openState();
 						}
 					}
 				}
@@ -219,6 +226,8 @@ public class DataListFragment extends ListFragment {
 					}
 
 					initData();
+					
+					openState();
 				}
 			};
 		}
@@ -236,6 +245,18 @@ public class DataListFragment extends ListFragment {
 		}
 	}
 
+	private void openState(){
+		CollaborativeList folderList = currentFolder.get(FOLDER_KEY);
+		CollaborativeList fileList = currentFolder.get(FILE_KEY);
+
+		if (null != folderList && 0 == folderList.length() && null != fileList
+				&& 0 == fileList.length()) {
+			((MainActivity) getActivity()).openState(LinearLayout.VISIBLE);
+		}else{
+			((MainActivity) getActivity()).openState(LinearLayout.INVISIBLE);
+		}
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -298,13 +319,13 @@ public class DataListFragment extends ListFragment {
 			}
 		};
 
-		String docId = "@tmp/"
-				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/androidTest02";
+		 String docId = "@tmp/"
+		 + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+		 + "/androidTest02";
 
-		// String docId = "@tmp/"
-		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		// + "/androidTest001";
+//		String docId = "@tmp/"
+//				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+//				+ "/androidTest002";
 
 		Realtime.load(docId, onLoaded, initializer, null);
 
@@ -313,7 +334,7 @@ public class DataListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.folder_list, container, false);
+		return inflater.inflate(R.layout.fragment_folderlist, container, false);
 	}
 
 	@Override

@@ -1,31 +1,33 @@
 package com.goodow.drive.android.activity;
 
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
+import android.app.ActionBar;
+import android.app.AlertDialog;
+import android.app.FragmentTransaction;
+import android.content.DialogInterface;
+import android.os.Bundle;
+import android.view.KeyEvent;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
-import roboguice.activity.RoboActivity;
-import roboguice.inject.InjectView;
-import roboguice.inject.ContentView;
-import android.view.animation.AnimationUtils;
-import android.view.animation.Animation;
-import android.view.KeyEvent;
-import android.widget.LinearLayout;
-import android.view.View;
-import android.app.FragmentTransaction;
-import android.content.DialogInterface;
-import android.app.AlertDialog;
-import android.view.MenuItem;
-import android.view.Menu;
-import android.app.ActionBar;
-import android.os.Bundle;
-
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
 	private ActionBar actionBar;
-	
+
 	private boolean isDataListFragmentIn = false;
 	private boolean isLocalResFragmentIn = false;
 
@@ -33,10 +35,14 @@ public class MainActivity extends RoboActivity {
 	private LinearLayout leftMenu;
 	@InjectView(R.id.middleLayout)
 	private LinearLayout middleLayout;
+
+	private TextView openFailure_text;
+	private ImageView openFailure_img;
 	// @InjectFragment
 	private LeftMenuFragment leftMenuFragment;
 	private DataListFragment dataListFragment;
 	private LocalResFragment localResFragment;
+	private DataDetailFragment dataDetailFragment;
 
 	/**
 	 * @return the dataListFragment
@@ -69,7 +75,7 @@ public class MainActivity extends RoboActivity {
 		MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
 		back2Login.setIcon(R.drawable.action_discussion_previous);
 		back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-		
+
 		return true;
 	}
 
@@ -138,12 +144,12 @@ public class MainActivity extends RoboActivity {
 
 		return true;
 	}
-	
-	public void setActionBarTitle(String title){
+
+	public void setActionBarTitle(String title) {
 		actionBar.setTitle(title);
 	}
-	
-	public void restActionBarTitle(){
+
+	public void restActionBarTitle() {
 		actionBar.setTitle(R.string.app_name);
 	}
 
@@ -158,6 +164,10 @@ public class MainActivity extends RoboActivity {
 			localResFragment = new LocalResFragment();
 		}
 
+		if (null == dataDetailFragment) {
+			dataDetailFragment = new DataDetailFragment();
+		}
+		
 		if (null == dataListFragment) {
 			dataListFragment = new DataListFragment();
 		}
@@ -188,4 +198,17 @@ public class MainActivity extends RoboActivity {
 		this.isLocalResFragmentIn = flag;
 	}
 
+	public void openState(int visibility) {
+		if (null != openFailure_text) {
+			openFailure_text.setVisibility(visibility);
+		}
+		if (null != openFailure_img) {
+			openFailure_img.setVisibility(visibility);
+		}
+	}
+
+	public void setOpenStatView(TextView textView, ImageView imageView) {
+		openFailure_text = textView;
+		openFailure_img = imageView;
+	}
 }

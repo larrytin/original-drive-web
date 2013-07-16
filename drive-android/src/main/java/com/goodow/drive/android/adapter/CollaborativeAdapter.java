@@ -8,6 +8,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -100,7 +102,7 @@ public class CollaborativeAdapter extends BaseAdapter {
 		final CollaborativeMap item = (CollaborativeMap) getItem(position);
 		String textViewContentString = "";
 		View row = convertView;
-		
+
 		if (0 == position) {
 			row = layoutInflater.inflate(R.layout.row_foldergroup, parent,
 					false);
@@ -125,6 +127,9 @@ public class CollaborativeAdapter extends BaseAdapter {
 			textViewContentString = (String) item.get("label");
 
 			fragment.setMapListener(item);
+
+			ImageButton button = (ImageButton) row.findViewById(R.id.delButton);
+			//TODO
 		}
 
 		TextView listItem = (TextView) row.findViewById(R.id.listItem);

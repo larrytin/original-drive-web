@@ -3,19 +3,19 @@ package com.goodow.drive.android.adapter;
 import java.io.File;
 import java.util.ArrayList;
 
-import com.goodow.android.drive.R;
-import com.goodow.drive.android.fragment.LocalResFragment;
-import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
-
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;
-import android.view.ViewGroup;
 import android.view.View.OnClickListener;
+import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.goodow.android.drive.R;
+import com.goodow.drive.android.fragment.LocalResFragment;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 
 public class LocalResAdapter extends BaseAdapter {
 	private ArrayList<File> dataSource;
@@ -58,8 +58,7 @@ public class LocalResAdapter extends BaseAdapter {
 
 		final File item = (File)getItem(position);
 		
-		Button delButton = (Button) row.findViewById(R.id.delButton);
-		delButton.setVisibility(View.VISIBLE);
+		ImageButton delButton = (ImageButton) row.findViewById(R.id.delButton);
 		delButton.setOnClickListener(new OnClickListener() {
 			@Override
 			public void onClick(View v) {

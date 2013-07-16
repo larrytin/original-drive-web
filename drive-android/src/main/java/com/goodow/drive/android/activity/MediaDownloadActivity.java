@@ -90,8 +90,6 @@ public class MediaDownloadActivity extends Activity {
 
   public static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
-  public static final String DATA_KEY = "folders";
-
   public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
 
   public static final String URL_6M =

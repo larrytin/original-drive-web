@@ -6,6 +6,7 @@
     <string name="action_settings">Settings</string>
     <string name="hello_world">Hello world!</string>
     
+    <string name="openfailure">文件夹是空的!</string>
     <string name="backFolderErro">已是最顶层文件夹!</string>
     
     <string name="actionBar_back">退出</string>
