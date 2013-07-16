@@ -13,6 +13,7 @@ html,body,form {
 }
 .goog-inline-block {
     display: inline-block;
+    display: -moz-inline-box;
     position: relative;
 }
 #gbz {
@@ -1152,46 +1153,11 @@ px
   vertical-align: top;
 }
 
-.jfk-button-primary {
-  background-color: #D14836;
-  background-image: -moz-linear-gradient(center top, #DD4B39, #D14836);
-  border: 1px solid transparent;
-  box-shadow: none;
-  color: #FFFFFF;
-  text-shadow: 0 1px rgba(0, 0, 0, 0.1);
-  text-transform: uppercase;
-}
-
-.jfk-button {
-  border-radius: 2px 2px 2px 2px;
-  cursor: default;
-  font-size: 11px;
-  font-weight: bold;
-  height: 27px;
-  line-height: 27px;
-  min-width: 54px;
-  outline: 0 none;
-  padding: 0 8px;
-  text-align: center;
-  white-space: nowrap;
-}
-
-.goog-inline-block {
-  display: inline-block;
-  position: relative;
-}
-
 .contentcreationpane.density-tiny {
   padding: 14px 0 13px 44px;
   transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
     width 0.218s ease 0s;
 }
-
-.jfk-button-narrow {
-  min-width: 34px;
-  padding: 0;
-}
-
 .drive-sprite-core-upload {
   background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 0/21px 405px transparent;
   height: 16px;
@@ -1199,19 +1165,26 @@ px
 }
 
 /*右侧共享，删除..功能键*/
-.navpane-resize-transition .navpane,.navpane-resize-transition {
-  transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
-    width 0.218s ease 0s;
+.viewpane {
+  position: relative;
+}
+
+.viewpane {
+  overflow: hidden;
+  -moz-box-sizing: border-box;
+  -webkit-box-sizing: border-box;
+  box-sizing: border-box;
+  background-color: rgb(255, 255, 255);
 }
 
 .viewpane-toolbar.density-tiny {
   padding: 7px 16px;
   transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
-    width 0.218s ease 0s;
+   width 0.218s ease 0s;
 }
 
 .viewpane-toolbar {
-  border-bottom: 1px solid #EBEBEB;
+  border-bottom: 1px solid rgb(235, 235, 235);
 }
 
 .viewpane-toolbar {
@@ -1220,16 +1193,18 @@ px
   overflow: hidden;
 }
 
-.viewpane-toolbar-selection {
-  float: left;
+.viewpane-content {
+  width: 100%;
+  border-collapse: collapse;
 }
 
-.jfk-button-standard {
-  background-color: #F5F5F5;
-  background-image: -moz-linear-gradient(center top, #F5F5F5, #F1F1F1);
-  border: 1px solid rgba(0, 0, 0, 0.1);
-  box-shadow: none;
-  color: #444444;
+.navpane-resize-transition .navpane,.navpane-resize-transition {
+  transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
+    width 0.218s ease 0s;
+}
+
+.viewpane-toolbar-selection {
+  float: left;
 }
 
 .viewpane-toolbar-share-icon {
@@ -1250,46 +1225,11 @@ px
   height: 21px;
   width: 21px;
 }
-
-.jfk-button-collapse-right {
-  border-bottom-right-radius: 0;
-  border-top-right-radius: 0;
-  margin-right: 0;
-}
-
-.jfk-button-hover {
-  -webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  -moz-box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
-  background-color: rgb(197, 55, 39);
-  background-image: -webkit-linear-gradient(top, rgb(221, 75, 57), rgb(197, 55, 39));
-  background-image: -moz-linear-gradient(top, rgb(221, 75, 57), rgb(197, 55, 39));
-  background-image: -ms-linear-gradient(top, rgb(221, 75, 57), rgb(197, 55, 39));
-  background-image: -o-linear-gradient(top, rgb(221, 75, 57), rgb(197, 55, 39));
-  background-image: linear-gradient(top, rgb(221, 75, 57), rgb(197, 55, 39));
-  border: 1px solid rgb(176, 40, 26);
-  border-bottom-color: rgb(175, 48, 31);
-}
-
 .upload-icon-position {
   margin-top: 5px;
 }
 
-.jfk-button-active {
-  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-  -moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-  box-shadow: inset 0 1px 2px rgba(0, 0, 0, 0.3);
-  background-color: rgb(176, 40, 26);
-  background-image: -webkit-linear-gradient(top, rgb(221, 75, 57), rgb(176, 40, 26));
-  background-image: -moz-linear-gradient(top, rgb(221, 75, 57), rgb(176, 40, 26));
-  background-image: -ms-linear-gradient(top, rgb(221, 75, 57), rgb(176, 40, 26));
-  background-image: -o-linear-gradient(top, rgb(221, 75, 57), rgb(176, 40, 26));
-  background-image: linear-gradient(top, rgb(221, 75, 57), rgb(176, 40, 26));
-  border: 1px solid rgb(153, 42, 27);
-  border-top: 1px solid rgb(153, 42, 27);
-}
 
-}
 .drive-sprite-core-organize {
   background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -39px/21px 405px transparent;
   height: 21px;
@@ -1302,16 +1242,6 @@ px
   opacity: 0.55;
   vertical-align: middle;
 }
-
-.jfk-button-collapse-left {
-  border-bottom-left-radius: 2;
-  border-top-left-radius: 2;
-}
-
-.jfk-button-collapse-left,.jfk-button-collapse-right {
-  z-index: 1;
-}
-
 .drive-sprite-core-trash {
   background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -118px/21px 405px transparent;
   height: 21px;
@@ -1329,6 +1259,40 @@ px
   margin-left: 8px;
   margin-right: 0;
   vertical-align: top !important;
+}
+
+.viewpane .goog-flat-menu-button {
+margin-left: 8px;
+margin-right: 8px;
+}
+
+.goog-flat-menu-button.goog-flat-menu-button-hover {
+  background-color: rgb(248, 248, 248);
+background-image: -webkit-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: -moz-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: -ms-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: -o-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+-webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+-moz-box-shadow: 0 1px 1px rgba(0,0,0,.1);
+box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
+border-color: rgb(198, 198, 198);
+color: rgb(51, 51, 51);
+}
+
+.goog-flat-menu-button.goog-flat-menu-button-open, .goog-flat-menu-button.goog-flat-menu-button-active {
+  -webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+background-color: rgb(238, 238, 238);
+background-image: -webkit-linear-gradient(top,rgb(238, 238, 238),rgb(224, 224, 224));
+background-image: -moz-linear-gradient(top,rgb(238, 238, 238),rgb(224, 224, 224));
+background-image: -ms-linear-gradient(top,rgb(238, 238, 238),rgb(224, 224, 224));
+background-image: -o-linear-gradient(top,rgb(238, 238, 238),rgb(224, 224, 224));
+background-image: linear-gradient(top,rgb(238, 238, 238),rgb(224, 224, 224));
+border: 1px solid rgb(204, 204, 204);
+color: rgb(51, 51, 51);
+z-index: 2;
 }
 
 .goog-flat-menu-button {
@@ -2946,11 +2910,1105 @@ a.gbiba {
     margin-top: 0;
 }
 
-.gbqfba, .gbqfbb {
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+.jfk-button {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    border-top-left-radius: 2px;
+    border-top-right-radius: 2px;
+    cursor: default;
+    font-size: 11px;
+    font-weight: bold;
+    height: 27px;
+    line-height: 27px;
+    margin-right: 16px;
+    min-width: 54px;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: 0;
+    padding-bottom: 0;
+    padding-left: 8px;
+    padding-right: 8px;
+    padding-top: 0;
+    text-align: center;
+    white-space: nowrap;
+}
+.jfk-button-hover {
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.1);
+}
+.jfk-button-selected {
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+.jfk-button .jfk-button-img {
+    margin-top: -3px;
+    vertical-align: middle;
+}
+.jfk-button-label {
+    margin-left: 5px;
+}
+.jfk-button-narrow {
+    min-width: 34px;
+    padding-bottom: 0;
+    padding-left: 0;
+    padding-right: 0;
+    padding-top: 0;
+}
+.jfk-button-collapse-left, .jfk-button-collapse-right {
+    z-index: 1;
+}
+.jfk-button-collapse-left.jfk-button-disabled {
+    z-index: 0;
+}
+
+.jfk-button-checked.jfk-button-collapse-left, .jfk-button-checked.jfk-button-collapse-right {
+    z-index: 2;
+}
+.jfk-button-collapse-left:focus, .jfk-button-collapse-right:focus, .jfk-button-hover.jfk-button-collapse-left, .jfk-button-hover.jfk-button-collapse-right {
+    z-index: 3;
+}
+.jfk-button-collapse-left {
+    border-bottom-left-radius: 0;
+    border-top-left-radius: 0;
+    margin-left: -1px;
+}
+.jfk-button-collapse-right {
+    border-bottom-right-radius: 0;
+    border-top-right-radius: 0;
+    margin-right: 0;
+}
+.jfk-button.jfk-button-disabled:active {
+    box-shadow: none;
+}
+.jfk-button-action {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #4D90FE;
+    background-image: -moz-linear-gradient(center top , #4D90FE, #4787ED);
+    border-bottom-color: #3079ED;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #3079ED;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #3079ED;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #3079ED;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    color: #FFFFFF;
+}
+.jfk-button-action.jfk-button-hover {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #357AE8;
+    background-image: -moz-linear-gradient(center top , #4D90FE, #357AE8);
+    border-bottom-color: #2F5BB7;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #2F5BB7;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #2F5BB7;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #2F5BB7;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+}
+.jfk-button-action:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: transparent;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: transparent;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: transparent;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: transparent;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 0 0 1px #FFFFFF inset;
+    outline-color: transparent;
+    outline-style: none;
+    outline-width: 0;
+}
+.jfk-button-action.jfk-button-clear-outline {
+    box-shadow: none;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: medium;
+}
+.jfk-button-action:active {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #357AE8;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-bottom-color: #2F5BB7;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #2F5BB7;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #2F5BB7;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #2F5BB7;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset;
+}
+.jfk-button-action.jfk-button-disabled {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #4D90FE;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+
+    background-repeat: repeat;
+    background-size: auto auto;
+    opacity: 0.5;
+}
+.jfk-button-contrast {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F5F5F5;
+    background-image: -moz-linear-gradient(center top , #F5F5F5, #F1F1F1);
+    border-bottom-color: rgba(0, 0, 0, 0.1);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: rgba(0, 0, 0, 0.1);
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: rgba(0, 0, 0, 0.1);
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: rgba(0, 0, 0, 0.1);
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    color: #444444;
+}
+.jfk-button-contrast.jfk-button-hover, .jfk-button-contrast.jfk-button-clear-outline.jfk-button-hover {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #F8F8F8;
+    background-image: -moz-linear-gradient(center top , #F8F8F8, #F1F1F1);
+    border-bottom-color: #C6C6C6;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #C6C6C6;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #C6C6C6;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #C6C6C6;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    color: #333333;
+}
+.jfk-button-contrast:active, .jfk-button-contrast.jfk-button-hover:active {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #F8F8F8;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+}
+.jfk-button-contrast.jfk-button-selected, .jfk-button-contrast.jfk-button-clear-outline.jfk-button-selected {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #F8F8F8, #F1F1F1);
+    border-bottom-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #CCCCCC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #CCCCCC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #CCCCCC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    color: #333333;
+}
+.jfk-button-contrast.jfk-button-checked, .jfk-button-contrast.jfk-button-clear-outline.jfk-button-checked {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #EEEEEE, #E0E0E0);
+    border-bottom-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #CCCCCC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #CCCCCC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #CCCCCC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    color: #333333;
+}
+.jfk-button-contrast:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: #4D90FE;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #4D90FE;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #4D90FE;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #4D90FE;
+    border-top-style: solid;
+    border-top-width: 1px;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: medium;
+}
+.jfk-button-contrast.jfk-button-clear-outline {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: #DCDCDC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #DCDCDC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #DCDCDC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #DCDCDC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: medium;
+}
+.jfk-button-contrast.jfk-button-disabled {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #FFFFFF;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: rgba(0, 0, 0, 0.05);
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: rgba(0, 0, 0, 0.05);
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: rgba(0, 0, 0, 0.05);
+    border-top-style: solid;
+    border-top-width: 1px;
+    color: #B8B8B8;
+}
+.jfk-button-contrast .jfk-button-img {
+    opacity: 0.55;
+}
+.jfk-button-contrast.jfk-button-checked .jfk-button-img, .jfk-button-contrast.jfk-button-selected .jfk-button-img, .jfk-button-contrast.jfk-button-hover .jfk-button-img {
+    opacity: 0.9;
+}
+.jfk-button-contrast.jfk-button-disabled .jfk-button-img {
+    opacity: 0.333;
+}
+.jfk-button-default {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #3D9400;
+    background-image: -moz-linear-gradient(center top , #3D9400, #398A00);
+    border-bottom-color: #29691D;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #29691D;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #29691D;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #29691D;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+}
+.jfk-button-default.jfk-button-hover {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #368200;
+    background-image: -moz-linear-gradient(center top , #3D9400, #368200);
+    border-bottom-color: #2D6200;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #2D6200;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #2D6200;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #2D6200;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.3);
+}
+.jfk-button-default:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: transparent;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: transparent;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: transparent;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: transparent;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 0 0 1px #FFFFFF inset;
+    outline-color: transparent;
+    outline-style: none;
+    outline-width: 0;
+}
+.jfk-button-default.jfk-button-clear-outline {
+    box-shadow: none;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: medium;
+}
+.jfk-button-default:active {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #368200;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-bottom-color: #2D6200;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #2D6200;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #2D6200;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #2D6200;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset;
+}
+.jfk-button-default.jfk-button-disabled {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #3D9400;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    opacity: 0.5;
+}
+.jfk-button-primary {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #D14836;
+    background-image: -moz-linear-gradient(center top , #DD4B39, #D14836);
+    border-bottom-color: transparent;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: transparent;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: transparent;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: transparent;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: none;
+    color: #FFFFFF;
+    text-shadow: 0 1px rgba(0, 0, 0, 0.1);
+    text-transform: uppercase;
+}
+.jfk-button-primary.jfk-button-hover {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #C53727;
+    background-image: -moz-linear-gradient(center top , #DD4B39, #C53727);
+    border-bottom-color: #AF301F;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #B0281A;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #B0281A;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #B0281A;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 1px 1px rgba(0, 0, 0, 0.2);
+}
+.jfk-button-primary:focus {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: transparent;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: transparent;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: transparent;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: transparent;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 0 0 1px #FFFFFF inset;
+    outline-color: transparent;
+    outline-style: none;
+    outline-width: 0;
+}
+.jfk-button-primary.jfk-button-clear-outline {
+    box-shadow: none;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: medium;
+}
+.jfk-button-standard:active, .jfk-button-standard.jfk-button-hover:active {
+-webkit-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+background: rgb(248, 248, 248);
+color: rgb(51, 51, 51);
+}
+.jfk-button-primary.jfk-button-disabled {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #D14836;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    opacity: 0.5;
+}
+.jfk-button-standard {
+    -webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
+background-color: #f5f5f5;
+background-image: -webkit-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image: -moz-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image: -ms-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image: -o-linear-gradient(top,#f5f5f5,#f1f1f1);
+background-image: linear-gradient(top,#f5f5f5,#f1f1f1);
+color: #444;
 border: 1px solid #dcdcdc;
-border-color: rgba(0,0,0,.1);
-color: #444 !important;
-font-size: 11px;
+border: 1px solid rgba(0,0,0,0.1);
+}
+
+.jfk-button-standard.jfk-button-hover, .jfk-button-standard.jfk-button-clear-outline.jfk-button-hover {
+    -webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
+background-color: rgb(248, 248, 248);
+background-image: -webkit-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: -moz-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: -ms-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: -o-linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+background-image: linear-gradient(top,rgb(248, 248, 248),rgb(241, 241, 241));
+border: 1px solid rgb(198, 198, 198);
+color: rgb(51, 51, 51);
+}
+.jfk-button-standard.jfk-button-selected, .jfk-button-standard.jfk-button-clear-outline.jfk-button-selected {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #F8F8F8, #F1F1F1);
+    border-bottom-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #CCCCCC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #CCCCCC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #CCCCCC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    color: #333333;
+}
+.jfk-button-standard.jfk-button-checked, .jfk-button-standard.jfk-button-clear-outline.jfk-button-checked {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-color: #EEEEEE;
+    background-image: -moz-linear-gradient(center top , #EEEEEE, #E0E0E0);
+    border-bottom-color: #CCCCCC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #CCCCCC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #CCCCCC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #CCCCCC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.1) inset;
+    color: #333333;
+}
+.jfk-button-standard:focus {
+/* border: 1px solid #4d90fe; */
+outline: none;
+}
+.jfk-button-standard.jfk-button-clear-outline {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    border-bottom-color: #DCDCDC;
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: #DCDCDC;
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: #DCDCDC;
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: #DCDCDC;
+    border-top-style: solid;
+    border-top-width: 1px;
+    outline-color: -moz-use-text-color;
+    outline-style: none;
+    outline-width: medium;
+}
+.jfk-button-standard.jfk-button-disabled {
+    -moz-border-bottom-colors: none;
+    -moz-border-left-colors: none;
+    -moz-border-right-colors: none;
+    -moz-border-top-colors: none;
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: #FFFFFF;
+    background-image: none;
+    background-origin: padding-box;
+    background-position: 0 0;
+    background-repeat: repeat;
+    background-size: auto auto;
+    border-bottom-color: rgba(0, 0, 0, 0.05);
+    border-bottom-style: solid;
+    border-bottom-width: 1px;
+    border-image-outset: 0 0 0 0;
+    border-image-repeat: stretch stretch;
+    border-image-slice: 100% 100% 100% 100%;
+    border-image-source: none;
+    border-image-width: 1 1 1 1;
+    border-left-color-ltr-source: physical;
+    border-left-color-rtl-source: physical;
+    border-left-color-value: rgba(0, 0, 0, 0.05);
+    border-left-style-ltr-source: physical;
+    border-left-style-rtl-source: physical;
+    border-left-style-value: solid;
+    border-left-width-ltr-source: physical;
+    border-left-width-rtl-source: physical;
+    border-left-width-value: 1px;
+    border-right-color-ltr-source: physical;
+    border-right-color-rtl-source: physical;
+    border-right-color-value: rgba(0, 0, 0, 0.05);
+    border-right-style-ltr-source: physical;
+    border-right-style-rtl-source: physical;
+    border-right-style-value: solid;
+    border-right-width-ltr-source: physical;
+    border-right-width-rtl-source: physical;
+    border-right-width-value: 1px;
+    border-top-color: rgba(0, 0, 0, 0.05);
+    border-top-style: solid;
+    border-top-width: 1px;
+    color: #B8B8B8;
+}
+.jfk-button-standard .jfk-button-img {
+    opacity: 0.55;
+}
+.jfk-button-standard.jfk-button-checked .jfk-button-img, .jfk-button-standard.jfk-button-selected .jfk-button-img, .jfk-button-standard.jfk-button-hover .jfk-button-img {
+    opacity: 0.9;
+}
+.jfk-button-standard.jfk-button-disabled .jfk-button-img {
+    opacity: 0.333;
+	
+}
+
+.drive-sprite-core-new-folder {
+    background-attachment: scroll;
+    background-clip: border-box;
+    background-color: transparent;
+    background-image:url(../images/core-97f43184269a3f7d5bc81d32657495d6.png);
+    background-origin: padding-box;
+    background-position: 0 -232px;
+    background-repeat: no-repeat;
+    background-size: 21px 428px;
+    height: 21px;
+    width: 21px;
+}
+.viewpane-toolbar-collection-icon {
+    margin-left: 17px;
+    margin-top: 3px;
+    opacity: 0.55;
+    vertical-align: middle;
 }
 
 
@@ -3117,3 +4175,73 @@ font-size: 13px;
 .goog-menuitem {
 position: relative;
 }
+
+.filter-selector .filter-menu-label {
+color: #555;
+font-size: 11px;
+font-weight: bold;
+margin-bottom: 5px;
+text-transform: uppercase;
+}
+
+.filter-menu-label, .filter-menu-label-caption {
+color: #999;
+font-size: 11px;
+}
+
+.filter-menu-label, .filter-menu-label-caption {
+cursor: default;
+font-weight: bold;
+}
+
+.filter-selector .goog-menuitem {
+padding: 0 6px;
+height: 18px;
+line-height: 18px;
+}
+
+.filter-selector .goog-menuitem {
+cursor: pointer;
+font-size: 13px;
+}
+
+.filter-selector .goog-menuitem-content {
+color: #222;
+}
+
+
+.gbqfqw:hover {
+border: 1px solid #b9b9b9;
+border-top: 1px solid #a0a0a0;
+-webkit-box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+-moz-box-shadow: inset 0 1px 2px rgba(0, 0, 0, .1);
+box-shadow: inset 0 1px 1px rgba(0, 0, 0, .1);
+}
+
+.gbqfqw:active, .gbqfqwf {
+border: 1px solid #4d90fe;
+-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
+-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
+box-shadow: inset 0 1px 2px rgba(0,0,0,.3);
+outline: none;
+}
+
+.gbqfqw:foucs {
+border: 1px solid #4d90fe!important;
+}
+
+.gbqfb:hover {
+border-color: #2f5bb7;
+background-color: #357ae8;
+background-image: -webkit-gradient(linear,left top,left bottom,from(#4d90fe),to(#357ae8));
+background-image: -webkit-linear-gradient(top,#4d90fe,#357ae8);
+background-image: -moz-linear-gradient(top,#4d90fe,#357ae8);
+background-image: -ms-linear-gradient(top,#4d90fe,#357ae8);
+background-image: -o-linear-gradient(top,#4d90fe,#357ae8);
+background-image: linear-gradient(top,#4d90fe,#357ae8);
+}
+
+.filter-selector table tbody tr td{
+ vertical-align: top;
+}
+<!--search menu css end-->

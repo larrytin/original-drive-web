@@ -28,7 +28,7 @@ good.drive.nav.folders.Model = function(view) {
     that.connect(doc);
   };
   good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
-      '/androidTest001', onLoad, onInit, null);
+      '/androidTest002', onLoad, onInit, null);
 };
 
 
@@ -54,6 +54,7 @@ good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
   this.addEvent(this.view.tree, this.root);
   this.pathHandle(this.view.tree);
+  this.view.roottree.path = this.path;
   if (this.path.length() == 0) {
     this.view.buildPath();
   }
@@ -262,6 +263,7 @@ good.drive.nav.folders.Model.prototype.initmap = function(mod) {
 //  var pathList = mod.createList();
 //  pathList.push(root_);
   root_.set(good.drive.nav.folders.Model.strType.PATH, mod.createList());
+  root_.set(good.drive.nav.folders.Model.strType.LABEL, '我的资料库');
 
   var folder;
   var subFolders;

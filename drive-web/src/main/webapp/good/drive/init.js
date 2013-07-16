@@ -46,8 +46,8 @@ good.drive.init.start = function() {
 
     var toolBarButton = new good.drive.nav.button.ToolBarButton();
     var toolBarCreate = toolBarButton.createTolBtn();
-    var toolBarDelete = toolBarButton.deleteTolBtn();
     var toolBarRename = toolBarButton.renameTolBtn();
+    var toolBarDelete = toolBarButton.deleteTolBtn();
 
     var dialog = new good.drive.nav.dialog.View();
     var createdialog = dialog.createFolderDialog(function(evt) {
@@ -79,8 +79,9 @@ good.drive.init.start = function() {
 
     var menu = new good.drive.nav.menu.View();
     var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
-      switch (e.target.getId()) {
-        case ':2':
+      switch (goog.array.indexOf(
+          createPopup.getChildIds(), e.target.getId())) {
+        case 0:
           createdialog.setVisible(true);
           break;
         default:
@@ -88,8 +89,8 @@ good.drive.init.start = function() {
       }
     });
 
-    var moverEvent = good.drive.creation.Mouserevent(
-        leftUpdateBtn.getElement());
+//    var moverEvent = good.drive.creation.Mouserevent(
+//        leftUpdateBtn.getElement());
     var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
     var fileupload = new good.drive.creation.Fileupload();
