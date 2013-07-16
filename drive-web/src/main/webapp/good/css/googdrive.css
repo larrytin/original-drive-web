@@ -4226,4 +4226,8 @@ background-image: -ms-linear-gradient(top,#4d90fe,#357ae8);
 background-image: -o-linear-gradient(top,#4d90fe,#357ae8);
 background-image: linear-gradient(top,#4d90fe,#357ae8);
 }
+
+.filter-selector table tbody tr td{
+ vertical-align: top;
+}
 <!--search menu css end-->
