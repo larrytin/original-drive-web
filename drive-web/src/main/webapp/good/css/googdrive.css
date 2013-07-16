@@ -2862,7 +2862,6 @@ a.gbiba {
     margin-top: 0;
 }
 
-<<<<<<< HEAD
 
 
 
@@ -3724,43 +3723,12 @@ a.gbiba {
     outline-style: none;
     outline-width: medium;
 }
-.jfk-button-primary:active {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    background-color: #B0281A;
-    background-image: -moz-linear-gradient(center top , #DD4B39, #B0281A);
-    border-bottom-color: #992A1B;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-image-outset: 0 0 0 0;
-    border-image-repeat: stretch stretch;
-    border-image-slice: 100% 100% 100% 100%;
-    border-image-source: none;
-    border-image-width: 1 1 1 1;
-    border-left-color-ltr-source: physical;
-    border-left-color-rtl-source: physical;
-    border-left-color-value: #992A1B;
-    border-left-style-ltr-source: physical;
-    border-left-style-rtl-source: physical;
-    border-left-style-value: solid;
-    border-left-width-ltr-source: physical;
-    border-left-width-rtl-source: physical;
-    border-left-width-value: 1px;
-    border-right-color-ltr-source: physical;
-    border-right-color-rtl-source: physical;
-    border-right-color-value: #992A1B;
-    border-right-style-ltr-source: physical;
-    border-right-style-rtl-source: physical;
-    border-right-style-value: solid;
-    border-right-width-ltr-source: physical;
-    border-right-width-rtl-source: physical;
-    border-right-width-value: 1px;
-    border-top-color: #992A1B;
-    border-top-style: solid;
-    border-top-width: 1px;
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.3) inset;
+.jfk-button-standard:active, .jfk-button-standard.jfk-button-hover:active {
+-webkit-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+-moz-box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+box-shadow: inset 0 1px 2px rgba(0,0,0,.1);
+background: #f8f8f8;
+color: #333;
 }
 .jfk-button-primary.jfk-button-disabled {
     background-attachment: scroll;
@@ -3916,42 +3884,8 @@ border: 1px solid rgba(0,0,0,0.1);
     color: #333333;
 }
 .jfk-button-standard:focus {
-    -moz-border-bottom-colors: none;
-    -moz-border-left-colors: none;
-    -moz-border-right-colors: none;
-    -moz-border-top-colors: none;
-    border-bottom-color: #4D90FE;
-    border-bottom-style: solid;
-    border-bottom-width: 1px;
-    border-image-outset: 0 0 0 0;
-    border-image-repeat: stretch stretch;
-    border-image-slice: 100% 100% 100% 100%;
-    border-image-source: none;
-    border-image-width: 1 1 1 1;
-    border-left-color-ltr-source: physical;
-    border-left-color-rtl-source: physical;
-    border-left-color-value: #4D90FE;
-    border-left-style-ltr-source: physical;
-    border-left-style-rtl-source: physical;
-    border-left-style-value: solid;
-    border-left-width-ltr-source: physical;
-    border-left-width-rtl-source: physical;
-    border-left-width-value: 1px;
-    border-right-color-ltr-source: physical;
-    border-right-color-rtl-source: physical;
-    border-right-color-value: #4D90FE;
-    border-right-style-ltr-source: physical;
-    border-right-style-rtl-source: physical;
-    border-right-style-value: solid;
-    border-right-width-ltr-source: physical;
-    border-right-width-rtl-source: physical;
-    border-right-width-value: 1px;
-    border-top-color: #4D90FE;
-    border-top-style: solid;
-    border-top-width: 1px;
-    outline-color: -moz-use-text-color;
-    outline-style: none;
-    outline-width: medium;
+border: 1px solid #4d90fe;
+outline: none;
 }
 .jfk-button-standard.jfk-button-clear-outline {
     -moz-border-bottom-colors: none;
@@ -4043,7 +3977,9 @@ border: 1px solid rgba(0,0,0,0.1);
 }
 .jfk-button-standard.jfk-button-disabled .jfk-button-img {
     opacity: 0.333;
+	
 }
+
 .drive-sprite-core-new-folder {
     background-attachment: scroll;
     background-clip: border-box;
@@ -4061,175 +3997,4 @@ border: 1px solid rgba(0,0,0,0.1);
     margin-top: 3px;
     opacity: 0.55;
     vertical-align: middle;
-}
-.gbqfba, .gbqfbb {
-border: 1px solid #dcdcdc;
-border-color: rgba(0,0,0,.1);
-color: #444 !important;
-font-size: 11px;
-}
-
-
-#gbmpal .gbqfbb:hover {
-border-color: #c6c6c6;
--webkit-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
--moz-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-box-shadow: 0 1px 1px rgba(0, 0, 0, .1);
-color: #222 !important;
- background-color: #fff;
- background-image: -webkit-gradient(linear, left top, left bottom, from(#fff), to(#f8f8f8));
- background-image: -webkit-linear-gradient(top, #fff, #f8f8f8);
- background-image: -moz-linear-gradient(top, #fff, #f8f8f8);
- background-image: -ms-linear-gradient(top, #fff, #f8f8f8);
- background-image: -o-linear-gradient(top, #fff, #f8f8f8);
- background-image: linear-gradient(top, #fff, #f8f8f8);
- filter: progid:DXImageTransform.Microsoft.gradient(startColorStr='#ffffff', EndColorStr='#f8f8f8')
-}
-
-
-<!--searchmenu-->
-#search-filters-container {
-height: 27px;
-line-height: 27px;
-padding: 0;
-}
-
-
-.filter-banner-table {
-height: 21px;
-line-height: 21px;
-vertical-align: top;
-border-collapse: collapse;
-border-spacing: 0;
-zoom: 1;
-}
-
-.filter-chip {
--webkit-border-radius: 2px;
--moz-border-radius: 2px;
-border-radius: 2px;
-background: none repeat scroll 0 0 #dae4f6;
-border: 1px solid #dae4f6;
-color: #222;
-cursor: default;
-height: 23px;
-line-height: 23px;
-margin: 1px;
-outline: medium none;
-padding: 0;
-vertical-align: top;
-}
-
-.filter-chip-label {
-font-size: 12px;
-height: 23px;
-padding: 0 0 0 5px;
-text-align: middle;
-vertical-align: top;
-}
-
-.filter-chip-x {
-color: #444;
-cursor: pointer;
-font-size: 17px;
-font-weight: 700;
-height: 23px;
-padding: 1px 4px;
-text-align: center;
-vertical-align: top;
-}
-
-.search-input-clear-container {
-height: 27px;
-position: absolute;
-right: 20px;
-top: 0;
-}
-
-.search-input-clear {
-cursor: pointer;
-outline: none;
-margin: 0;
-padding: 4px 3px 3px;
-}
-
-.search-input-clear-icon {
-background-position: -1805px 0;
--moz-opacity: .55;
--khtml-opacity: .55;
-opacity: .55;
-filter: alpha(opacity=55);
-}
-
-.search-input-clear-icon {
-background-image: url(https://ssl.gstatic.com/docs/doclist/images/icons_35.png);
-background-repeat: no-repeat;
-height: 10px;
-margin: 5px 2px;
-width: 10px;
-}
-
-.advanced-search-button-container {
-height: 27px;
-line-height: 24px;
-position: absolute;
-right: 0;
-top: 0;
-}
-
-.advanced-search-button.goog-flat-menu-button {
-background-color: transparent;
-background-image: none;
-border: none;
-margin: 0 4px 0 0;
-min-width: 8px;
-padding: 4px;
-}
-
-.advanced-search-button {
-cursor: pointer;
-height: 18px;
-width: 10px;
-}
-
-.filter-selector {
-background-color: #fff;
-border-color: rgba(0,0,0,0.2);
-border-style: solid;
-border-width: 1px;
-position: absolute;
-z-index: 993;
-}
-
-.filter-selector table {
-border-collapse: collapse;
-border: none;
-width: 100%;
-}
-
-.filter-selector .goog-menu {
-border: none;
-outline: none;
-position: relative;
-}
-
-.filter-selector .goog-menu {
--webkit-box-shadow: none;
--moz-box-shadow: none;
-box-shadow: none;
-}
-
-.filter-selector .goog-menuitem {
-padding: 0 6px;
-height: 18px;
-line-height: 18px;
-}
-
-.filter-selector .goog-menuitem {
-cursor: pointer;
-font-size: 13px;
-}
-
-.goog-menuitem {
-position: relative;
 }
