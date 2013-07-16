@@ -1,15 +1,13 @@
 package com.goodow.drive.android.adapter;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 
 import java.util.List;
-
 import android.app.Activity;
 import android.content.Context;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 

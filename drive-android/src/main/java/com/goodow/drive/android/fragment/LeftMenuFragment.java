@@ -1,15 +1,11 @@
 package com.goodow.drive.android.fragment;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;

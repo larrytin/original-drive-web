@@ -2,9 +2,11 @@ package com.goodow.drive.android.adapter;
 
 import java.io.File;
 import java.util.ArrayList;
-import com.goodow.drive.android.R;
+
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
+
 import android.app.AlertDialog;
 import android.content.DialogInterface;
 import android.view.View;

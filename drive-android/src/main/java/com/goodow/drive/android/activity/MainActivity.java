@@ -1,61 +1,31 @@
 package com.goodow.drive.android.activity;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
-import com.google.inject.Inject;
-
-import android.accounts.Account;
-
 import roboguice.activity.RoboActivity;
-
-import roboguice.inject.InjectFragment;
-
 import roboguice.inject.InjectView;
-
-import roboguice.inject.InjectResource;
-
 import roboguice.inject.ContentView;
-
 import android.view.animation.AnimationUtils;
-
 import android.view.animation.Animation;
-
-import android.graphics.drawable.Animatable;
-
-import android.app.Fragment;
-
-import android.R.integer;
-
 import android.view.KeyEvent;
-
-import android.widget.Toast;
-
-import android.widget.AdapterView;
-
-import android.widget.AdapterView.OnItemClickListener;
-
-import android.widget.ListView;
-
 import android.widget.LinearLayout;
-
 import android.view.View;
-
 import android.app.FragmentTransaction;
-
 import android.content.DialogInterface;
 import android.app.AlertDialog;
 import android.view.MenuItem;
 import android.view.Menu;
 import android.app.ActionBar;
 import android.os.Bundle;
-import android.app.Activity;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
+	private ActionBar actionBar;
+	
 	private boolean isDataListFragmentIn = false;
 	private boolean isLocalResFragmentIn = false;
 
@@ -99,7 +69,7 @@ public class MainActivity extends RoboActivity {
 		MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
 		back2Login.setIcon(R.drawable.action_discussion_previous);
 		back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
-
+		
 		return true;
 	}
 
@@ -168,12 +138,20 @@ public class MainActivity extends RoboActivity {
 
 		return true;
 	}
+	
+	public void setActionBarTitle(String title){
+		actionBar.setTitle(title);
+	}
+	
+	public void restActionBarTitle(){
+		actionBar.setTitle(R.string.app_name);
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		ActionBar actionBar = getActionBar();
+		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
 		if (null == localResFragment) {

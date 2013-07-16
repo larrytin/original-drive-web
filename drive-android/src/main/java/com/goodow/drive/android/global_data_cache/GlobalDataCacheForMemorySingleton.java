@@ -1,6 +1,5 @@
 package com.goodow.drive.android.global_data_cache;
 
-import android.os.Environment;
 
 /**
  * 需要全局缓存的数据

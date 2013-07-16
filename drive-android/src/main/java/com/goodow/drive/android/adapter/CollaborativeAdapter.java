@@ -1,12 +1,9 @@
 package com.goodow.drive.android.adapter;
 
-import com.goodow.drive.android.R;
+import com.goodow.android.drive.R;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
-import com.goodow.realtime.EventHandler;
-import com.goodow.realtime.ValueChangedEvent;
-import android.app.Fragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;

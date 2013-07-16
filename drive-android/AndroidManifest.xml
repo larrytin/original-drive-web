@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-    package="com.goodow.drive.android"
-    android:versionCode="2"
-    android:versionName="0.0.2-SNAPSHOT" >
+    package="com.goodow.android.drive"
+    android:versionCode="1"
+    android:versionName="0.0.1-SNAPSHOT" >
 
     <uses-sdk
         android:minSdkVersion="15"
@@ -10,10 +10,10 @@
 
     <!-- This permission is not required if you are targeting your application to 4.1 or above (i.e., minSdkVersion 16) -->
     <permission
-        android:name="com.goodow.drive.android.permission.C2D_MESSAGE"
+        android:name="com.goodow.android.drive.permission.C2D_MESSAGE"
         android:protectionLevel="signature" />
 
-    <uses-permission android:name="com.goodow.drive.android.permission.C2D_MESSAGE" />
+    <uses-permission android:name="com.goodow.android.drive.permission.C2D_MESSAGE" />
     <!-- App receives GCM messages. -->
     <uses-permission android:name="com.google.android.c2dm.permission.RECEIVE" />
     <!-- GCM connects to Google Services. -->
@@ -34,8 +34,6 @@
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" >
     </uses-permission>
     <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
     </uses-permission>
@@ -69,7 +67,7 @@
                 <!-- Receives the registration id. -->
                 <action android:name="com.google.android.c2dm.intent.REGISTRATION" />
                 <!-- The category tag is not required for applications targeted to minSdkVersion 16 and higher -->
-                <category android:name="com.goodow.drive.android" />
+                <category android:name="com.goodow.android.drive" />
             </intent-filter>
         </receiver>
         <!--
