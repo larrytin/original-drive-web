@@ -126,8 +126,11 @@
         <version>${gae.version}</version>
         <configuration>
           <enhancerApi>JPA</enhancerApi>
+          <enableJarClasses>false</enableJarClasses>
+          <disableUpdateCheck>true</disableUpdateCheck>
+          <address>0.0.0.0</address>
         </configuration>
-        <!-- <executions>
+        <executions>
           <execution>
             <id>DataNucleus Enhancement</id>
             <phase>compile</phase>
@@ -135,13 +138,7 @@
               <goal>enhance</goal>
             </goals>
           </execution>
-          <execution>
-            <goals>
-              <goal>endpoints_get_discovery_doc</goal>
-              <goal>endpoints_get_client_lib</goal>
-            </goals>
-          </execution>
-        </executions> -->
+        </executions>
       </plugin>
       <!-- Mark the project for Google Plugin for Eclipse (GPE) -->
       <plugin>
@@ -157,5 +154,37 @@
         </configuration>
       </plugin>
     </plugins>
+    
+    <!-- Required by m2e for import into eclipse. No effect on command line builds -->
+    <pluginManagement>
+      <plugins>
+        <plugin>
+          <groupId>org.eclipse.m2e</groupId>
+          <artifactId>lifecycle-mapping</artifactId>
+          <version>1.0.0</version>
+          <configuration>
+            <lifecycleMappingMetadata>
+              <pluginExecutions>
+                <pluginExecution>
+                  <pluginExecutionFilter>
+                    <groupId>com.google.appengine</groupId>
+                    <artifactId>appengine-maven-plugin</artifactId>
+                    <versionRange>[${gae.version},)</versionRange>
+                    <goals>
+                      <goal>enhance</goal>
+                      <goal>endpoints_get_discovery_doc</goal>
+                      <goal>endpoints_get_client_lib</goal>
+                    </goals>
+                  </pluginExecutionFilter>
+                  <action>
+                    <ignore />
+                  </action>
+                </pluginExecution>
+              </pluginExecutions>
+            </lifecycleMappingMetadata>
+          </configuration>
+        </plugin>
+      </plugins>
+    </pluginManagement>
   </build>
 </project>
