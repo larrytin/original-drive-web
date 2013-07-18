@@ -17,14 +17,6 @@ import javax.persistence.EntityManager;
 
 @Api(name = "attachment", version = "v0.0.1", defaultVersion = AnnotationBoolean.TRUE, namespace = @ApiNamespace(ownerDomain = "goodow.com", ownerName = "Goodow", packagePath = "api.services"))
 public class AttachmentEndpoint {
-  static class BoxedString {
-    String value;
-
-    public BoxedString(String value) {
-      this.value = value;
-    }
-  }
-
   @Inject
   private IdGenerator idGenerator;
   @Inject
@@ -62,5 +54,4 @@ public class AttachmentEndpoint {
     Attachment attachment = get(id);
     return blobInfoFactory.loadBlobInfo(attachment.getBlobKey());
   }
-
 }

@@ -16,14 +16,17 @@ package com.goodow.drive.server.attachment;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.common.collect.Iterables;
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
 import java.io.IOException;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
 
+import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -31,11 +34,6 @@ import javax.servlet.http.HttpServletResponse;
 @Singleton
 public class UploadServlet extends HttpServlet {
   private static final Logger log = Logger.getLogger(UploadServlet.class.getName());
-
-  /**
-   * Attachment file upload form field name.
-   */
-  private static final String ATTACHMENT_UPLOAD_PARAM = "attachment";
 
   @Inject
   private BlobstoreService blobstoreService;
@@ -46,12 +44,28 @@ public class UploadServlet extends HttpServlet {
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
-    List<BlobKey> blobKeys = blobs.get(ATTACHMENT_UPLOAD_PARAM);
-    log.info("blobKeys: " + blobKeys);
-    BlobKey blobKey = Iterables.getOnlyElement(blobKeys);
-    Attachment attachment = new Attachment();
-    attachment.setBlobKey(blobKey);
-    attachmentEndpoint.insert(attachment);
-    resp.sendRedirect("/UploadResult.html?id=" + attachment.getId());
+    Map<String, String> ids = new LinkedHashMap<String, String>();
+    for (Map.Entry<String, List<BlobKey>> entry : blobs.entrySet()) {
+      List<BlobKey> blobKeys = entry.getValue();
+      log.info("blobKeys: " + blobKeys);
+      BlobKey blobKey = Iterables.getOnlyElement(blobKeys);
+      Attachment attachment = new Attachment();
+      attachment.setBlobKey(blobKey);
+      attachmentEndpoint.insert(attachment);
+      ids.put(entry.getKey(), attachment.getId());
+    }
+    resp.setContentType("application/json");
+    resp.setHeader("Access-Control-Allow-Origin", "*");
+    String json = new Gson().toJson(ids);
+    resp.getWriter().print(json);
+  }
+
+  @Override
+  protected void doOptions(HttpServletRequest arg0, HttpServletResponse resp)
+      throws ServletException, IOException {
+    resp.setHeader("Access-Control-Allow-Origin", "*");
+    resp.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT");
+    resp.setHeader("Access-Control-Allow-Headers", "Content-Length");
+    super.doOptions(arg0, resp);
   }
 }

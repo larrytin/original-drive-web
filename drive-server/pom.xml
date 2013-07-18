@@ -103,6 +103,11 @@
       <artifactId>guice-persist</artifactId>
     </dependency>
     
+    <dependency>
+      <groupId>com.google.code.gson</groupId>
+      <artifactId>gson</artifactId>
+    </dependency>
+    
     <!-- Test -->
     <dependency>
       <groupId>junit</groupId>
