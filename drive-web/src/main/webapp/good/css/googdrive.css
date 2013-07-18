@@ -311,14 +311,14 @@ html,body,form {
 }
 
 #gbql,#gbgsi,#gbgsa,.gbqfi,.gbmai,.gbp0i,.gbmppci,.gbqfh #gbql {
-  background-image: url('http://ssl.gstatic.com/gb/images/k1_a31af7ac.png');
+  background-image: url('../images/k1_a31af7ac.png');
   background-size: 294px 45px
 }
 
 @media screen and (min-resolution:1.25dppx) , screen and (-o-min-device-pixel-ratio:5/4) , screen and (-webkit-min-device-pixel-ratio:1.25) ,
     screen and (min-device-pixel-ratio:1.25) {
   #gbql,#gbgsi,#gbgsa,.gbqfi,.gbmai,.gbp0i,.gbmppci,.gbqfh #gbql {
-    background-image: url('//ssl.gstatic.com/gb/images/k2_aca6bcc6.png')
+    background-image: url('../images/k2_aca6bcc6.png')
   }
 }
 
@@ -1521,7 +1521,7 @@ z-index: 2;
     line-height: 16px;
 }
 .goog-listitem-icon.starred-icon {
-    background-image: url("https://ssl.gstatic.com/docs/doclist/images/icons_35.png");
+    background-image: url("../images/icons_35.png");
     background-position: -240px 0;
     margin-left: 2px;
     margin-top: -2px;
@@ -1770,10 +1770,10 @@ z-index: 2;
     width: 7px;
 }
 .more-caption .more-icon:before {
-    content: url("//ssl.gstatic.com/ui/v1/zippy/arrow_down.png");
+    content: url("../images/arrow_down.png");
 }
 .more-caption .less-icon:before {
-    content: url("//ssl.gstatic.com/ui/v1/icons/mail/arrow_up.png");
+    content: url("../images/arrow_up.png");
 }
 .connected-services-separator {
     margin-top: 16px !important;
@@ -2176,7 +2176,7 @@ z-index: 2;
     line-height: 16px;
 }
 .goog-listitem-icon.starred-icon {
-    background-image: url("https://ssl.gstatic.com/docs/doclist/images/icons_35.png");
+    background-image: url("../images/icons_35.png");
     background-position: -240px 0;
     margin-left: 2px;
     margin-top: -2px;
@@ -4104,7 +4104,7 @@ filter: alpha(opacity=55);
 }
 
 .search-input-clear-icon {
-background-image: url(https://ssl.gstatic.com/docs/doclist/images/icons_35.png);
+background-image: url(../images/icons_35.png);
 background-repeat: no-repeat;
 height: 10px;
 margin: 5px 2px;
