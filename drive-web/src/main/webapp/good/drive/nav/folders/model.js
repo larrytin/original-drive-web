@@ -145,6 +145,25 @@ good.drive.nav.folders.Model.prototype.getLeaf =
   return map;
 };
 
+
+/**
+ * @param {string} name
+ * @param {string} url
+ * @param {string} type
+ * @return {good.realtime.CollaborativeMap}
+ */
+good.drive.nav.folders.Model.prototype.getfileMap =
+    function(name, url, type) {
+  var map = this.mod.createMap();
+  map.set(good.drive.nav.folders.Model.strType.LABEL,
+      name);
+  map.set('url', url);
+  map.set('type', type);
+  map.set('process', '');
+  map.set('isoffline', '');
+  return map;
+};
+
 /**
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeList} list
