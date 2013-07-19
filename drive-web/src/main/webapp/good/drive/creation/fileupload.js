@@ -1,10 +1,12 @@
 'use strict';
 goog.provide('good.drive.creation.fileupload');
 
+goog.require('good.constants');
 goog.require('good.drive.nav.folders.Model');
 goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.events');
+
 
 /**
  * @constructor
@@ -197,12 +199,13 @@ good.drive.creation.Fileupload.prototype.closeuploadAction = function() {
 good.drive.creation.Fileupload.prototype.geturl = function(files, tree) {
   var that = this;
   var rpc = new good.net.CrossDomainRpc('GET',
-      'http://192.168.1.15:8880/_ah/api/attachment',
-      good.config.VERSION, 'boxedstring');
+      good.constants.NAME,
+      good.constants.VERSION, 'boxedstring',
+      good.constants.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
       var url = new goog.Uri(json['value']);
-      url.setDomain('192.168.1.15');
+      url.setDomain(good.constants.SERVERDOMAIN);
       //url.setScheme();
       that.uploadFiles(url, files, function(json) {
         if (json && !json['error']) {
