@@ -1,6 +1,5 @@
 package com.goodow.drive.android.global_data_cache;
 
-
 /**
  * 需要全局缓存的数据
  * 
@@ -129,6 +128,10 @@ public enum GlobalDataCacheForMemorySingleton {
 
 	public void setStoragePaht(String storagePaht) {
 		this.storagePaht = storagePaht;
+	}
+
+	public String getStoragePaht() {
+		return storagePaht;
 	}
 
 	public synchronized void setUsernameForLastSuccessfulLogon(

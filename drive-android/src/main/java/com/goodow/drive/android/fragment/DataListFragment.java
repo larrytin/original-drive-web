@@ -12,8 +12,10 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.activity.MainActivity.LocalFragmentEnum;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.realtime.BaseModelEvent;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -46,9 +48,7 @@ public class DataListFragment extends ListFragment {
 	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
 	// private EventHandler<ValuesSetEvent> pathValuesSetEventHandler;
 
-	private EventHandler<ValuesAddedEvent> valuesAddedEventHandler;
-	private EventHandler<ValuesRemovedEvent> valuesRemovedEventHandler;
-	private EventHandler<ValuesSetEvent> valuesSetEventHandler;
+	private EventHandler<?> listEventHandler;
 
 	private EventHandler<ValueChangedEvent> valuesChangeEventHandler;
 
@@ -143,13 +143,14 @@ public class DataListFragment extends ListFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		((MainActivity) getActivity()).setIsDataListFragmentIn(false);
+		
+		((MainActivity) getActivity()).restActionBarTitle();
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		((MainActivity) getActivity()).setIsDataListFragmentIn(true);
+		((MainActivity) getActivity()).setLocalFragmentEnum(LocalFragmentEnum.DATALISTFRAGMENT);
 		
 		TextView textView = (TextView)((MainActivity) getActivity()).findViewById(R.id.openfailure_text);
 		ImageView imageView = (ImageView)((MainActivity) getActivity()).findViewById(R.id.openfailure_img);
@@ -158,32 +159,18 @@ public class DataListFragment extends ListFragment {
 	}
 
 	private void initEventHandler() {
-		if (valuesAddedEventHandler == null) {
-			valuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
+		if (listEventHandler == null) {
+			listEventHandler = new EventHandler<BaseModelEvent>() {
 				@Override
-				public void handleEvent(ValuesAddedEvent event) {
+				public void handleEvent(BaseModelEvent event) {
 					adapter.notifyDataSetChanged();
+					
+					openState();
 				}
 			};
 		}
 
-		if (valuesRemovedEventHandler == null) {
-			valuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
-				@Override
-				public void handleEvent(ValuesRemovedEvent event) {
-					adapter.notifyDataSetChanged();
-				}
-			};
-		}
 
-		if (valuesSetEventHandler == null) {
-			valuesSetEventHandler = new EventHandler<ValuesSetEvent>() {
-				@Override
-				public void handleEvent(ValuesSetEvent event) {
-					adapter.notifyDataSetChanged();
-				}
-			};
-		}
 
 		if (pathValuesAddedEventHandler == null) {
 			pathValuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
@@ -344,23 +331,15 @@ public class DataListFragment extends ListFragment {
 		historyOpenedFolders.push(clickItem);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setListListener(CollaborativeList listenerList) {
-		listenerList.addValuesSetListener(valuesSetEventHandler);
-
-		listenerList.addValuesRemovedListener(valuesRemovedEventHandler);
-
-		listenerList.addValuesAddedListener(valuesAddedEventHandler);
+		listenerList.addValuesSetListener((EventHandler<ValuesSetEvent>)listEventHandler);
+		listenerList.addValuesRemovedListener((EventHandler<ValuesRemovedEvent>)listEventHandler);
+		listenerList.addValuesAddedListener((EventHandler<ValuesAddedEvent>)listEventHandler);
 	}
 
 	private void removeListListener(CollaborativeList listenerList) {
-		listenerList.removeEventListener(EventType.VALUES_SET,
-				valuesSetEventHandler, false);
-
-		listenerList.removeEventListener(EventType.VALUES_REMOVED,
-				valuesRemovedEventHandler, false);
-
-		listenerList.removeEventListener(EventType.VALUES_ADDED,
-				valuesAddedEventHandler, false);
+		listenerList.removeListListener(listEventHandler);
 	}
 
 	public void setMapListener(CollaborativeMap listenerMap) {

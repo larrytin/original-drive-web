@@ -1,17 +1,20 @@
 package com.goodow.drive.android.adapter;
 
-import com.goodow.android.drive.R;
-import com.goodow.drive.android.fragment.DataListFragment;
-import com.goodow.realtime.CollaborativeList;
-import com.goodow.realtime.CollaborativeMap;
 import android.view.LayoutInflater;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.goodow.android.drive.R;
+import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.fragment.DataDetailFragment;
+import com.goodow.drive.android.fragment.DataListFragment;
+import com.goodow.realtime.CollaborativeList;
+import com.goodow.realtime.CollaborativeMap;
 
 public class CollaborativeAdapter extends BaseAdapter {
 	private CollaborativeList folderList;
@@ -129,7 +132,19 @@ public class CollaborativeAdapter extends BaseAdapter {
 			fragment.setMapListener(item);
 
 			ImageButton button = (ImageButton) row.findViewById(R.id.delButton);
-			//TODO
+			button.setOnClickListener(new OnClickListener() {
+				@Override
+				public void onClick(View v) {
+					DataDetailFragment dataDetailFragment = ((MainActivity) fragment
+							.getActivity()).getDataDetailFragment();
+					dataDetailFragment.setFile(item);
+
+					dataDetailFragment.initView();
+
+					((MainActivity) fragment.getActivity())
+							.setDataDetailLayoutState(View.VISIBLE);
+				}
+			});
 		}
 
 		TextView listItem = (TextView) row.findViewById(R.id.listItem);

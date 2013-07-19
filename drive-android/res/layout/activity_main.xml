@@ -9,27 +9,49 @@
 
         <LinearLayout
             android:id="@+id/contentLayout"
-            android:layout_gravity="center"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
-            android:orientation="horizontal">
+            android:layout_gravity="center"
+            android:orientation="vertical" >
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="xxxx" >
+            </TextView>
+
+            <ProgressBar
+                android:id="@+id/downloadbar"
+                style="?android:attr/progressBarStyleHorizontal"
+                android:layout_width="fill_parent"
+                android:layout_height="@dimen/progressBar_height" />
         </LinearLayout>
-        
+
+        <LinearLayout
+            android:id="@+id/dataDetailLayout"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:layout_gravity="right"
+            android:background="@color/white"
+            android:orientation="horizontal"
+            android:visibility="invisible" >
+        </LinearLayout>
+
         <LinearLayout
             android:id="@+id/middleLayout"
-            android:layout_gravity="center"
             android:layout_width="fill_parent"
             android:layout_height="fill_parent"
+            android:layout_gravity="center"
             android:alpha="0.6"
             android:background="@android:color/black"
             android:orientation="horizontal" >
         </LinearLayout>
-        
+
         <LinearLayout
             android:id="@+id/leftMenuLayout"
-            android:layout_gravity="left"
             android:layout_width="wrap_content"
             android:layout_height="fill_parent"
+            android:layout_gravity="left"
             android:background="@color/gray"
             android:orientation="vertical" >
         </LinearLayout>

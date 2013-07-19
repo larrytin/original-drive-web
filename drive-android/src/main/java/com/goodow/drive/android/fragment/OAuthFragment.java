@@ -1,11 +1,8 @@
 package com.goodow.drive.android.fragment;
 
-import com.goodow.android.drive.R;
-import com.goodow.drive.android.activity.LogInActivity;
 import com.goodow.realtime.Realtime;
-
+import android.annotation.SuppressLint;
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -46,8 +43,6 @@ public class OAuthFragment extends DialogFragment {
 
   private static final String UIT = "&access_token=";
 
-  private static LogInActivity activity;
-
   private WebView webViewOauth;
 
   @Override
@@ -65,12 +60,12 @@ public class OAuthFragment extends DialogFragment {
     return v;
   }
 
-  @Override
+  @SuppressLint("SetJavaScriptEnabled")
+@Override
   public void onViewCreated(View arg0, Bundle arg1) {
     super.onViewCreated(arg0, arg1);
-    activity = (LogInActivity) this.getActivity();
     WebSettings webSettings = webViewOauth.getSettings();
-    webSettings.setJavaScriptEnabled(true);
+		webSettings.setJavaScriptEnabled(true);
 
     // load the url of the oAuth login page
     webViewOauth.loadUrl("http://retech.goodow.com/good.js/good/auth/ServiceLogin.html");
