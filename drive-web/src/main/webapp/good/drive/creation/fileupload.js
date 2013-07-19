@@ -43,43 +43,46 @@ good.drive.creation.Fileupload.prototype.fileChange = function(tree) {
           alert('请选择文件。');
           return false;
         }
-        
-        //显示上传信息div               
+        //显示上传信息div
         that._upload_div.style.display = 'block';
-         
-        
+
         var selected = tree.getCurrentItem();
         var mod = new good.drive.nav.folders.Model();
         var filelst = selected.file;
         for (var i = 0; i < files.length; i++) {
           var filename = files[i].name;
-          
-          var size = '';          
-          var filesize = files[i].size/(1024*1024);
+
+          var size = '';
+          var filesize = files[i].size / (1024);
           if (filesize < 1) {
+            filesize = Math.round(filesize * 100) / 100;
             size = filesize + 'B';
-          }else{
-            filesize = files[i].size/(1024);
-            filesize = filesize*100;
+          } else {
+            filesize = files[i].size / (1024 * 1024);
+            filesize = filesize * 100;
             filesize = Math.round(filesize);
-            filesize = filesize/100;
-            
+            filesize = filesize / 100;
             if (filesize < 1){
               size = filesize*1024 + 'KB';
-            }else{
+            } else {
               size = filesize + 'M';
             } 
           }         
           var json = {'name': filename,'size': size};
           that.createTable(json);
-          var map = mod.getLeaf(filename);
-          filelst.push(map);
+//          var map = mod.getLeaf(filename);
+//          filelst.push(map);
         }
+        
+        that.geturl(files);       
         
       });
 };
 
-
+/**
+ * 
+ * @param json
+ */
 good.drive.creation.Fileupload.prototype.createTable = function(json) {   
    var  tr = this._uploadtable.insertRow();
    tr.setAttribute('class','upload-file upload-state-complete');
@@ -117,7 +120,7 @@ good.drive.creation.Fileupload.prototype.createTable = function(json) {
    progress_td.setAttribute('class','upload-file-col upload-file-progress');
    
    //name_div = goog.dom.createDom('div',{'class':'upload-file-status apps-upload-sprite goog-control'});   
-   var progress_span = goog.dom.createDom('span',{'class':'progresstext'}, '正在上传');
+   var progress_span = goog.dom.createDom('span',{'id':json.name, 'class':'progresstext'}, '正在上传');
    progress_td.appendChild(progress_span);
    tr.appendChild(progress_td);
    
@@ -146,8 +149,9 @@ good.drive.creation.Fileupload.prototype.createTable = function(json) {
 /**
  * @param {string} url
  * @param {FileList} files
+ * @param {Function} handler
  */
-good.drive.creation.Fileupload.prototype.uploadFiles = function(url, files) {
+good.drive.creation.Fileupload.prototype.uploadFiles = function(url, files, handler) {
   var formData = new FormData();
 
   for (var i = 0, file; file = files[i]; ++i) {
@@ -156,8 +160,13 @@ good.drive.creation.Fileupload.prototype.uploadFiles = function(url, files) {
 
   var xhr = new XMLHttpRequest();
   xhr.open('POST', url, true);
-  xhr.onload = function(e) { 
-    console.log('onload');
+  xhr.onload = function(e) {
+    var responseText = this.responseText;
+    if (responseText.length == 0) {
+      onLoad(null);
+      return;
+    }
+    handler(goog.json.parse(responseText));
   };
 //  xhr.upload.onprogress = function(e) {
 //    if (e.lengthComputable) {
@@ -166,33 +175,6 @@ good.drive.creation.Fileupload.prototype.uploadFiles = function(url, files) {
 //  };
   xhr.send(formData);  // multipart/form-data
 };
-
-/**
- * @param {string} url
- * @param {FileList} files
- */
-good.drive.creation.Fileupload.prototype.uploadFiles = function(url, files) {
-  var formData = new FormData();
-
-  for (var i = 0, file; file = files[i]; ++i) {
-    formData.append(file.name, file);
-  }
-
-  var xhr = new XMLHttpRequest();
-  xhr.open('POST', url, true);
-  xhr.onload = function(e) { 
-    console.log('onload');
-  };
-//  xhr.upload.onprogress = function(e) {
-//    if (e.lengthComputable) {
-//      console.log('progressBar.value: ' + (e.loaded / e.total) * 100);
-//    }
-//  };
-  xhr.send(formData);  // multipart/form-data
-};
-
-
-
 
 /**
  *
@@ -204,5 +186,26 @@ good.drive.creation.Fileupload.prototype.closeuploadAction = function() {
   //隐藏上传信息div               
     that._upload_div.style.display = 'none';
     goog.dom.removeChildren(that._uploadtable);
+  });
+};
+
+/**
+ * @param {Array.<Object>} files
+ */
+good.drive.creation.Fileupload.prototype.geturl = function(files) {
+  var that = this;
+  var rpc = new good.net.CrossDomainRpc('GET', 'http://192.168.1.15:8880/_ah/api/attachment',
+      good.config.VERSION, 'boxedstring');
+  rpc.send(function(json){
+    if (json && !json['error']){
+      var url = json['value'].replace('localhost','192.168.1.15');
+      that.uploadFiles(url, files, function(json) {
+        alert('ddd');
+        for(var i = 0; i < files.length; i++){
+          var filename = files[0].name;
+          fileId = json[filename];
+        }
+      });
+    }
   });
 };
