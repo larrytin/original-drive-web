@@ -1,19 +1,14 @@
 package com.goodow.drive.android.service;
 
 import java.io.OutputStream;
-import java.net.URL;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
-import android.widget.Toast;
-
 import com.goodow.drive.android.Interface.IDownloadProcess;
-import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
 import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener;

@@ -8,10 +8,8 @@ import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
-
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
-import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.service.MediaDownloadService;
 import com.goodow.drive.android.toolutils.SimpleDownloadResources;
 import com.goodow.realtime.CollaborativeMap;
@@ -45,7 +43,6 @@ public class DataDetailFragment extends Fragment {
 		downloButton = (Button) ((MainActivity) getActivity())
 				.findViewById(R.id.downloadButton);
 
-
 	}
 
 	public void initView() {
@@ -55,8 +52,9 @@ public class DataDetailFragment extends Fragment {
 			downloButton.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					SimpleDownloadResources.getInstance.downloadResource(MediaDownloadService.URL_6M);
-					
+					SimpleDownloadResources.getInstance
+							.downloadResource(MediaDownloadService.URL_6M);
+
 				}
 			});
 		}

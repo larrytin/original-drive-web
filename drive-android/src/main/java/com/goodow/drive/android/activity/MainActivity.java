@@ -7,13 +7,9 @@ import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
-import android.content.ComponentName;
 import android.content.DialogInterface;
-import android.content.Intent;
-import android.content.ServiceConnection;
 import android.os.Bundle;
 import android.os.Handler;
-import android.os.IBinder;
 import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
@@ -25,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.fragment.DataDetailFragment;
@@ -33,8 +28,6 @@ import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.service.MediaDownloadService;
-import com.goodow.drive.android.service.MediaDownloadService.MyBinder;
 import com.goodow.drive.android.toolutils.SimpleDownloadResources;
 
 @ContentView(R.layout.activity_main)

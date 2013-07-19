@@ -1,8 +1,5 @@
 package com.goodow.drive.android.global_data_cache;
 
-import java.util.concurrent.BlockingQueue;
-import java.util.concurrent.LinkedBlockingDeque;
-
 /**
  * 需要全局缓存的数据
  * 
@@ -39,7 +36,6 @@ public enum GlobalDataCacheForMemorySingleton {
 
 	private String storagePaht;
 
-	
 	/**
 	 * @return the access_token
 	 */

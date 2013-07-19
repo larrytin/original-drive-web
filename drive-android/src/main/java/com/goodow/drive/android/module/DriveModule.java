@@ -2,14 +2,9 @@ package com.goodow.drive.android.module;
 
 import java.io.File;
 
-import android.app.Application;
-import android.content.Intent;
 import android.os.Environment;
-
 import com.goodow.api.services.account.Account;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.service.MediaDownloadService;
-import com.goodow.drive.android.toolutils.DownloadResServiceBinder;
 import com.goodow.drive.android.toolutils.MyApplication;
 import com.goodow.realtime.android.CloudEndpointUtils;
 import com.goodow.realtime.android.RealtimeModule;
@@ -19,7 +14,6 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpRequestInitializer;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
 import com.google.inject.Provides;
 import com.google.inject.Singleton;
 
