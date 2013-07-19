@@ -10,5 +10,10 @@
     <dimen name="listItemHeigh">33dp</dimen>
     <dimen name="listItemTextSize">14sp</dimen>
     <dimen name="listItemPadding">1dp</dimen>
+    
+    <dimen name="listGroupHeigh_large">48dp</dimen>
+    <dimen name="listItemHeigh_large">99dp</dimen>
+    <dimen name="listItemTextSize_large">42sp</dimen>
+    <dimen name="listItemPadding_large">3dp</dimen>
 
 </resources>

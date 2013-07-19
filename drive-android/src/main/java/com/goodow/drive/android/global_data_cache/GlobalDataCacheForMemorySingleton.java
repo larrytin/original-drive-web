@@ -1,5 +1,7 @@
 package com.goodow.drive.android.global_data_cache;
 
+import java.util.concurrent.BlockingQueue;
+import java.util.concurrent.LinkedBlockingDeque;
 
 /**
  * 需要全局缓存的数据
@@ -37,6 +39,7 @@ public enum GlobalDataCacheForMemorySingleton {
 
 	private String storagePaht;
 
+	
 	/**
 	 * @return the access_token
 	 */
@@ -129,6 +132,10 @@ public enum GlobalDataCacheForMemorySingleton {
 
 	public void setStoragePaht(String storagePaht) {
 		this.storagePaht = storagePaht;
+	}
+
+	public String getStoragePaht() {
+		return storagePaht;
 	}
 
 	public synchronized void setUsernameForLastSuccessfulLogon(

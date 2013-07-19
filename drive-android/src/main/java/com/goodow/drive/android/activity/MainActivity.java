@@ -3,11 +3,18 @@ package com.goodow.drive.android.activity;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
+import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
+import android.content.ComponentName;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.ServiceConnection;
 import android.os.Bundle;
+import android.os.Handler;
+import android.os.IBinder;
+import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -16,25 +23,39 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.service.MediaDownloadService;
+import com.goodow.drive.android.service.MediaDownloadService.MyBinder;
+import com.goodow.drive.android.toolutils.SimpleDownloadResources;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
-	private ActionBar actionBar;
+	public static enum LocalFragmentEnum {
+		DATALISTFRAGMENT, LOCALRESFRAGMENT, DATADETAILFRAGMENT;
+	}
 
-	private boolean isDataListFragmentIn = false;
-	private boolean isLocalResFragmentIn = false;
+	private LocalFragmentEnum localFragmentEnum;
+	private LocalFragmentEnum lastFragmentEnum;
+
+	private ActionBar actionBar;
 
 	@InjectView(R.id.leftMenuLayout)
 	private LinearLayout leftMenu;
 	@InjectView(R.id.middleLayout)
 	private LinearLayout middleLayout;
+	@InjectView(R.id.dataDetailLayout)
+	private LinearLayout dataDetailLayout;
+	@InjectView(R.id.downloadbar)
+	private ProgressBar progressBar;
 
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
@@ -43,6 +64,10 @@ public class MainActivity extends RoboActivity {
 	private DataListFragment dataListFragment;
 	private LocalResFragment localResFragment;
 	private DataDetailFragment dataDetailFragment;
+
+	public DataDetailFragment getDataDetailFragment() {
+		return dataDetailFragment;
+	}
 
 	/**
 	 * @return the dataListFragment
@@ -58,6 +83,24 @@ public class MainActivity extends RoboActivity {
 		return localResFragment;
 	}
 
+	@SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				progressBar.setProgress((int) (msg.getData()
+						.getDouble("progress")));
+
+				break;
+			case -1:
+				progressBar.setProgress(100);
+
+				break;
+			}
+		}
+	};
+
 	public void hideLeftMenuLayout() {
 		if (null != leftMenu && null != middleLayout) {
 			Animation out = AnimationUtils.makeOutAnimation(this, false);
@@ -66,6 +109,23 @@ public class MainActivity extends RoboActivity {
 			leftMenu.setVisibility(LinearLayout.INVISIBLE);
 			middleLayout.setVisibility(LinearLayout.INVISIBLE);
 		}
+	}
+
+	public void setDataDetailLayoutState(int state) {
+		Animation animation;
+		if (state == View.VISIBLE) {
+			animation = AnimationUtils.makeInAnimation(this, false);
+
+			setLastFragmentEnum(localFragmentEnum);
+			setLocalFragmentEnum(LocalFragmentEnum.DATADETAILFRAGMENT);
+		} else {
+			animation = AnimationUtils.makeOutAnimation(this, true);
+
+			setLocalFragmentEnum(lastFragmentEnum);
+		}
+
+		dataDetailLayout.startAnimation(animation);
+		dataDetailLayout.setVisibility(state);
 	}
 
 	@Override
@@ -81,13 +141,22 @@ public class MainActivity extends RoboActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			if (isDataListFragmentIn) {
-				dataListFragment.backFragment();
-			}
+		if (keyCode == KeyEvent.KEYCODE_BACK && null != localFragmentEnum) {
+			switch (localFragmentEnum) {
+			case DATADETAILFRAGMENT:
+				dataDetailFragment.backFragment();
+				break;
 
-			if (isLocalResFragmentIn) {
+			case DATALISTFRAGMENT:
+				dataListFragment.backFragment();
+				break;
+
+			case LOCALRESFRAGMENT:
 				localResFragment.backFragment();
+				break;
+
+			default:
+				break;
 			}
 
 			return true;
@@ -153,6 +222,24 @@ public class MainActivity extends RoboActivity {
 		actionBar.setTitle(R.string.app_name);
 	}
 
+	private IDownloadProcess process = new IDownloadProcess() {
+
+		@Override
+		public void downLoadProgress(int progress) {
+			Message msg = new Message();
+			msg.what = 1;
+			msg.getData().putDouble("progress", progress);
+			handler.sendMessage(msg);
+		}
+
+		@Override
+		public void downLoadFinish() {
+			Message msg = new Message();
+			msg.what = -1;
+			handler.sendMessage(msg);
+		}
+	};
+
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -166,8 +253,14 @@ public class MainActivity extends RoboActivity {
 
 		if (null == dataDetailFragment) {
 			dataDetailFragment = new DataDetailFragment();
+
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction();
+			fragmentTransaction.replace(R.id.dataDetailLayout,
+					dataDetailFragment);
+			fragmentTransaction.commit();
 		}
-		
+
 		if (null == dataListFragment) {
 			dataListFragment = new DataListFragment();
 		}
@@ -188,14 +281,15 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 
+		SimpleDownloadResources.getInstance.setDownloadProcess(process);
 	}
 
-	public void setIsDataListFragmentIn(boolean flag) {
-		this.isDataListFragmentIn = flag;
+	public void setLastFragmentEnum(LocalFragmentEnum lastFragmentEnum) {
+		this.lastFragmentEnum = lastFragmentEnum;
 	}
 
-	public void setIsLocalResFragmentIn(boolean flag) {
-		this.isLocalResFragmentIn = flag;
+	public void setLocalFragmentEnum(LocalFragmentEnum localFragmentEnum) {
+		this.localFragmentEnum = localFragmentEnum;
 	}
 
 	public void openState(int visibility) {
