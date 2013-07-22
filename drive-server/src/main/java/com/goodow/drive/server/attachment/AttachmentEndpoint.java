@@ -10,6 +10,7 @@ import com.google.api.server.spi.config.ApiNamespace;
 import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.datastore.Cursor;
 import com.google.appengine.datanucleus.query.JPACursorHelper;
@@ -17,6 +18,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +71,7 @@ public class AttachmentEndpoint {
   @ApiMethod(name = "loadBlobInfo")
   public BlobInfo loadBlobInfo(@Named("id") String id) {
     Attachment attachment = get(id);
-    return blobInfoFactory.loadBlobInfo(attachment.getBlobKey());
+    return blobInfoFactory.loadBlobInfo(new BlobKey(attachment.getBlobKey()));
   }
 
   @ApiMethod(name = "remove", httpMethod = HttpMethod.POST)
@@ -83,14 +85,16 @@ public class AttachmentEndpoint {
   @ApiMethod(name = "search")
   public CollectionResponse<Attachment> search(@Nullable @Named("cursor") String cursorString,
       @Nullable @Named("limit") Integer limit, @Nullable @Named("filename") String filename,
-      @Nullable @Named("tags") List<String> tags, @Nullable @Named("contentType") String contentType) {
+      @Nullable @Named("tags") List<String> tags,
+      @Nullable @Named("contentType") String contentType, @Nullable @Named("before") Date before,
+      @Nullable @Named("after") Date after) {
 
     Cursor cursor = null;
     List<Attachment> execute = null;
 
     StringBuilder select = new StringBuilder("select from Attachment as a");
     StringBuilder join = new StringBuilder("");
-    StringBuilder where = new StringBuilder(" where a.filename IS NOT NULL");
+    StringBuilder where = new StringBuilder("");
     Map<String, Object> params = new HashMap<String, Object>();
 
     if (filename != null && !filename.isEmpty()) {
@@ -110,7 +114,18 @@ public class AttachmentEndpoint {
       where.append(" and a.contentType = :contentType");
       params.put("contentType", contentType);
     }
-
+    if (before != null) {
+      where.append(" and a.creation < :before");
+      params.put("before", before);
+    }
+    if (after != null) {
+      where.append(" and a.creation > :after");
+      params.put("after", after);
+    }
+    int indexOf = where.indexOf("and ");
+    if (indexOf != -1) {
+      where.replace(indexOf, indexOf + "and ".length(), " where ");
+    }
     Query query = em.get().createQuery(select.append(join).append(where).toString());
     if (cursorString != null && !"".equals(cursorString)) {
       cursor = Cursor.fromWebSafeString(cursorString);

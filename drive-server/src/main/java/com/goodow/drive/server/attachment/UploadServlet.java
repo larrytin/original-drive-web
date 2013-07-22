@@ -56,7 +56,8 @@ public class UploadServlet extends HttpServlet {
       Attachment attachment = new Attachment();
       attachment.setFilename(blobInfo.getFilename());
       attachment.setContentType(blobInfo.getContentType());
-      attachment.setBlobKey(blobKey);
+      attachment.setCreation(blobInfo.getCreation());
+      attachment.setBlobKey(blobKey.getKeyString());
       attachmentEndpoint.insert(attachment);
       ids.put(entry.getKey(), attachment.getId());
     }

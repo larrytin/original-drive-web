@@ -37,7 +37,7 @@ public class ServeServlet extends HttpServlet {
 
   @Override
   public void doGet(HttpServletRequest req, HttpServletResponse resp) throws IOException {
-    BlobKey blobKey = attachmentEndpoint.get(req.getParameter("id")).getBlobKey();
-    blobstoreService.serve(blobKey, resp);
+    String blobKey = attachmentEndpoint.get(req.getParameter("id")).getBlobKey();
+    blobstoreService.serve(new BlobKey(blobKey), resp);
   }
 }

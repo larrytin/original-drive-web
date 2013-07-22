@@ -1,7 +1,6 @@
 package com.goodow.drive.server.attachment;
 
-import com.google.appengine.api.blobstore.BlobKey;
-
+import java.util.Date;
 import java.util.List;
 
 import javax.persistence.ElementCollection;
@@ -14,16 +13,21 @@ public class Attachment {
   private String id;
   private String filename;
   private String contentType;
-  private BlobKey blobKey;
+  private String blobKey;
+  private Date creation;
   @ElementCollection
   private List<String> tags;
 
-  public BlobKey getBlobKey() {
+  public String getBlobKey() {
     return blobKey;
   }
 
   public String getContentType() {
     return contentType;
+  }
+
+  public Date getCreation() {
+    return creation;
   }
 
   public String getFilename() {
@@ -38,12 +42,16 @@ public class Attachment {
     return tags;
   }
 
-  public void setBlobKey(BlobKey blobKey) {
+  public void setBlobKey(String blobKey) {
     this.blobKey = blobKey;
   }
 
   public void setContentType(String contentType) {
     this.contentType = contentType;
+  }
+
+  public void setCreation(Date creation) {
+    this.creation = creation;
   }
 
   public void setFilename(String filename) {
