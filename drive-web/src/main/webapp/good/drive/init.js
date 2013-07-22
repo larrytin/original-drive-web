@@ -13,6 +13,7 @@ goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
+goog.require('good.drive.nav.folders.Control');
 goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
@@ -50,9 +51,9 @@ good.drive.init.init = function() {
 
   var advancedMenu = new good.drive.search.AdvancedMenu();
 
-  var tree = new good.drive.nav.folders.Tree();
+  var tree = new good.drive.nav.folders.Tree('androidTest004');
   tree.changeHandle(function(e) {
-    tree.buildPath();
+    tree.control().buildPath();
   });
 
   var leftButton = new good.drive.nav.button.LeftButton();
