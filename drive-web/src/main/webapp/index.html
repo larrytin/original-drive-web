@@ -20,14 +20,13 @@
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<script src="good.js/closure-library/closure/goog/base.js"></script>
+<!-- <script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script>
-<!-- <script src="drive-compiled.js"></script> -->
+</script> -->
+<script src="drive-compiled.js"></script>
 <style type="text/css">
-
 </style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
@@ -210,6 +209,70 @@
           </tbody>
         </table>
       </div>
+      <!-- 上传信息系显示  start-->
+      <div class="doclistmole" style="right: 45px; left: auto; width: 493px; bottom: 0px; display: none;" dlrc="true" dlcmt="n">
+        <div class="doclistmole-headercontainer">
+          <div class="doclistmoleheader">
+            ‎
+            <div class="doclistmoleheader-mainiconcontainer">
+              ‎<span class="goog-inline-block uploadmole-icon-main"></span>
+            </div>
+            <div class="doclistmoleheader-titlecontainer goog-inline-block">
+              ‎<span class="goog-inline-block doclistmoleheader-title">文件上传</span>
+            </div>
+            <div class="doclistmoleheader-viewcontrols">
+             <!--  ‎<span class="goog-inline-block doclistmoleheader-icon doclistmoleheader-icon-minimize" actiontype="toggle-minimize"></span> -->
+              <span id="close_upload" class="goog-inline-block doclistmoleheader-icon doclistmoleheader-icon-close" actiontype="close"></span>
+            </div>
+          </div>
+        </div>
+        <div class="doclistmole-contents">
+          <div class="uploadmole">
+            <!-- <div class="uploadmole-toolbar-container">
+              <div class="uploadmoletoolbar">
+                ‎
+                <div class="goog-inline-block uploadmoletoolbar-primary-actions">
+                  ‎
+                  <div class="goog-inline-block uploadmoletoolbar-item uploadmoletoolbar-settings-container">
+                    <span class="goog-inline-block uploadmoletoolbar-settings">设置</span>&nbsp;<span
+                      class="goog-inline-block uploadmoletoolbar-settingsarrow">▼</span>
+                  </div>
+                  <div class="goog-inline-block uploadmoletoolbar-settingssummary-container">
+                    <span class="goog-inline-block uploadmoletoolbar-settingssummary">转换：关闭</span>
+                  </div>
+                </div>
+                <div class="goog-inline-block uploadmoletoolbar-secondary-actions">
+                  ‎
+                  <div class="goog-inline-block uploadmoletoolbar-retryall-container">
+                    <span class="goog-inline-block uploadmoletoolbar-item uploadmoletoolbar-retryall" style="display: none;">全部重试</span>
+                  </div>
+                  <div class="goog-inline-block uploadmoletoolbar-cancelall-container">
+                    <span class="goog-inline-block uploadmoletoolbar-item uploadmoletoolbar-cancelall" style="display: none;">全部取消</span>
+                  </div>
+                </div>
+              </div>
+            </div> -->
+            <div class="uploadmole-filelist jfk-scrollbar">
+              <div class="upload-uploader">
+                <div class="upload-uploader-inner">
+                  <div class="upload-uploader-file-list">
+                    <table class="upload-uploader-table">
+                      <tbody>                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="upload-uploader-footer goog-control" style="-webkit-user-select: none;"></div>
+                </div>
+              </div>
+            </div>
+            <div class="uploadmole-quotainfo">
+              <span class="uploadmole-usage">已使用 18 MB，共 15 GB（回收站占用 0 MB）</span><span class="uploadmole-purchase-link decorated-link"
+                tabindex="0">升级存储空间</span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <!-- 上传信息系显示  end-->
     </div>
   </div>
   <div id="dMenu" class="goog-menu" style="display: none;">
@@ -222,7 +285,7 @@
         <div class="detroit-createmenu-entries-col">
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="https://ssl.gstatic.com/docs/doclist/images/icon_11_collection_email.png"
+              <img class="detroit-createmenuitem-icon-image" src="good/images/icon_11_collection_email.png"
                 role="presentation" style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">文件夹</div>
