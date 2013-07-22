@@ -32,11 +32,13 @@ good.drive.nav.editpwd.start = function() {
     var pwd = $('Passwd').value;
     var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
         good.config.VERSION, 'login/' + encodeURIComponent(name) +
-        '/' + encodeURIComponent(OldPasswd));
+        '/' + encodeURIComponent(OldPasswd),
+        good.config.SERVERADRESS);
     rpc.send(function(json) {
       if (json && json['token']) {
         var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
-            good.config.VERSION, 'updateAccountInfo');
+            good.config.VERSION, 'updateAccountInfo',
+            good.config.SERVERADRESS);
         json['token'] = pwd;
         delete json.kind;
         delete json.etag;

@@ -37,7 +37,8 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
   var userId = query.get('userId');
 
   var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
-      good.config.VERSION, 'accountinfo/' + userId);
+      good.config.VERSION, 'accountinfo/' + userId,
+      good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && json['token']) {
       var name = goog.dom.getElement('gbgs4dn');

@@ -26,4 +26,3 @@ good.js/closure-library/closure/bin/build/closurebuilder.py \
   --compiler_flags="--create_source_map=editpwd.js.map" \
   > editpwd-compiled.js
 echo //@ sourceMappingURL=editpwd.js.map >> editpwd-compiled.js
-

@@ -5,12 +5,17 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.activity.MainActivity.LocalFragmentEnum;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.realtime.BaseModelEvent;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -26,8 +31,6 @@ import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
 
 public class DataListFragment extends ListFragment {
-	private MainActivity activity;
-
 	private CollaborativeList historyOpenedFolders;
 	private CollaborativeMap currentFolder;
 
@@ -45,9 +48,7 @@ public class DataListFragment extends ListFragment {
 	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
 	// private EventHandler<ValuesSetEvent> pathValuesSetEventHandler;
 
-	private EventHandler<ValuesAddedEvent> valuesAddedEventHandler;
-	private EventHandler<ValuesRemovedEvent> valuesRemovedEventHandler;
-	private EventHandler<ValuesSetEvent> valuesSetEventHandler;
+	private EventHandler<?> listEventHandler;
 
 	private EventHandler<ValueChangedEvent> valuesChangeEventHandler;
 
@@ -118,22 +119,23 @@ public class DataListFragment extends ListFragment {
 			if (null != fileList) {
 				setListListener(fileList);
 			}
-			
-			//设置action bar的显示
+
+			// 设置action bar的显示
 			if (historyOpenedFolders.length() <= 1) {
-				activity.restActionBarTitle();
-				
+				((MainActivity) getActivity()).restActionBarTitle();
+
 			} else {
 				StringBuffer title = new StringBuffer();
 				for (int i = 0; i < historyOpenedFolders.length(); i++) {
-					String label = ((CollaborativeMap) historyOpenedFolders.get(i))
-							.get("label");
+					String label = ((CollaborativeMap) historyOpenedFolders
+							.get(i)).get("label");
 					if (null != label) {
 						title.append("/" + label);
 					}
 				}
-				
-				activity.setActionBarTitle(title.toString());
+
+				((MainActivity) getActivity()).setActionBarTitle(title
+						.toString());
 			}
 		}
 	}
@@ -141,44 +143,34 @@ public class DataListFragment extends ListFragment {
 	@Override
 	public void onPause() {
 		super.onPause();
-		activity.setIsDataListFragmentIn(false);
+		
+		((MainActivity) getActivity()).restActionBarTitle();
 	}
 
 	@Override
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
-		activity = (MainActivity) this.getActivity();
-		activity.setIsDataListFragmentIn(true);
+		((MainActivity) getActivity()).setLocalFragmentEnum(LocalFragmentEnum.DATALISTFRAGMENT);
+		
+		TextView textView = (TextView)((MainActivity) getActivity()).findViewById(R.id.openfailure_text);
+		ImageView imageView = (ImageView)((MainActivity) getActivity()).findViewById(R.id.openfailure_img);
+		((MainActivity) getActivity()).setOpenStatView(textView, imageView);
 
 	}
 
 	private void initEventHandler() {
-		if (valuesAddedEventHandler == null) {
-			valuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
+		if (listEventHandler == null) {
+			listEventHandler = new EventHandler<BaseModelEvent>() {
 				@Override
-				public void handleEvent(ValuesAddedEvent event) {
+				public void handleEvent(BaseModelEvent event) {
 					adapter.notifyDataSetChanged();
+					
+					openState();
 				}
 			};
 		}
 
-		if (valuesRemovedEventHandler == null) {
-			valuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
-				@Override
-				public void handleEvent(ValuesRemovedEvent event) {
-					adapter.notifyDataSetChanged();
-				}
-			};
-		}
 
-		if (valuesSetEventHandler == null) {
-			valuesSetEventHandler = new EventHandler<ValuesSetEvent>() {
-				@Override
-				public void handleEvent(ValuesSetEvent event) {
-					adapter.notifyDataSetChanged();
-				}
-			};
-		}
 
 		if (pathValuesAddedEventHandler == null) {
 			pathValuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
@@ -201,6 +193,8 @@ public class DataListFragment extends ListFragment {
 									.get(historyOpenedFolders.length() - 1);
 
 							initData();
+							
+							openState();
 						}
 					}
 				}
@@ -219,6 +213,8 @@ public class DataListFragment extends ListFragment {
 					}
 
 					initData();
+					
+					openState();
 				}
 			};
 		}
@@ -236,6 +232,18 @@ public class DataListFragment extends ListFragment {
 		}
 	}
 
+	private void openState(){
+		CollaborativeList folderList = currentFolder.get(FOLDER_KEY);
+		CollaborativeList fileList = currentFolder.get(FILE_KEY);
+
+		if (null != folderList && 0 == folderList.length() && null != fileList
+				&& 0 == fileList.length()) {
+			((MainActivity) getActivity()).openState(LinearLayout.VISIBLE);
+		}else{
+			((MainActivity) getActivity()).openState(LinearLayout.INVISIBLE);
+		}
+	}
+	
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -298,13 +306,13 @@ public class DataListFragment extends ListFragment {
 			}
 		};
 
-		String docId = "@tmp/"
-				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/androidTest02";
+		 String docId = "@tmp/"
+		 + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+		 + "/androidTest02";
 
-		// String docId = "@tmp/"
-		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		// + "/androidTest001";
+//		String docId = "@tmp/"
+//				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+//				+ "/androidTest002";
 
 		Realtime.load(docId, onLoaded, initializer, null);
 
@@ -313,7 +321,7 @@ public class DataListFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.folder_list, container, false);
+		return inflater.inflate(R.layout.fragment_folderlist, container, false);
 	}
 
 	@Override
@@ -323,23 +331,15 @@ public class DataListFragment extends ListFragment {
 		historyOpenedFolders.push(clickItem);
 	}
 
+	@SuppressWarnings("unchecked")
 	private void setListListener(CollaborativeList listenerList) {
-		listenerList.addValuesSetListener(valuesSetEventHandler);
-
-		listenerList.addValuesRemovedListener(valuesRemovedEventHandler);
-
-		listenerList.addValuesAddedListener(valuesAddedEventHandler);
+		listenerList.addValuesSetListener((EventHandler<ValuesSetEvent>)listEventHandler);
+		listenerList.addValuesRemovedListener((EventHandler<ValuesRemovedEvent>)listEventHandler);
+		listenerList.addValuesAddedListener((EventHandler<ValuesAddedEvent>)listEventHandler);
 	}
 
 	private void removeListListener(CollaborativeList listenerList) {
-		listenerList.removeEventListener(EventType.VALUES_SET,
-				valuesSetEventHandler, false);
-
-		listenerList.removeEventListener(EventType.VALUES_REMOVED,
-				valuesRemovedEventHandler, false);
-
-		listenerList.removeEventListener(EventType.VALUES_ADDED,
-				valuesAddedEventHandler, false);
+		listenerList.removeListListener(listEventHandler);
 	}
 
 	public void setMapListener(CollaborativeMap listenerMap) {

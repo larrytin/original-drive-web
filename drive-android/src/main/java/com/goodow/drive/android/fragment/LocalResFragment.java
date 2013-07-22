@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.activity.MainActivity.LocalFragmentEnum;
 import com.goodow.drive.android.adapter.LocalResAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
@@ -26,7 +27,7 @@ public class LocalResFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.folder_list, container, false);
+		return inflater.inflate(R.layout.fragment_folderlist, container, false);
 	}
 
 	@Override
@@ -61,14 +62,8 @@ public class LocalResFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
-		((MainActivity) this.getActivity()).setIsLocalResFragmentIn(true);
-	}
-
-	@Override
-	public void onPause() {
-		super.onPause();
-
-		((MainActivity) this.getActivity()).setIsLocalResFragmentIn(false);
+		((MainActivity) this.getActivity())
+				.setLocalFragmentEnum(LocalFragmentEnum.LOCALRESFRAGMENT);
 	}
 
 	@Override
