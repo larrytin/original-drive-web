@@ -13,6 +13,8 @@
  */
 package com.goodow.drive.server.attachment;
 
+import com.google.appengine.api.blobstore.BlobInfo;
+import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.common.collect.Iterables;
@@ -37,7 +39,8 @@ public class UploadServlet extends HttpServlet {
 
   @Inject
   private BlobstoreService blobstoreService;
-
+  @Inject
+  private BlobInfoFactory blobInfoFactory;
   @Inject
   private AttachmentEndpoint attachmentEndpoint;
 
@@ -49,7 +52,10 @@ public class UploadServlet extends HttpServlet {
       List<BlobKey> blobKeys = entry.getValue();
       log.info("blobKeys: " + blobKeys);
       BlobKey blobKey = Iterables.getOnlyElement(blobKeys);
+      BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
       Attachment attachment = new Attachment();
+      attachment.setFilename(blobInfo.getFilename());
+      attachment.setContentType(blobInfo.getContentType());
       attachment.setBlobKey(blobKey);
       attachmentEndpoint.insert(attachment);
       ids.put(entry.getKey(), attachment.getId());
