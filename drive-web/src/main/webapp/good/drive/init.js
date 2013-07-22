@@ -107,13 +107,19 @@ good.drive.init.init = function() {
 
 //    var moverEvent = good.drive.creation.Mouserevent(
 //        leftUpdateBtn.getElement());
-  var menulst = new Array('文件...');
-  var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
-  var fileupload = new good.drive.creation.Fileupload();
-  fileupload.fileChange(tree);
-  popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
-    fileupload.fileClick();
-  });
+  if(goog.userAgent.IE && goog.userAgent.VERSION <10){
+    var menulst = new Array('上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。');
+    var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
+    popupmenu.createPopup(leftUpdateBtn.getElement(), null);
+  }else{
+    var menulst = new Array('文件...');
+    var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
+    var fileupload = new good.drive.creation.Fileupload();
+    fileupload.fileChange(tree);
+    popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
+      fileupload.fileClick();
+    });
+  } 
 
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(

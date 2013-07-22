@@ -7,17 +7,28 @@ import com.google.api.server.spi.config.Api;
 import com.google.api.server.spi.config.ApiMethod;
 import com.google.api.server.spi.config.ApiMethod.HttpMethod;
 import com.google.api.server.spi.config.ApiNamespace;
+import com.google.api.server.spi.response.CollectionResponse;
 import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
+import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.datastore.Cursor;
+import com.google.appengine.datanucleus.query.JPACursorHelper;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.persist.Transactional;
 
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import javax.annotation.Nullable;
 import javax.inject.Named;
 import javax.persistence.EntityExistsException;
 import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
+import javax.persistence.Query;
 
 @Api(name = "attachment", version = "v0.0.1", defaultVersion = AnnotationBoolean.TRUE, namespace = @ApiNamespace(ownerDomain = "goodow.com", ownerName = "Goodow", packagePath = "api.services"))
 public class AttachmentEndpoint {
@@ -60,7 +71,7 @@ public class AttachmentEndpoint {
   @ApiMethod(name = "loadBlobInfo")
   public BlobInfo loadBlobInfo(@Named("id") String id) {
     Attachment attachment = get(id);
-    return blobInfoFactory.loadBlobInfo(attachment.getBlobKey());
+    return blobInfoFactory.loadBlobInfo(new BlobKey(attachment.getBlobKey()));
   }
 
   @ApiMethod(name = "remove", httpMethod = HttpMethod.POST)
@@ -68,6 +79,79 @@ public class AttachmentEndpoint {
     Attachment attachment = em.get().find(Attachment.class, id);
     em.get().remove(attachment);
     return attachment;
+  }
+
+  @SuppressWarnings({"unchecked", "unused"})
+  @ApiMethod(name = "search")
+  public CollectionResponse<Attachment> search(@Nullable @Named("cursor") String cursorString,
+      @Nullable @Named("limit") Integer limit, @Nullable @Named("filename") String filename,
+      @Nullable @Named("tags") List<String> tags,
+      @Nullable @Named("contentType") String contentType, @Nullable @Named("before") Date before,
+      @Nullable @Named("after") Date after) {
+
+    Cursor cursor = null;
+    List<Attachment> execute = null;
+
+    StringBuilder select = new StringBuilder("select from Attachment as a");
+    StringBuilder join = new StringBuilder("");
+    StringBuilder where = new StringBuilder("");
+    Map<String, Object> params = new HashMap<String, Object>();
+
+    if (filename != null && !filename.isEmpty()) {
+      where.append(" and a.filename = :filename");
+      params.put("filename", filename);
+    }
+    if (tags != null && !tags.isEmpty()) {
+      join.append(" join a.tags tags");
+      int i = 0;
+      for (String tag : tags) {
+        where.append(" and tags = :tag").append(i);
+        params.put("tag" + i, tag);
+        i++;
+      }
+    }
+    if (contentType != null && !contentType.isEmpty()) {
+      where.append(" and a.contentType = :contentType");
+      params.put("contentType", contentType);
+    }
+    if (before != null) {
+      where.append(" and a.creation < :before");
+      params.put("before", before);
+    }
+    if (after != null) {
+      where.append(" and a.creation > :after");
+      params.put("after", after);
+    }
+    int indexOf = where.indexOf("and ");
+    if (indexOf != -1) {
+      where.replace(indexOf, indexOf + "and ".length(), " where ");
+    }
+    Query query = em.get().createQuery(select.append(join).append(where).toString());
+    if (cursorString != null && !"".equals(cursorString)) {
+      cursor = Cursor.fromWebSafeString(cursorString);
+      query.setHint(JPACursorHelper.CURSOR_HINT, cursor);
+    }
+    if (limit != null) {
+      query.setFirstResult(0);
+      query.setMaxResults(limit);
+    }
+    for (Map.Entry<String, Object> param : params.entrySet()) {
+      query.setParameter(param.getKey(), param.getValue());
+    }
+
+    execute = query.getResultList();
+    cursor = JPACursorHelper.getCursor(execute);
+    if (cursor != null) {
+      cursorString = cursor.toWebSafeString();
+    }
+
+    // Tight loop for fetching all entities from datastore and accomodate
+    // for lazy fetch.
+    for (Attachment obj : execute) {
+      ;
+    }
+    return CollectionResponse.<Attachment> builder().setItems(execute).setNextPageToken(
+        cursorString).build();
   }
 
   @ApiMethod(path = "update", httpMethod = HttpMethod.POST)
