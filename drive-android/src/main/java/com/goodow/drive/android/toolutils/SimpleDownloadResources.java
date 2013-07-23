@@ -1,19 +1,30 @@
 package com.goodow.drive.android.toolutils;
 
-import android.text.TextUtils;
 import com.goodow.drive.android.Interface.IDownloadProcess;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.realtime.CollaborativeMap;
 
 public enum SimpleDownloadResources {
 	getInstance;
 
-	public void downloadResource(final String urlOfResource) {
-		if (TextUtils.isEmpty(urlOfResource)) {
+	public void addDownloadResource(final CollaborativeMap resource) {
+		if (null == resource) {
 			assert false : "入参urlOfResource为空.";
 			return;
 		}
 
 		DownloadResServiceBinder.getDownloadResServiceBinder().addResDownload(
-				urlOfResource);
+				resource);
+	}
+
+	public void removeDownloadResource(final CollaborativeMap resource) {
+		if (null == resource) {
+			assert false : "入参urlOfResource为空.";
+			return;
+		}
+
+		DownloadResServiceBinder.getDownloadResServiceBinder()
+				.removeResDownload(resource);
 	}
 
 	public void setDownloadProcess(final IDownloadProcess process) {

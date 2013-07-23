@@ -4,6 +4,7 @@ import com.goodow.android.drive.R;
 import com.goodow.api.services.account.Account;
 import com.goodow.api.services.account.model.AccountInfo;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
 import com.goodow.realtime.Realtime;
 
@@ -19,6 +20,7 @@ import android.content.Intent;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -30,6 +32,7 @@ import roboguice.inject.InjectView;
 @SuppressLint("SetJavaScriptEnabled")
 @ContentView(R.layout.activity_login)
 public class LogInActivity extends RoboActivity {
+	private String TAG = "LOGIN";
   private class LoginNetRequestTask extends AsyncTask<String, String, AccountInfo> {
     @Override
     protected AccountInfo doInBackground(String... params) {
@@ -74,6 +77,12 @@ public class LogInActivity extends RoboActivity {
         // 通知。。。
         Realtime.authorize(userId, token);
 
+        String docId = "@tmp/"
+       		 + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+       		 + "/offine1";
+        Log.i(TAG, "Offine DocId:"+docId);
+        new OfflineFileObserver().startObservation(docId);
+        
         Intent intent = new Intent(LogInActivity.this, MainActivity.class);
         LogInActivity.this.startActivity(intent);
 

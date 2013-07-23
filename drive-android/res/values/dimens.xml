@@ -4,6 +4,7 @@
     <dimen name="activity_horizontal_margin">10dp</dimen>
     <dimen name="activity_vertical_margin">10dp</dimen>
     
+    <dimen name="progressTextSize">11sp</dimen>
     <dimen name="progressBar_height">5dp</dimen>
     
     <dimen name="listGroupHeigh">18dp</dimen>

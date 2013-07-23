@@ -9,6 +9,9 @@ import android.os.Binder;
 import android.os.IBinder;
 import android.util.Log;
 import com.goodow.drive.android.Interface.IDownloadProcess;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
+import com.goodow.realtime.CollaborativeMap;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
 import com.google.api.client.googleapis.media.MediaHttpDownloaderProgressListener;
@@ -22,11 +25,13 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 public class MediaDownloadService extends Service {
-	private BlockingQueue<String> downloadUrlQueue = new LinkedBlockingDeque<String>();
+	private BlockingQueue<CollaborativeMap> downloadUrlQueue = new LinkedBlockingDeque<CollaborativeMap>();
 
 	private final IBinder myBinder = new MyBinder();
 
-	private IDownloadProcess downloadProcess;
+	// private IDownloadProcess downloadProcess;
+
+	private CollaborativeMap downloadRes;
 
 	private OutputStream out;
 
@@ -50,9 +55,17 @@ public class MediaDownloadService extends Service {
 
 				while (true) {
 					try {
-						final String urlString = MediaDownloadService.this.downloadUrlQueue
+						downloadRes = MediaDownloadService.this.downloadUrlQueue
 								.take();
-						doDownLoad(urlString);
+
+						if (!GlobalConstant.DownloadStatusEnum.COMPLETE
+								.getStatus().equals(downloadRes.get("status"))) {
+
+							final String urlString = downloadRes.get("url");
+							doDownLoad(urlString);
+
+						}
+
 					} catch (InterruptedException e) {
 						e.printStackTrace();
 					}
@@ -63,12 +76,28 @@ public class MediaDownloadService extends Service {
 
 	public final class MyBinder extends Binder {
 		public void setDownLoadProgress(IDownloadProcess downloadProcess) {
-			MediaDownloadService.this.downloadProcess = downloadProcess;
+			// MediaDownloadService.this.downloadProcess = downloadProcess;
 		}
 
-		public void addResDownload(final String resUrl) {
-			MediaDownloadService.this.downloadUrlQueue.add(resUrl);
+		public void addResDownload(final CollaborativeMap res) {
+			MediaDownloadService.this.downloadUrlQueue.add(res);
 		}
+
+		public void removeResDownload(final CollaborativeMap res) {
+			MediaDownloadService.this.downloadUrlQueue.remove(res);
+
+			// Iterator<CollaborativeMap> iterator =
+			// downloadUrlQueue.iterator();
+			//
+			// while (iterator.hasNext()) {
+			// CollaborativeMap localRes = iterator.next();
+			// if (null != localRes.get("url") && null != res.get("url")
+			// && localRes.get("url").equals(res.get("url"))) {
+			// downloadUrlQueue.remove(localRes);
+			// }
+			// }
+		}
+
 	}
 
 	/**
@@ -80,17 +109,24 @@ public class MediaDownloadService extends Service {
 		public void progressChanged(final MediaHttpDownloader downloader) {
 			switch (downloader.getDownloadState()) {
 			case MEDIA_IN_PROGRESS:
-				if (downloadProcess != null) {
-					downloadProcess.downLoadProgress((int) (downloader
-							.getProgress() * 100));
-				}
+				// if (downloadProcess != null) {
+				// downloadProcess.downLoadProgress((int) (downloader
+				// .getProgress() * 100));
+				// }
+
+				downloadRes.set("progress", Integer.toString((int) (downloader
+						.getProgress() * 100)));
 
 				break;
 
 			case MEDIA_COMPLETE:
-				if (downloadProcess != null) {
-					downloadProcess.downLoadFinish();
-				}
+				// if (downloadProcess != null) {
+				// downloadProcess.downLoadFinish();
+				// }
+
+				downloadRes.set("progress", "100");
+				downloadRes.set("status",
+						DownloadStatusEnum.COMPLETE.getStatus());
 
 				break;
 
@@ -103,7 +139,7 @@ public class MediaDownloadService extends Service {
 
 	private void doDownLoad(String... params) {
 		try {
-			setOut(openFileOutput("task_test.zip", MODE_PRIVATE));
+			setOut(openFileOutput("downloadTest.zip", MODE_PRIVATE));
 
 			MediaHttpDownloader downloader = new MediaHttpDownloader(
 					HTTP_TRANSPORT, new HttpRequestInitializer() {

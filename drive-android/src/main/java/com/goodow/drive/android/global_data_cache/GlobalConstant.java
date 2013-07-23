@@ -13,6 +13,20 @@ public final class GlobalConstant {
       return typeName;
     }
   }
+  
+  public static enum DownloadStatusEnum {
+	  WAITING("waiting"),DOWNLOADING("downloading") ,COMPLETE("complete");
+	  
+	  private final String status;
+
+	    private DownloadStatusEnum(String status) {
+	      this.status = status;
+	    }
+
+	    public String getStatus() {
+	      return status;
+	    }
+	  }
 
   private GlobalConstant() {
 

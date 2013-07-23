@@ -21,19 +21,19 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
-import com.goodow.drive.android.fragment.LocalResFragment;
+import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.toolutils.SimpleDownloadResources;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
 	public static enum LocalFragmentEnum {
-		DATALISTFRAGMENT, LOCALRESFRAGMENT, DATADETAILFRAGMENT;
+		DATALISTFRAGMENT, LOCALRESFRAGMENT, DATADETAILFRAGMENT, OFFLINELISTFRAGMENT;
 	}
 
 	private LocalFragmentEnum localFragmentEnum;
@@ -47,15 +47,17 @@ public class MainActivity extends RoboActivity {
 	private LinearLayout middleLayout;
 	@InjectView(R.id.dataDetailLayout)
 	private LinearLayout dataDetailLayout;
-	@InjectView(R.id.downloadbar)
+
 	private ProgressBar progressBar;
+	private TextView textView;
 
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
 	// @InjectFragment
 	private LeftMenuFragment leftMenuFragment;
 	private DataListFragment dataListFragment;
-	private LocalResFragment localResFragment;
+	// private LocalResFragment localResFragment;
+	private OfflineListFragment offlineListFragment;
 	private DataDetailFragment dataDetailFragment;
 
 	public DataDetailFragment getDataDetailFragment() {
@@ -72,8 +74,8 @@ public class MainActivity extends RoboActivity {
 	/**
 	 * @return the localResFragment
 	 */
-	public LocalResFragment getLocalResFragment() {
-		return localResFragment;
+	public OfflineListFragment getOfflineListFragment() {
+		return offlineListFragment;
 	}
 
 	@SuppressLint("HandlerLeak")
@@ -82,12 +84,25 @@ public class MainActivity extends RoboActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				progressBar.setProgress((int) (msg.getData()
-						.getDouble("progress")));
+				int progress = (int) (msg.getData().getDouble("progress"));
+
+				if (null != textView) {
+					textView.setText(progress + " %");
+				}
+
+				if (null != progressBar) {
+					progressBar.setProgress(progress);
+				}
 
 				break;
 			case -1:
-				progressBar.setProgress(100);
+				if (null != textView) {
+					textView.setText("100 %");
+				}
+
+				if (null != progressBar) {
+					progressBar.setProgress(100);
+				}
 
 				break;
 			}
@@ -118,7 +133,9 @@ public class MainActivity extends RoboActivity {
 		}
 
 		dataDetailLayout.startAnimation(animation);
-		dataDetailLayout.setVisibility(state);
+		if (dataDetailLayout.getVisibility() != state) {
+			dataDetailLayout.setVisibility(state);
+		}
 	}
 
 	@Override
@@ -144,8 +161,8 @@ public class MainActivity extends RoboActivity {
 				dataListFragment.backFragment();
 				break;
 
-			case LOCALRESFRAGMENT:
-				localResFragment.backFragment();
+			case OFFLINELISTFRAGMENT:
+				offlineListFragment.backFragment();
 				break;
 
 			default:
@@ -218,7 +235,11 @@ public class MainActivity extends RoboActivity {
 	private IDownloadProcess process = new IDownloadProcess() {
 
 		@Override
-		public void downLoadProgress(int progress) {
+		public void downLoadProgress(int progress, ProgressBar progressBar,
+				TextView textView) {
+			MainActivity.this.progressBar = progressBar;
+			MainActivity.this.textView = textView;
+
 			Message msg = new Message();
 			msg.what = 1;
 			msg.getData().putDouble("progress", progress);
@@ -226,12 +247,19 @@ public class MainActivity extends RoboActivity {
 		}
 
 		@Override
-		public void downLoadFinish() {
+		public void downLoadFinish(ProgressBar progressBar, TextView textView) {
+			MainActivity.this.progressBar = progressBar;
+			MainActivity.this.textView = textView;
+
 			Message msg = new Message();
 			msg.what = -1;
 			handler.sendMessage(msg);
 		}
 	};
+
+	public IDownloadProcess getProcess() {
+		return process;
+	}
 
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
@@ -240,8 +268,8 @@ public class MainActivity extends RoboActivity {
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		if (null == localResFragment) {
-			localResFragment = new LocalResFragment();
+		if (null == offlineListFragment) {
+			offlineListFragment = new OfflineListFragment();
 		}
 
 		if (null == dataDetailFragment) {
@@ -274,7 +302,8 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 
-		SimpleDownloadResources.getInstance.setDownloadProcess(process);
+		// 使下载service能够更改UI界面,即修改进度条
+		// SimpleDownloadResources.getInstance.setDownloadProcess(process);
 	}
 
 	public void setLastFragmentEnum(LocalFragmentEnum lastFragmentEnum) {

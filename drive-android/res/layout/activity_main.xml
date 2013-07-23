@@ -1,7 +1,7 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="fill_parent"
     android:layout_height="fill_parent"
-    android:orientation="horizontal" >
+    android:orientation="vertical" >
 
     <FrameLayout
         android:layout_width="fill_parent"
@@ -13,18 +13,6 @@
             android:layout_height="fill_parent"
             android:layout_gravity="center"
             android:orientation="vertical" >
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:text="xxxx" >
-            </TextView>
-
-            <ProgressBar
-                android:id="@+id/downloadbar"
-                style="?android:attr/progressBarStyleHorizontal"
-                android:layout_width="fill_parent"
-                android:layout_height="@dimen/progressBar_height" />
         </LinearLayout>
 
         <LinearLayout
