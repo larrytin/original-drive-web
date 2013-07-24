@@ -1,6 +1,8 @@
 'use strict';
 goog.provide('good.drive.search');
 
+goog.require('good.constants');
+goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.ui.MenuItem');
@@ -17,6 +19,8 @@ good.drive.search.AdvancedMenu = function() {
   var search_input = goog.dom.getElement('search_input');
 
   var input_text = goog.dom.getElement('gbqfq');
+
+  var search_btn = goog.dom.getElement('gbqfb');
 
   var popupElt = goog.dom.getElement('search_menu');
 
@@ -47,12 +51,20 @@ good.drive.search.AdvancedMenu = function() {
 
   popupElt.style.minWidth = '509px';
   //popupElt.style.minHight = '200px';
+  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
+  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
+  var gradeArray = new Array('大班', '中班', '小班');
+  this._typeArray = typeArray;
+  this._fieldArray = fieldArray;
+  this._gradeArray = gradeArray;
   this._pop = pop;
   this._search_input = search_input;
   this._input_text = input_text;
+  this._search_btn = search_btn;
   this.popaction();
   this.clearAction();
   this.inputAction();
+  this.searchbtncick();
 };
 
 /**
@@ -87,10 +99,12 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
         goog.dom.replaceNode(div, oldNode);
       }
       that.inputstyle();
+      that.search();
       goog.events.listen(span_clean,
           goog.events.EventType.CLICK, function(e) {
         goog.dom.removeNode(e.target.parentElement);
         that.inputstyle();
+        that.search();
       });
     }
   });
@@ -133,15 +147,12 @@ good.drive.search.AdvancedMenu.prototype.ishave = function(array) {
  * @return {Array.<string>}
  */
 good.drive.search.AdvancedMenu.prototype.getArray = function(str) {
-  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
-  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
-  var gradeArray = new Array('大班', '中班', '小班');
-  if (goog.array.contains(typeArray, str)) {
-    return typeArray;
-  } else if (goog.array.contains(fieldArray, str)) {
-    return fieldArray;
+  if (goog.array.contains(this._typeArray, str)) {
+    return this._typeArray;
+  } else if (goog.array.contains(this._fieldArray, str)) {
+    return this._fieldArray;
   } else {
-    return gradeArray;
+    return this._gradeArray;
   }
 };
 
@@ -197,3 +208,78 @@ good.drive.search.AdvancedMenu.prototype.trim = function(str) {
     return str.replace(/(^\s*)|(\s*$)/g, '');
 };
 
+
+/** */
+good.drive.search.AdvancedMenu.prototype.search = function() {
+  var that = this;
+  var type = {'动画': 'application/x-shockwave-flash',
+      '视频': 'video/mpeg',
+      '音频': 'audio/mp3',
+      '图片': 'image/jpeg',
+      '文本': 'text/plain'};
+  var contentType = undefined;
+  var tags = new Array();
+  if (that._search_input.children.length != 0) {
+    for (var i = 0; i < this._search_input.children.length; i++) {
+      var child = that._search_input.children[i];
+      var spantext = child.children[0].innerText;
+      if (goog.array.contains(this._typeArray, spantext)) {
+        contentType = type[spantext];
+      } else if (goog.array.contains(this._fieldArray, spantext) ||
+          goog.array.contains(this._gradeArray, spantext)) {
+        goog.array.insert(tags, spantext);
+      }
+    }
+  }
+
+    var inputval = that._input_text.value;
+
+    //组织查询条件
+    var path = 'search';
+    var flag = false;
+    if (contentType != undefined) {
+      path = path + '?contentType=' + contentType;
+      flag = true;
+    }
+    if (!goog.array.isEmpty(tags)) {
+      goog.array.forEach(tags, function(e) {
+        if (flag) {
+          path = path + '&tags=' + e;
+          flag = true;
+        } else {
+          path = path + '?tags=' + e;
+          flag = true;
+        }
+      });
+    }
+
+    if (inputval != null && inputval != '') {
+      if (flag) {
+        path = path + '&filename=' + inputval;
+      } else {
+        path = path + '?filename=' + inputval;
+      }
+    }
+
+    //连接服务器查询
+    var rpc = new good.net.CrossDomainRpc('POST',
+        good.constants.NAME,
+        good.constants.VERSION, path,
+        good.constants.SERVERADRESS);
+    rpc.send(function(json) {
+      //填充网格数据
+      alert('333');
+    });  
+};
+
+
+/**
+ *
+ */
+good.drive.search.AdvancedMenu.prototype.searchbtncick = function() {
+  var that = this;
+  goog.events.listen(that._search_btn,
+      goog.events.EventType.CLICK, function(e) {
+    that.search();
+  });
+};

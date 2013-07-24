@@ -37,3 +37,16 @@ good.drive.nav.menu.Popupmenu.prototype.createPopup =
   goog.events.listen(this._pm, 'action', handle);
   return this._pm;
 };
+
+/**
+ * @param {Element} dom
+ * @param {Function} handle
+ * @return {goog.ui.PopupMenu}
+ */
+good.drive.nav.menu.Popupmenu.prototype.createRight =
+    function(dom, handle) {
+  this._pm.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
+      goog.positioning.Corner.TOP_LEFT, true);
+  goog.events.listen(this._pm, 'action', handle);
+  return this._pm;
+};

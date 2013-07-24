@@ -3,6 +3,7 @@ goog.provide('good.drive.creation.fileupload');
 
 goog.require('good.constants');
 goog.require('good.drive.nav.folders.Model');
+goog.require('good.net.CrossDomainRpc');
 goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -176,6 +177,7 @@ good.drive.creation.Fileupload.prototype.uploadFiles =
 //      console.log('progressBar.value: ' + (e.loaded / e.total) * 100);
 //    }
 //  };
+  //xhr.setRequestHeader('Content-Type', 'text/plain; charset=UTF-8');
   xhr.send(formData);  // multipart/form-data
 };
 
@@ -210,21 +212,71 @@ good.drive.creation.Fileupload.prototype.geturl = function(files, tree) {
       that.uploadFiles(url, files, function(json) {
         if (json && !json['error']) {
           var selected = tree.getCurrentItem();
-          var mod = new good.drive.nav.folders.Model();
+
           var filelst = selected.file;
 
           for (var i = 0; i < files.length; i++) {
-            var filename = files[0].name;
+            var filename = files[i].name;
             var fileId = json[filename];
 
-            var map = mod.getfileMap(filename, fileId,
-                filename.substring(filename.lastIndexOf('.') + 1));
-            filelst.push(map);
+            var tags = [selected.title];
+            that.updatefile(fileId, tags, '', function() {
+              var map = tree.control_._model.getfileMap(filename, fileId,
+                  filename.substring(filename.lastIndexOf('.') + 1));
+              filelst.push(map);
 
-            goog.dom.getElement(filename).innerText = '上传结束';
+              goog.dom.getElement(filename).innerText = '上传结束';
+            });
           }
         }
       });
     }
   });
 };
+
+/**
+ * @param {string} fileId
+ * @param {Array.<string>} tags
+ * @param {string} content_Type
+ * @param {Function} handler
+ */
+good.drive.creation.Fileupload.prototype.updatefile = function(fileId,
+    tags, content_Type, handler) {
+  if ((tags != null && tags.length > 0) ||
+      (content_Type != null && content_Type != '')) {
+    var rpc = new good.net.CrossDomainRpc('GET',
+        good.constants.NAME,
+        good.constants.VERSION, 'attachment/' + fileId,
+        good.constants.SERVERADRESS);
+    rpc.send(function(json) {
+       if (json && !json['error']) {
+         if (tags != null && tags.length > 0) {
+           if (json['tags'] != undefined &&
+               !goog.array.isEmpty(json['tags'])) {
+             goog.array.forEach(tags, function(e) {
+              if (!goog.array.contains(json['tags']), e) {
+                goog.array.insert(json['tags'], e);
+              }
+            });
+           }else {
+             json['tags'] = tags;
+           }
+         } 
+         if (content_Type != null && content_Type != '') {
+           json['contentType'] = content_Type;
+         }
+         var rpc = new good.net.CrossDomainRpc('POST',
+             good.constants.NAME,
+             good.constants.VERSION, 'update',
+             good.constants.SERVERADRESS);
+         rpc.body = json;
+         rpc.send(function(json) {
+           handler();
+        });
+       }
+    });
+  } else {
+    handler();
+  }
+};
+
