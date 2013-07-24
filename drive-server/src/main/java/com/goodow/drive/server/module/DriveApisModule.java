@@ -22,7 +22,7 @@ public class DriveApisModule extends GuiceSystemServiceServletModule {
   @Override
   protected void configureServlets() {
     install(new JpaPersistModule("transactions-optional"));
-    filterRegex("^/(?!_ah/upload/).*$").through(PersistFilter.class);
+    filterRegex("^/(?!_ah/(upload|admin)).*$").through(PersistFilter.class);
 
     filter(ProxyFilter.PROXY_PATH + "*").through(ProxyFilter.class);
     if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {

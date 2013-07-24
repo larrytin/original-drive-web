@@ -77,6 +77,7 @@ public class AttachmentEndpoint {
   @ApiMethod(name = "remove", httpMethod = HttpMethod.POST)
   public Attachment remove(@Named("id") String id) {
     Attachment attachment = em.get().find(Attachment.class, id);
+    blobstoreService.delete(new BlobKey(attachment.getBlobKey()));
     em.get().remove(attachment);
     return attachment;
   }
@@ -98,8 +99,8 @@ public class AttachmentEndpoint {
     Map<String, Object> params = new HashMap<String, Object>();
 
     if (filename != null && !filename.isEmpty()) {
-      where.append(" and a.filename = :filename");
-      params.put("filename", filename);
+      where.append(" and a.filename like :filename");
+      params.put("filename", filename + "%");
     }
     if (tags != null && !tags.isEmpty()) {
       join.append(" join a.tags tags");
@@ -111,8 +112,8 @@ public class AttachmentEndpoint {
       }
     }
     if (contentType != null && !contentType.isEmpty()) {
-      where.append(" and a.contentType = :contentType");
-      params.put("contentType", contentType);
+      where.append(" and a.contentType like :contentType");
+      params.put("contentType", contentType + "%");
     }
     if (before != null) {
       where.append(" and a.creation < :before");

@@ -17,6 +17,8 @@ import com.google.appengine.api.blobstore.BlobInfo;
 import com.google.appengine.api.blobstore.BlobInfoFactory;
 import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
+import com.google.appengine.api.images.ImagesService;
+import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import com.google.inject.Inject;
@@ -43,6 +45,8 @@ public class UploadServlet extends HttpServlet {
   private BlobInfoFactory blobInfoFactory;
   @Inject
   private AttachmentEndpoint attachmentEndpoint;
+  @Inject
+  private ImagesService imagesService;
 
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
@@ -54,10 +58,16 @@ public class UploadServlet extends HttpServlet {
       BlobKey blobKey = Iterables.getOnlyElement(blobKeys);
       BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
       Attachment attachment = new Attachment();
-      attachment.setFilename(blobInfo.getFilename());
+      String filename = blobInfo.getFilename();
+      filename = new String(filename.getBytes("ISO8859-1"), "UTF-8");
+      attachment.setFilename(filename);
       attachment.setContentType(blobInfo.getContentType());
       attachment.setCreation(blobInfo.getCreation());
       attachment.setBlobKey(blobKey.getKeyString());
+      if (attachment.getContentType().startsWith("image/")) {
+        ServingUrlOptions servingUrlOptions = ServingUrlOptions.Builder.withBlobKey(blobKey);
+        attachment.setThumbnail(imagesService.getServingUrl(servingUrlOptions));
+      }
       attachmentEndpoint.insert(attachment);
       ids.put(entry.getKey(), attachment.getId());
     }

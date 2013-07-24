@@ -17,6 +17,7 @@ public class Attachment {
   private Date creation;
   @ElementCollection
   private List<String> tags;
+  private String thumbnail;
 
   public String getBlobKey() {
     return blobKey;
@@ -42,6 +43,10 @@ public class Attachment {
     return tags;
   }
 
+  public String getThumbnail() {
+    return thumbnail;
+  }
+
   public void setBlobKey(String blobKey) {
     this.blobKey = blobKey;
   }
@@ -64,5 +69,9 @@ public class Attachment {
 
   public void setTags(List<String> tags) {
     this.tags = tags;
+  }
+
+  public void setThumbnail(String thumbnail) {
+    this.thumbnail = thumbnail;
   }
 }
