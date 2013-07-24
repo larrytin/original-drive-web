@@ -21,7 +21,6 @@ import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.TextView;
-
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.fragment.DataDetailFragment;
@@ -53,12 +52,39 @@ public class MainActivity extends RoboActivity {
 
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
+
 	// @InjectFragment
 	private LeftMenuFragment leftMenuFragment;
 	private DataListFragment dataListFragment;
 	// private LocalResFragment localResFragment;
 	private OfflineListFragment offlineListFragment;
 	private DataDetailFragment dataDetailFragment;
+
+	private IDownloadProcess iDownloadProcess = new IDownloadProcess() {
+		@Override
+		public void initData(ProgressBar progressBar, TextView textView) {
+			MainActivity.this.progressBar = progressBar;
+			MainActivity.this.textView = textView;
+		}
+
+		@Override
+		public void downLoadProgress(int progress) {
+			Message message = new Message();
+			message.what = 1;
+			message.getData().putInt("progress", progress);
+
+			handler.sendMessage(message);
+
+		}
+
+		@Override
+		public void downLoadFinish() {
+			Message message = new Message();
+			message.what = -1;
+
+			handler.sendMessage(message);
+		}
+	};
 
 	public DataDetailFragment getDataDetailFragment() {
 		return dataDetailFragment;
@@ -84,7 +110,7 @@ public class MainActivity extends RoboActivity {
 		public void handleMessage(Message msg) {
 			switch (msg.what) {
 			case 1:
-				int progress = (int) (msg.getData().getDouble("progress"));
+				int progress = msg.getData().getInt("progress");
 
 				if (null != textView) {
 					textView.setText(progress + " %");
@@ -120,20 +146,21 @@ public class MainActivity extends RoboActivity {
 	}
 
 	public void setDataDetailLayoutState(int state) {
-		Animation animation;
-		if (state == View.VISIBLE) {
-			animation = AnimationUtils.makeInAnimation(this, false);
-
-			setLastFragmentEnum(localFragmentEnum);
-			setLocalFragmentEnum(LocalFragmentEnum.DATADETAILFRAGMENT);
-		} else {
-			animation = AnimationUtils.makeOutAnimation(this, true);
-
-			setLocalFragmentEnum(lastFragmentEnum);
-		}
-
-		dataDetailLayout.startAnimation(animation);
 		if (dataDetailLayout.getVisibility() != state) {
+			Animation animation;
+			
+			if (state == View.VISIBLE) {
+				animation = AnimationUtils.makeInAnimation(this, false);
+
+				setLastFragmentEnum(localFragmentEnum);
+				setLocalFragmentEnum(LocalFragmentEnum.DATADETAILFRAGMENT);
+			} else {
+				animation = AnimationUtils.makeOutAnimation(this, true);
+
+				setLocalFragmentEnum(lastFragmentEnum);
+			}
+
+			dataDetailLayout.startAnimation(animation);
 			dataDetailLayout.setVisibility(state);
 		}
 	}
@@ -232,35 +259,6 @@ public class MainActivity extends RoboActivity {
 		actionBar.setTitle(R.string.app_name);
 	}
 
-	private IDownloadProcess process = new IDownloadProcess() {
-
-		@Override
-		public void downLoadProgress(int progress, ProgressBar progressBar,
-				TextView textView) {
-			MainActivity.this.progressBar = progressBar;
-			MainActivity.this.textView = textView;
-
-			Message msg = new Message();
-			msg.what = 1;
-			msg.getData().putDouble("progress", progress);
-			handler.sendMessage(msg);
-		}
-
-		@Override
-		public void downLoadFinish(ProgressBar progressBar, TextView textView) {
-			MainActivity.this.progressBar = progressBar;
-			MainActivity.this.textView = textView;
-
-			Message msg = new Message();
-			msg.what = -1;
-			handler.sendMessage(msg);
-		}
-	};
-
-	public IDownloadProcess getProcess() {
-		return process;
-	}
-
 	@Override
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
@@ -303,7 +301,7 @@ public class MainActivity extends RoboActivity {
 		});
 
 		// 使下载service能够更改UI界面,即修改进度条
-		// SimpleDownloadResources.getInstance.setDownloadProcess(process);
+		// SimpleDownloadResources.getInstance.setDownloadProcess(iDownloadProcess);
 	}
 
 	public void setLastFragmentEnum(LocalFragmentEnum lastFragmentEnum) {
@@ -321,6 +319,10 @@ public class MainActivity extends RoboActivity {
 		if (null != openFailure_img) {
 			openFailure_img.setVisibility(visibility);
 		}
+	}
+
+	public IDownloadProcess getIDownloadProcess() {
+		return this.iDownloadProcess;
 	}
 
 	public void setOpenStatView(TextView textView, ImageView imageView) {

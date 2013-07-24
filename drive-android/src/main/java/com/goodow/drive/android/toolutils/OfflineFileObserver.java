@@ -29,10 +29,11 @@ public class OfflineFileObserver {
 	public static void addFile(CollaborativeMap file) {
 		if (null != file) {
 			CollaborativeMap newFile = model.createMap(null);
-			newFile.set("name", file.get("label"));
+			newFile.set("title", file.get("label"));
 			newFile.set("url", file.get("url"));
 			newFile.set("progress", "0");
 			newFile.set("status", file.get("status"));
+			newFile.set("blobKey", file.get("blobKey"));
 
 			list.push(newFile);
 		}

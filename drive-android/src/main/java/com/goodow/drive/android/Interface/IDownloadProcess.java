@@ -4,8 +4,9 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 
 public interface IDownloadProcess {
-	public void downLoadProgress(int progress, ProgressBar progressBar,
-			TextView textView);
+	public void initData(ProgressBar progressBar, TextView textView);
 
-	public void downLoadFinish(ProgressBar progressBar, TextView textView);
+	public void downLoadProgress(int progress);
+
+	public void downLoadFinish();
 }

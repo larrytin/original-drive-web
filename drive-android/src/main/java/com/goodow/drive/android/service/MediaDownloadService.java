@@ -29,7 +29,7 @@ public class MediaDownloadService extends Service {
 
 	private final IBinder myBinder = new MyBinder();
 
-	// private IDownloadProcess downloadProcess;
+	private IDownloadProcess downloadProcess;
 
 	private CollaborativeMap downloadRes;
 
@@ -61,6 +61,12 @@ public class MediaDownloadService extends Service {
 						if (!GlobalConstant.DownloadStatusEnum.COMPLETE
 								.getStatus().equals(downloadRes.get("status"))) {
 
+							Intent intent = new Intent();
+							intent.setAction("NEW_RES_DOWNLOADING");
+							getBaseContext().sendBroadcast(intent);
+
+							downloadRes.set("status", "downloading");
+
 							final String urlString = downloadRes.get("url");
 							doDownLoad(urlString);
 
@@ -75,8 +81,12 @@ public class MediaDownloadService extends Service {
 	}
 
 	public final class MyBinder extends Binder {
+		public String getDownloadResBlobKey() {
+			return MediaDownloadService.this.downloadRes.get("blobKey");
+		}
+
 		public void setDownLoadProgress(IDownloadProcess downloadProcess) {
-			// MediaDownloadService.this.downloadProcess = downloadProcess;
+			MediaDownloadService.this.downloadProcess = downloadProcess;
 		}
 
 		public void addResDownload(final CollaborativeMap res) {
@@ -109,25 +119,33 @@ public class MediaDownloadService extends Service {
 		public void progressChanged(final MediaHttpDownloader downloader) {
 			switch (downloader.getDownloadState()) {
 			case MEDIA_IN_PROGRESS:
-				// if (downloadProcess != null) {
-				// downloadProcess.downLoadProgress((int) (downloader
-				// .getProgress() * 100));
-				// }
+				if (downloadProcess != null) {
+					downloadProcess.downLoadProgress((int) (downloader
+							.getProgress() * 100));
+
+					Log.i("DOWNLOAD",
+							"Media_iDownload_progress: "
+									+ downloader.getProgress() * 100);
+				}
 
 				downloadRes.set("progress", Integer.toString((int) (downloader
 						.getProgress() * 100)));
-
+				Log.i("DOWNLOAD", "Media_progress: " + downloader.getProgress()
+						* 100);
 				break;
 
 			case MEDIA_COMPLETE:
-				// if (downloadProcess != null) {
-				// downloadProcess.downLoadFinish();
-				// }
+				if (downloadProcess != null) {
+					downloadProcess.downLoadFinish();
+
+					Log.i("DOWNLOAD", "Media_iDownload_complete");
+				}
 
 				downloadRes.set("progress", "100");
 				downloadRes.set("status",
 						DownloadStatusEnum.COMPLETE.getStatus());
 
+				Log.i("DOWNLOAD", "Media_complete");
 				break;
 
 			default:
@@ -139,7 +157,8 @@ public class MediaDownloadService extends Service {
 
 	private void doDownLoad(String... params) {
 		try {
-			setOut(openFileOutput("downloadTest.zip", MODE_PRIVATE));
+			setOut(openFileOutput((String) downloadRes.get("blobKey"),
+					MODE_PRIVATE));
 
 			MediaHttpDownloader downloader = new MediaHttpDownloader(
 					HTTP_TRANSPORT, new HttpRequestInitializer() {
