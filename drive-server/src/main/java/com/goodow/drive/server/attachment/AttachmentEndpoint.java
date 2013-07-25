@@ -30,7 +30,7 @@ import javax.persistence.EntityManager;
 import javax.persistence.EntityNotFoundException;
 import javax.persistence.Query;
 
-@Api(name = "attachment", version = "v0.0.1", defaultVersion = AnnotationBoolean.TRUE, namespace = @ApiNamespace(ownerDomain = "goodow.com", ownerName = "Goodow", packagePath = "api.services"))
+@Api(name = "attachment", version = "v0.0.1", defaultVersion = AnnotationBoolean.TRUE, root = "http://server.drive.goodow.com/ah/api", namespace = @ApiNamespace(ownerDomain = "goodow.com", ownerName = "Goodow", packagePath = "api.services"))
 public class AttachmentEndpoint {
   @Inject
   private IdGenerator idGenerator;
