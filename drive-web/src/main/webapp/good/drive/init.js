@@ -13,7 +13,7 @@ goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
-goog.require('good.drive.nav.folders.Control');
+goog.require('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
@@ -43,6 +43,9 @@ window.gdrOnLoad = good.drive.init.start;
 good.drive.init.init = function() {
   var createInput;
   var modifeInput;
+  var myResDocId = 'myRes02';
+  var myClassResDocId = 'myClassRes02';
+  var publicResDocId = 'publicRes02';
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
 
   good.config.start();
@@ -51,10 +54,14 @@ good.drive.init.init = function() {
 
   var advancedMenu = new good.drive.search.AdvancedMenu();
 
-  var tree = new good.drive.nav.folders.Tree('androidTest004');
-  tree.changeHandle(function(e) {
-    tree.control().buildPath();
-  });
+  
+  var myResTree = new good.drive.nav.folders.Tree('我的收藏夹', myResDocId);
+  var myclass = new good.drive.nav.folders.Tree('我的课程', myClassResDocId);
+  var publicResTree = new good.drive.nav.folders.Tree('公共资料库', publicResDocId, 1);
+  var pathControl = good.drive.nav.folders.Path.getINSTANCE();
+  pathControl.addPath(myResDocId, myResTree);
+  pathControl.addPath(myClassResDocId, myclass);
+  pathControl.addPath(publicResDocId, publicResTree);
 
   var leftButton = new good.drive.nav.button.LeftButton();
   var leftCreateBtn = leftButton.createBtn();
@@ -72,7 +79,7 @@ good.drive.init.init = function() {
     }
     switch (evt.key) {
       case 'cr':
-        tree.addLeaf(createInput.value);
+        myResTree.addLeaf(createInput.value);
         break;
       case 'c':
         break;
@@ -84,7 +91,7 @@ good.drive.init.init = function() {
   var modifydialog = dialog.modifyFolderDialog(function(evt) {
     switch (evt.key) {
       case 'cr':
-        tree.renameLeaf(modifeInput.value);
+        myResTree.renameLeaf(modifeInput.value);
         break;
       case 'c':
         break;
@@ -115,7 +122,7 @@ good.drive.init.init = function() {
     var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
     var fileupload = new good.drive.creation.Fileupload();
-    fileupload.fileChange(tree);
+    fileupload.fileChange(myResTree);
     popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
       fileupload.fileClick();
     });
@@ -123,13 +130,13 @@ good.drive.init.init = function() {
 
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(
-    tree.roottree.getElement(), function(e) {
+    myResTree.roottree.getElement(), function(e) {
       if (leftSubmenuChildIds == undefined) {
         leftSubmenuChildIds = leftSubmenu.getChildIds();
       }
       switch (goog.array.indexOf(leftSubmenuChildIds, e.target.getId())) {
         case 0:
-          tree.extended();
+          myResTree.extended();
           break;
         case 2:
           createdialog.setVisible(true);
@@ -139,10 +146,10 @@ good.drive.init.init = function() {
           if (modifeInput == undefined) {
             modifeInput = goog.dom.getElement('modifyFolder');
           }
-          modifeInput.value = tree.getCurrentItem().title;
+          modifeInput.value = myResTree.getCurrentItem().title;
           break;
         case 6:
-          tree.removeLeaf();
+          myResTree.removeLeaf();
           break;
         default:
           break;

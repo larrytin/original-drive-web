@@ -1,7 +1,7 @@
 'use strict';
 goog.provide('good.drive.nav.folders');
 
-goog.require('good.drive.nav.folders.Control');
+goog.require('good.drive.nav.folders.ViewControl');
 goog.require('goog.events.KeyHandler');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.tree.BaseNode');
@@ -9,12 +9,14 @@ goog.require('goog.ui.tree.TreeControl');
 
 /**
  * @constructor
- * @param {string} str
- * @param {good.drive.nav.folders.Control} control
+ * @param {string} title
+ * @param {string} docid
+ * @param {number} level
+ * @param {good.drive.nav.folders.ViewControl} control
  */
-good.drive.nav.folders.Tree = function(str, control) {
+good.drive.nav.folders.Tree = function(title, docid, level, control) {
   if (control == undefined) {
-    control = new good.drive.nav.folders.Control(str, this);
+    control = new good.drive.nav.folders.ViewControl(docid, this, level);
   }
   this.control_ = control;
   var root = new goog.ui.tree.TreeControl('',
@@ -25,10 +27,11 @@ good.drive.nav.folders.Tree = function(str, control) {
   root.setShowLines(false);
 
   var tree_ = root.getTree().createNode(
-      '<span class="treedoclistview-root-node-name">我的收藏夹 &nbsp;</span>');
+      '<span class="treedoclistview-root-node-name">' +
+      title + '&nbsp;</span>');
   root.add(tree_);
   tree_.setExpanded(false);
-  root.setSelectedItem(tree_);
+//  root.setSelectedItem(tree_);
   this.customNode(tree_);
 
   this.roottree = root;
@@ -43,7 +46,6 @@ good.drive.nav.folders.Tree = function(str, control) {
 
   this.currentItem_ = undefined;
 };
-
 
 /** {struct} */
 good.drive.nav.folders.labelElm = [
@@ -100,6 +102,34 @@ good.drive.nav.folders.Tree.prototype.extended =
   selected.setExpanded(true);
 };
 
+/**
+ * @param {good.realtime.CollaborativeList} pathlist
+ * @param {good.realtime.CollaborativeMap} pathroot
+ * @param {Function} callback
+ */
+good.drive.nav.folders.Tree.prototype.initPath = function(pathlist, pathroot, callback) {
+  var that = this;
+//  if (pathlist.length == 0) {
+//    this.roottree.setSelectedItem(null);
+//  }
+  this.changeHandle(function(e) {
+    if(!that.control().buildPath(pathlist, pathroot)) {
+      return;
+    }
+//    callback(that.control().model().docId());
+  });
+};
+
+/**
+ */
+good.drive.nav.folders.Tree.prototype.recovery = function() {
+  this.roottree.setSelectedItem(null);
+};
+
+/**
+ */
+good.drive.nav.folders.Tree.prototype.location = function() {
+};
 
 /**
  * @return {goog.ui.tree.TreeControl}
@@ -210,7 +240,7 @@ good.drive.nav.folders.Tree.prototype.getIndexByChild = function(node) {
 };
 
 /**
- * @return {good.drive.nav.folders.Control}
+ * @return {good.drive.nav.folders.ViewControl}
  */
 good.drive.nav.folders.Tree.prototype.control = function() {
   return this.control_;

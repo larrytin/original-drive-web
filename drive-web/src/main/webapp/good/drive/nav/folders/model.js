@@ -11,10 +11,15 @@ good.drive.nav.folders.Model = function(str) {
   window.modelbak = this;
   var that = this;
   var onInit = function(mod) {
-    that.initmap(mod);
+    that.initdata(mod);
   };
+  
+  this._docId = str;
+  
+  this.isloaded = false;
 
   var onLoad = function(doc) {
+    that.isloaded = true;
     that.doc = doc;
     that.mod = that.doc.getModel();
     that.root = that.mod.getRoot();
@@ -24,7 +29,7 @@ good.drive.nav.folders.Model = function(str) {
     that.connect(doc);
   };
   good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
-      '/' + str, onLoad, onInit, null);
+      '/' + this._docId, onLoad, onInit, null);
 };
 
 /**
@@ -48,8 +53,28 @@ good.drive.nav.folders.Model.prototype.connect = function(doc) {
 };
 
 /**
+ * @return {boolean}
+ */
+good.drive.nav.folders.Model.prototype.isloaded = function() {
+  return this.isloaded;
+};
+
+/**
+ * @param {boolean} isloaded
+ */
+good.drive.nav.folders.Model.prototype.setIsloaded = function(isloaded) {
+  this.isloaded = isloaded;
+};
+
+/**
+ * @param {good.realtime.Model} mod
+ */
+good.drive.nav.folders.Model.prototype.initdata = function(mod) {
+};
+
+/**
  * @param {good.realtime.CollaborativeList} list
- * @param {Array.<Object>} children
+ * @param {Array.<good.realtime.CollaborativeMap>} children
  */
 good.drive.nav.folders.Model.prototype.pushAll = function(list, children) {
   list.pushAll(children);
@@ -134,53 +159,10 @@ good.drive.nav.folders.Model.prototype.getfileMap =
 };
 
 /**
- * @param {good.realtime.Model} mod
+ * @return {string}
  */
-good.drive.nav.folders.Model.prototype.initmap = function(mod) {
-  var name = good.drive.nav.folders.Model.BASEDATA;
-  var root_ = mod.getRoot();
-
-  var rootFolders = mod.createList();
-  var rootFiles = mod.createList();
-  root_.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
-      rootFolders);
-  root_.set(good.drive.nav.folders.Model.strType.FILECHILD,
-      rootFiles);
-//  var pathList = mod.createList();
-//  pathList.push(root_);
-  root_.set(good.drive.nav.folders.Model.strType.PATH, mod.createList());
-  root_.set(good.drive.nav.folders.Model.strType.LABEL, '我的资料库');
-
-  var folder;
-  var subFolders;
-  var subFolder;
-
-  var folders = [];
-  for (var i in name) {
-    folder = mod.createMap();
-    folder.set(good.drive.nav.folders.Model.strType.LABEL, name[i]);
-    folder.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
-        mod.createList());
-    folder.set(good.drive.nav.folders.Model.strType.FILECHILD,
-        mod.createList());
-    folders.push(folder);
-  }
-  rootFolders.pushAll(folders);
-
-  for (var i in name) {
-    subFolders = folders[i].get(
-        good.drive.nav.folders.Model.strType.FOLDERSCHILD);
-    for (var j in name) {
-      subFolder = mod.createMap();
-      subFolder.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
-          mod.createList());
-      subFolder.set(good.drive.nav.folders.Model.strType.FILECHILD,
-          mod.createList());
-      subFolder.set(good.drive.nav.folders.Model.strType.LABEL,
-          name[i] + j);
-      subFolders.push(subFolder);
-    }
-  }
+good.drive.nav.folders.Model.prototype.docId = function() {
+  return this._docId;
 };
 
 /**

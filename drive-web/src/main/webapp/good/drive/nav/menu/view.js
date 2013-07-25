@@ -68,6 +68,9 @@ good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
  */
 good.drive.nav.menu.View.prototype.leftSubMenu = function(dom, handle) {
   this.left_.attach(dom, undefined, undefined, true);
+  this.left_.getHandler().listen(this.left_, goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
+    var str = '';
+  });
   goog.events.listen(this.left_, 'action', handle);
   return this.left_;
 };

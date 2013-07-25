@@ -16,7 +16,6 @@ goog.require('goog.ui.Component');
 good.drive.nav.grid.View = function(node, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
   this.node = node;
-  this.head_ = {};
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
@@ -26,9 +25,14 @@ goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 good.drive.nav.grid.View.grids = {};
 
 /**
+ * @type {good.drive.nav.grid.View}
+ */
+good.drive.nav.grid.View.currentGrid = undefined;
+
+/**
  * @param {goog.ui.tree.TreeControl} node
  */
-good.drive.nav.grid.View.createGrid = function(node) {
+good.drive.nav.grid.View.createGrid = function(node, docId) {
   var id = node.getId();
   if (goog.object.containsKey(good.drive.nav.grid.View.grids, id)) {
     good.drive.nav.grid.View.visiable(
@@ -38,19 +42,26 @@ good.drive.nav.grid.View.createGrid = function(node) {
   var grid = new good.drive.nav.grid.View(node);
   grid.render(goog.dom.getElement('viewmanager'));
   grid.renderCell(node);
+  if(!goog.object.containsKey(good.drive.nav.grid.View.grids, docId)) {
+    var cells = {};
+    goog.object.add(good.drive.nav.grid.View.grids, docId, cells);
+  }
+  var cells =  goog.object.get(good.drive.nav.grid.View.grids, docId);
   grid.renderFolderPath(good.drive.nav.folders.Model.strType.LABEL);
-  goog.object.add(good.drive.nav.grid.View.grids, id, grid);
+  goog.object.add(cells, id, grid);
   good.drive.nav.grid.View.visiable(grid);
 };
-
 
 /**
  * @param {good.drive.nav.grid.View} grid
  */
 good.drive.nav.grid.View.visiable = function(grid) {
-  goog.object.forEach(good.drive.nav.grid.View.grids, function(value, key) {
-    goog.style.showElement(value.getElement());
-  });
+  if(good.drive.nav.grid.View.currentGrid != undefined) {
+    goog.style.showElement(good.drive.nav.grid.View.currentGrid.getElement());
+  }
+//  goog.object.forEach(good.drive.nav.grid.View.grids, function(value, key) {
+//  });
+  good.drive.nav.grid.View.currentGrid = grid;
   goog.style.showElement(grid.getElement(), 'none');
 };
 
