@@ -30,7 +30,7 @@ import com.goodow.realtime.ValuesAddedEvent;
 import com.goodow.realtime.ValuesRemovedEvent;
 import com.goodow.realtime.ValuesSetEvent;
 
-public class DataListFragment extends ListFragment implements
+public class LessonListFragment extends ListFragment implements
 		IRemoteDataFragment {
 	private CollaborativeList historyOpenedFolders;
 	private CollaborativeMap currentFolder;
@@ -153,7 +153,7 @@ public class DataListFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		MainActivity activity = (MainActivity) getActivity();
-
+		
 		activity.setIRemoteFrament(this);
 		activity.setLastiRemoteDataFragment(this);
 
@@ -188,7 +188,8 @@ public class DataListFragment extends ListFragment implements
 								.get(FOLDER_KEY)) {
 
 							// TODO
-							Toast.makeText(DataListFragment.this.getActivity(),
+							Toast.makeText(
+									LessonListFragment.this.getActivity(),
 									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
 									.show();
 
@@ -313,7 +314,7 @@ public class DataListFragment extends ListFragment implements
 
 		String docId = "@tmp/"
 				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/favorites";
+				+ "/lesson";
 
 		// String docId = "@tmp/"
 		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
@@ -350,7 +351,6 @@ public class DataListFragment extends ListFragment implements
 		listenerList.removeListListener(listEventHandler);
 	}
 
-	@Override
 	public void setMapListener(CollaborativeMap listenerMap) {
 		listenerMap.addValueChangedListener(valuesChangeEventHandler);
 	}

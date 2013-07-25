@@ -1,7 +1,6 @@
 package com.goodow.drive.android.toolutils;
 
 import com.goodow.drive.android.Interface.IDownloadProcess;
-import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.realtime.CollaborativeMap;
 
 public enum SimpleDownloadResources {

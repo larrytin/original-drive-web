@@ -1,15 +1,21 @@
 package com.goodow.drive.android.service;
 
+import java.io.File;
+import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
+import android.os.Handler;
 import android.os.IBinder;
+import android.os.Message;
 import android.util.Log;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.realtime.CollaborativeMap;
 import com.google.api.client.extensions.android.http.AndroidHttp;
@@ -45,6 +51,24 @@ public class MediaDownloadService extends Service {
 	public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
 
 	public static final String URL_6M = "http://mirror.bjtu.edu.cn/apache/maven/maven-3/3.1.0-alpha-1/binaries/apache-maven-3.1.0-alpha-1-bin.zip";
+
+	@SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				int progress = msg.getData().getInt("progress");
+
+				downloadProcess.downLoadProgress(progress);
+				break;
+			case -1:
+				downloadProcess.downLoadFinish();
+
+				break;
+			}
+		}
+	};
 
 	@Override
 	public void onCreate() {
@@ -120,32 +144,34 @@ public class MediaDownloadService extends Service {
 			switch (downloader.getDownloadState()) {
 			case MEDIA_IN_PROGRESS:
 				if (downloadProcess != null) {
-					downloadProcess.downLoadProgress((int) (downloader
-							.getProgress() * 100));
 
-					Log.i("DOWNLOAD",
-							"Media_iDownload_progress: "
-									+ downloader.getProgress() * 100);
+					Message message = new Message();
+					message.what = 1;
+					message.getData().putInt("progress",
+							(int) (downloader.getProgress() * 100));
+
+					handler.sendMessage(message);
+
 				}
 
 				downloadRes.set("progress", Integer.toString((int) (downloader
 						.getProgress() * 100)));
-				Log.i("DOWNLOAD", "Media_progress: " + downloader.getProgress()
-						* 100);
+
 				break;
 
 			case MEDIA_COMPLETE:
 				if (downloadProcess != null) {
-					downloadProcess.downLoadFinish();
+					Message message = new Message();
+					message.what = -1;
 
-					Log.i("DOWNLOAD", "Media_iDownload_complete");
+					handler.sendMessage(message);
+
 				}
 
 				downloadRes.set("progress", "100");
 				downloadRes.set("status",
 						DownloadStatusEnum.COMPLETE.getStatus());
 
-				Log.i("DOWNLOAD", "Media_complete");
 				break;
 
 			default:
@@ -157,8 +183,11 @@ public class MediaDownloadService extends Service {
 
 	private void doDownLoad(String... params) {
 		try {
-			setOut(openFileOutput((String) downloadRes.get("blobKey"),
-					MODE_PRIVATE));
+			File newFile = new File(
+					GlobalDataCacheForMemorySingleton.getInstance
+							.getOfflineResDirPath() + "/"+downloadRes.get("blobKey"));
+			FileOutputStream outputStream = new FileOutputStream(newFile);
+			setOut(outputStream);
 
 			MediaHttpDownloader downloader = new MediaHttpDownloader(
 					HTTP_TRANSPORT, new HttpRequestInitializer() {

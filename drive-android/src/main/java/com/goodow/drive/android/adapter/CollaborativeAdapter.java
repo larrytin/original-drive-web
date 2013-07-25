@@ -1,5 +1,6 @@
 package com.goodow.drive.android.adapter;
 
+import android.app.ListFragment;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -8,11 +9,10 @@ import android.widget.BaseAdapter;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
-
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.fragment.DataDetailFragment;
-import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 
@@ -20,15 +20,16 @@ public class CollaborativeAdapter extends BaseAdapter {
 	private CollaborativeList folderList;
 	private CollaborativeList fileList;
 	private LayoutInflater layoutInflater;
-	private DataListFragment fragment;
+	private IRemoteDataFragment fragment;
 
-	public CollaborativeAdapter(DataListFragment fragment,
+	public CollaborativeAdapter(IRemoteDataFragment fragment,
 			CollaborativeList folderList, CollaborativeList fileList) {
 		super();
 		this.folderList = folderList;
 		this.fileList = fileList;
 		this.fragment = fragment;
-		this.layoutInflater = LayoutInflater.from(this.fragment.getActivity());
+		this.layoutInflater = LayoutInflater
+				.from(((ListFragment) this.fragment).getActivity());
 	}
 
 	@Override
@@ -135,14 +136,19 @@ public class CollaborativeAdapter extends BaseAdapter {
 			button.setOnClickListener(new OnClickListener() {
 				@Override
 				public void onClick(View v) {
-					DataDetailFragment dataDetailFragment = ((MainActivity) fragment
-							.getActivity()).getDataDetailFragment();
+					MainActivity activity = (MainActivity) ((ListFragment) fragment)
+							.getActivity();
+
+					DataDetailFragment dataDetailFragment = activity
+							.getDataDetailFragment();
+					
 					dataDetailFragment.setFile(item);
 
 					dataDetailFragment.initView();
 
-					((MainActivity) fragment.getActivity())
-							.setDataDetailLayoutState(View.VISIBLE);
+					activity.setDataDetailLayoutState(View.VISIBLE);
+
+					activity.setIRemoteFrament(dataDetailFragment);
 				}
 			});
 		}
