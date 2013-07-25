@@ -21,6 +21,7 @@ import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ServingUrlOptions;
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
+import com.google.gson.JsonObject;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 
@@ -44,32 +45,27 @@ public class UploadServlet extends HttpServlet {
   @Inject
   private BlobInfoFactory blobInfoFactory;
   @Inject
-  private AttachmentEndpoint attachmentEndpoint;
-  @Inject
   private ImagesService imagesService;
 
   @Override
   public void doPost(HttpServletRequest req, HttpServletResponse resp) throws IOException {
     Map<String, List<BlobKey>> blobs = blobstoreService.getUploads(req);
-    Map<String, String> ids = new LinkedHashMap<String, String>();
+    Map<String, JsonObject> ids = new LinkedHashMap<String, JsonObject>();
     for (Map.Entry<String, List<BlobKey>> entry : blobs.entrySet()) {
       List<BlobKey> blobKeys = entry.getValue();
       log.info("blobKeys: " + blobKeys);
       BlobKey blobKey = Iterables.getOnlyElement(blobKeys);
       BlobInfo blobInfo = blobInfoFactory.loadBlobInfo(blobKey);
-      Attachment attachment = new Attachment();
+      JsonObject jsonTree = new Gson().toJsonTree(blobInfo).getAsJsonObject();
+      if (blobInfo.getContentType().startsWith("image/")) {
+        ServingUrlOptions servingUrlOptions = ServingUrlOptions.Builder.withBlobKey(blobKey);
+        String servingUrl = imagesService.getServingUrl(servingUrlOptions);
+        jsonTree.addProperty("thumbnail", servingUrl.substring(servingUrl.lastIndexOf('/') + 1));
+      }
       String filename = blobInfo.getFilename();
       filename = new String(filename.getBytes("ISO8859-1"), "UTF-8");
-      attachment.setFilename(filename);
-      attachment.setContentType(blobInfo.getContentType());
-      attachment.setCreation(blobInfo.getCreation());
-      attachment.setBlobKey(blobKey.getKeyString());
-      if (attachment.getContentType().startsWith("image/")) {
-        ServingUrlOptions servingUrlOptions = ServingUrlOptions.Builder.withBlobKey(blobKey);
-        attachment.setThumbnail(imagesService.getServingUrl(servingUrlOptions));
-      }
-      attachmentEndpoint.insert(attachment);
-      ids.put(entry.getKey(), attachment.getId());
+      jsonTree.addProperty("filename", filename);
+      ids.put(entry.getKey(), jsonTree);
     }
     resp.setContentType("application/json");
     resp.setHeader("Access-Control-Allow-Origin", "*");
