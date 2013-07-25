@@ -20,6 +20,7 @@ goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.search');
 goog.require('goog.dom');
+goog.require('good.drive.rightmenu');
 
 /**
  * @type {boolean}
@@ -117,7 +118,9 @@ good.drive.init.init = function() {
   if(goog.userAgent.IE && goog.userAgent.VERSION <10){
     var menulst = new Array('上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
-    popupmenu.createPopup(leftUpdateBtn.getElement(), null);
+    popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
+      
+    });
   }else{
     var menulst = new Array('文件...');
     var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
@@ -160,5 +163,7 @@ good.drive.init.init = function() {
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
 
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
+  
+  var ceshi = new good.drive.rightmenu.Rightmenu();
 };
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);
