@@ -62,6 +62,12 @@ good.drive.init.init = function() {
   pathControl.addPath(myResDocId, myResTree);
   pathControl.addPath(myClassResDocId, myclass);
   pathControl.addPath(publicResDocId, publicResTree);
+  
+  pathControl.pathload = function() {
+    good.drive.nav.grid.View.initGrid();
+  };
+  
+  good.drive.nav.folders.AbstractControl.linkload();
 
   var leftButton = new good.drive.nav.button.LeftButton();
   var leftCreateBtn = leftButton.createBtn();
