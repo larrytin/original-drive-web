@@ -17,12 +17,14 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LessonListFragment;
+import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
@@ -46,10 +48,14 @@ public class MainActivity extends RoboActivity {
 	// @InjectFragment
 	private LeftMenuFragment leftMenuFragment;
 	private DataListFragment dataListFragment;
-	// private LocalResFragment localResFragment;
+	private LocalResFragment localResFragment;
 	private OfflineListFragment offlineListFragment;
 	private DataDetailFragment dataDetailFragment;
 	private LessonListFragment lessonListFragment;
+
+	public LocalResFragment getLocalResFragment() {
+		return localResFragment;
+	}
 
 	public DataDetailFragment getDataDetailFragment() {
 		return dataDetailFragment;
@@ -177,6 +183,10 @@ public class MainActivity extends RoboActivity {
 
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
+
+		if (null == localResFragment) {
+			localResFragment = new LocalResFragment();
+		}
 
 		if (null == offlineListFragment) {
 			offlineListFragment = new OfflineListFragment();

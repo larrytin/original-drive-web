@@ -20,6 +20,14 @@ public class OfflineListFragment extends ListFragment implements
 		IRemoteDataFragment {
 	private OfflineAdapter adapter;
 
+	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+		@Override
+		public void onReceive(Context context, Intent intent) {
+			adapter.notifyDataSetChanged();
+		}
+
+	};
+
 	public void backFragment() {
 
 	}
@@ -42,13 +50,8 @@ public class OfflineListFragment extends ListFragment implements
 
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("NEW_RES_DOWNLOADING");
-		((MainActivity) getActivity()).registerReceiver(
-				new BroadcastReceiver() {
-					@Override
-					public void onReceive(Context context, Intent intent) {
-						adapter.notifyDataSetChanged();
-					}
-				}, intentFilter);
+		((MainActivity) getActivity()).registerReceiver(broadcastReceiver,
+				intentFilter);
 
 	}
 
@@ -57,4 +60,10 @@ public class OfflineListFragment extends ListFragment implements
 		// TODO Auto-generated method stub
 	}
 
+	@Override
+	public void onPause() {
+		super.onPause();
+		
+		((MainActivity) getActivity()).unregisterReceiver(broadcastReceiver);
+	}
 }

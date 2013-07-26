@@ -13,6 +13,7 @@ import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.fragment.DataDetailFragment;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 
@@ -125,7 +126,8 @@ public class CollaborativeAdapter extends BaseAdapter {
 			if (null != folderList && position < folderList.length() + 1) {
 				img_left.setImageResource(R.drawable.ic_type_folder);
 			} else {
-				img_left.setImageResource(R.drawable.ic_type_doc);
+				img_left.setImageResource(ToolsFunctionForThisProgect
+						.getFileIconByFileFullName("." + item.get("type")));
 			}
 
 			textViewContentString = (String) item.get("label");
@@ -141,7 +143,7 @@ public class CollaborativeAdapter extends BaseAdapter {
 
 					DataDetailFragment dataDetailFragment = activity
 							.getDataDetailFragment();
-					
+
 					dataDetailFragment.setFile(item);
 
 					dataDetailFragment.initView();

@@ -1,6 +1,9 @@
 package com.goodow.drive.android.fragment;
 
+import java.io.File;
+
 import android.app.ListFragment;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,7 +16,10 @@ import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.activity.play.AudioPlayActivity;
+import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.BaseModelEvent;
 import com.goodow.realtime.CollaborativeList;
@@ -153,7 +159,7 @@ public class LessonListFragment extends ListFragment implements
 		super.onActivityCreated(savedInstanceState);
 
 		MainActivity activity = (MainActivity) getActivity();
-		
+
 		activity.setIRemoteFrament(this);
 		activity.setLastiRemoteDataFragment(this);
 
@@ -182,16 +188,45 @@ public class LessonListFragment extends ListFragment implements
 				@Override
 				public void handleEvent(ValuesAddedEvent event) {
 					if (0 != historyOpenedFolders.length()) {
+						CollaborativeMap map = (CollaborativeMap) historyOpenedFolders
+								.get(historyOpenedFolders.length() - 1);
+						if (null == map.get(FOLDER_KEY)) {
 
-						if (null == ((CollaborativeMap) historyOpenedFolders
-								.get(historyOpenedFolders.length() - 1))
-								.get(FOLDER_KEY)) {
+							File file = new File(
+									GlobalDataCacheForMemorySingleton.getInstance
+											.getOfflineResDirPath()
+											+ "/"
+											+ map.get("blobKey"));
 
-							// TODO
-							Toast.makeText(
-									LessonListFragment.this.getActivity(),
-									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
-									.show();
+							if (file.exists()) {
+								Intent intent = null;
+
+								if (GlobalConstant.SupportResTypeEnum.MP3
+										.getTypeName().equals(map.get("type"))) {
+									intent = new Intent(getActivity(),
+											AudioPlayActivity.class);
+								} else if (GlobalConstant.SupportResTypeEnum.MP4
+										.getTypeName().equals(map.get("type"))) {
+									intent = new Intent(getActivity(),
+											VideoPlayActivity.class);
+								}
+
+								intent.putExtra(
+										AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
+												.name(), (String) map
+												.get("label"));
+								intent.putExtra(
+										AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
+												.name(),
+										GlobalDataCacheForMemorySingleton.getInstance
+												.getOfflineResDirPath()
+												+ "/"
+												+ (String) map.get("blobKey"));
+								getActivity().startActivity(intent);
+							} else {
+								Toast.makeText(getActivity(), "请先下载该文件.",
+										Toast.LENGTH_SHORT).show();
+							}
 
 							backFragment();
 						} else {

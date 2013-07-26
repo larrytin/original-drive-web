@@ -6,10 +6,12 @@ import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.EventHandler;
@@ -84,6 +86,12 @@ public class OfflineAdapter extends BaseAdapter {
 				R.layout.row_offlinelist, parent, false);
 
 		final CollaborativeMap item = (CollaborativeMap) getItem(position);
+
+		ImageView imageView = (ImageView) row
+				.findViewById(R.id.offlineFileIcon);
+		imageView.setImageResource(ToolsFunctionForThisProgect
+				.getFileIconByFileFullName("."+item.get("type")));
+
 		final TextView offlinefilename = (TextView) row
 				.findViewById(R.id.offlineFileName);
 		offlinefilename.setText((String) item.get("title"));

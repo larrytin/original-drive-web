@@ -25,7 +25,7 @@ import android.widget.Toast;
 public class LeftMenuFragment extends ListFragment {
 	public static enum MenuTypeEnum {
 		USER_NAME("用户帐户名称"), USER_LESSON_DATA("我的课程"), USER_REMOTE_DATA("我的收藏夹"), USER_OFFLINE_DATA(
-				"离线文件");
+				"离线文件"), LOCAL_RES("本地资源");
 		private final String menuName;
 
 		private MenuTypeEnum(String menuName) {
@@ -83,6 +83,10 @@ public class LeftMenuFragment extends ListFragment {
 				break;
 
 			case USER_OFFLINE_DATA:
+				img_left.setImageResource(R.drawable.ic_type_zip);
+				break;
+
+			case LOCAL_RES:
 				img_left.setImageResource(R.drawable.ic_type_zip);
 				break;
 
@@ -158,6 +162,15 @@ public class LeftMenuFragment extends ListFragment {
 					.beginTransaction();
 			fragmentTransaction
 					.replace(R.id.contentLayout, (Fragment) fragment);
+			fragmentTransaction.commit();
+			break;
+
+		case LOCAL_RES:
+
+			fragmentTransaction = mainActivity.getFragmentManager()
+					.beginTransaction();
+			fragmentTransaction
+					.replace(R.id.contentLayout, mainActivity.getLocalResFragment());
 			fragmentTransaction.commit();
 			break;
 

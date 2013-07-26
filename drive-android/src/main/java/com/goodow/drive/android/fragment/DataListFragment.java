@@ -188,10 +188,6 @@ public class DataListFragment extends ListFragment implements
 								.get(FOLDER_KEY)) {
 
 							// TODO
-							Toast.makeText(DataListFragment.this.getActivity(),
-									"你打开了一个文件!正在播放...", Toast.LENGTH_SHORT)
-									.show();
-
 							backFragment();
 						} else {
 							currentFolder = historyOpenedFolders

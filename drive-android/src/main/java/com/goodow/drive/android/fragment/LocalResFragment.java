@@ -10,10 +10,14 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.adapter.LocalResAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.realtime.CollaborativeMap;
 
-public class LocalResFragment extends ListFragment {
+public class LocalResFragment extends ListFragment implements
+		IRemoteDataFragment {
 	private LocalResAdapter localResAdapter;
 
 	private ArrayList<File> folderList = new ArrayList<File>();
@@ -24,6 +28,13 @@ public class LocalResFragment extends ListFragment {
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
 		return inflater.inflate(R.layout.fragment_folderlist, container, false);
+	}
+
+	@Override
+	public void onActivityCreated(Bundle savedInstanceState) {
+		super.onActivityCreated(savedInstanceState);
+
+		((MainActivity) getActivity()).setIRemoteFrament(this);
 	}
 
 	@Override
@@ -41,7 +52,7 @@ public class LocalResFragment extends ListFragment {
 			initDataSource(new File(parentDirectory));
 
 			if (parentDirectory.equals(GlobalDataCacheForMemorySingleton
-					.getInstance().getUserResDirPath())) {
+					.getInstance().getOfflineResDirPath())) {
 				parentDirectory = null;// 如果返回至用户文件夹,则置空父文件路径
 			} else {
 				parentDirectory = new File(parentDirectory).getParentFile()
@@ -66,7 +77,7 @@ public class LocalResFragment extends ListFragment {
 
 		initDataSource(new File(
 				GlobalDataCacheForMemorySingleton.getInstance
-						.getUserResDirPath()));
+						.getOfflineResDirPath()));
 	}
 
 	public void delFile(File file) {
@@ -103,5 +114,11 @@ public class LocalResFragment extends ListFragment {
 		}
 
 		localResAdapter.notifyDataSetChanged();
+	}
+
+	@Override
+	public void setMapListener(CollaborativeMap map) {
+		// TODO Auto-generated method stub
+
 	}
 }

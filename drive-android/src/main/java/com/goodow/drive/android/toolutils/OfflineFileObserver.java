@@ -34,6 +34,7 @@ public class OfflineFileObserver {
 		if (null != file) {
 			CollaborativeMap newFile = model.createMap(null);
 			newFile.set("title", file.get("label"));
+			newFile.set("type", file.get("type"));
 			newFile.set("url", file.get("url"));
 			newFile.set("progress", "0");
 			newFile.set("status",
