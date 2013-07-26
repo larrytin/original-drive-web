@@ -9,6 +9,7 @@ goog.require('goog.ui.Component');
 
 /**
  * @param {Object} data
+ * @param {string} docid
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
  * @extends {goog.ui.Component}
@@ -31,8 +32,6 @@ good.drive.nav.grid.View.grids = {};
 good.drive.nav.grid.View.currentGrid = undefined;
 
 /**
- * @param {Ojbect} data
- * @param {string} docid
  */
 good.drive.nav.grid.View.initGrid = function() {
   var path = good.drive.nav.folders.Path.getINSTANCE().path;
@@ -40,21 +39,26 @@ good.drive.nav.grid.View.initGrid = function() {
   pathlist.addValuesAddedListener(function(evt) {
     var id = pathlist.get(pathlist.length() - 1);
     var docid = path.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
-    if(!goog.object.containsKey(good.drive.nav.grid.View.grids, docid)) {
+    if (docid == good.constants.PUBLICRESDOCID) {
+      return;
+    }
+    if (!goog.object.containsKey(good.drive.nav.grid.View.grids, docid)) {
       var cells = {};
       goog.object.add(good.drive.nav.grid.View.grids, docid, cells);
     }
-    var cells =  goog.object.get(good.drive.nav.grid.View.grids, docid);
+    var cells = goog.object.get(good.drive.nav.grid.View.grids, docid);
     if (goog.object.containsKey(cells, id)) {
       good.drive.nav.grid.View.visiable(goog.object.get(cells, id));
       return;
     }
-    var model = goog.object.get(good.drive.nav.folders.AbstractControl.docs, docid);
+    var model = goog.object.get(
+        good.drive.nav.folders.AbstractControl.docs, docid);
     var data = model.getObject(id);
     var grid = new good.drive.nav.grid.View(data, docid);
     grid.render(goog.dom.getElement('viewmanager'));
     grid.renderCell(data);
-    grid.renderFolderPath(good.drive.nav.folders.Model.strType.LABEL);
+    grid.renderFolderPath(
+        good.drive.nav.folders.ViewControl.ViewControlType.LABEL);
     goog.object.add(cells, id, grid);
     good.drive.nav.grid.View.visiable(grid);
   });
@@ -64,7 +68,7 @@ good.drive.nav.grid.View.initGrid = function() {
  * @param {good.drive.nav.grid.View} grid
  */
 good.drive.nav.grid.View.visiable = function(grid) {
-  if(good.drive.nav.grid.View.currentGrid != undefined) {
+  if (good.drive.nav.grid.View.currentGrid != undefined) {
     goog.style.showElement(good.drive.nav.grid.View.currentGrid.getElement());
   }
 //  goog.object.forEach(good.drive.nav.grid.View.grids, function(value, key) {
@@ -77,8 +81,9 @@ good.drive.nav.grid.View.visiable = function(grid) {
  * @param {Object} data
  */
 good.drive.nav.grid.View.prototype.renderCell = function(data) {
-  var file = data.get(good.drive.nav.folders.Model.strType.FILECHILD);
-  var folder = data.get(good.drive.nav.folders.Model.strType.FOLDERSCHILD);
+  var file = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
+  var folder = data.get(
+      good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS);
   for (var i = 0; i < file.length(); i++) {
     var data = file.get(i);
     this.insertCell(data, false);
@@ -107,7 +112,8 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
   var pathElm = this.getFolderPathElement();
   goog.dom.removeChildren(pathElm);
   var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;
-  var model = goog.object.get(good.drive.nav.folders.AbstractControl.docs, this.docid);
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, this.docid);
   for (var i = 0; i < path.length(); i++) {
     var id = path.get(i);
     var value = model.getObject(id);

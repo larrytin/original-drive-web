@@ -9,7 +9,6 @@ good.drive.nav.folders.Model = function(str) {
 //  this.view = view;
 
   window.modelbak = this;
-  
   this._docId = str;
   this._isloaded = false;
   this._doc = undefined;
@@ -32,20 +31,6 @@ good.drive.nav.folders.Model = function(str) {
 //  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
 //      '/' + this._docId, onLoad, onInit, null);
 };
-
-/**
- * @enum {string}
- */
-good.drive.nav.folders.Model.strType = {
-  LABEL: 'label',
-  FOLDERS: 'folders',
-  FOLDERSCHILD: 'folders',
-  FILECHILD: 'files',
-  PATH: 'path'
-};
-
-/** @type {string} */
-good.drive.nav.folders.Model.BASEDATA = ['我的课件', '我的音乐', '我的视频', '我的图片'];
 
 /**
  * @param {good.realtime.Document} doc
@@ -98,6 +83,12 @@ good.drive.nav.folders.Model.prototype.removeChildByIdx = function(list, idx) {
   list.remove(idx);
 };
 
+/**
+ * @return {good.realtime.CollaborativeList}
+ */
+good.drive.nav.folders.Model.prototype.createList = function() {
+  return this._mod.createList();
+};
 
 /**
  * @param {good.realtime.CollaborativeList} list
@@ -123,6 +114,8 @@ good.drive.nav.folders.Model.prototype.clear = function(list) {
   list.clear();
 };
 
+/**
+ */
 good.drive.nav.folders.Model.prototype.load = function() {
   var that = this;
   var onInit = function(mod) {
@@ -133,7 +126,6 @@ good.drive.nav.folders.Model.prototype.load = function() {
     that._doc = doc;
     that._mod = that._doc.getModel();
     that._root = that._mod.getRoot();
-    
     that.loadOther();
     // connectUi();
     that.connect(doc);
@@ -142,6 +134,8 @@ good.drive.nav.folders.Model.prototype.load = function() {
       '/' + this._docId, onLoad, onInit, null);
 };
 
+/**
+ */
 good.drive.nav.folders.Model.prototype.loadOther = function() {
 };
 
@@ -189,9 +183,12 @@ good.drive.nav.folders.Model.prototype.docId = function() {
   return this._docId;
 };
 
+/**
+ * @return {good.realtime.Model}
+ */
 good.drive.nav.folders.Model.prototype.mod = function() {
   return this._mod;
-}
+};
 
 /**
  * @return {good.realtime.CollaborativeMap}

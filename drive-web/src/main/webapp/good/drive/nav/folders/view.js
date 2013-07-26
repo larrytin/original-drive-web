@@ -15,10 +15,11 @@ goog.require('goog.ui.tree.TreeControl');
  */
 good.drive.nav.folders.Tree = function(title, docid, control) {
   if (control == undefined) {
-    control = new good.drive.nav.folders.ViewControl(title, docid);
+    control = new good.drive.nav.folders.ViewControl(docid);
   }
   this.control_ = control;
   this.control_.setView(this);
+  this.control_.setTitle(title);
   var root = new goog.ui.tree.TreeControl('',
       good.drive.nav.folders.Tree.defaultConfig);
   root.render(goog.dom.getElement('navfolderslist'));
@@ -106,7 +107,8 @@ good.drive.nav.folders.Tree.prototype.extended =
  * @param {good.realtime.CollaborativeMap} pathroot
  * @param {Function} callback
  */
-good.drive.nav.folders.Tree.prototype.initPath = function(pathlist, pathroot, callback) {
+good.drive.nav.folders.Tree.prototype.initPath =
+  function(pathlist, pathroot, callback) {
   var that = this;
   this.changeHandle(function(e) {
     if (that.getCurrentItem() != null) {

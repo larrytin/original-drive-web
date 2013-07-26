@@ -15,4 +15,8 @@ good.constants.VERSION = 'v0.0.1';
 
 
 /** @type {string} */
-good.constants.PUBLICRESDOCID = 'publicRes02';
+good.constants.MYCLASSRESDOCID = 'myClassRes04';
+/** @type {string} */
+good.constants.MYRESDOCID = 'myRes04';
+/** @type {string} */
+good.constants.PUBLICRESDOCID = 'publicRes06';

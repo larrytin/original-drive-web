@@ -24,8 +24,10 @@ goog.inherits(good.drive.nav.grid.Cell, goog.ui.Component);
 
 /** */
 good.drive.nav.grid.Cell.prototype.renderCell = function() {
-  var label = this.data.get(good.drive.nav.folders.Model.strType.LABEL);
-  var labelElm = goog.dom.createDom('div', {'class': 'gv-view-name  dir=ltr'},
+  var label = this.data.get(
+      good.drive.nav.folders.ViewControl.ViewControlType.LABEL);
+  var labelElm = goog.dom.createDom('div',
+      {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
 };
@@ -51,7 +53,6 @@ good.drive.nav.grid.Cell.prototype.exitDocument = function() {
 good.drive.nav.grid.Cell.prototype.isFolder = function() {
   return this.isFolder_;
 };
-
 
 /**
  * @param {boolean} isFolder

@@ -8,39 +8,52 @@ goog.require('goog.ui.tree.TreeControl');
 
 /**
  * @constructor
- * @param {string} title
  * @param {string} docid
  * @extends {good.drive.nav.folders.AbstractControl}
  */
-good.drive.nav.folders.ViewControl = function(title, docid) {
+good.drive.nav.folders.ViewControl = function(docid) {
   good.drive.nav.folders.AbstractControl.call(this, docid);
-  this._title = title;
+  this._title = undefined;
 };
-goog.inherits(good.drive.nav.folders.ViewControl, good.drive.nav.folders.AbstractControl);
+goog.inherits(good.drive.nav.folders.ViewControl,
+    good.drive.nav.folders.AbstractControl);
+
+/**
+ * @enum {string}
+ */
+good.drive.nav.folders.ViewControl.ViewControlType = {
+  LABEL: 'label',
+  FOLDERS: 'folders',
+  FILES: 'files'
+};
+
+/** @type {string} */
+good.drive.nav.folders.ViewControl.BASEDATA = ['我的课件', '我的音乐', '我的视频', '我的图片'];
 
 /**
  * @override
  */
 good.drive.nav.folders.ViewControl.prototype.connect = function(doc) {
   this.mappingView(this.view(), this.model().getData());
-  this.model().getData().set(good.drive.nav.folders.Model.strType.LABEL, this._title);
+  this.model().getData().set(this.getKeyType().LABEL, this._title);
 };
 
 /**
  * @param {goog.ui.tree.TreeControl} view
  * @param {good.realtime.CollaborativeMap} data
  */
-good.drive.nav.folders.ViewControl.prototype.mappingView = function(view, data) {
+good.drive.nav.folders.ViewControl.prototype.mappingView =
+  function(view, data) {
   var tree = view.tree;
-  var root = tree.getTree();
-  this.addEvent(view.tree, data);
+  this.addEvent(tree, data);
 };
 
 /**
  * @param {goog.ui.tree.TreeControl} root
  * @param {good.realtime.CollaborativeList} path
  */
-good.drive.nav.folders.ViewControl.prototype.locationNode = function(root, path) {
+good.drive.nav.folders.ViewControl.prototype.locationNode =
+  function(root, path) {
   this.locationNode_(root, path, parseInt(0), path.length());
 };
 
@@ -82,7 +95,8 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {good.realtime.CollaborativeMap} pathmap
  */
-good.drive.nav.folders.ViewControl.prototype.buildPath = function(pathlist, pathmap) {
+good.drive.nav.folders.ViewControl.prototype.buildPath =
+  function(pathlist, pathmap) {
   var parentNode = this.view().getCurrentItem();
   var docid = pathmap.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
   if (docid != this.model().docId() &&
@@ -137,8 +151,17 @@ good.drive.nav.folders.ViewControl.prototype.addEvent = function(node, map) {
   if (this.bindData(node, map)) {
     return;
   }
-  this.dataHandle(node, node.folder);
-  this.nodeHandle(node, node.folder);
+  this.dataHandle(node, this.getViewSource(map));
+  this.nodeHandle(node, this.getViewSource(map));
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} map
+ * @return {Object}
+ */
+good.drive.nav.folders.ViewControl.prototype.getViewSource =
+  function(map) {
+  return map.get(this.getKeyType().FOLDERS);
 };
 
 /**
@@ -158,7 +181,7 @@ good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
     var grid = that.getGridById(id);
     for (var i in vals) {
       var val = vals[i];
-      var title = val.get(good.drive.nav.folders.Model.strType.LABEL);
+      var title = val.get(that.getKeyType().LABEL);
       var childNode = that.view().insertNode(node, idx, title);
       that.mapHander(node, childNode, val);
       that.addEvent(childNode, val);
@@ -207,7 +230,7 @@ good.drive.nav.folders.ViewControl.prototype.nodeHandle = function(node, list) {
         }
         for (var i = 0; i < list.length(); i++) {
           var val = list.get(i);
-          var title = val.get(good.drive.nav.folders.Model.strType.LABEL);
+          var title = val.get(that.getKeyType().LABEL);
           var childNode = that.view().insertNode(node, 0, title);
           that.mapHander(node, childNode, val);
           that.addEvent(childNode, val);
@@ -240,7 +263,7 @@ good.drive.nav.folders.ViewControl.prototype.mapHander =
   var that = this;
   map.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
-    if (property != good.drive.nav.folders.Model.strType.LABEL) {
+    if (property != this.getKeyType().LABEL) {
       return;
     }
     var newValue = evt.getNewValue();
@@ -263,10 +286,6 @@ good.drive.nav.folders.ViewControl.prototype.bindData = function(node, map) {
   }
   node.mapid = map.getId();
   node.map = map;
-  node.folder = map.get(
-      good.drive.nav.folders.Model.strType.FOLDERSCHILD);
-  node.file = map.get(
-      good.drive.nav.folders.Model.strType.FILECHILD);
   return false;
 };
 
@@ -274,8 +293,10 @@ good.drive.nav.folders.ViewControl.prototype.bindData = function(node, map) {
  * @param {string} id
  * @return {good.drive.nav.grid.View}
  */
-good.drive.nav.folders.ViewControl.prototype.getGridById = function(id) {
-  var cells = goog.object.get(good.drive.nav.grid.View.grids, this.model().docId());
+good.drive.nav.folders.ViewControl.prototype.getGridById =
+  function(id) {
+  var cells = goog.object.get(
+      good.drive.nav.grid.View.grids, this.model().docId());
   if (!goog.object.containsKey(cells, id)) {
     return null;
   }
@@ -286,8 +307,10 @@ good.drive.nav.folders.ViewControl.prototype.getGridById = function(id) {
  * @param {string} id
  * @return {good.drive.nav.grid.View}
  */
-good.drive.nav.folders.ViewControl.prototype.removeGridById = function(id) {
-  var cells = goog.object.get(good.drive.nav.grid.View.grids, this.model().docId());
+good.drive.nav.folders.ViewControl.prototype.removeGridById =
+  function(id) {
+  var cells = goog.object.get(good.drive.nav.grid.View.grids,
+      this.model().docId());
   return goog.object.remove(cells, id);
 };
 
@@ -305,7 +328,8 @@ good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, str) {
  * @param {number} idx
  * @param {string} str
  */
-good.drive.nav.folders.ViewControl.prototype.renameLeaf = function(node, idx, str) {
+good.drive.nav.folders.ViewControl.prototype.renameLeaf =
+  function(node, idx, str) {
   this.model().renameLabel(this.model().getChildByIdx(node.folder, idx), str);
 };
 
@@ -315,6 +339,13 @@ good.drive.nav.folders.ViewControl.prototype.renameLeaf = function(node, idx, st
  */
 good.drive.nav.folders.ViewControl.prototype.removeLeaf = function(node, idx) {
   this.model().removeChildByIdx(node.folder, idx);
+};
+
+/**
+ * @param {string} title
+ */
+good.drive.nav.folders.ViewControl.prototype.setTitle = function(title) {
+  this._title = title;
 };
 
 /**
@@ -332,22 +363,25 @@ good.drive.nav.folders.ViewControl.prototype.setView = function(view) {
 };
 
 /**
+ * @return {Object}
+ */
+good.drive.nav.folders.ViewControl.prototype.getKeyType = function() {
+  return good.drive.nav.folders.ViewControl.ViewControlType;
+};
+
+/**
  * @override
  */
 good.drive.nav.folders.ViewControl.prototype.initdata = function(mod) {
-  var name = good.drive.nav.folders.Model.BASEDATA;
+  var name = good.drive.nav.folders.ViewControl.BASEDATA;
   var root_ = mod.getRoot();
 
   var rootFolders = mod.createList();
   var rootFiles = mod.createList();
-  root_.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+  root_.set(this.getKeyType().FOLDERS,
       rootFolders);
-  root_.set(good.drive.nav.folders.Model.strType.FILECHILD,
+  root_.set(this.getKeyType().FILES,
       rootFiles);
-//  var pathList = mod.createList();
-//  pathList.push(root_);
-  root_.set(good.drive.nav.folders.Model.strType.PATH, mod.createList());
-  root_.set(good.drive.nav.folders.Model.strType.LABEL, '我的资料库');
 
   var folder;
   var subFolders;
@@ -356,10 +390,10 @@ good.drive.nav.folders.ViewControl.prototype.initdata = function(mod) {
   var folders = [];
   for (var i in name) {
     folder = mod.createMap();
-    folder.set(good.drive.nav.folders.Model.strType.LABEL, name[i]);
-    folder.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+    folder.set(this.getKeyType().LABEL, name[i]);
+    folder.set(this.getKeyType().FOLDERS,
         mod.createList());
-    folder.set(good.drive.nav.folders.Model.strType.FILECHILD,
+    folder.set(this.getKeyType().FILES,
         mod.createList());
     folders.push(folder);
   }
@@ -367,14 +401,14 @@ good.drive.nav.folders.ViewControl.prototype.initdata = function(mod) {
 
   for (var i in name) {
     subFolders = folders[i].get(
-        good.drive.nav.folders.Model.strType.FOLDERSCHILD);
+        this.getKeyType().FOLDERS);
     for (var j in name) {
       subFolder = mod.createMap();
-      subFolder.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+      subFolder.set(this.getKeyType().FOLDERS,
           mod.createList());
-      subFolder.set(good.drive.nav.folders.Model.strType.FILECHILD,
+      subFolder.set(this.getKeyType().FILES,
           mod.createList());
-      subFolder.set(good.drive.nav.folders.Model.strType.LABEL,
+      subFolder.set(this.getKeyType().LABEL,
           name[i] + j);
       subFolders.push(subFolder);
     }

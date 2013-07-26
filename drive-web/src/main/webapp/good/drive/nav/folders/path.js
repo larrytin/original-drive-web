@@ -17,7 +17,8 @@ good.drive.nav.folders.Path = function(str) {
   this.pathlist = undefined;
   this.root = undefined;
 };
-goog.inherits(good.drive.nav.folders.Path, good.drive.nav.folders.AbstractControl);
+goog.inherits(good.drive.nav.folders.Path,
+    good.drive.nav.folders.AbstractControl);
 
 /**
  * @type {good.drive.nav.folders.Path}
@@ -27,7 +28,7 @@ good.drive.nav.folders.Path.INSTANCE;
 /**
  * @type {string}
  */
-good.drive.nav.folders.Path.PATHDOCID = 'path25';
+good.drive.nav.folders.Path.PATHDOCID = 'path26';
 
 /**
  * @enum {string}
@@ -37,12 +38,12 @@ good.drive.nav.folders.Path.NameType = {
     CURRENTPATH: 'currentpath',
     CURRENTDOCID: 'currentdocid'
 };
- 
+
 /**
  * @return {good.drive.nav.folders.Path}
  */
 good.drive.nav.folders.Path.getINSTANCE = function() {
-  if(good.drive.nav.folders.Path.INSTANCE == undefined) {
+  if (good.drive.nav.folders.Path.INSTANCE == undefined) {
     good.drive.nav.folders.Path.INSTANCE =
       new good.drive.nav.folders.Path(good.drive.nav.folders.Path.PATHDOCID);
   }
@@ -69,55 +70,63 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
       if (view == value) {
         return;
       }
-      if('recovery' in value) {
+      if ('recovery' in value) {
         value.recovery();
       }
     });
-    if('location' in view) {
+    if ('location' in view) {
       view.location(that.pathlist);
     }
   });
-  
   goog.object.forEach(this.pathHeap, function(value, key) {
-    if('initPath' in value) {
+    if ('initPath' in value) {
       var docid = path.get(that.pathNameType().CURRENTDOCID);
       value.initPath(that.pathlist, that.path, that.initCallBack);
     }
   });
-  
   this.pathload();
 };
 
+/**
+ */
 good.drive.nav.folders.Path.prototype.pathload = function() {
 };
 
+/**
+ * @return {Object}
+ */
 good.drive.nav.folders.Path.prototype.getCurrentData = function() {
   if (this.pathlist.length() == 0) {
     return null;
   }
   var dataid = this.pathlist.get(this.pathlist.length() - 1);
   var docid = this.path.get(this.pathNameType().CURRENTDOCID);
-  var model = goog.object.get(good.drive.nav.folders.AbstractControl.docs, docid);
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, docid);
   return model.getObject(dataid);
-}
+};
 
 /**
  * @param {string} docId
  * @param {Object} view
  */
 good.drive.nav.folders.Path.prototype.addPath = function(docId, view) {
-  if(this.containPathByDocId(docId)) {
+  if (this.containPathByDocId(docId)) {
     return;
   }
   goog.object.add(this.pathHeap, docId, view);
 };
 
+/**
+ * @param {string} docId
+ * @return {Object}
+ */
 good.drive.nav.folders.Path.prototype.getViewBydocId = function(docId) {
   if (!goog.object.containsKey(this.pathHeap, docId)) {
     return null;
   }
   return goog.object.get(this.pathHeap, docId);
-}
+};
 
 /**
  * @param {string} docId
@@ -145,7 +154,7 @@ good.drive.nav.folders.Path.prototype.containPathByDocId = function(docId) {
  * @return {Object}
  */
 good.drive.nav.folders.Path.prototype.getPathViewByDocId = function(docId) {
-  if(!this.containPathByDocId(docId)) {
+  if (!this.containPathByDocId(docId)) {
     return null;
   }
   return goog.object.get(this.pathHeap, docId);
@@ -159,12 +168,11 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   var path = mod.createMap();
   path.set(this.pathNameType().CURRENTPATH, mod.createList());
   path.set(this.pathNameType().CURRENTDOCID, '');
-  
   root.set(this.pathNameType().PATH, path);
 };
 
 /**
- * @enum {string}
+ * @return {Object}
  */
 good.drive.nav.folders.Path.prototype.pathNameType = function() {
   return good.drive.nav.folders.Path.NameType;

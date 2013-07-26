@@ -20,8 +20,11 @@ good.drive.nav.folders.AbstractControl = function(str) {
     that._model = model;
 };
 
+/**
+ */
 good.drive.nav.folders.AbstractControl.linkload = function() {
-  var models = goog.object.getValues(good.drive.nav.folders.AbstractControl.docs);
+  var models = goog.object.getValues(
+      good.drive.nav.folders.AbstractControl.docs);
   var count = goog.array.count(models, function() {
     return true;
   });
@@ -31,8 +34,9 @@ good.drive.nav.folders.AbstractControl.linkload = function() {
       model.load();
     }
     model.loadOther = function() {
-      var otherModel = good.drive.nav.folders.AbstractControl.hasModel(models, index + 1, count);
-      if(otherModel == null) {
+      var otherModel = good.drive.nav.folders.AbstractControl.hasModel(
+          models, index + 1, count);
+      if (otherModel == null) {
         return;
       }
       otherModel.load();
@@ -40,13 +44,20 @@ good.drive.nav.folders.AbstractControl.linkload = function() {
   });
 };
 
+/**
+ * @param {Array.<Object>} models
+ * @param {number} idx
+ * @param {number} count
+ * @return {good.drive.nav.folders.Model}
+ */
 good.drive.nav.folders.AbstractControl.hasModel = function(models, idx, count) {
-  if(count <= idx) {
+  if (count <= idx) {
     return null;
   }
   return models[idx];
 };
 
+/** @type {Object} */
 good.drive.nav.folders.AbstractControl.docs = {};
 
 /**
