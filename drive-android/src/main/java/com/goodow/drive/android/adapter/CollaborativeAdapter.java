@@ -123,36 +123,39 @@ public class CollaborativeAdapter extends BaseAdapter {
 			row.setTag(item);
 
 			ImageView img_left = (ImageView) row.findViewById(R.id.leftImage);
+			ImageButton button = (ImageButton) row.findViewById(R.id.delButton);
+
 			if (null != folderList && position < folderList.length() + 1) {
 				img_left.setImageResource(R.drawable.ic_type_folder);
+				button.setVisibility(View.INVISIBLE);
+				
 			} else {
 				img_left.setImageResource(ToolsFunctionForThisProgect
 						.getFileIconByFileFullName("." + item.get("type")));
+
+				button.setOnClickListener(new OnClickListener() {
+					@Override
+					public void onClick(View v) {
+						MainActivity activity = (MainActivity) ((ListFragment) fragment)
+								.getActivity();
+
+						DataDetailFragment dataDetailFragment = activity
+								.getDataDetailFragment();
+
+						dataDetailFragment.setFile(item);
+
+						dataDetailFragment.initView();
+
+						activity.setDataDetailLayoutState(View.VISIBLE);
+
+						activity.setIRemoteFrament(dataDetailFragment);
+					}
+				});
 			}
 
 			textViewContentString = (String) item.get("label");
 
 			fragment.setMapListener(item);
-
-			ImageButton button = (ImageButton) row.findViewById(R.id.delButton);
-			button.setOnClickListener(new OnClickListener() {
-				@Override
-				public void onClick(View v) {
-					MainActivity activity = (MainActivity) ((ListFragment) fragment)
-							.getActivity();
-
-					DataDetailFragment dataDetailFragment = activity
-							.getDataDetailFragment();
-
-					dataDetailFragment.setFile(item);
-
-					dataDetailFragment.initView();
-
-					activity.setDataDetailLayoutState(View.VISIBLE);
-
-					activity.setIRemoteFrament(dataDetailFragment);
-				}
-			});
 		}
 
 		TextView listItem = (TextView) row.findViewById(R.id.listItem);

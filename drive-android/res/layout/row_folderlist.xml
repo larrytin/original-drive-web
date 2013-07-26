@@ -12,6 +12,7 @@
         android:layout_height="@dimen/listItemHeigh"
         android:layout_alignParentLeft="true"
         android:layout_marginRight="10dp"
+        android:contentDescription="@string/contentDescription"
         android:gravity="center_vertical" />
 
     <TextView
@@ -28,6 +29,7 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="20dp"
         android:background="@drawable/selector_delbutton_bg"
+        android:contentDescription="@string/contentDescription"
         android:src="@drawable/ic_update_normal" />
 
 </RelativeLayout>
