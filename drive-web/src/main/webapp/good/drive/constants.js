@@ -17,10 +17,10 @@ good.constants.VERSION = 'v0.0.1';
 
 
 /** @type {string} */
-good.constants.MYCLASSRESDOCID = 'myClassRes06';
+good.constants.MYCLASSRESDOCID = 'lesson01';
 /** @type {string} */
-good.constants.MYRESDOCID = 'myRes06';
+good.constants.MYRESDOCID = 'favorites01';
 /** @type {string} */
-good.constants.PUBLICRESDOCID = 'publicRes14';
+good.constants.PUBLICRESDOCID = '@tmp/publicRes14';
 /** @type {string} */
-good.constants.PATHDOCID = 'path26';
+good.constants.PATHDOCID = 'remotecontrol01';

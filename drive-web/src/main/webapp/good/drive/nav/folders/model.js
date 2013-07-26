@@ -104,7 +104,8 @@ good.drive.nav.folders.Model.prototype.getChildByIdx = function(list, idx) {
  * @param {string} str
  */
 good.drive.nav.folders.Model.prototype.renameLabel = function(map, str) {
-  map.set(good.drive.nav.folders.Model.strType.LABEL, str);
+  map.set(
+      good.drive.nav.folders.ViewControl.ViewControlType.LABEL, str);
 };
 
 /**
@@ -130,8 +131,7 @@ good.drive.nav.folders.Model.prototype.load = function() {
     // connectUi();
     that.connect(doc);
   };
-  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
-      '/' + this._docId, onLoad, onInit, null);
+  good.realtime.load(this._docId, onLoad, onInit, null);
 };
 
 /**
@@ -146,13 +146,16 @@ good.drive.nav.folders.Model.prototype.loadOther = function() {
 good.drive.nav.folders.Model.prototype.getLeaf =
     function(str) {
   var map = this._mod.createMap();
-  map.set(good.drive.nav.folders.Model.strType.LABEL,
+  map.set(
+      good.drive.nav.folders.ViewControl.ViewControlType.LABEL,
       str);
   var list = this._mod.createList();
-  map.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
+  map.set(
+      good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS,
       list);
   list = this._mod.createList();
-  map.set(good.drive.nav.folders.Model.strType.FILECHILD,
+  map.set(
+      good.drive.nav.folders.ViewControl.ViewControlType.FILES,
       list);
 
   return map;
@@ -167,7 +170,7 @@ good.drive.nav.folders.Model.prototype.getLeaf =
 good.drive.nav.folders.Model.prototype.getfileMap =
     function(name, url, type) {
   var map = this._mod.createMap();
-  map.set(good.drive.nav.folders.Model.strType.LABEL,
+  map.set(good.drive.nav.folders.ViewControl.ViewControlType.LABEL,
       name);
   map.set('url', url);
   map.set('type', type);

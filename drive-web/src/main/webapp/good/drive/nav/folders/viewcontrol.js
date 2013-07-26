@@ -320,7 +320,7 @@ good.drive.nav.folders.ViewControl.prototype.removeGridById =
  */
 good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, str) {
   var map = this.model().getLeaf(str);
-  this.model().push(node.folder, map);
+  this.model().push(this.getViewSource(node.map), map);
 };
 
 /**
@@ -330,7 +330,8 @@ good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, str) {
  */
 good.drive.nav.folders.ViewControl.prototype.renameLeaf =
   function(node, idx, str) {
-  this.model().renameLabel(this.model().getChildByIdx(node.folder, idx), str);
+  this.model().renameLabel(
+      this.model().getChildByIdx(this.getViewSource(node.map), idx), str);
 };
 
 /**
@@ -338,7 +339,7 @@ good.drive.nav.folders.ViewControl.prototype.renameLeaf =
  * @param {number} idx
  */
 good.drive.nav.folders.ViewControl.prototype.removeLeaf = function(node, idx) {
-  this.model().removeChildByIdx(node.folder, idx);
+  this.model().removeChildByIdx(this.getViewSource(node.map), idx);
 };
 
 /**
