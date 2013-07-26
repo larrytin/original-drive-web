@@ -52,8 +52,7 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   rootFolders.pushAll(folders);
 
   for (var i = 0; i < fieldArray.length; i++) {
-    subFolders = folders[i].get(
-        good.drive.nav.folders.Model.strType.FOLDERSCHILD);
+    subFolders = folders[i].get(this.getKeyType().FOLDERS);
   goog.array.forEach(gradeArray, function(e) {
     subFolder = mod.createMap();
     subFolder.set('label', e);
