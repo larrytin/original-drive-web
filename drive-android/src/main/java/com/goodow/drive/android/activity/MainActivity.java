@@ -214,9 +214,14 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 
+//		String docId = "@tmp/"
+//				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+//				+ "/remotecontrol";
+		
 		String docId = "@tmp/"
 				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/remotecontrol";
+				+ "/remotecontrol01";
+		
 		remoteControlObserver = new RemoteControlObserver();
 		remoteControlObserver.startObservation(docId);
 	}

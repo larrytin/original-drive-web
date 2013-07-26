@@ -390,13 +390,13 @@ public class LessonListFragment extends ListFragment implements
 			}
 		};
 
-		String docId = "@tmp/"
-				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/lesson";
+//		String docId = "@tmp/"
+//				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+//				+ "/lesson";
 
-		// String docId = "@tmp/"
-		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		// + "/androidTest002";
+		 String docId = "@tmp/"
+		 + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+		 + "/lesson01";
 
 		Realtime.load(docId, onLoaded, initializer, null);
 
