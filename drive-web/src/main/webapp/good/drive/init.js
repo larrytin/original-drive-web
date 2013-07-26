@@ -46,6 +46,13 @@ good.drive.init.init = function() {
   var createInput;
   var modifeInput;
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
+  var baseDocid = '@tmp/' + good.auth.Auth.current.userId + '/';
+  good.constants.MYRESDOCID = baseDocid +
+    good.constants.MYRESDOCID;
+  good.constants.MYCLASSRESDOCID = baseDocid +
+    good.constants.MYCLASSRESDOCID;
+  good.constants.PATHDOCID = baseDocid +
+    good.constants.PATHDOCID;
 
   good.config.start();
   var auth = good.auth.Auth.current;

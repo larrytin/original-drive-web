@@ -226,7 +226,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
             delete insertJson.md5Hash;
             if (good.drive.creation.Fileupload.TYPE == 'new') {
               var tags = that.getTags();
-              insertJson['tags'] = tags;              
+              insertJson['tags'] = tags;
               that.insertfile(insertJson, function() {
                 goog.dom.getElement(filename).innerText = '上传结束';
               });
@@ -272,7 +272,7 @@ good.drive.creation.Fileupload.prototype.updateAgain =
       good.constants.VERSION, 'attachment/' + fileId,
       good.constants.SERVERADRESS);
   rpc.send(function(json) {
-     if (json && !json['error']) {      
+     if (json && !json['error']) {
        updatejson['tags'] = json['tags'];
        updatejson['id'] = json['id'];
        var rpc = new good.net.CrossDomainRpc('POST',
@@ -283,7 +283,6 @@ good.drive.creation.Fileupload.prototype.updateAgain =
        rpc.send(function(json) {
          fn();
       });
-         
        }
      });
 };
