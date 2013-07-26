@@ -269,7 +269,7 @@ good.drive.search.AdvancedMenu.prototype.search = function() {
     rpc.send(function(json) {
       //填充网格数据
       alert('333');
-    });  
+    });
 };
 
 
