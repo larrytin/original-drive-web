@@ -10,13 +10,10 @@ goog.require('goog.ui.tree.TreeControl');
  * @constructor
  * @param {string} title
  * @param {string} docid
- * @param {Object} view
- * @param {number} level
  * @extends {good.drive.nav.folders.AbstractControl}
  */
-good.drive.nav.folders.ViewControl = function(title, docid, view, level) {
-  good.drive.nav.folders.AbstractControl.call(this, docid, level);
-  this._view = view;
+good.drive.nav.folders.ViewControl = function(title, docid) {
+  good.drive.nav.folders.AbstractControl.call(this, docid);
   this._title = title;
 };
 goog.inherits(good.drive.nav.folders.ViewControl, good.drive.nav.folders.AbstractControl);
@@ -325,6 +322,13 @@ good.drive.nav.folders.ViewControl.prototype.removeLeaf = function(node, idx) {
  */
 good.drive.nav.folders.ViewControl.prototype.view = function() {
   return this._view;
+};
+
+/**
+ * @param {Object} view
+ */
+good.drive.nav.folders.ViewControl.prototype.setView = function(view) {
+  this._view = view;
 };
 
 /**

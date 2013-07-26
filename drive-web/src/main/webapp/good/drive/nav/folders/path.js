@@ -9,7 +9,7 @@ goog.require('good.drive.nav.folders.AbstractControl');
  * @extends {good.drive.nav.folders.AbstractControl}
  */
 good.drive.nav.folders.Path = function(str) {
-  good.drive.nav.folders.AbstractControl.call(this, str, 3);
+  good.drive.nav.folders.AbstractControl.call(this, str);
   this.pathHeap = {};
   this.currentView = undefined;
   this.currentDocId = undefined;
@@ -27,7 +27,7 @@ good.drive.nav.folders.Path.INSTANCE;
 /**
  * @type {string}
  */
-good.drive.nav.folders.Path.PATHDOCID = 'path24';
+good.drive.nav.folders.Path.PATHDOCID = 'path25';
 
 /**
  * @enum {string}
@@ -35,7 +35,7 @@ good.drive.nav.folders.Path.PATHDOCID = 'path24';
 good.drive.nav.folders.Path.NameType = {
     PATH: 'path',
     CURRENTPATH: 'currentpath',
-    CURRENTDOCID: 'docid'
+    CURRENTDOCID: 'currentdocid'
 };
  
 /**
@@ -112,6 +112,13 @@ good.drive.nav.folders.Path.prototype.addPath = function(docId, view) {
   goog.object.add(this.pathHeap, docId, view);
 };
 
+good.drive.nav.folders.Path.prototype.getViewBydocId = function(docId) {
+  if (!goog.object.containsKey(this.pathHeap, docId)) {
+    return null;
+  }
+  return goog.object.get(this.pathHeap, docId);
+}
+
 /**
  * @param {string} docId
  */
@@ -119,6 +126,7 @@ good.drive.nav.folders.Path.prototype.initCallBack = function(docId) {
   var pathcontrol = good.drive.nav.folders.Path.getINSTANCE();
   pathcontrol.path.set(
       good.drive.nav.folders.Path.NameType.CURRENTDOCID, docId);
+  pathcontrol.currentDocId = docId;
 };
 
 /**

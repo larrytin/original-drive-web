@@ -11,14 +11,14 @@ goog.require('goog.ui.tree.TreeControl');
  * @constructor
  * @param {string} title
  * @param {string} docid
- * @param {number} level
  * @param {good.drive.nav.folders.ViewControl} control
  */
-good.drive.nav.folders.Tree = function(title, docid, level, control) {
+good.drive.nav.folders.Tree = function(title, docid, control) {
   if (control == undefined) {
-    control = new good.drive.nav.folders.ViewControl(title, docid, this, level);
+    control = new good.drive.nav.folders.ViewControl(title, docid);
   }
   this.control_ = control;
+  this.control_.setView(this);
   var root = new goog.ui.tree.TreeControl('',
       good.drive.nav.folders.Tree.defaultConfig);
   root.render(goog.dom.getElement('navfolderslist'));

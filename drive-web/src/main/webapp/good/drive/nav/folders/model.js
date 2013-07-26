@@ -39,8 +39,8 @@ good.drive.nav.folders.Model = function(str) {
 good.drive.nav.folders.Model.strType = {
   LABEL: 'label',
   FOLDERS: 'folders',
-  FOLDERSCHILD: 'folderschild',
-  FILECHILD: 'filechild',
+  FOLDERSCHILD: 'folders',
+  FILECHILD: 'files',
   PATH: 'path'
 };
 
@@ -151,13 +151,13 @@ good.drive.nav.folders.Model.prototype.loadOther = function() {
  */
 good.drive.nav.folders.Model.prototype.getLeaf =
     function(str) {
-  var map = this.mod.createMap();
+  var map = this._mod.createMap();
   map.set(good.drive.nav.folders.Model.strType.LABEL,
       str);
-  var list = this.mod.createList();
+  var list = this._mod.createList();
   map.set(good.drive.nav.folders.Model.strType.FOLDERSCHILD,
       list);
-  list = this.mod.createList();
+  list = this._mod.createList();
   map.set(good.drive.nav.folders.Model.strType.FILECHILD,
       list);
 
@@ -172,7 +172,7 @@ good.drive.nav.folders.Model.prototype.getLeaf =
  */
 good.drive.nav.folders.Model.prototype.getfileMap =
     function(name, url, type) {
-  var map = this.mod.createMap();
+  var map = this._mod.createMap();
   map.set(good.drive.nav.folders.Model.strType.LABEL,
       name);
   map.set('url', url);
@@ -188,6 +188,10 @@ good.drive.nav.folders.Model.prototype.getfileMap =
 good.drive.nav.folders.Model.prototype.docId = function() {
   return this._docId;
 };
+
+good.drive.nav.folders.Model.prototype.mod = function() {
+  return this._mod;
+}
 
 /**
  * @return {good.realtime.CollaborativeMap}

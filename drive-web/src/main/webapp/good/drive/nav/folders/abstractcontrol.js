@@ -6,13 +6,9 @@ goog.require('good.drive.nav.folders.Model');
 /**
  * @constructor
  * @param {string} str
- * @param {number} level
  */
-good.drive.nav.folders.AbstractControl = function(str, level) {
+good.drive.nav.folders.AbstractControl = function(str) {
   var that = this;
-  if (level == undefined) {
-    level = 0;
-  }
     var model = new good.drive.nav.folders.Model(str);
     goog.object.add(good.drive.nav.folders.AbstractControl.docs, str, model);
     model.connect = function(doc) {
@@ -50,8 +46,6 @@ good.drive.nav.folders.AbstractControl.hasModel = function(models, idx, count) {
   }
   return models[idx];
 };
-
-good.drive.nav.folders.AbstractControl.syncTime = 200;
 
 good.drive.nav.folders.AbstractControl.docs = {};
 
