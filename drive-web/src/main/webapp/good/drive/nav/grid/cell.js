@@ -110,17 +110,8 @@ good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
   if (!this.isFolder()) {
     return;
   }
-  var parent = this.getParent().node;
-  if (!parent.getExpanded()) {
-    parent.setExpanded(true);
-  }
-  for (var i = 0; i < parent.getChildCount(); i++) {
-    var node = parent.getChildAt(i);
-    if (node.map.getId() == this.data.getId()) {
-      node.getTree().setSelectedItem(node);
-      break;
-    }
-  }
+  var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;
+  path.push(this.data.getId());
 };
 
 /** @override */

@@ -8,14 +8,16 @@ goog.require('goog.ui.tree.TreeControl');
 
 /**
  * @constructor
- * @param {string} str
+ * @param {string} title
+ * @param {string} docid
  * @param {Object} view
  * @param {number} level
  * @extends {good.drive.nav.folders.AbstractControl}
  */
-good.drive.nav.folders.ViewControl = function(str, view, level) {
-  good.drive.nav.folders.AbstractControl.call(this, str, level);
+good.drive.nav.folders.ViewControl = function(title, docid, view, level) {
+  good.drive.nav.folders.AbstractControl.call(this, docid, level);
   this._view = view;
+  this._title = title;
 };
 goog.inherits(good.drive.nav.folders.ViewControl, good.drive.nav.folders.AbstractControl);
 
@@ -24,6 +26,7 @@ goog.inherits(good.drive.nav.folders.ViewControl, good.drive.nav.folders.Abstrac
  */
 good.drive.nav.folders.ViewControl.prototype.connect = function(doc) {
   this.mappingView(this.view(), this.model().getData());
+  this.model().getData().set(good.drive.nav.folders.Model.strType.LABEL, this._title);
 };
 
 /**
@@ -63,14 +66,14 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
   if (length == 0) {
     return;
   }
-  var pathId = path.get(idx).getId();
+  var pathId = path.get(idx);
   for (var i = 0; i < length; i++) {
     var child = parentNode.getChildAt(i);
-    var childId = child.map.getId();
+    var childId = child.mapid;
     if (childId == pathId) {
       if (idx == (pathleg - 1)) {
         child.getTree().setSelectedItem(child);
-        good.drive.nav.grid.View.createGrid(child, this.model().docId());
+//        good.drive.nav.grid.View.createGrid(child.map, this.model().docId());
       }
       this.locationNode_(child, path, idx + 1, pathleg);
       break;
@@ -80,19 +83,19 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
 
 /**
  * @param {good.realtime.CollaborativeList} pathlist
- * @return {boolean}
+ * @param {good.realtime.CollaborativeMap} pathmap
  */
-good.drive.nav.folders.ViewControl.prototype.buildPath = function(pathlist) {
+good.drive.nav.folders.ViewControl.prototype.buildPath = function(pathlist, pathmap) {
   var parentNode = this.view().getCurrentItem();
-  if (parentNode == null || this.isCurrentPath(pathlist, parentNode.mapid)) {
-    return false;
+  var docid = pathmap.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
+  if (docid != this.model().docId() &&
+      (parentNode == null || this.isCurrentPath(pathlist, parentNode.mapid))) {
+    return;
   }
   var paths = [];
   pathlist.clear();
-  pathlist.push(this.model().docId());
   this.buildPath_(parentNode, paths);
   pathlist.pushAll(paths);
-  return true;
 };
 
 /**
@@ -122,9 +125,8 @@ good.drive.nav.folders.ViewControl.prototype.isCurrentPath =
   if (mapid == undefined) {
     return true;
   }
-  var docid = pathlist.get(0);
   var mapid_ = pathlist.get(pathlist.length() - 1);
-  if (mapid_ == mapid && docid == this.model().docId()) {
+  if (mapid_ == mapid) {
     return true;
   }
   return false;

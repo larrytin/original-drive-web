@@ -16,7 +16,7 @@ goog.require('goog.ui.tree.TreeControl');
  */
 good.drive.nav.folders.Tree = function(title, docid, level, control) {
   if (control == undefined) {
-    control = new good.drive.nav.folders.ViewControl(docid, this, level);
+    control = new good.drive.nav.folders.ViewControl(title, docid, this, level);
   }
   this.control_ = control;
   var root = new goog.ui.tree.TreeControl('',
@@ -31,7 +31,6 @@ good.drive.nav.folders.Tree = function(title, docid, level, control) {
       title + '&nbsp;</span>');
   root.add(tree_);
   tree_.setExpanded(false);
-//  root.setSelectedItem(tree_);
   this.customNode(tree_);
 
   this.roottree = root;
@@ -109,14 +108,11 @@ good.drive.nav.folders.Tree.prototype.extended =
  */
 good.drive.nav.folders.Tree.prototype.initPath = function(pathlist, pathroot, callback) {
   var that = this;
-//  if (pathlist.length == 0) {
-//    this.roottree.setSelectedItem(null);
-//  }
   this.changeHandle(function(e) {
-    if(!that.control().buildPath(pathlist, pathroot)) {
-      return;
+    if (that.getCurrentItem() != null) {
+      callback(that.control().model().docId());
     }
-//    callback(that.control().model().docId());
+    that.control().buildPath(pathlist, pathroot);
   });
 };
 
@@ -127,8 +123,10 @@ good.drive.nav.folders.Tree.prototype.recovery = function() {
 };
 
 /**
+ * @param {good.realtime.CollaborativeList} pathlist
  */
-good.drive.nav.folders.Tree.prototype.location = function() {
+good.drive.nav.folders.Tree.prototype.location = function(pathlist) {
+  this.control().locationNode(this.roottree, pathlist);
 };
 
 /**

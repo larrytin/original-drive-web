@@ -9,7 +9,7 @@ goog.require('good.drive.nav.folders.AbstractControl');
  * @extends {good.drive.nav.folders.AbstractControl}
  */
 good.drive.nav.folders.Path = function(str) {
-  good.drive.nav.folders.AbstractControl.call(this, str, 2);
+  good.drive.nav.folders.AbstractControl.call(this, str, 3);
   this.pathHeap = {};
   this.currentView = undefined;
   this.currentDocId = undefined;
@@ -27,7 +27,7 @@ good.drive.nav.folders.Path.INSTANCE;
 /**
  * @type {string}
  */
-good.drive.nav.folders.Path.PATHDOCID = 'path18';
+good.drive.nav.folders.Path.PATHDOCID = 'path24';
 
 /**
  * @enum {string}
@@ -60,10 +60,10 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
   this.pathlist = path.get(this.pathNameType().CURRENTPATH);
   var that = this;
   this.pathlist.addValuesAddedListener(function(evt) {
-    if (that.pathlist.length() <= 1) {
+    if (that.pathlist.length() == 0) {
       return;
     }
-    var docid = that.pathlist.get(0);
+    var docid = that.path.get(that.pathNameType().CURRENTDOCID);
     var view = that.getPathViewByDocId(docid);
     goog.object.forEach(that.pathHeap, function(value, key) {
       if (view == value) {
@@ -74,16 +74,22 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
       }
     });
     if('location' in view) {
-      view.location();
+      view.location(that.pathlist);
     }
   });
   
   goog.object.forEach(this.pathHeap, function(value, key) {
     if('initPath' in value) {
       var docid = path.get(that.pathNameType().CURRENTDOCID);
-      value.initPath(that.pathlist, that.root);
+      value.initPath(that.pathlist, that.path, that.initCallBack);
     }
   });
+  
+  this.pathload();
+};
+
+good.drive.nav.folders.Path.prototype.pathload = function() {
+  
 };
 
 /**

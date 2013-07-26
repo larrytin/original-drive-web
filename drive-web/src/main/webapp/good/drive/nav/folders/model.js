@@ -9,27 +9,28 @@ good.drive.nav.folders.Model = function(str) {
 //  this.view = view;
 
   window.modelbak = this;
-  var that = this;
-  var onInit = function(mod) {
-    that.initdata(mod);
-  };
   
   this._docId = str;
-  
-  this.isloaded = false;
+  this._isloaded = false;
+  this._doc = undefined;
+  this._mod = undefined;
+  this._root = undefined;
 
-  var onLoad = function(doc) {
-    that.isloaded = true;
-    that.doc = doc;
-    that.mod = that.doc.getModel();
-    that.root = that.mod.getRoot();
-    that.path = that.root.get(good.drive.nav.folders.Model.strType.PATH);
-
-    // connectUi();
-    that.connect(doc);
-  };
-  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
-      '/' + this._docId, onLoad, onInit, null);
+//  var that = this;
+//  var onInit = function(mod) {
+//    that.initdata(mod);
+//  };
+//  var onLoad = function(doc) {
+//    that.isloaded = true;
+//    that.doc = doc;
+//    that.mod = that.doc.getModel();
+//    that.root = that.mod.getRoot();
+//
+//    // connectUi();
+//    that.connect(doc);
+//  };
+//  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
+//      '/' + this._docId, onLoad, onInit, null);
 };
 
 /**
@@ -56,14 +57,7 @@ good.drive.nav.folders.Model.prototype.connect = function(doc) {
  * @return {boolean}
  */
 good.drive.nav.folders.Model.prototype.isloaded = function() {
-  return this.isloaded;
-};
-
-/**
- * @param {boolean} isloaded
- */
-good.drive.nav.folders.Model.prototype.setIsloaded = function(isloaded) {
-  this.isloaded = isloaded;
+  return this._isloaded;
 };
 
 /**
@@ -86,6 +80,14 @@ good.drive.nav.folders.Model.prototype.pushAll = function(list, children) {
  */
 good.drive.nav.folders.Model.prototype.push = function(list, map) {
   list.push(map);
+};
+
+/**
+ * @param {string} id
+ * @return {Object}
+ */
+good.drive.nav.folders.Model.prototype.getObject = function(id) {
+  return this._mod.getObject(id);
 };
 
 /**
@@ -119,6 +121,28 @@ good.drive.nav.folders.Model.prototype.renameLabel = function(map, str) {
  */
 good.drive.nav.folders.Model.prototype.clear = function(list) {
   list.clear();
+};
+
+good.drive.nav.folders.Model.prototype.load = function() {
+  var that = this;
+  var onInit = function(mod) {
+    that.initdata(mod);
+  };
+  var onLoad = function(doc) {
+    that.isloaded = true;
+    that._doc = doc;
+    that._mod = that._doc.getModel();
+    that._root = that._mod.getRoot();
+    
+    that.loadOther();
+    // connectUi();
+    that.connect(doc);
+  };
+  good.realtime.load('@tmp/' + good.auth.Auth.current.userId +
+      '/' + this._docId, onLoad, onInit, null);
+};
+
+good.drive.nav.folders.Model.prototype.loadOther = function() {
 };
 
 /**
@@ -169,5 +193,5 @@ good.drive.nav.folders.Model.prototype.docId = function() {
  * @return {good.realtime.CollaborativeMap}
  */
 good.drive.nav.folders.Model.prototype.getData = function() {
-  return this.root;
+  return this._root;
 };
