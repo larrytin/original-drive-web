@@ -21,7 +21,9 @@ import java.io.File;
 import android.os.Environment;
 
 public class DriveModule extends AbstractModule {
-  private static final String DRIVE_SERVER = "http://192.168.1.15:8880/_ah/api/";
+  private static final String DRIVE_SERVER = "http://192.168.1.15:8880";
+
+  // private static final String DRIVE_SERVER = "http://server.drive.goodow.com";
 
   @Override
   protected void configure() {
@@ -58,7 +60,7 @@ public class DriveModule extends AbstractModule {
               public void initialize(HttpRequest httpRequest) {
               }
             });
-    endpointBuilder.setRootUrl(DRIVE_SERVER);
+    endpointBuilder.setRootUrl(RealtimeModule.getEndpointRootUrl(DRIVE_SERVER));
     return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
   }
 

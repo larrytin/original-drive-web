@@ -5,15 +5,14 @@
 <html>
 <head>
 <title>Upload Attachment</title>
-<meta charset='utf-8'>
 <meta http-equiv='Content-Type' content='text/html; charset=utf-8'>
 </head>
 <body>
   <%
     BlobstoreService blobstoreService = BlobstoreServiceFactory.getBlobstoreService();
   %>
-  <form action="<%=blobstoreService.createUploadUrl("/upload")%>" method="post"
-    enctype="multipart/form-data">
+  <form action="<%=blobstoreService.createUploadUrl("/upload")%>" 
+    method="post" enctype="multipart/form-data" accept-charset="utf-8">
     <input type="file" name="attachment"> <input type="submit" value="Submit">
   </form>
 </body>

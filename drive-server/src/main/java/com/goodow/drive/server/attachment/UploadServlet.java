@@ -67,7 +67,7 @@ public class UploadServlet extends HttpServlet {
       jsonTree.addProperty("filename", filename);
       ids.put(entry.getKey(), jsonTree);
     }
-    resp.setContentType("application/json");
+    resp.setContentType("application/json; charset=UTF-8");
     resp.setHeader("Access-Control-Allow-Origin", "*");
     String json = new Gson().toJson(ids);
     resp.getWriter().print(json);
