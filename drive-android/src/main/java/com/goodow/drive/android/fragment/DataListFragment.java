@@ -390,13 +390,13 @@ public class DataListFragment extends ListFragment implements
 			}
 		};
 
-		String docId = "@tmp/"
-				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/favorites";
-
 		// String docId = "@tmp/"
 		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		// + "/androidTest002";
+		// + "/favorites";
+
+		String docId = "@tmp/"
+				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+				+ "/favorites01";
 
 		Realtime.load(docId, onLoaded, initializer, null);
 

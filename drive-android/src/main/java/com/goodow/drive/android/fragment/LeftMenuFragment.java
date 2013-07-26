@@ -145,7 +145,7 @@ public class LeftMenuFragment extends ListFragment {
 
 			String favoritesDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
-							.getUserId() + "/favorites";
+							.getUserId() + "/favorites01";
 			mainActivity.getRemoteControlObserver().changeMapItem(
 					favoritesDocId);
 			
@@ -162,7 +162,7 @@ public class LeftMenuFragment extends ListFragment {
 
 			String lessonDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
-							.getUserId() + "/lesson";
+							.getUserId() + "/lesson01";
 			mainActivity.getRemoteControlObserver().changeMapItem(lessonDocId);
 			
 			break;
