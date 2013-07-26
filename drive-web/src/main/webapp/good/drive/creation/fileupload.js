@@ -216,14 +216,18 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
     if (json && !json['error']) {
       var url = new goog.Uri(json['value']);
       url.setDomain(good.constants.SERVERDOMAIN);
-      //url.setScheme();
+      url.setScheme('http');
       that.uploadFiles(url, files, function(json) {
         if (json && !json['error']) {
           for (var i = 0; i < files.length; i++) {
             var filename = files[i].name;
             var insertJson = json[filename]['members'];
+            var blobKey = insertJson['blobKey']['blobKey'];
+            delete insertJson.blobKey;
             delete insertJson.size;
             delete insertJson.md5Hash;
+            delete insertJson.creation;
+            insertJson['blobKey'] = blobKey;
             if (good.drive.creation.Fileupload.TYPE == 'new') {
               var tags = that.getTags();
               insertJson['tags'] = tags;              
@@ -340,12 +344,12 @@ good.drive.creation.Fileupload.prototype.updatefile = function(fileId,
  */
 good.drive.creation.Fileupload.prototype.getTags = function() {
   var path = good.drive.nav.folders.Path.getINSTANCE();
-  var docId = path.path.get('docid');
+  var docId = path.currentDocId;
   if (docId == good.constants.PUBLICRESDOCID) {
     var map = path.getCurrentData();
     var query = map.get('query');
     var tags = query.get('tags');
-    return tags;
+    return tags.asArray();
   } else {
     var publicTree = goog.object.get(
         good.drive.nav.folders.AbstractControl.docs,

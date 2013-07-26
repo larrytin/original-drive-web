@@ -136,7 +136,7 @@ good.drive.init.init = function() {
     var fileupload = new good.drive.creation.Fileupload();
     fileupload.fileChange(myResTree);
     popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
-      fileupload.fileClick();
+      fileupload.fileClick('new','');
     });
   }
   var leftSubmenuChildIds = undefined;
