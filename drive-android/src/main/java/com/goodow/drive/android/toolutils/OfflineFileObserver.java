@@ -1,5 +1,9 @@
 package com.goodow.drive.android.toolutils;
 
+import java.io.File;
+
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -32,7 +36,8 @@ public class OfflineFileObserver {
 			newFile.set("title", file.get("label"));
 			newFile.set("url", file.get("url"));
 			newFile.set("progress", "0");
-			newFile.set("status", file.get("status"));
+			newFile.set("status",
+					GlobalConstant.DownloadStatusEnum.WAITING.getStatus());
 			newFile.set("blobKey", file.get("blobKey"));
 
 			list.push(newFile);
@@ -83,9 +88,23 @@ public class OfflineFileObserver {
 					if (null != adds) {
 						for (Object o : adds) {
 							CollaborativeMap resource = (CollaborativeMap) o;
-							DownloadResServiceBinder
-									.getDownloadResServiceBinder()
-									.addResDownload(resource);
+							File file = new File(
+									GlobalDataCacheForMemorySingleton.getInstance
+											.getOfflineResDirPath()
+											+ "/"
+											+ resource.get("blobKey"));
+
+							if (!file.exists()) {
+								DownloadResServiceBinder
+										.getDownloadResServiceBinder()
+										.addResDownload(resource);
+							} else {
+								resource.set("progress", "100");
+								resource.set(
+										"status",
+										GlobalConstant.DownloadStatusEnum.COMPLETE
+												.getStatus());
+							}
 						}
 					}
 				}

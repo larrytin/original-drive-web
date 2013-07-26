@@ -1,6 +1,8 @@
 package com.goodow.drive.android.adapter;
 
-import android.util.Log;
+import android.annotation.SuppressLint;
+import android.os.Handler;
+import android.os.Message;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
@@ -8,30 +10,67 @@ import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
-import com.goodow.drive.android.toolutils.DownloadResServiceBinder;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.EventHandler;
 import com.goodow.realtime.ValueChangedEvent;
 
 public class OfflineAdapter extends BaseAdapter {
-	private CollaborativeList offline;
+	private CollaborativeList offlineList;
 	private MainActivity activity;
 
-	public OfflineAdapter(MainActivity activity, CollaborativeList offline) {
-		this.offline = offline;
+	private View row;
+	private ProgressBar progressBar;
+	private TextView textView;
+
+	@SuppressLint("HandlerLeak")
+	private Handler handler = new Handler() {
+		@Override
+		public void handleMessage(Message msg) {
+			switch (msg.what) {
+			case 1:
+				int progress = msg.getData().getInt("progress");
+
+				if (null != textView) {
+					((TextView) row.findViewById(R.id.downloadText))
+							.setText(progress + " %");
+				}
+
+				if (null != progressBar) {
+					((ProgressBar) activity.findViewById(10))
+							.setProgress(progress);
+					progressBar.setProgress(progress);
+				}
+
+				break;
+			case -1:
+				if (null != textView) {
+					textView.setText("100 %");
+				}
+
+				if (null != progressBar) {
+					progressBar.setProgress(100);
+				}
+
+				break;
+			}
+		}
+	};
+
+	public OfflineAdapter(MainActivity activity, CollaborativeList offlineList) {
+		this.offlineList = offlineList;
 		this.activity = activity;
 	}
 
 	@Override
 	public int getCount() {
-		int count = (offline == null ? 0 : offline.length());
+		int count = (offlineList == null ? 0 : offlineList.length());
 		return count;
 	}
 
 	@Override
 	public Object getItem(int position) {
-		return offline.get(position);
+		return offlineList.get(position);
 	}
 
 	@Override
@@ -65,7 +104,23 @@ public class OfflineAdapter extends BaseAdapter {
 
 		// if (DownloadResServiceBinder.getDownloadResServiceBinder()
 		// .getDownloadResBlobKey().equals(item.get("blobKey"))) {
-		// activity.getIDownloadProcess().initData(progressBar, downloadText);
+		//
+		// // 使下载service能够更改UI界面,即修改进度条
+		// SimpleDownloadResources.getInstance
+		// .setDownloadProcess(new IDownloadProcess() {
+		// @Override
+		// public void downLoadProgress(int progress) {
+		// progressBar.setProgress(progress);
+		// downloadText.setText(progress + " %");
+		//
+		// }
+		//
+		// @Override
+		// public void downLoadFinish() {
+		// progressBar.setProgress(100);
+		// downloadText.setText(100 + " %");
+		// }
+		// });
 		// }
 
 		item.addValueChangedListener(new EventHandler<ValueChangedEvent>() {

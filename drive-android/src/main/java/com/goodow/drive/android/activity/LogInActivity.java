@@ -79,7 +79,7 @@ public class LogInActivity extends RoboActivity {
 
         String docId = "@tmp/"
        		 + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-       		 + "/offine1";
+       		 + "/offline";
         Log.i(TAG, "Offine DocId:"+docId);
         new OfflineFileObserver().startObservation(docId);
         

@@ -2,7 +2,6 @@ package com.goodow.drive.android.fragment;
 
 import java.io.File;
 import java.util.ArrayList;
-
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -10,10 +9,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
-
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.activity.MainActivity;
-import com.goodow.drive.android.activity.MainActivity.LocalFragmentEnum;
 import com.goodow.drive.android.adapter.LocalResAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
@@ -56,14 +52,6 @@ public class LocalResFragment extends ListFragment {
 			Toast.makeText(this.getActivity(), R.string.backFolderErro,
 					Toast.LENGTH_SHORT).show();
 		}
-	}
-
-	@Override
-	public void onActivityCreated(Bundle savedInstanceState) {
-		super.onActivityCreated(savedInstanceState);
-
-		((MainActivity) this.getActivity())
-				.setLocalFragmentEnum(LocalFragmentEnum.LOCALRESFRAGMENT);
 	}
 
 	@Override

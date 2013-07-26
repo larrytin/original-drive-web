@@ -1,5 +1,7 @@
 package com.goodow.drive.android.global_data_cache;
 
+import java.io.File;
+
 /**
  * 需要全局缓存的数据
  * 
@@ -83,6 +85,15 @@ public enum GlobalDataCacheForMemorySingleton {
 		} else {
 			return storagePaht + "/" + userId;
 		}
+	}
+
+	public String getOfflineResDirPath() {
+		File offline = new File(storagePaht + "/res");
+		if (!offline.exists()) {
+			offline.mkdir();
+		}
+
+		return storagePaht + "/res";
 	}
 
 	/**

@@ -3,14 +3,11 @@ package com.goodow.drive.android.activity;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
-import android.annotation.SuppressLint;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Message;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -19,24 +16,20 @@ import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.ProgressBar;
 import android.widget.TextView;
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.Interface.IDownloadProcess;
+import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
+import com.goodow.drive.android.fragment.LessonListFragment;
 import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
-	public static enum LocalFragmentEnum {
-		DATALISTFRAGMENT, LOCALRESFRAGMENT, DATADETAILFRAGMENT, OFFLINELISTFRAGMENT;
-	}
-
-	private LocalFragmentEnum localFragmentEnum;
-	private LocalFragmentEnum lastFragmentEnum;
+	private IRemoteDataFragment iRemoteDataFragment;
+	private IRemoteDataFragment lastiRemoteDataFragment;
 
 	private ActionBar actionBar;
 
@@ -47,9 +40,6 @@ public class MainActivity extends RoboActivity {
 	@InjectView(R.id.dataDetailLayout)
 	private LinearLayout dataDetailLayout;
 
-	private ProgressBar progressBar;
-	private TextView textView;
-
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
 
@@ -59,81 +49,23 @@ public class MainActivity extends RoboActivity {
 	// private LocalResFragment localResFragment;
 	private OfflineListFragment offlineListFragment;
 	private DataDetailFragment dataDetailFragment;
-
-	private IDownloadProcess iDownloadProcess = new IDownloadProcess() {
-		@Override
-		public void initData(ProgressBar progressBar, TextView textView) {
-			MainActivity.this.progressBar = progressBar;
-			MainActivity.this.textView = textView;
-		}
-
-		@Override
-		public void downLoadProgress(int progress) {
-			Message message = new Message();
-			message.what = 1;
-			message.getData().putInt("progress", progress);
-
-			handler.sendMessage(message);
-
-		}
-
-		@Override
-		public void downLoadFinish() {
-			Message message = new Message();
-			message.what = -1;
-
-			handler.sendMessage(message);
-		}
-	};
+	private LessonListFragment lessonListFragment;
 
 	public DataDetailFragment getDataDetailFragment() {
 		return dataDetailFragment;
 	}
 
-	/**
-	 * @return the dataListFragment
-	 */
 	public DataListFragment getDataListFragment() {
 		return dataListFragment;
 	}
 
-	/**
-	 * @return the localResFragment
-	 */
 	public OfflineListFragment getOfflineListFragment() {
 		return offlineListFragment;
 	}
 
-	@SuppressLint("HandlerLeak")
-	private Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				int progress = msg.getData().getInt("progress");
-
-				if (null != textView) {
-					textView.setText(progress + " %");
-				}
-
-				if (null != progressBar) {
-					progressBar.setProgress(progress);
-				}
-
-				break;
-			case -1:
-				if (null != textView) {
-					textView.setText("100 %");
-				}
-
-				if (null != progressBar) {
-					progressBar.setProgress(100);
-				}
-
-				break;
-			}
-		}
-	};
+	public LessonListFragment getLessonListFragment() {
+		return lessonListFragment;
+	}
 
 	public void hideLeftMenuLayout() {
 		if (null != leftMenu && null != middleLayout) {
@@ -148,16 +80,11 @@ public class MainActivity extends RoboActivity {
 	public void setDataDetailLayoutState(int state) {
 		if (dataDetailLayout.getVisibility() != state) {
 			Animation animation;
-			
+
 			if (state == View.VISIBLE) {
 				animation = AnimationUtils.makeInAnimation(this, false);
-
-				setLastFragmentEnum(localFragmentEnum);
-				setLocalFragmentEnum(LocalFragmentEnum.DATADETAILFRAGMENT);
 			} else {
 				animation = AnimationUtils.makeOutAnimation(this, true);
-
-				setLocalFragmentEnum(lastFragmentEnum);
 			}
 
 			dataDetailLayout.startAnimation(animation);
@@ -178,23 +105,8 @@ public class MainActivity extends RoboActivity {
 
 	@Override
 	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK && null != localFragmentEnum) {
-			switch (localFragmentEnum) {
-			case DATADETAILFRAGMENT:
-				dataDetailFragment.backFragment();
-				break;
-
-			case DATALISTFRAGMENT:
-				dataListFragment.backFragment();
-				break;
-
-			case OFFLINELISTFRAGMENT:
-				offlineListFragment.backFragment();
-				break;
-
-			default:
-				break;
-			}
+		if (keyCode == KeyEvent.KEYCODE_BACK && null != iRemoteDataFragment) {
+			iRemoteDataFragment.backFragment();
 
 			return true;
 		}
@@ -270,6 +182,14 @@ public class MainActivity extends RoboActivity {
 			offlineListFragment = new OfflineListFragment();
 		}
 
+		if (null == dataListFragment) {
+			dataListFragment = new DataListFragment();
+		}
+
+		if (null == lessonListFragment) {
+			lessonListFragment = new LessonListFragment();
+		}
+
 		if (null == dataDetailFragment) {
 			dataDetailFragment = new DataDetailFragment();
 
@@ -280,18 +200,14 @@ public class MainActivity extends RoboActivity {
 			fragmentTransaction.commit();
 		}
 
-		if (null == dataListFragment) {
-			dataListFragment = new DataListFragment();
-		}
-
 		if (null == leftMenuFragment) {
 			leftMenuFragment = new LeftMenuFragment();
-		}
 
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction();
-		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
-		fragmentTransaction.commit();
+			FragmentTransaction fragmentTransaction = getFragmentManager()
+					.beginTransaction();
+			fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
+			fragmentTransaction.commit();
+		}
 
 		middleLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -300,16 +216,19 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 
-		// 使下载service能够更改UI界面,即修改进度条
-		// SimpleDownloadResources.getInstance.setDownloadProcess(iDownloadProcess);
 	}
 
-	public void setLastFragmentEnum(LocalFragmentEnum lastFragmentEnum) {
-		this.lastFragmentEnum = lastFragmentEnum;
+	public void setIRemoteFrament(IRemoteDataFragment iRemoteDataFragment) {
+		this.iRemoteDataFragment = iRemoteDataFragment;
 	}
 
-	public void setLocalFragmentEnum(LocalFragmentEnum localFragmentEnum) {
-		this.localFragmentEnum = localFragmentEnum;
+	public IRemoteDataFragment getLastiRemoteDataFragment() {
+		return lastiRemoteDataFragment;
+	}
+
+	public void setLastiRemoteDataFragment(
+			IRemoteDataFragment lastiRemoteDataFragment) {
+		this.lastiRemoteDataFragment = lastiRemoteDataFragment;
 	}
 
 	public void openState(int visibility) {
@@ -321,11 +240,7 @@ public class MainActivity extends RoboActivity {
 		}
 	}
 
-	public IDownloadProcess getIDownloadProcess() {
-		return this.iDownloadProcess;
-	}
-
-	public void setOpenStatView(TextView textView, ImageView imageView) {
+	public void setOpenStateView(TextView textView, ImageView imageView) {
 		openFailure_text = textView;
 		openFailure_img = imageView;
 	}

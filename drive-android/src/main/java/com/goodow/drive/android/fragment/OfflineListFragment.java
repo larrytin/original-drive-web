@@ -9,14 +9,15 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
-import com.goodow.drive.android.activity.MainActivity.LocalFragmentEnum;
 import com.goodow.drive.android.adapter.OfflineAdapter;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
+import com.goodow.realtime.CollaborativeMap;
 
-public class OfflineListFragment extends ListFragment {
+public class OfflineListFragment extends ListFragment implements
+		IRemoteDataFragment {
 	private OfflineAdapter adapter;
 
 	public void backFragment() {
@@ -37,6 +38,8 @@ public class OfflineListFragment extends ListFragment {
 	public void onActivityCreated(Bundle savedInstanceState) {
 		super.onActivityCreated(savedInstanceState);
 
+		((MainActivity) getActivity()).setIRemoteFrament(this);
+
 		IntentFilter intentFilter = new IntentFilter();
 		intentFilter.addAction("NEW_RES_DOWNLOADING");
 		((MainActivity) getActivity()).registerReceiver(
@@ -47,9 +50,11 @@ public class OfflineListFragment extends ListFragment {
 					}
 				}, intentFilter);
 
-		((MainActivity) getActivity())
-				.setLocalFragmentEnum(LocalFragmentEnum.OFFLINELISTFRAGMENT);
+	}
 
+	@Override
+	public void setMapListener(CollaborativeMap map) {
+		// TODO Auto-generated method stub
 	}
 
 }
