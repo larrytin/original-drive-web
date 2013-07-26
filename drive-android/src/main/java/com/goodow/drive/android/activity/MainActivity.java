@@ -17,7 +17,6 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
@@ -27,12 +26,22 @@ import com.goodow.drive.android.fragment.LessonListFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.realtime.CollaborativeList;
+import com.goodow.realtime.CollaborativeMap;
+import com.goodow.realtime.Document;
+import com.goodow.realtime.DocumentLoadedHandler;
+import com.goodow.realtime.EventHandler;
+import com.goodow.realtime.Model;
+import com.goodow.realtime.ModelInitializerHandler;
+import com.goodow.realtime.Realtime;
+import com.goodow.realtime.ValueChangedEvent;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
 	private IRemoteDataFragment iRemoteDataFragment;
 	private IRemoteDataFragment lastiRemoteDataFragment;
 
+	private RemoteControlObserver remoteControlObserver;
 	private ActionBar actionBar;
 
 	@InjectView(R.id.leftMenuLayout)
@@ -181,43 +190,22 @@ public class MainActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
+
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		if (null == localResFragment) {
-			localResFragment = new LocalResFragment();
-		}
+		localResFragment = new LocalResFragment();
+		offlineListFragment = new OfflineListFragment();
+		dataListFragment = new DataListFragment();
+		lessonListFragment = new LessonListFragment();
+		dataDetailFragment = new DataDetailFragment();
+		fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
+		leftMenuFragment = new LeftMenuFragment();
+		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
 
-		if (null == offlineListFragment) {
-			offlineListFragment = new OfflineListFragment();
-		}
-
-		if (null == dataListFragment) {
-			dataListFragment = new DataListFragment();
-		}
-
-		if (null == lessonListFragment) {
-			lessonListFragment = new LessonListFragment();
-		}
-
-		if (null == dataDetailFragment) {
-			dataDetailFragment = new DataDetailFragment();
-
-			FragmentTransaction fragmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragmentTransaction.replace(R.id.dataDetailLayout,
-					dataDetailFragment);
-			fragmentTransaction.commit();
-		}
-
-		if (null == leftMenuFragment) {
-			leftMenuFragment = new LeftMenuFragment();
-
-			FragmentTransaction fragmentTransaction = getFragmentManager()
-					.beginTransaction();
-			fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
-			fragmentTransaction.commit();
-		}
+		fragmentTransaction.commit();
 
 		middleLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -226,6 +214,11 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 
+		String docId = "@tmp/"
+				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+				+ "/remotecontrol";
+		remoteControlObserver = new RemoteControlObserver();
+		remoteControlObserver.startObservation(docId);
 	}
 
 	public void setIRemoteFrament(IRemoteDataFragment iRemoteDataFragment) {
@@ -253,5 +246,95 @@ public class MainActivity extends RoboActivity {
 	public void setOpenStateView(TextView textView, ImageView imageView) {
 		openFailure_text = textView;
 		openFailure_img = imageView;
+	}
+
+	private void initFragment(String fragmentName) {
+		FragmentTransaction fragmentTransaction;
+
+		if ("lesson".equals(fragmentName)) {
+			fragmentTransaction = getFragmentManager().beginTransaction();
+			fragmentTransaction.replace(R.id.contentLayout, lessonListFragment);
+			fragmentTransaction.commit();
+		} else if ("favorites".equals(fragmentName)) {
+			fragmentTransaction = getFragmentManager().beginTransaction();
+			fragmentTransaction.replace(R.id.contentLayout, dataListFragment);
+			fragmentTransaction.commit();
+		}
+	}
+
+	public RemoteControlObserver getRemoteControlObserver() {
+		return remoteControlObserver;
+	}
+
+	public class RemoteControlObserver {
+		private Document doc;
+		private Model model;
+		private CollaborativeMap root;
+		private CollaborativeMap map;
+		private CollaborativeList list;
+
+		private static final String PATH_KEY = "path";
+
+		public CollaborativeList getList() {
+			return list;
+		}
+
+		public void changeMapItem(String docId) {
+			if (null != map) {
+				map.set("currentdocid", docId);
+			}
+		}
+
+		public void clearList() {
+			if (null != list && 0 < list.length()) {
+				list.clear();
+			}
+		}
+
+		private void startObservation(String docId) {
+			DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
+				@Override
+				public void onLoaded(Document document) {
+					doc = document;
+					model = doc.getModel();
+					root = model.getRoot();
+					map = root.get(PATH_KEY);
+					list = map.get("currentpath");
+
+					map.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
+						@Override
+						public void handleEvent(ValueChangedEvent event) {
+							String property = event.getProperty();
+							if ("currentdocid".equals(property)) {
+								String newValue = (String) event.getNewValue();
+
+								newValue = newValue.substring(newValue
+										.lastIndexOf("/") + 1);
+
+								MainActivity.this.initFragment(newValue);
+
+								clearList();
+							}
+						}
+					});
+				}
+			};
+
+			ModelInitializerHandler initializer = new ModelInitializerHandler() {
+				@Override
+				public void onInitializer(Model model_) {
+					model = model_;
+					root = model.getRoot();
+
+					CollaborativeMap newMap = model.createMap(null);
+					CollaborativeList newList = model.createList();
+					newMap.set("currentpath", newList);
+					root.set(PATH_KEY, newMap);
+				}
+			};
+
+			Realtime.load(docId, onLoaded, initializer, null);
+		}
+
 	}
 }

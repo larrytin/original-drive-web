@@ -4,7 +4,6 @@ import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
@@ -136,23 +135,36 @@ public class LeftMenuFragment extends ListFragment {
 			break;
 
 		case USER_REMOTE_DATA:
-			fragment = mainActivity.getDataListFragment();
+			// fragment = mainActivity.getDataListFragment();
+			//
+			// fragmentTransaction = mainActivity.getFragmentManager()
+			// .beginTransaction();
+			// fragmentTransaction
+			// .replace(R.id.contentLayout, (Fragment) fragment);
+			// fragmentTransaction.commit();
 
-			fragmentTransaction = mainActivity.getFragmentManager()
-					.beginTransaction();
-			fragmentTransaction
-					.replace(R.id.contentLayout, (Fragment) fragment);
-			fragmentTransaction.commit();
+			String favoritesDocId = "@tmp/"
+					+ GlobalDataCacheForMemorySingleton.getInstance()
+							.getUserId() + "/favorites";
+			mainActivity.getRemoteControlObserver().changeMapItem(
+					favoritesDocId);
+			
 			break;
 
 		case USER_LESSON_DATA:
-			fragment = mainActivity.getLessonListFragment();
+			// fragment = mainActivity.getLessonListFragment();
+			//
+			// fragmentTransaction = mainActivity.getFragmentManager()
+			// .beginTransaction();
+			// fragmentTransaction
+			// .replace(R.id.contentLayout, (Fragment) fragment);
+			// fragmentTransaction.commit();
 
-			fragmentTransaction = mainActivity.getFragmentManager()
-					.beginTransaction();
-			fragmentTransaction
-					.replace(R.id.contentLayout, (Fragment) fragment);
-			fragmentTransaction.commit();
+			String lessonDocId = "@tmp/"
+					+ GlobalDataCacheForMemorySingleton.getInstance()
+							.getUserId() + "/lesson";
+			mainActivity.getRemoteControlObserver().changeMapItem(lessonDocId);
+			
 			break;
 
 		case USER_OFFLINE_DATA:
@@ -169,8 +181,8 @@ public class LeftMenuFragment extends ListFragment {
 
 			fragmentTransaction = mainActivity.getFragmentManager()
 					.beginTransaction();
-			fragmentTransaction
-					.replace(R.id.contentLayout, mainActivity.getLocalResFragment());
+			fragmentTransaction.replace(R.id.contentLayout,
+					mainActivity.getLocalResFragment());
 			fragmentTransaction.commit();
 			break;
 
@@ -181,4 +193,5 @@ public class LeftMenuFragment extends ListFragment {
 		mainActivity.hideLeftMenuLayout();
 		mainActivity.setDataDetailLayoutState(View.INVISIBLE);
 	}
+
 }

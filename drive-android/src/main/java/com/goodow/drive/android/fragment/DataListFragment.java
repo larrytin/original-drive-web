@@ -1,6 +1,9 @@
 package com.goodow.drive.android.fragment;
 
+import java.io.File;
 import android.app.ListFragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,8 +16,12 @@ import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.activity.play.AudioPlayActivity;
+import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.SomeEnums;
 import com.goodow.realtime.BaseModelEvent;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -32,7 +39,7 @@ import com.goodow.realtime.ValuesSetEvent;
 
 public class DataListFragment extends ListFragment implements
 		IRemoteDataFragment {
-	private CollaborativeList historyOpenedFolders;
+	private CollaborativeList currentPathList;
 	private CollaborativeMap currentFolder;
 
 	private CollaborativeAdapter adapter;
@@ -43,7 +50,6 @@ public class DataListFragment extends ListFragment implements
 
 	private static final String FOLDER_KEY = "folders";
 	private static final String FILE_KEY = "files";
-	private static final String PATH_KEY = "path";
 
 	private EventHandler<ValuesAddedEvent> pathValuesAddedEventHandler;
 	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
@@ -54,14 +60,16 @@ public class DataListFragment extends ListFragment implements
 	private EventHandler<ValueChangedEvent> valuesChangeEventHandler;
 
 	public void backFragment() {
-		if (1 < historyOpenedFolders.length()) {
-			CollaborativeList chilFolders = (CollaborativeList) ((CollaborativeMap) historyOpenedFolders
-					.get(historyOpenedFolders.length() - 1)).get(FOLDER_KEY);
+		if (1 < currentPathList.length()) {
+			String mapId = currentPathList.get(currentPathList.length() - 1);
+			CollaborativeMap currentmap = model.getObject(mapId);
+			CollaborativeList chilFolders = (CollaborativeList) currentmap
+					.get(FOLDER_KEY);
 
 			// 删除监听
 			if (null != chilFolders) {
-				CollaborativeList chilFiles = (CollaborativeList) ((CollaborativeMap) historyOpenedFolders
-						.get(historyOpenedFolders.length() - 1)).get(FILE_KEY);
+				CollaborativeList chilFiles = (CollaborativeList) currentmap
+						.get(FILE_KEY);
 
 				for (int i = 0; i < chilFolders.length(); i++) {
 					CollaborativeMap map = chilFolders.get(i);
@@ -77,7 +85,7 @@ public class DataListFragment extends ListFragment implements
 				removeListListener(chilFiles);
 			}
 
-			historyOpenedFolders.remove(historyOpenedFolders.length() - 1);
+			currentPathList.remove(currentPathList.length() - 1);
 
 		} else {
 			Toast.makeText(getActivity(), R.string.backFolderErro,
@@ -86,15 +94,16 @@ public class DataListFragment extends ListFragment implements
 	}
 
 	public void connectUi() {
-		historyOpenedFolders = root.get(PATH_KEY);
+		if (null == currentPathList) {
+			currentPathList = ((MainActivity) getActivity())
+					.getRemoteControlObserver().getList();
+		}
 
-		historyOpenedFolders
-				.addValuesAddedListener(pathValuesAddedEventHandler);
-		historyOpenedFolders
-				.addValuesRemovedListener(pathValuesRemovedEventHandler);
+		currentPathList.addValuesAddedListener(pathValuesAddedEventHandler);
+		currentPathList.addValuesRemovedListener(pathValuesRemovedEventHandler);
 
-		if (0 == historyOpenedFolders.length()) {
-			historyOpenedFolders.push(root);
+		if (0 == currentPathList.length()) {
+			currentPathList.push(root.getId());
 		}
 
 		if (null != currentFolder) {
@@ -122,22 +131,28 @@ public class DataListFragment extends ListFragment implements
 			}
 
 			// 设置action bar的显示
-			if (historyOpenedFolders.length() <= 1) {
-				((MainActivity) getActivity()).restActionBarTitle();
+			MainActivity activity = (MainActivity) getActivity();
+			if (null != activity) {
+				if (currentPathList.length() <= 1) {
+					((MainActivity) getActivity()).restActionBarTitle();
 
-			} else {
-				StringBuffer title = new StringBuffer();
-				for (int i = 0; i < historyOpenedFolders.length(); i++) {
-					String label = ((CollaborativeMap) historyOpenedFolders
-							.get(i)).get("label");
-					if (null != label) {
-						title.append("/" + label);
+				} else {
+					StringBuffer title = new StringBuffer();
+					for (int i = 0; i < currentPathList.length(); i++) {
+						CollaborativeMap currentMap = model
+								.getObject((String) currentPathList.get(i));
+
+						String label = currentMap.get("label");
+						if (null != label) {
+							title.append("/" + label);
+						}
 					}
-				}
 
-				((MainActivity) getActivity()).setActionBarTitle(title
-						.toString());
+					((MainActivity) getActivity()).setActionBarTitle(title
+							.toString());
+				}
 			}
+
 		}
 	}
 
@@ -181,17 +196,80 @@ public class DataListFragment extends ListFragment implements
 			pathValuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
 				@Override
 				public void handleEvent(ValuesAddedEvent event) {
-					if (0 != historyOpenedFolders.length()) {
+					if (0 != currentPathList.length()) {
+						CollaborativeMap map = model
+								.getObject((String) currentPathList
+										.get(currentPathList.length() - 1));
+						if (null != map && null == map.get(FOLDER_KEY)) {
 
-						if (null == ((CollaborativeMap) historyOpenedFolders
-								.get(historyOpenedFolders.length() - 1))
-								.get(FOLDER_KEY)) {
+							File file = new File(
+									GlobalDataCacheForMemorySingleton.getInstance
+											.getOfflineResDirPath()
+											+ "/"
+											+ map.get("blobKey"));
 
-							// TODO
+							if (file.exists()) {
+								Intent intent = null;
+
+								String resPath = GlobalDataCacheForMemorySingleton.getInstance
+										.getOfflineResDirPath() + "/";
+
+								if (GlobalConstant.SupportResTypeEnum.MP3
+										.getTypeName().equals(map.get("type"))) {
+									intent = new Intent(getActivity(),
+											AudioPlayActivity.class);
+
+									intent.putExtra(
+											AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
+													.name(), (String) map
+													.get("label"));
+									intent.putExtra(
+											AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
+													.name(),
+											resPath
+													+ (String) map
+															.get("blobKey"));
+								} else if (GlobalConstant.SupportResTypeEnum.MP4
+										.getTypeName().equals(map.get("type"))) {
+									intent = new Intent(getActivity(),
+											VideoPlayActivity.class);
+
+									intent.putExtra(
+											VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
+													.name(), (String) map
+													.get("label"));
+									intent.putExtra(
+											VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
+													.name(),
+											resPath
+													+ (String) map
+															.get("blobKey"));
+								} else if (GlobalConstant.SupportResTypeEnum.FLASH
+										.getTypeName().equals(map.get("type"))) {
+									// TODO
+								} else {
+									intent = new Intent();
+
+									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									intent.setAction(Intent.ACTION_VIEW);
+									String type = SomeEnums
+											.getMIMEType((String) map
+													.get("type"));
+									intent.setDataAndType(Uri.fromFile(file),
+											type);
+								}
+
+								getActivity().startActivity(intent);
+							} else {
+								Toast.makeText(getActivity(), "请先下载该文件.",
+										Toast.LENGTH_SHORT).show();
+							}
+
 							backFragment();
 						} else {
-							currentFolder = historyOpenedFolders
-									.get(historyOpenedFolders.length() - 1);
+							currentFolder = model
+									.getObject((String) currentPathList
+											.get(currentPathList.length() - 1));
 
 							initData();
 
@@ -206,11 +284,12 @@ public class DataListFragment extends ListFragment implements
 			pathValuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
 				@Override
 				public void handleEvent(ValuesRemovedEvent event) {
-					if (0 != historyOpenedFolders.length()) {
-						currentFolder = historyOpenedFolders
-								.get(historyOpenedFolders.length() - 1);
+					if (0 != currentPathList.length()) {
+						currentFolder = model
+								.getObject((String) currentPathList
+										.get(currentPathList.length() - 1));
 					} else {
-						historyOpenedFolders.push(root);
+						currentPathList.push(root.getId());
 					}
 
 					initData();
@@ -234,15 +313,21 @@ public class DataListFragment extends ListFragment implements
 	}
 
 	private void openState() {
-		CollaborativeList folderList = currentFolder.get(FOLDER_KEY);
-		CollaborativeList fileList = currentFolder.get(FILE_KEY);
+		if (null != currentFolder) {
+			CollaborativeList folderList = currentFolder.get(FOLDER_KEY);
+			CollaborativeList fileList = currentFolder.get(FILE_KEY);
 
-		if (null != folderList && 0 == folderList.length() && null != fileList
-				&& 0 == fileList.length()) {
-			((MainActivity) getActivity()).openState(LinearLayout.VISIBLE);
-		} else {
-			((MainActivity) getActivity()).openState(LinearLayout.INVISIBLE);
+			MainActivity activity = (MainActivity) getActivity();
+			if (null != activity) {
+				if (null != folderList && 0 == folderList.length()
+						&& null != fileList && 0 == fileList.length()) {
+					activity.openState(LinearLayout.VISIBLE);
+				} else {
+					activity.openState(LinearLayout.INVISIBLE);
+				}
+			}
 		}
+
 	}
 
 	@Override
@@ -302,8 +387,6 @@ public class DataListFragment extends ListFragment implements
 
 				root.set("folders", list);
 
-				list = model_.createList();
-				root.set("path", list);
 			}
 		};
 
@@ -329,7 +412,7 @@ public class DataListFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
 
-		historyOpenedFolders.push(clickItem);
+		currentPathList.push(clickItem.getId());
 	}
 
 	@SuppressWarnings("unchecked")
@@ -346,7 +429,6 @@ public class DataListFragment extends ListFragment implements
 		listenerList.removeListListener(listEventHandler);
 	}
 
-	@Override
 	public void setMapListener(CollaborativeMap listenerMap) {
 		listenerMap.addValueChangedListener(valuesChangeEventHandler);
 	}
@@ -355,4 +437,5 @@ public class DataListFragment extends ListFragment implements
 		listenerMap.removeEventListener(EventType.VALUE_CHANGED,
 				valuesChangeEventHandler, false);
 	}
+
 }
