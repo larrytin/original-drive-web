@@ -102,7 +102,7 @@ good.drive.nav.folders.ViewControl.prototype.buildPath = function(pathlist, path
  */
 good.drive.nav.folders.ViewControl.prototype.buildPath_ =
   function(parentNode, paths) {
-  if (parentNode == parentNode.getTree()) {
+  if (parentNode == null || parentNode == parentNode.getTree()) {
     return;
   }
   this.buildPath_(parentNode.getParent(), paths);

@@ -12,3 +12,7 @@ good.constants.NAME = 'attachment';
 
 /** @type {string} */
 good.constants.VERSION = 'v0.0.1';
+
+
+/** @type {string} */
+good.constants.PUBLICRESDOCID = 'publicRes02';

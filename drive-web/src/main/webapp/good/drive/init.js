@@ -14,6 +14,7 @@ goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.folders.Path');
+goog.require('good.drive.nav.folders.PublicViewControl');
 goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
@@ -46,7 +47,7 @@ good.drive.init.init = function() {
   var modifeInput;
   var myResDocId = 'myRes03';
   var myClassResDocId = 'myClassRes03';
-  var publicResDocId = 'publicRes03';
+  var publicResDocId = 'publicRes04';
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
 
   good.config.start();
@@ -58,7 +59,9 @@ good.drive.init.init = function() {
   
   var myResTree = new good.drive.nav.folders.Tree('我的收藏夹', myResDocId);
   var myclass = new good.drive.nav.folders.Tree('我的课程', myClassResDocId);
-  var publicResTree = new good.drive.nav.folders.Tree('公共资料库', publicResDocId);
+  
+  var puclicViewControl = new good.drive.nav.folders.PublicViewControl();
+  var publicResTree = new good.drive.nav.folders.Tree('公共资料库', publicResDocId, puclicViewControl);
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   pathControl.addPath(myResDocId, myResTree);
   pathControl.addPath(myClassResDocId, myclass);
