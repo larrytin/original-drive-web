@@ -222,15 +222,19 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
           for (var i = 0; i < files.length; i++) {
             var filename = files[i].name;
             var insertJson = json[filename]['members'];
+            delete insertJson.size;
+            delete insertJson.md5Hash;
             if (good.drive.creation.Fileupload.TYPE == 'new') {
               var tags = that.getTags();
-              insertJson['tags'] = tags;
-              delete insertJson.size;
-              delete insertJson.md5Hash;
+              insertJson['tags'] = tags;              
               that.insertfile(insertJson, function() {
                 goog.dom.getElement(filename).innerText = '上传结束';
               });
             } else {
+              that.updateAgain(good.drive.creation.Fileupload.FILEID,
+                  insertJson, function() {
+                goog.dom.getElement(filename).innerText = '更新成功';
+                  });
             }
           }
         }
@@ -268,7 +272,18 @@ good.drive.creation.Fileupload.prototype.updateAgain =
       good.constants.VERSION, 'attachment/' + fileId,
       good.constants.SERVERADRESS);
   rpc.send(function(json) {
-     if (json && !json['error']) {
+     if (json && !json['error']) {      
+       updatejson['tags'] = json['tags'];
+       updatejson['id'] = json['id'];
+       var rpc = new good.net.CrossDomainRpc('POST',
+           good.constants.NAME,
+           good.constants.VERSION, 'update',
+           good.constants.SERVERADRESS);
+       rpc.body = updatejson;
+       rpc.send(function(json) {
+         fn();
+      });
+         
        }
      });
 };
@@ -294,7 +309,7 @@ good.drive.creation.Fileupload.prototype.updatefile = function(fileId,
            if (json['tags'] != undefined &&
                !goog.array.isEmpty(json['tags'])) {
              goog.array.forEach(tags, function(e) {
-              if (!goog.array.contains(json['tags']), e) {
+              if (!goog.array.contains(json['tags'], e)) {
                 goog.array.insert(json['tags'], e);
               }
             });
