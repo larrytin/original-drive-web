@@ -25,6 +25,7 @@
             android:id="@+id/offlineFileName"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginLeft="6dp"
             android:layout_toRightOf="@id/offlineFileIcon"
             android:gravity="center_vertical" />
     </RelativeLayout>
@@ -41,7 +42,7 @@
             android:layout_width="100dp"
             android:layout_height="@dimen/progressBar_height"
             android:layout_alignParentLeft="true"
-            android:layout_marginLeft="10dp"
+            android:layout_marginLeft="13dp"
             android:layout_marginTop="8dp" />
 
         <TextView

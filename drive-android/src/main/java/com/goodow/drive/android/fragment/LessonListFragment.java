@@ -4,6 +4,7 @@ import java.io.File;
 
 import android.app.ListFragment;
 import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -13,6 +14,7 @@ import android.widget.LinearLayout;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
@@ -21,6 +23,7 @@ import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.SomeEnums;
 import com.goodow.realtime.BaseModelEvent;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -201,27 +204,53 @@ public class LessonListFragment extends ListFragment implements
 							if (file.exists()) {
 								Intent intent = null;
 
+								String resPath = GlobalDataCacheForMemorySingleton.getInstance
+										.getOfflineResDirPath() + "/";
+
 								if (GlobalConstant.SupportResTypeEnum.MP3
 										.getTypeName().equals(map.get("type"))) {
 									intent = new Intent(getActivity(),
 											AudioPlayActivity.class);
+
+									intent.putExtra(
+											AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
+													.name(), (String) map
+													.get("label"));
+									intent.putExtra(
+											AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
+													.name(),
+											resPath
+													+ (String) map
+															.get("blobKey"));
 								} else if (GlobalConstant.SupportResTypeEnum.MP4
 										.getTypeName().equals(map.get("type"))) {
 									intent = new Intent(getActivity(),
 											VideoPlayActivity.class);
+
+									intent.putExtra(
+											VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
+													.name(), (String) map
+													.get("label"));
+									intent.putExtra(
+											VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
+													.name(),
+											resPath
+													+ (String) map
+															.get("blobKey"));
+								} else if (GlobalConstant.SupportResTypeEnum.FLASH
+										.getTypeName().equals(map.get("type"))) {
+									// TODO
+								} else {
+									intent = new Intent();
+
+									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+									intent.setAction(Intent.ACTION_VIEW);
+									String type = SomeEnums.getMIMEType((String) map
+											.get("type"));
+									intent.setDataAndType(Uri.fromFile(file),
+											type);
 								}
 
-								intent.putExtra(
-										AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
-												.name(), (String) map
-												.get("label"));
-								intent.putExtra(
-										AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
-												.name(),
-										GlobalDataCacheForMemorySingleton.getInstance
-												.getOfflineResDirPath()
-												+ "/"
-												+ (String) map.get("blobKey"));
 								getActivity().startActivity(intent);
 							} else {
 								Toast.makeText(getActivity(), "请先下载该文件.",
@@ -394,4 +423,5 @@ public class LessonListFragment extends ListFragment implements
 		listenerMap.removeEventListener(EventType.VALUE_CHANGED,
 				valuesChangeEventHandler, false);
 	}
+
 }

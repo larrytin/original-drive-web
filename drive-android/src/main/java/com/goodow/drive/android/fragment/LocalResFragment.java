@@ -2,7 +2,11 @@ package com.goodow.drive.android.fragment;
 
 import java.io.File;
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 import android.app.ListFragment;
+import android.content.Intent;
+import android.net.Uri;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -12,8 +16,11 @@ import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.LocalResAdapter;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.SomeEnums;
 import com.goodow.realtime.CollaborativeMap;
 
 public class LocalResFragment extends ListFragment implements
@@ -44,6 +51,46 @@ public class LocalResFragment extends ListFragment implements
 		if (file.isDirectory()) {
 			parentDirectory = file.getParentFile().getAbsolutePath();
 			initDataSource(file);
+		} else {
+			if (file.exists()) {
+				String fileName = file.getName();
+				Map<String, String> map = new HashMap<String, String>();
+				map.put("label", fileName);
+				map.put("type",
+						fileName.substring(fileName.lastIndexOf(".") + 1));
+				map.put("blobKey", fileName);
+
+				Intent intent = null;
+
+				String resPath = GlobalDataCacheForMemorySingleton.getInstance
+						.getOfflineResDirPath() + "/";
+
+				if (GlobalConstant.SupportResTypeEnum.MP4.getTypeName().equals(
+						map.get("type"))) {
+					intent = new Intent(getActivity(), VideoPlayActivity.class);
+
+					intent.putExtra(
+							VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
+									.name(), (String) map.get("label"));
+					intent.putExtra(
+							VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
+									.name(),
+							resPath + (String) map.get("blobKey"));
+				} else if (GlobalConstant.SupportResTypeEnum.FLASH
+						.getTypeName().equals(map.get("type"))) {
+					// TODO
+				} else {
+					intent = new Intent();
+
+					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+					intent.setAction(Intent.ACTION_VIEW);
+					String type = SomeEnums.getMIMEType((String) map
+							.get("type"));
+					intent.setDataAndType(Uri.fromFile(file), type);
+				}
+
+				getActivity().startActivity(intent);
+			}
 		}
 	}
 
