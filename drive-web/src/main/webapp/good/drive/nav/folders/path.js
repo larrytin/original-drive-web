@@ -89,8 +89,17 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
 };
 
 good.drive.nav.folders.Path.prototype.pathload = function() {
-  
 };
+
+good.drive.nav.folders.Path.prototype.getCurrentData = function() {
+  if (this.pathlist.length() == 0) {
+    return null;
+  }
+  var dataid = this.pathlist.get(this.pathlist.length() - 1);
+  var docid = this.path.get(this.pathNameType().CURRENTDOCID);
+  var model = goog.object.get(good.drive.nav.folders.AbstractControl.docs, docid);
+  return model.getObject(dataid);
+}
 
 /**
  * @param {string} docId
