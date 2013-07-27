@@ -19,6 +19,7 @@ import com.google.appengine.api.blobstore.BlobKey;
 import com.google.appengine.api.blobstore.BlobstoreService;
 import com.google.appengine.api.images.ImagesService;
 import com.google.appengine.api.images.ServingUrlOptions;
+import com.google.appengine.api.utils.SystemProperty;
 import com.google.common.collect.Iterables;
 import com.google.gson.Gson;
 import com.google.gson.JsonObject;
@@ -60,16 +61,30 @@ public class UploadServlet extends HttpServlet {
       if (blobInfo.getContentType().startsWith("image/")) {
         ServingUrlOptions servingUrlOptions = ServingUrlOptions.Builder.withBlobKey(blobKey);
         String servingUrl = imagesService.getServingUrl(servingUrlOptions);
-        jsonTree.addProperty("thumbnail", servingUrl.substring(servingUrl.lastIndexOf('/') + 1));
+        // jsonTree.addProperty("thumbnail", servingUrl.substring(servingUrl.indexOf("/_ah/img/")));
+        jsonTree.addProperty("thumbnail", servingUrl);
       }
       String filename = blobInfo.getFilename();
-      filename = new String(filename.getBytes("ISO8859-1"), "UTF-8");
+      if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {
+        filename = new String(filename.getBytes("ISO8859-1"), "UTF-8");
+      }
       jsonTree.addProperty("filename", filename);
       ids.put(entry.getKey(), jsonTree);
     }
     resp.setContentType("application/json; charset=UTF-8");
     resp.setHeader("Access-Control-Allow-Origin", "*");
     String json = new Gson().toJson(ids);
+    resp.getWriter().print(json);
+  }
+
+  @Override
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException,
+      IOException {
+    String formAction = blobstoreService.createUploadUrl("/upload");
+    resp.setContentType("application/json; charset=UTF-8");
+    resp.setHeader("Access-Control-Allow-Origin", "*");
+    formAction = formAction.substring(formAction.indexOf("/_ah/upload/"));
+    String json = new Gson().toJson(new BoxedString(formAction));
     resp.getWriter().print(json);
   }
 

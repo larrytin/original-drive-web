@@ -4,7 +4,6 @@ goog.provide('good.drive.creation.fileupload');
 goog.require('good.constants');
 goog.require('good.drive.nav.folders.Model');
 goog.require('good.net.CrossDomainRpc');
-goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.events');
 
@@ -214,9 +213,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
       good.constants.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
-      var url = new goog.Uri(json['value']);
-      url.setDomain(good.constants.SERVERDOMAIN);
-      url.setScheme('http');
+      var url = good.constants.DRIVE_SERVER + json['value'];
       that.uploadFiles(url, files, function(json) {
         if (json && !json['error']) {
           for (var i = 0; i < files.length; i++) {

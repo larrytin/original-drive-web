@@ -2,12 +2,12 @@
 goog.provide('good.constants');
 
 /**@type {string} */
-//good.constants.SERVERDOMAIN = '192.168.1.15';
-good.constants.SERVERDOMAIN = 'server.drive.goodow.com';
+//good.constants.DRIVE_SERVER = 'http://192.168.1.15:8880';
+good.constants.DRIVE_SERVER = 'http://server.drive.goodow.com';
 
 /**@type {string} */
-good.constants.SERVERADRESS = 'http://' +
-              good.constants.SERVERDOMAIN + '/ah/api/';
+good.constants.SERVERADRESS =
+              good.constants.DRIVE_SERVER + '/ah/api/';
 
 /**@type {string} */
 good.constants.NAME = 'attachment';

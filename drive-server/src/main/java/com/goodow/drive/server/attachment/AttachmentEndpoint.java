@@ -52,7 +52,7 @@ public class AttachmentEndpoint {
     if (formAction == null) {
       throw new RuntimeException("Null blobstore upload url");
     }
-    return new BoxedString(formAction);
+    return new BoxedString(formAction.substring(formAction.indexOf("/_ah/upload/")));
   }
 
   @ApiMethod(name = "insert")
