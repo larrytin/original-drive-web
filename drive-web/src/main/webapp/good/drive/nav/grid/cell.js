@@ -12,11 +12,12 @@ goog.require('goog.ui.Component');
  * @constructor
  * @extends {goog.ui.Component}
  */
-good.drive.nav.grid.Cell = function(data, defaultConfig, opt_domHelper) {
+good.drive.nav.grid.Cell = function(data, keytype, defaultConfig, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
 
   this.data = data;
   this.defaultConfig = defaultConfig;
+  this.keytype = keytype;
   this.isFolder_ = undefined;
   this.selected_ = false;
 };
@@ -25,14 +26,20 @@ goog.inherits(good.drive.nav.grid.Cell, goog.ui.Component);
 
 /** */
 good.drive.nav.grid.Cell.prototype.renderCell = function() {
-  var label = this.data.get(
-      good.drive.nav.folders.ViewControl.ViewControlType.LABEL);
+  var label = this.getLabelData(this.data);
   var labelElm = goog.dom.createDom('div',
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
 };
 
+good.drive.nav.grid.Cell.prototype.getImageData = function(data) {
+  return data.get(this.keytype.LABEL[0]);
+};
+
+good.drive.nav.grid.Cell.prototype.getLabelData = function(data) {
+  return data.get(this.keytype.LABEL[0]);
+};
 
 /** @override */
 good.drive.nav.grid.Cell.prototype.enterDocument = function() {

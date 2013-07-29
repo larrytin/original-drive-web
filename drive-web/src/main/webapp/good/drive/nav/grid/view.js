@@ -134,7 +134,7 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
   for (var i = 0; i < path.length(); i++) {
     var id = path.get(i);
     var value = model.getObject(id);
-    var label = value.get('label');
+    var label = value.get(this.getKeyType().LABEL[0]);
     if (i == (path.length() - 1)) {
       var cruuentElm = goog.dom.createDom('div',
           {'class': 'goog-inline-block folder-path-' +
@@ -192,6 +192,14 @@ good.drive.nav.grid.View.prototype.pathHandle = function(elm, path, currentid) {
  */
 good.drive.nav.grid.View.prototype.removeFromParent = function() {
   goog.dom.removeNode(this.getElement());
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ * @param {boolean} isFolder
+ */
+good.drive.nav.grid.View.prototype.insertCell = function(data, isFolder) {
+  
 };
 
 /**
@@ -275,7 +283,7 @@ good.drive.nav.grid.View.prototype.enterDocument = function() {
  * @return {good.drive.nav.grid.Cell}
  */
 good.drive.nav.grid.View.prototype.createCell = function(data) {
-  return new good.drive.nav.grid.Cell(data, this.getConfig());
+  return new good.drive.nav.grid.Cell(data, this.getKeyType(), this.getConfig());
 };
 
 
@@ -516,6 +524,9 @@ good.drive.nav.grid.View.prototype.getGridContainerClassName = function() {
   return this.getConfig().cssGridContainer;
 };
 
+good.drive.nav.grid.View.prototype.getKeyType = function() {
+  return {LABEL: ['label', 'string']};
+}
 
 /**
  * @return {Object.<string, string>}
