@@ -18,6 +18,7 @@ good.drive.nav.grid.View = function(data, docid, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
   this.data = data;
   this.docid = docid;
+  this._selectedItem = undefined;
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
@@ -81,6 +82,22 @@ good.drive.nav.grid.View.visiable = function(grid) {
  * @param {Object} data
  */
 good.drive.nav.grid.View.prototype.renderCell = function(data) {
+  if (goog.isArray(data)) {
+    this.renderCellByArray(data);
+    return;
+  }
+  if (goog.isObject(data)) {
+    this.renderCellByObject(data);
+  }
+};
+
+good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
+  goog.array.forEach(data, function(cell) {
+    this.insertCell(cell, false);
+  });
+};
+
+good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
   var file = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
   var folder = data.get(
       good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS);
@@ -88,7 +105,7 @@ good.drive.nav.grid.View.prototype.renderCell = function(data) {
     var data = file.get(i);
     this.insertCell(data, false);
   }
-
+  
   for (var i = 0; i < folder.length(); i++) {
     var data = folder.get(i);
     this.insertCell(data, true);
@@ -135,6 +152,25 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
     goog.dom.appendChild(pathElm, separatorElm);
     this.pathHandle(contentElm, path, id);
   }
+};
+
+good.drive.nav.grid.View.prototype.setSelectedItem = function(cell) {
+  if (this._selectedItem == cell) {
+    return;
+  }
+  
+  if (this._selectedItem) {
+    this._selectedItem.setSelectedInternal(false);
+  }
+  this._selectedItem = cell;
+  if (cell) {
+    cell.setSelectedInternal(true);
+    cell.select();
+  }
+};
+
+good.drive.nav.grid.View.prototype.getSelectedItem = function() {
+  return this._selectedItem;
 };
 
 /**

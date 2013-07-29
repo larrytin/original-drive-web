@@ -18,6 +18,7 @@ good.drive.nav.grid.Cell = function(data, defaultConfig, opt_domHelper) {
   this.data = data;
   this.defaultConfig = defaultConfig;
   this.isFolder_ = undefined;
+  this.selected_ = false;
 };
 goog.inherits(good.drive.nav.grid.Cell, goog.ui.Component);
 
@@ -71,9 +72,24 @@ good.drive.nav.grid.Cell.prototype.attachEvents_ = function() {
   this.getHandler().
       listen(el, goog.events.EventType.MOUSEOVER, this.handleKeyEvent).
       listen(el, goog.events.EventType.MOUSEOUT, this.handleKeyEvent).
+      listen(el, goog.events.EventType.MOUSEDOWN, this.handleKeyEvent).
       listen(el, goog.events.EventType.CLICK, this.clickHandle);
-
 };
+
+good.drive.nav.grid.Cell.prototype.select = function() {
+  var view = this.getParent();
+  view.setSelectedItem(this);
+}
+
+good.drive.nav.grid.Cell.prototype.setSelectedInternal = function(selected) {
+  if(this.selected_ == selected) {
+    return;
+  }
+  this.selected_ == selected;
+  
+  var cellElm = this.getContentElement();
+  cellElm.className = this.defaultConfig.cssCellRoot;
+}
 
 /**
  * @private
@@ -100,6 +116,8 @@ good.drive.nav.grid.Cell.prototype.handleKeyEvent = function(e) {
         goog.dom.classes.remove(el,
             this.defaultConfig.cssCellHover);
       }
+    case goog.events.EventType.MOUSEDOWN:
+      this.select();
       break;
   }
 };
