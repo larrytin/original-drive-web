@@ -58,8 +58,7 @@ good.drive.nav.grid.View.initGrid = function() {
     var grid = new good.drive.nav.grid.View(data, docid);
     grid.render(goog.dom.getElement('viewmanager'));
     grid.renderCell(data);
-    grid.renderFolderPath(
-        good.drive.nav.folders.ViewControl.ViewControlType.LABEL);
+    grid.renderFolderPath();
     goog.object.add(cells, id, grid);
     good.drive.nav.grid.View.visiable(grid);
   });
@@ -92,8 +91,9 @@ good.drive.nav.grid.View.prototype.renderCell = function(data) {
 };
 
 good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
+  var that = this;
   goog.array.forEach(data, function(cell) {
-    this.insertCell(cell, false);
+    that.insertCell(cell, false);
   });
 };
 
