@@ -4626,3 +4626,137 @@ transition: width .218s ease .218s;
 overflow: hidden;
 }
 
+<!-- gird content -->
+.gridview-grid {
+overflow: hidden;
+}
+
+.gridview-grid {
+cursor: default;
+}
+
+.gv-grid-inner {
+padding: 27px 0 0 11px;
+}
+
+.doclist-container {
+-moz-user-select: none;
+-webkit-user-select: none;
+user-select: none;
+}
+.gv-image {
+margin: 0 auto;
+position: relative;
+}
+
+.gv-view-bottom {
+bottom: 0;
+left: 0;
+position: absolute;
+}
+
+.gv-view-center {
+text-align: center;
+}
+
+.gv-selection {
+border: 1px solid #FFF;
+display: inline-block;
+padding: 2px;
+}
+
+.gv-image-container {
+position: relative;
+min-height: 64px;
+min-width: 64px;
+}
+
+.doclist-gv-name-container {
+line-height: 21px;
+text-align: center;
+}
+
+.gv-view-name {
+color: #222;
+font-size: 13px;
+line-height: 21px;
+overflow: hidden;
+padding-left: 6px;
+padding-right: 6px;
+text-align: center;
+text-overflow: ellipsis;
+-o-text-overflow: ellipsis;
+white-space: nowrap;
+}
+
+.doclist-gv-name-container .gv-view-name {
+display: inline-block;
+max-width: 80%;
+padding-top: 1px;
+padding-left: 0;
+vertical-align: top;
+}
+
+.gv-dynamic-thumbnail a {
+color: #222;
+text-decoration: none;
+}
+
+.gridview-thumbnail-link {
+display: block;
+height: 100%;
+width: 100%;
+}
+
+.gv-checkbox {
+border-left: 1px solid #F6EBAE;
+border-top: 1px solid #F6EBAE;
+background-color: #FFF;
+display: none;
+left: 0;
+padding-bottom: 4px;
+position: absolute;
+top: -2px;
+}
+
+.jfk-checkbox {
+-webkit-border-radius: 1px;
+-moz-border-radius: 1px;
+border-radius: 1px;
+background-color: rgba(255, 255, 255, 0.05);
+border: 1px solid #C6C6C6;
+border: 1px solid rgba(155, 155, 155, 0.57);
+font-size: 1px;
+height: 11px;
+margin: 0 4px 0 1px;
+outline: 0;
+vertical-align: text-bottom;
+width: 11px;
+}
+
+.jfk-checkbox-checkmark {
+height: 15px;
+outline: 0;
+width: 15px;
+left: 0;
+position: relative;
+top: -3px;
+}
+
+.doclist-gv-thumb-container {
+height: 132px;
+text-align: center;
+width: 132px;
+}
+
+.doclist-gv-thumb-folder>.gv-image-el {
+display: inline-block;
+margin-top: 29px!important;
+}
+
+.drive-sprite-folder-grid-icon.icon-color-1 {
+background: no-repeat url(../images/wjj.png) 0 0;
+background-size: 110px 2063px;
+width: 110px;
+height: 85px;
+}
