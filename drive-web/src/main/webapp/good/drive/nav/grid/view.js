@@ -90,6 +90,16 @@ good.drive.nav.grid.View.prototype.renderCell = function(data) {
   }
 };
 
+good.drive.nav.grid.View.prototype.clear = function() {
+  var length =  this.getChildCount();
+  if (length == 0) {
+    return;
+  }
+  for (var i=0; i < length; i++) {
+    this.removeChildAt(0);
+  }
+};
+
 good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
   var that = this;
   goog.array.forEach(data, function(cell) {
@@ -115,6 +125,8 @@ good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
 /**
  */
 good.drive.nav.grid.View.prototype.renderFolderPath = function() {
+  var headElm = this.getHeadContainerElement();
+  goog.style.showElement(headElm, 'none');
   var pathElm = this.getFolderPathElement();
   var child = goog.dom.getChildren(pathElm);
   if (!goog.array.isEmpty(child)) {
@@ -192,14 +204,6 @@ good.drive.nav.grid.View.prototype.pathHandle = function(elm, path, currentid) {
  */
 good.drive.nav.grid.View.prototype.removeFromParent = function() {
   goog.dom.removeNode(this.getElement());
-};
-
-/**
- * @param {good.realtime.CollaborativeMap} data
- * @param {boolean} isFolder
- */
-good.drive.nav.grid.View.prototype.insertCell = function(data, isFolder) {
-  
 };
 
 /**
@@ -371,7 +375,7 @@ good.drive.nav.grid.View.prototype.getInnerClassName = function() {
 good.drive.nav.grid.View.prototype.getHeadContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="', this.getHeadContainerClassName(),
-      '">',
+      '" style="display: none;">',
       this.getFolderPathHtml(),
       '<div class="',
       this.getConfig().cssEdge,
