@@ -4537,4 +4537,92 @@ outline: none;
 text-decoration: none;
 }
 
+<!-- grid导航条 -->
+.viewpane-list {
+padding: 0;
+vertical-align: top;
+width: 100%;
+}
+
+.banner-box .density-tiny {
+padding: 0 16px;
+}
+
+.doclist, .doclistview, .doclistview-ie, .doclistview-inner, .doclistview-inner-ie, .doclistview-child-inner, .doclistview-child-inner-ie {
+cursor: default;
+margin: 0;
+outline: none;
+}
+
+.doclist, .doclistview, .doclistview-ie, .doclistview-inner, .doclistview-inner-ie, .doclistview-child-inner, .doclistview-child-inner-ie {
+position: relative;
+}
+
+.doclistview-fixed-container.density-tiny {
+margin: 0 16px;
+}
+
+.doclistview-fixed-container {
+left: 0;
+position: absolute;
+right: 0;
+top: 0;
+z-index: 1;
+}
+
+.folder-path-container {
+background-color: #FFF;
+border-bottom: 1px solid #EBEBEB;
+color: #777;
+font-size: 11px;
+height: 26px;
+line-height: 26px;
+outline: none;
+overflow: hidden;
+padding-left: 2px;
+text-align: top;
+white-space: nowrap;
+z-index: 1;
+}
+
+.folder-path-folder {
+vertical-align: top;
+}
+
+.folder-path-separator-icon {
+background-image: url(../images/icons_35.png);
+background-position: -1598px 8px!important;
+background-repeat: no-repeat;
+height: 16px;
+-moz-opacity: .55;
+-khtml-opacity: .55;
+opacity: .55;
+filter: alpha(opacity=55);
+width: 20px;
+}
+
+.folder-current-element {
+font-weight: bold;
+}
+
+.doclistview-scroll-container {
+overflow-y: auto;
+}
+
+.doclistview-side-panel {
+border-left: 1px solid #EBEBEB;
+box-sizing: border-box;
+-moz-box-sizing: border-box;
+-webkit-box-sizing: border-box;
+float: right;
+overflow: hidden;
+-webkit-transition: width .218s ease .218s;
+-moz-transition: width .218s ease .218s;
+-o-transition: width .218s ease .218s;
+transition: width .218s ease .218s;
+}
+
+.doclistview-empty-view {
+overflow: hidden;
+}
 
