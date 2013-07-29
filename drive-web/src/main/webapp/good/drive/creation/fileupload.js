@@ -207,11 +207,15 @@ good.drive.creation.Fileupload.prototype.closeuploadAction = function() {
  */
 good.drive.creation.Fileupload.prototype.geturl = function(files) {
   var that = this;
-  var rpc = new good.net.CrossDomainRpc('GET',
-      good.constants.NAME,
-      good.constants.VERSION, 'boxedstring',
-      good.constants.SERVERADRESS);
-  rpc.send(function(json) {
+  var xhr = new XMLHttpRequest();
+  var url = good.constants.DRIVE_SERVER + '/upload';
+  xhr.open('GET', url, true);
+  xhr.onload = function(e) {
+    var responseText = this.responseText;
+    if (responseText.length == 0) {      
+      return;
+    }
+    var json = goog.json.parse(responseText);
     if (json && !json['error']) {
       var url = good.constants.DRIVE_SERVER + json['value'];
       that.uploadFiles(url, files, function(json) {
@@ -241,7 +245,8 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
         }
       });
     }
-  });
+  };  
+  xhr.send();  
 };
 
 /**
@@ -351,6 +356,8 @@ good.drive.creation.Fileupload.prototype.getTags = function() {
         good.drive.nav.folders.AbstractControl.docs,
         good.constants.PUBLICRESDOCID);
     var map = publicTree.getData();
-    return new Array('数学', '图片');
+    var query = map.get('query');
+    var tags = query.get('tags');
+    return tags.asArray();
   }
   };
