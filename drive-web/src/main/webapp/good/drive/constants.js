@@ -21,7 +21,7 @@ good.constants.MYCLASSRESDOCID = 'lesson01';
 /** @type {string} */
 good.constants.MYRESDOCID = 'favorites01';
 /** @type {string} */
-good.constants.PUBLICRESDOCID = '@tmp/publicRes14';
+good.constants.PUBLICRESDOCID = '@tmp/publicRes16';
 /** @type {string} */
 good.constants.PATHDOCID = 'remotecontrol01';
 

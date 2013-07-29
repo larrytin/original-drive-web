@@ -232,14 +232,10 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
             if (good.drive.creation.Fileupload.TYPE == 'new') {
               var tags = that.getTags();
               insertJson['tags'] = tags;
-              that.insertfile(insertJson, function() {
-                goog.dom.getElement(filename).innerText = '上传结束';
-              });
+              that.insertfile(insertJson);
             } else {
               that.updateAgain(good.drive.creation.Fileupload.FILEID,
-                  insertJson, function() {
-                goog.dom.getElement(filename).innerText = '更新成功';
-                  });
+                  insertJson);
             }
           }
         }
@@ -251,9 +247,8 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
 
 /**
  * @param {JSON} json
- * @param {Function} fn
  */
-good.drive.creation.Fileupload.prototype.insertfile = function(json, fn) {
+good.drive.creation.Fileupload.prototype.insertfile = function(json) {
   var rpc = new good.net.CrossDomainRpc('POST',
       good.constants.NAME,
       good.constants.VERSION, 'attachment',
@@ -261,7 +256,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json, fn) {
   rpc.body = json;
   rpc.send(function(json) {
    if (json && !json['error']) {
-     fn();
+     goog.dom.getElement(json['filename']).innerText = '上传结束';
    }
   });
 };
@@ -269,10 +264,9 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json, fn) {
 /**
  * @param {string} fileId
  * @param {JSON} updatejson
- * @param {Function} fn
  */
 good.drive.creation.Fileupload.prototype.updateAgain =
-  function(fileId, updatejson, fn) {
+  function(fileId, updatejson) {
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
@@ -287,7 +281,7 @@ good.drive.creation.Fileupload.prototype.updateAgain =
            good.constants.SERVERADRESS);
        rpc.body = updatejson;
        rpc.send(function(json) {
-         fn();
+         goog.dom.getElement(json['filename']).innerText = '更新成功';         
       });
        }
      });

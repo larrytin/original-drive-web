@@ -46,7 +46,7 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
     tags.push(e);
     query.set(good.constants.TAGS, tags);
     query.set(good.constants.CONTENTTYPE, '');
-    root_.set(good.constants.QUERY, query);
+    folder.set(good.constants.QUERY, query);
     folders.push(folder);
   });
   rootFolders.pushAll(folders);

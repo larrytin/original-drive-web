@@ -20,6 +20,7 @@ goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.rightmenu');
+goog.require('good.drive.resourcemap');
 goog.require('good.drive.search');
 goog.require('goog.dom');
 
@@ -57,8 +58,7 @@ good.drive.init.init = function() {
   good.config.start();
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
-
-  var advancedMenu = new good.drive.search.AdvancedMenu();
+  
   var myclass = new good.drive.nav.folders.Tree('我的课程',
       good.constants.MYCLASSRESDOCID);
   var myResTree = new good.drive.nav.folders.Tree('我的收藏夹',
@@ -73,7 +73,12 @@ good.drive.init.init = function() {
   pathControl.addPath(good.constants.PUBLICRESDOCID, publicResTree);
   pathControl.pathload = function() {
     good.drive.nav.grid.View.initGrid();
+    good.drive.resourcemap.Resourcemap.init();
   };
+  
+  var advancedMenu = new good.drive.search.AdvancedMenu();
+  advancedMenu.init();
+
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
   var leftCreateBtn = leftButton.createBtn();
