@@ -23,11 +23,11 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var root_ = mod.getRoot();
 
   var rootFolders = mod.createList();
-  root_.set('folders', rootFolders);
+  root_.set(good.constants.FOLDERS, rootFolders);
   var query = mod.createMap();
   var tags = mod.createList();
-  query.set('tags', tags);
-  query.set('contentType', '');
+  query.set(good.constants.TAGS, tags);
+  query.set(good.constants.CONTENTTYPE, '');
   root_.set('query', query);
 
   var folder;
@@ -39,14 +39,14 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var folders = [];
   goog.array.forEach(fieldArray, function(e) {
     folder = mod.createMap();
-    folder.set('label', e);
-    folder.set('folders', mod.createList());
+    folder.set(good.constants.LABEL, e);
+    folder.set(good.constants.FOLDERS, mod.createList());
     var query = mod.createMap();
     var tags = mod.createList();
     tags.push(e);
-    query.set('tags', tags);
-    query.set('contentType', '');
-    root_.set('query', query);
+    query.set(good.constants.TAGS, tags);
+    query.set(good.constants.CONTENTTYPE, '');
+    folder.set(good.constants.QUERY, query);
     folders.push(folder);
   });
   rootFolders.pushAll(folders);
@@ -55,15 +55,15 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
     subFolders = folders[i].get(this.getKeyType().FOLDERS);
   goog.array.forEach(gradeArray, function(e) {
     subFolder = mod.createMap();
-    subFolder.set('label', e);
-    subFolder.set('folders', mod.createList());
+    subFolder.set(good.constants.LABEL, e);
+    subFolder.set(good.constants.FOLDERS, mod.createList());
     var query = mod.createMap();
     var tags = mod.createList();
     tags.push(fieldArray[i]);
     tags.push(e);
-    query.set('tags', tags);
-    query.set('contentType', '');
-    subFolder.set('query', query);
+    query.set(good.constants.TAGS, tags);
+    query.set(good.constants.CONTENTTYPE, '');
+    subFolder.set(good.constants.QUERY, query);
     subFolders.push(subFolder);
   });
   }

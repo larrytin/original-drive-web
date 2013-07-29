@@ -4,7 +4,6 @@ goog.provide('good.drive.creation.fileupload');
 goog.require('good.constants');
 goog.require('good.drive.nav.folders.Model');
 goog.require('good.net.CrossDomainRpc');
-goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.events');
 
@@ -208,15 +207,17 @@ good.drive.creation.Fileupload.prototype.closeuploadAction = function() {
  */
 good.drive.creation.Fileupload.prototype.geturl = function(files) {
   var that = this;
-  var rpc = new good.net.CrossDomainRpc('GET',
-      good.constants.NAME,
-      good.constants.VERSION, 'boxedstring',
-      good.constants.SERVERADRESS);
-  rpc.send(function(json) {
+  var xhr = new XMLHttpRequest();
+  var url = good.constants.DRIVE_SERVER + '/upload';
+  xhr.open('GET', url, true);
+  xhr.onload = function(e) {
+    var responseText = this.responseText;
+    if (responseText.length == 0) {      
+      return;
+    }
+    var json = goog.json.parse(responseText);
     if (json && !json['error']) {
-      var url = new goog.Uri(json['value']);
-      url.setDomain(good.constants.SERVERDOMAIN);
-      url.setScheme('http');
+      var url = good.constants.DRIVE_SERVER + json['value'];
       that.uploadFiles(url, files, function(json) {
         if (json && !json['error']) {
           for (var i = 0; i < files.length; i++) {
@@ -231,27 +232,23 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
             if (good.drive.creation.Fileupload.TYPE == 'new') {
               var tags = that.getTags();
               insertJson['tags'] = tags;
-              that.insertfile(insertJson, function() {
-                goog.dom.getElement(filename).innerText = '上传结束';
-              });
+              that.insertfile(insertJson);
             } else {
               that.updateAgain(good.drive.creation.Fileupload.FILEID,
-                  insertJson, function() {
-                goog.dom.getElement(filename).innerText = '更新成功';
-                  });
+                  insertJson);
             }
           }
         }
       });
     }
-  });
+  };  
+  xhr.send();  
 };
 
 /**
  * @param {JSON} json
- * @param {Function} fn
  */
-good.drive.creation.Fileupload.prototype.insertfile = function(json, fn) {
+good.drive.creation.Fileupload.prototype.insertfile = function(json) {
   var rpc = new good.net.CrossDomainRpc('POST',
       good.constants.NAME,
       good.constants.VERSION, 'attachment',
@@ -259,7 +256,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json, fn) {
   rpc.body = json;
   rpc.send(function(json) {
    if (json && !json['error']) {
-     fn();
+     goog.dom.getElement(json['filename']).innerText = '上传结束';
    }
   });
 };
@@ -267,10 +264,9 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json, fn) {
 /**
  * @param {string} fileId
  * @param {JSON} updatejson
- * @param {Function} fn
  */
 good.drive.creation.Fileupload.prototype.updateAgain =
-  function(fileId, updatejson, fn) {
+  function(fileId, updatejson) {
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
@@ -285,7 +281,7 @@ good.drive.creation.Fileupload.prototype.updateAgain =
            good.constants.SERVERADRESS);
        rpc.body = updatejson;
        rpc.send(function(json) {
-         fn();
+         goog.dom.getElement(json['filename']).innerText = '更新成功';         
       });
        }
      });
@@ -354,6 +350,8 @@ good.drive.creation.Fileupload.prototype.getTags = function() {
         good.drive.nav.folders.AbstractControl.docs,
         good.constants.PUBLICRESDOCID);
     var map = publicTree.getData();
-    return new Array('数学', '图片');
+    var query = map.get('query');
+    var tags = query.get('tags');
+    return tags.asArray();
   }
   };

@@ -2,14 +2,13 @@
 goog.provide('good.drive.search');
 
 goog.require('good.constants');
+goog.require('good.drive.nav.grid');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.ui.MenuItem');
 goog.require('goog.ui.Popup');
 goog.require('goog.ui.PopupMenu');
-
-
 
 /**
  * @constructor
@@ -23,10 +22,43 @@ good.drive.search.AdvancedMenu = function() {
   var search_btn = goog.dom.getElement('gbqfb');
 
   var popupElt = goog.dom.getElement('search_menu');
-
-  var btn = goog.dom.getElement('advanced-search-button-container');
+  
   var pop = new goog.ui.PopupMenu();
-  pop.decorateContent = function(element) {
+  popupElt.style.minWidth = '509px';
+  
+  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
+  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
+  var gradeArray = new Array('大班', '中班', '小班');
+  this._typeArray = typeArray;
+  this._fieldArray = fieldArray;
+  this._gradeArray = gradeArray;
+  this._pop = pop;
+  this._search_input = search_input;
+  this._input_text = input_text;
+  this._search_btn = search_btn;  
+};
+
+/**
+ *
+ */
+good.drive.search.AdvancedMenu.prototype.init = function() {
+  this.createPopMenu();
+  this.popaction();
+  this.clearAction();
+  this.inputAction();
+  this.searchbtncick();
+};
+
+
+/**
+ *
+ */
+good.drive.search.AdvancedMenu.prototype.createPopMenu = function() {
+  var btn = goog.dom.getElement('advanced-search-button-container');
+  var popupElt = goog.dom.getElement('search_menu');
+  
+  popupElt.style.minWidth = '509px';
+  this._pop.decorateContent = function(element) {
     var renderer = this.getRenderer();
     var contentElements = this.getDomHelper().
     getElementsByTagNameAndClass('div',
@@ -41,30 +73,13 @@ good.drive.search.AdvancedMenu = function() {
     }
   };
 
-  pop.setToggleMode(true);
-  pop.decorate(popupElt);
+  this._pop.setToggleMode(true);
+  this._pop.decorate(popupElt);
 
-  pop.attach(
+  this._pop.attach(
       btn,
       goog.positioning.Corner.BOTTOM_RIGHT,
       goog.positioning.Corner.TOP_RIGHT);
-
-  popupElt.style.minWidth = '509px';
-  //popupElt.style.minHight = '200px';
-  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
-  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
-  var gradeArray = new Array('大班', '中班', '小班');
-  this._typeArray = typeArray;
-  this._fieldArray = fieldArray;
-  this._gradeArray = gradeArray;
-  this._pop = pop;
-  this._search_input = search_input;
-  this._input_text = input_text;
-  this._search_btn = search_btn;
-  this.popaction();
-  this.clearAction();
-  this.inputAction();
-  this.searchbtncick();
 };
 
 /**
@@ -74,7 +89,20 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
   var that = this;
   goog.events.listen(this._pop, 'action', function(e) {
     var title = e.target.element_.innerText;
-    title = that.trim(title);
+    title = that.trim(title); 
+    that.createCondition(title);
+    that.inputstyle();
+    that.search();
+  });
+};
+
+
+/**
+ * @param {string} str
+ */
+good.drive.search.AdvancedMenu.prototype.createCondition = function(title) {
+  var that = this;
+  if (title != null && title != '') {
     if (title != '类型' && title != '领域' && title != '年级') {
       var div = goog.dom.createDom('div',
           {'class': 'goog-inline-block filter-chip',
@@ -97,9 +125,7 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
       } else {
         var oldNode = that._search_input.children[index];
         goog.dom.replaceNode(div, oldNode);
-      }
-      that.inputstyle();
-      that.search();
+      }    
       goog.events.listen(span_clean,
           goog.events.EventType.CLICK, function(e) {
         goog.dom.removeNode(e.target.parentElement);
@@ -107,7 +133,7 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
         that.search();
       });
     }
-  });
+  }
 };
 
 /**
