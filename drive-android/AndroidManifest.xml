@@ -69,6 +69,11 @@
                 <category android:name="com.goodow.android.drive" />
             </intent-filter>
         </receiver>
+        <receiver android:name="com.goodow.drive.android.service.DownloadBroadcastReceiver">
+            <intent-filter>
+                <action android:name="com.goodow.realtime.android.action.DOWNLOAD" />
+            </intent-filter>
+        </receiver>
         <!--
       Application-specific subclass of GCMBaseIntentService that will
       handle received messages.
