@@ -38,6 +38,8 @@ good.drive.search.AdvancedMenu = function() {
   this._search_btn = search_btn;  
 };
 
+good.drive.search.AdvancedMenu.SEARCHGRID = undefined;
+
 /**
  *
  */
@@ -235,8 +237,10 @@ good.drive.search.AdvancedMenu.prototype.trim = function(str) {
 };
 
 
-/** */
-good.drive.search.AdvancedMenu.prototype.search = function() {
+/**
+ * @param {string} search_type
+ */
+good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
   var that = this;
   var type = {'动画': 'application/x-shockwave-flash',
       '视频': 'video/mpeg',
@@ -287,15 +291,39 @@ good.drive.search.AdvancedMenu.prototype.search = function() {
       }
     }
 
+    var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
+    if (grid != undefined) {
+      grid.removeFromParent();
+    }
+    if (search_type == undefined && path == 'search') {
+      return;
+    } else {
     //连接服务器查询
-    var rpc = new good.net.CrossDomainRpc('POST',
-        good.constants.NAME,
-        good.constants.VERSION, path,
-        good.constants.SERVERADRESS);
-    rpc.send(function(json) {
-      //填充网格数据
-      alert('333');
-    });
+      var rpc = new good.net.CrossDomainRpc('POST',
+          good.constants.NAME,
+          good.constants.VERSION, path,
+          good.constants.SERVERADRESS);
+      rpc.send(function(json) {
+        //填充网格数据
+        if (json && !json['error']){         
+          
+          grid = new good.drive.nav.grid.View(json['items']);
+          grid.render(goog.dom.getElement('viewmanager'));
+          goog.array.forEach(json['items'], function(item) {
+            var cell = grid.createCell(item);
+            cell.getLabelData = function(data) {
+              return data.filename;
+            };
+            grid.add(cell);
+            cell.renderCell();
+          });
+          good.drive.nav.grid.View.visiable(grid);
+          good.drive.search.AdvancedMenu.SEARCHGRID = grid;
+          var aa = good.drive.search.Rightmenu();
+          
+        }
+      });
+    }    
 };
 
 
@@ -306,6 +334,6 @@ good.drive.search.AdvancedMenu.prototype.searchbtncick = function() {
   var that = this;
   goog.events.listen(that._search_btn,
       goog.events.EventType.CLICK, function(e) {
-    that.search();
+    that.search('click');
   });
 };
