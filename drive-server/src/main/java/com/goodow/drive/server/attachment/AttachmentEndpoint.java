@@ -82,7 +82,7 @@ public class AttachmentEndpoint {
   }
 
   @SuppressWarnings({"unchecked", "unused"})
-  @ApiMethod(name = "search")
+  @ApiMethod(name = "search", httpMethod = HttpMethod.GET)
   public CollectionResponse<Attachment> search(@Nullable @Named("cursor") String cursorString,
       @Nullable @Named("limit") Integer limit, @Nullable @Named("filename") String filename,
       @Nullable @Named("tags") List<String> tags,

@@ -69,7 +69,11 @@ public class UploadServlet extends HttpServlet {
         filename = new String(filename.getBytes("ISO8859-1"), "UTF-8");
       }
       jsonTree.addProperty("filename", filename);
-      ids.put(entry.getKey(), jsonTree);
+      String key = entry.getKey();
+      if (SystemProperty.environment.value() == SystemProperty.Environment.Value.Development) {
+        key = new String(key.getBytes("ISO8859-1"), "UTF-8");
+      }
+      ids.put(key, jsonTree);
     }
     resp.setContentType("application/json; charset=UTF-8");
     resp.setHeader("Access-Control-Allow-Origin", "*");
