@@ -204,7 +204,6 @@ good.drive.init.init = function() {
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
-  var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-  var ceshi = new good.drive.rightmenu.Rightmenu();
+  var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();  
 };
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);

@@ -33,6 +33,12 @@ good.drive.resourcemap.Resourcemap.init = function() {
           menu.createCondition(contentType);
           menu.inputstyle();
           menu.search();
+    } else {
+      var input_text = goog.dom.getElement('gbqfq');
+      var search_btn = goog.dom.getElement('gbqfb');
+      goog.dom.removeChildren(search_btn);
+      input_text.value = '';
+      menu.inputstyle();
     }
   });
 };
