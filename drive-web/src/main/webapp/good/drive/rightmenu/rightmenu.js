@@ -16,19 +16,6 @@ goog.require('goog.ui.Dialog');
 good.drive.rightmenu.Rightmenu = function() {
   var fileupload = new good.drive.creation.Fileupload();
   this._fileupload = fileupload;
-
-  //
-  var aa = goog.dom.getElement('gbqfb');
-
-  var menulst = new Array('预览', '详细信息');
-  var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
-  var that = this;
-  var id = 'oxwg0klaoetukyhhbrqim9hkx0u41tbttln5' +
-  'c0v7ebrvfeaefl19eff53wvva8e2dlo25y5lxy1df895u' +
-  'tk490vgu7q13ehz9lea70sjwe5480lwljn';
-  popupmenu.createRight(aa, function(e) {
-    that.preview(id);
-  });
 };
 
 /**
@@ -59,13 +46,16 @@ good.drive.rightmenu.Rightmenu.prototype.changeinfo = function(fileId,
 };
 
 /**
- *
+ * @param {string} fileId
+ * @param {Function} fn
  */
-good.drive.rightmenu.Rightmenu.prototype.uploadAgain = function() {
+good.drive.rightmenu.Rightmenu.prototype.uploadAgain = function(fileId, fn) {
+  var that = this;
   if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
     alert('上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。');
     return;
   }
+  that._fileupload.fileClick('update', fileId);
 };
 
 
@@ -117,4 +107,11 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
       fn(json);
     }
   });
+};
+
+/**
+ * @param {string} fileId
+ * @param {string} subscribeId
+ */
+good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
 };
