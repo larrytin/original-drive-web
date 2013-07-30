@@ -10,8 +10,8 @@ goog.require('good.drive.nav.button.ToolBarView');
  */
 good.drive.nav.button.ToolBarButton = function() {
   var targetElm = goog.dom.getElement('viewpane-toolbar');
-  this.leftElm = targetElm.firstElementChild;
-  this.rightElm = targetElm.lastElementChild;
+  this.leftElm = goog.dom.getFirstElementChild(targetElm);
+  this.rightElm = goog.dom.getLastElementChild(targetElm);
 };
 
 
