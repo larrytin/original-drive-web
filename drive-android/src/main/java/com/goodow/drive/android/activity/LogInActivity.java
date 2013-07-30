@@ -92,7 +92,7 @@ public class LogInActivity extends RoboActivity {
 						+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
 								.getValue();
 
-				new OfflineFileObserver().startObservation(docId);
+				new OfflineFileObserver().startObservation(docId, true);
 
 				Intent intent = new Intent(LogInActivity.this,
 						MainActivity.class);
@@ -103,10 +103,9 @@ public class LogInActivity extends RoboActivity {
 			SimpleProgressDialog.dismiss(LogInActivity.this);
 
 			if (!TextUtils.isEmpty(errorMessage)) {
-				Toast.makeText(LogInActivity.this, "用户名或者密码错误!",
+				Toast.makeText(LogInActivity.this, errorMessage,
 						Toast.LENGTH_SHORT).show();
 			}
-
 		}
 	}
 

@@ -20,7 +20,7 @@ public class OfflineListFragment extends ListFragment implements
 		IRemoteDataFragment {
 	private OfflineAdapter adapter;
 
-	BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
+	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
 		@Override
 		public void onReceive(Context context, Intent intent) {
 			adapter.notifyDataSetChanged();
