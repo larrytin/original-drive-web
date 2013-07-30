@@ -138,22 +138,19 @@ good.drive.init.init = function() {
 //    var moverEvent = good.drive.creation.Mouserevent(
 //        leftUpdateBtn.getElement());
   if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
-    var menulst = new Array('上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。');
-    var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
-    popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
+    var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
+    menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
     });
   } else {
-    var menulst = new Array('文件...');
-    var popupmenu = new good.drive.nav.menu.Popupmenu(menulst);
+    var menulst = '文件...';
     var fileupload = new good.drive.creation.Fileupload();
-    fileupload.fileChange(myResTree);
-    popupmenu.createPopup(leftUpdateBtn.getElement(), function(e) {
+    fileupload.fileChange();
+    menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
       fileupload.fileClick('new', '');
     });
   }
   var leftSubmenuChildIds = undefined;
-  var leftSubmenu = menu.leftSubMenu(
-      goog.dom.getElement('navfolderslist'), function(e) {
+  var leftSubmenu = menu.leftSubMenu(myclass.tree.getChildrenElement(), function(e) {
       if (leftSubmenuChildIds == undefined) {
         leftSubmenuChildIds = leftSubmenu.getChildIds();
       }
@@ -180,6 +177,30 @@ good.drive.init.init = function() {
           break;
       }
     });
+  var bindPopup = false;
+  var corner = {targetCorner: undefined,
+      menuCorner: undefined, contextMenu: true};
+  myclass.tree.getHandler().listen(
+      myclass.tree, goog.ui.tree.BaseNode.EventType.EXPAND,
+      function (e) {
+        var target = e.target;
+        if (bindPopup) {
+          return;
+        }
+        if (target.title != undefined) {
+          return;
+        }
+        bindPopup = true;
+        var myClassNode = target.getChildAt(0);
+        var type = [['i', '新建课程'], ['s', ''], ['i', '删除课程']];
+        menu.genPopupMenu(myClassNode.getElement(), type, function(e) {
+          alert('a');
+        }, corner);
+        var myFolderNode = target.getChildAt(1);
+        menu.genPopupMenu(myFolderNode.getElement(), [['i', 'abc']], function(e) {
+          alert('a');
+        }, corner);
+      });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);

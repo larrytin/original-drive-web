@@ -12,8 +12,6 @@ goog.require('goog.ui.PopupMenu');
 goog.require('goog.ui.SubMenu');
 goog.require('goog.ui.registry');
 
-
-
 /**
  * @constructor
  */
@@ -46,7 +44,59 @@ good.drive.nav.menu.View = function() {
   left.decorate(goog.dom.getElement('leftsubmenu'));
   this.left_ = left;
 };
+/**
+ * @param {Element} dom
+ * @param {Array.<Array>} items [['i', ''], ['s', '']]
+ * @param {Function} handle
+ * @param {Object} corner {targetCorner: ,menuCorner: contextMenu:}
+ * @param {Element} target
+ * @return {goog.ui.PopupMenu}
+ */
+good.drive.nav.menu.View.prototype.genPopupMenu =
+  function(dom, items, handle, corner, target) {
+  var popupMenu = new goog.ui.PopupMenu();
+  this.genItems_(popupMenu, items);
+  popupMenu.setToggleMode(true);
+  popupMenu.render(target == undefined ? document.body : target);
+  if (corner == undefined) {
+    popupMenu.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
+        goog.positioning.Corner.TOP_LEFT);
+  } else {
+    popupMenu.attach(dom, corner.targetCorner,
+        corner.menuCorner, corner.contextMenu);
+  }
+  goog.events.listen(popupMenu, 'action', handle);
+  return popupMenu;
+};
 
+/**
+ * @param {goog.ui.PopupMenu} popup
+ * @param {Array.<Array>} items [['i', ''], ['s', '']]
+ * @param {Function} handle
+ * @return {goog.ui.PopupMenu}
+ */
+good.drive.nav.menu.View.prototype.reload = function(popupMenu, items, handle) {
+  this.genItems_(popupMenu, items);
+  if (handel == undefined) {
+    return;
+  }
+  goog.events.listen(popupMenu, 'action', handle);
+};
+
+good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
+  goog.array.forEach(items, function(value) {
+    switch (value[0]) {
+    case 's':
+      popupMenu.addItem(new goog.ui.MenuSeparator());
+      break;
+    case 'i':
+      popupMenu.addItem(new goog.ui.MenuItem(value[1]));
+      break;
+    default:
+      break;
+    }
+  });
+}
 
 /**
  * @param {Element} dom
@@ -59,7 +109,6 @@ good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
   goog.events.listen(this.create_, 'action', handle);
   return this.create_;
 };
-
 
 /**
  * @param {Element} dom
