@@ -3,6 +3,7 @@ goog.provide('good.drive.search');
 
 goog.require('good.constants');
 goog.require('good.drive.nav.grid');
+goog.require('good.drive.search.rigthmenu');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -22,10 +23,10 @@ good.drive.search.AdvancedMenu = function() {
   var search_btn = goog.dom.getElement('gbqfb');
 
   var popupElt = goog.dom.getElement('search_menu');
-  
+
   var pop = new goog.ui.PopupMenu();
   popupElt.style.minWidth = '509px';
-  
+
   var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
   var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
   var gradeArray = new Array('大班', '中班', '小班');
@@ -35,9 +36,10 @@ good.drive.search.AdvancedMenu = function() {
   this._pop = pop;
   this._search_input = search_input;
   this._input_text = input_text;
-  this._search_btn = search_btn;  
+  this._search_btn = search_btn;
 };
 
+/** @type {good.drive.nav.grid} */
 good.drive.search.AdvancedMenu.SEARCHGRID = undefined;
 
 /**
@@ -58,7 +60,7 @@ good.drive.search.AdvancedMenu.prototype.init = function() {
 good.drive.search.AdvancedMenu.prototype.createPopMenu = function() {
   var btn = goog.dom.getElement('advanced-search-button-container');
   var popupElt = goog.dom.getElement('search_menu');
-  
+
   popupElt.style.minWidth = '509px';
   this._pop.decorateContent = function(element) {
     var renderer = this.getRenderer();
@@ -91,7 +93,7 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
   var that = this;
   goog.events.listen(this._pop, 'action', function(e) {
     var title = e.target.element_.innerText;
-    title = that.trim(title); 
+    title = that.trim(title);
     that.createCondition(title);
     that.inputstyle();
     that.search();
@@ -100,7 +102,7 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
 
 
 /**
- * @param {string} str
+ * @param {string} title
  */
 good.drive.search.AdvancedMenu.prototype.createCondition = function(title) {
   var that = this;
@@ -127,7 +129,7 @@ good.drive.search.AdvancedMenu.prototype.createCondition = function(title) {
       } else {
         var oldNode = that._search_input.children[index];
         goog.dom.replaceNode(div, oldNode);
-      }    
+      }
       goog.events.listen(span_clean,
           goog.events.EventType.CLICK, function(e) {
         goog.dom.removeNode(e.target.parentElement);
@@ -286,44 +288,53 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     if (inputval != null && inputval != '') {
       if (flag) {
         path = path + '&filename=' + inputval;
+        flag = true;
       } else {
         path = path + '?filename=' + inputval;
+        flag = true;
       }
     }
 
-    var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
-    if (grid != undefined) {
-      grid.removeFromParent();
+    if (flag) {
+      path = path + '&limit=8';
+    } else {
+      path = path + '?limit=8';
     }
-    if (search_type == undefined && path == 'search') {
+
+    var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
+    if (grid == undefined) {
+      grid = new good.drive.nav.grid.View();
+      grid.render(goog.dom.getElement('viewmanager'));
+    }
+    grid.clear();
+    if (search_type == undefined && path == 'search?limit=8') {
       return;
     } else {
     //连接服务器查询
-      var rpc = new good.net.CrossDomainRpc('POST',
+      var rpc = new good.net.CrossDomainRpc('GET',
           good.constants.NAME,
           good.constants.VERSION, path,
           good.constants.SERVERADRESS);
       rpc.send(function(json) {
         //填充网格数据
-        if (json && !json['error']){         
-          
-          grid = new good.drive.nav.grid.View(json['items']);
-          grid.render(goog.dom.getElement('viewmanager'));
-          goog.array.forEach(json['items'], function(item) {
-            var cell = grid.createCell(item);
-            cell.getLabelData = function(data) {
-              return data.filename;
-            };
-            grid.add(cell);
-            cell.renderCell();
-          });
-          good.drive.nav.grid.View.visiable(grid);
-          good.drive.search.AdvancedMenu.SEARCHGRID = grid;
-          var aa = good.drive.search.Rightmenu();
-          
+        if (json && !json['error']) {
+          if (json['items'] != undefined) {
+            goog.array.forEach(json['items'], function(item) {
+              var cell = grid.createCell(item);
+              cell.getLabelData = function(data) {
+                return data.filename;
+              };
+              grid.add(cell);
+              cell.renderCell();
+            });
+            good.drive.nav.grid.View.visiable(grid);
+            good.drive.search.AdvancedMenu.SEARCHGRID = grid;
+            var rightmenu = new good.drive.search.
+               Rightmenu(grid.getElement(), grid);
+          }
         }
       });
-    }    
+    }
 };
 
 
