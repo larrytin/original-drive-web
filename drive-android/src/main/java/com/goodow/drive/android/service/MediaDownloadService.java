@@ -18,6 +18,7 @@ import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.module.DriveModule;
 import com.goodow.realtime.CollaborativeMap;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
@@ -40,7 +41,7 @@ public class MediaDownloadService extends Service {
 	private OutputStream out;
 
 	private final IBinder myBinder = new MyBinder();
-	
+
 	private String TAG = "drive_download";
 
 	public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
@@ -226,8 +227,14 @@ public class MediaDownloadService extends Service {
 							request.setParser(new JsonObjectParser(JSON_FACTORY));
 						}
 					});
-			// downloader.setDirectDownloadEnabled(true); //设为单块下载
-			downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+
+			if (DriveModule.DRIVE_SERVER.endsWith(".goodow.com")) {
+				downloader.setDirectDownloadEnabled(false);
+				downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+			} else {
+				downloader.setDirectDownloadEnabled(true); // 设为单块下载
+			}
+
 			Log.i(TAG, downloader.getChunkSize() + "");
 			downloader.setProgressListener(new CustomProgressListener());
 

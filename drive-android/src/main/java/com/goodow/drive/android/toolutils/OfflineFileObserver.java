@@ -114,7 +114,7 @@ public class OfflineFileObserver {
 //							"type",
 //							execute.getFilename().substring(
 //									execute.getFilename().lastIndexOf(".")));
-					newFile.set("url", DriveModule.getDriveServer()
+					newFile.set("url", DriveModule.DRIVE_SERVER
 							+ "/serve?id=" + attachmentId);
 					newFile.set("progress", "0");
 					newFile.set("status",
