@@ -276,10 +276,10 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     if (!goog.array.isEmpty(tags)) {
       goog.array.forEach(tags, function(e) {
         if (flag) {
-          path = path + '&tags=' + e;
+          path = path + '&tags=' + encodeURIComponent(e);
           flag = true;
         } else {
-          path = path + '?tags=' + e;
+          path = path + '?tags=' + encodeURIComponent(e);
           flag = true;
         }
       });
@@ -287,10 +287,10 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
 
     if (inputval != null && inputval != '') {
       if (flag) {
-        path = path + '&filename=' + inputval;
+        path = path + '&filename=' + encodeURIComponent(inputval);
         flag = true;
       } else {
-        path = path + '?filename=' + inputval;
+        path = path + '?filename=' + encodeURIComponent(inputval);
         flag = true;
       }
     }
