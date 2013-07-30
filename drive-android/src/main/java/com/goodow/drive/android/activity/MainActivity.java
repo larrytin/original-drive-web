@@ -25,6 +25,7 @@ import com.goodow.drive.android.fragment.LeftMenuFragment;
 import com.goodow.drive.android.fragment.LessonListFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.fragment.OfflineListFragment;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -54,7 +55,6 @@ public class MainActivity extends RoboActivity {
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
 
-	// @InjectFragment
 	private LeftMenuFragment leftMenuFragment;
 	private DataListFragment dataListFragment;
 	private LocalResFragment localResFragment;
@@ -190,18 +190,20 @@ public class MainActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction();
-
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		localResFragment = new LocalResFragment();
-		offlineListFragment = new OfflineListFragment();
-		dataListFragment = new DataListFragment();
 		lessonListFragment = new LessonListFragment();
+		dataListFragment = new DataListFragment();
+		offlineListFragment = new OfflineListFragment();
+		localResFragment = new LocalResFragment();
+
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
+
 		dataDetailFragment = new DataDetailFragment();
 		fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
+
 		leftMenuFragment = new LeftMenuFragment();
 		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
 
@@ -214,14 +216,12 @@ public class MainActivity extends RoboActivity {
 			}
 		});
 
-//		String docId = "@tmp/"
-//				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-//				+ "/remotecontrol";
-		
 		String docId = "@tmp/"
 				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				+ "/remotecontrol01";
-		
+				+ "/"
+				+ GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID
+						.getValue();
+
 		remoteControlObserver = new RemoteControlObserver();
 		remoteControlObserver.startObservation(docId);
 	}
@@ -254,17 +254,25 @@ public class MainActivity extends RoboActivity {
 	}
 
 	private void initFragment(String fragmentName) {
-		FragmentTransaction fragmentTransaction;
+		FragmentTransaction fragmentTransaction = getFragmentManager()
+				.beginTransaction();
 
-		if ("lesson".equals(fragmentName)) {
-			fragmentTransaction = getFragmentManager().beginTransaction();
+		if (GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue().equals(
+				fragmentName)) {
 			fragmentTransaction.replace(R.id.contentLayout, lessonListFragment);
-			fragmentTransaction.commit();
-		} else if ("favorites".equals(fragmentName)) {
-			fragmentTransaction = getFragmentManager().beginTransaction();
+
+		} else if (GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID
+				.getValue().equals(fragmentName)) {
 			fragmentTransaction.replace(R.id.contentLayout, dataListFragment);
-			fragmentTransaction.commit();
+
+		} else if (GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID.getValue()
+				.equals(fragmentName)) {
+			fragmentTransaction
+					.replace(R.id.contentLayout, offlineListFragment);
+
 		}
+
+		fragmentTransaction.commit();
 	}
 
 	public RemoteControlObserver getRemoteControlObserver() {
@@ -278,15 +286,14 @@ public class MainActivity extends RoboActivity {
 		private CollaborativeMap map;
 		private CollaborativeList list;
 
-		private static final String PATH_KEY = "path";
-
 		public CollaborativeList getList() {
 			return list;
 		}
 
 		public void changeMapItem(String docId) {
 			if (null != map) {
-				map.set("currentdocid", docId);
+				map.set(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+						.getValue(), docId);
 			}
 		}
 
@@ -303,14 +310,18 @@ public class MainActivity extends RoboActivity {
 					doc = document;
 					model = doc.getModel();
 					root = model.getRoot();
-					map = root.get(PATH_KEY);
-					list = map.get("currentpath");
+					map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY
+							.getValue());
+					list = map
+							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+									.getValue());
 
 					map.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
 						@Override
 						public void handleEvent(ValueChangedEvent event) {
 							String property = event.getProperty();
-							if ("currentdocid".equals(property)) {
+							if (GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+									.getValue().equals(property)) {
 								String newValue = (String) event.getNewValue();
 
 								newValue = newValue.substring(newValue
@@ -333,8 +344,11 @@ public class MainActivity extends RoboActivity {
 
 					CollaborativeMap newMap = model.createMap(null);
 					CollaborativeList newList = model.createList();
-					newMap.set("currentpath", newList);
-					root.set(PATH_KEY, newMap);
+					newMap.set(
+							GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+									.getValue(), newList);
+					root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY
+							.getValue(), newMap);
 				}
 			};
 

@@ -5,6 +5,7 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -48,8 +49,10 @@ public class LessonListFragment extends ListFragment implements
 	private Model model;
 	private CollaborativeMap root;
 
-	private static final String FOLDER_KEY = "folders";
-	private static final String FILE_KEY = "files";
+	private static final String FOLDER_KEY = GlobalConstant.DocumentIdAndDataKey.FOLDERSKEY
+			.getValue();
+	private static final String FILE_KEY = GlobalConstant.DocumentIdAndDataKey.FILESKEY
+			.getValue();
 
 	private EventHandler<ValuesAddedEvent> pathValuesAddedEventHandler;
 	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
@@ -94,20 +97,19 @@ public class LessonListFragment extends ListFragment implements
 	}
 
 	public void connectUi() {
-		if (null == currentPathList) {
-			currentPathList = ((MainActivity) getActivity())
-					.getRemoteControlObserver().getList();
-		}
+		if (null != currentPathList) {
 
-		currentPathList.addValuesAddedListener(pathValuesAddedEventHandler);
-		currentPathList.addValuesRemovedListener(pathValuesRemovedEventHandler);
+			currentPathList.addValuesAddedListener(pathValuesAddedEventHandler);
+			currentPathList
+					.addValuesRemovedListener(pathValuesRemovedEventHandler);
 
-		if (0 == currentPathList.length()) {
-			currentPathList.push(root.getId());
-		}
+			if (0 == currentPathList.length()) {
+				currentPathList.push(root.getId());
+			}
 
-		if (null != currentFolder) {
-			initData();
+			if (null != currentFolder) {
+				initData();
+			}
 		}
 	}
 
@@ -161,6 +163,22 @@ public class LessonListFragment extends ListFragment implements
 		super.onPause();
 
 		((MainActivity) getActivity()).restActionBarTitle();
+
+		currentPathList = null;
+	}
+
+	@Override
+	public void onResume() {
+		super.onResume();
+		Log.i("LifeCycle", "onResume");
+		if (null == currentPathList) {
+			currentPathList = ((MainActivity) getActivity())
+					.getRemoteControlObserver().getList();
+			
+			if (null != root) {
+				connectUi();
+			}
+		}
 	}
 
 	@Override
@@ -196,84 +214,94 @@ public class LessonListFragment extends ListFragment implements
 			pathValuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
 				@Override
 				public void handleEvent(ValuesAddedEvent event) {
-					if (0 != currentPathList.length()) {
+
+					if (null != currentPathList
+							&& 0 != currentPathList.length()) {
 						CollaborativeMap map = model
 								.getObject((String) currentPathList
 										.get(currentPathList.length() - 1));
-						if (null != map && null == map.get(FOLDER_KEY)) {
+						if (null != map) {
+							// 判断若为文件,则触发播放功能,并且pathList自动-1(即执行一遍backfragment()方法)
+							if (null == map.get(FOLDER_KEY)) {
+								File file = new File(
+										GlobalDataCacheForMemorySingleton.getInstance
+												.getOfflineResDirPath()
+												+ "/"
+												+ map.get("blobKey"));
 
-							File file = new File(
-									GlobalDataCacheForMemorySingleton.getInstance
-											.getOfflineResDirPath()
-											+ "/"
-											+ map.get("blobKey"));
+								if (file.exists()) {
+									Intent intent = null;
 
-							if (file.exists()) {
-								Intent intent = null;
+									String resPath = GlobalDataCacheForMemorySingleton.getInstance
+											.getOfflineResDirPath() + "/";
 
-								String resPath = GlobalDataCacheForMemorySingleton.getInstance
-										.getOfflineResDirPath() + "/";
+									if (GlobalConstant.SupportResTypeEnum.MP3
+											.getTypeName().equals(
+													map.get("type"))) {
+										intent = new Intent(getActivity(),
+												AudioPlayActivity.class);
 
-								if (GlobalConstant.SupportResTypeEnum.MP3
-										.getTypeName().equals(map.get("type"))) {
-									intent = new Intent(getActivity(),
-											AudioPlayActivity.class);
+										intent.putExtra(
+												AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
+														.name(), (String) map
+														.get("label"));
+										intent.putExtra(
+												AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
+														.name(),
+												resPath
+														+ (String) map
+																.get("blobKey"));
+									} else if (GlobalConstant.SupportResTypeEnum.MP4
+											.getTypeName().equals(
+													map.get("type"))) {
+										intent = new Intent(getActivity(),
+												VideoPlayActivity.class);
 
-									intent.putExtra(
-											AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
-													.name(), (String) map
-													.get("label"));
-									intent.putExtra(
-											AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
-													.name(),
-											resPath
-													+ (String) map
-															.get("blobKey"));
-								} else if (GlobalConstant.SupportResTypeEnum.MP4
-										.getTypeName().equals(map.get("type"))) {
-									intent = new Intent(getActivity(),
-											VideoPlayActivity.class);
+										intent.putExtra(
+												VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
+														.name(), (String) map
+														.get("label"));
+										intent.putExtra(
+												VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
+														.name(),
+												resPath
+														+ (String) map
+																.get("blobKey"));
+									} else if (GlobalConstant.SupportResTypeEnum.FLASH
+											.getTypeName().equals(
+													map.get("type"))) {
+										// TODO
+									} else {
+										intent = new Intent();
 
-									intent.putExtra(
-											VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
-													.name(), (String) map
-													.get("label"));
-									intent.putExtra(
-											VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
-													.name(),
-											resPath
-													+ (String) map
-															.get("blobKey"));
-								} else if (GlobalConstant.SupportResTypeEnum.FLASH
-										.getTypeName().equals(map.get("type"))) {
-									// TODO
+										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										intent.setAction(Intent.ACTION_VIEW);
+										String type = SomeEnums
+												.getMIMEType((String) map
+														.get("type"));
+										intent.setDataAndType(
+												Uri.fromFile(file), type);
+									}
+
+									getActivity().startActivity(intent);
 								} else {
-									intent = new Intent();
-
-									intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-									intent.setAction(Intent.ACTION_VIEW);
-									String type = SomeEnums
-											.getMIMEType((String) map
-													.get("type"));
-									intent.setDataAndType(Uri.fromFile(file),
-											type);
+									Toast.makeText(getActivity(), "请先下载该文件.",
+											Toast.LENGTH_SHORT).show();
 								}
 
-								getActivity().startActivity(intent);
+								backFragment();
 							} else {
-								Toast.makeText(getActivity(), "请先下载该文件.",
-										Toast.LENGTH_SHORT).show();
+								// 判断若为文件夹,则展现数据
+								currentFolder = model
+										.getObject((String) currentPathList
+												.get(currentPathList.length() - 1));
+
+								initData();
+
+								openState();
 							}
-
-							backFragment();
 						} else {
-							currentFolder = model
-									.getObject((String) currentPathList
-											.get(currentPathList.length() - 1));
-
-							initData();
-
-							openState();
+							backFragment();
 						}
 					}
 				}
@@ -284,17 +312,26 @@ public class LessonListFragment extends ListFragment implements
 			pathValuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
 				@Override
 				public void handleEvent(ValuesRemovedEvent event) {
-					if (0 != currentPathList.length()) {
-						currentFolder = model
-								.getObject((String) currentPathList
-										.get(currentPathList.length() - 1));
-					} else {
-						currentPathList.push(root.getId());
+					if (null != currentPathList) {
+						if (0 != currentPathList.length()) {
+							CollaborativeMap currentMap = model
+									.getObject((String) currentPathList
+											.get(currentPathList.length() - 1));
+
+							if (null != currentMap) {
+								currentFolder = currentMap;
+							} else {
+								backFragment();
+								return;
+							}
+						} else {
+							currentPathList.push(root.getId());
+						}
+
+						initData();
+
+						openState();
 					}
-
-					initData();
-
-					openState();
 				}
 			};
 		}
@@ -333,6 +370,8 @@ public class LessonListFragment extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
+		Log.i("LifeCycle", "onCreate");
+
 		adapter = new CollaborativeAdapter(this, null, null);
 		setListAdapter(adapter);
 
@@ -385,18 +424,20 @@ public class LessonListFragment extends ListFragment implements
 				CollaborativeList list = model_.createList();
 				list.pushAll((Object[]) values);
 
-				root.set("folders", list);
+				root.set(GlobalConstant.DocumentIdAndDataKey.FOLDERSKEY
+						.getValue(), list);
 
 			}
 		};
 
-//		String docId = "@tmp/"
-//				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-//				+ "/lesson";
+		// String docId = "@tmp/"
+		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+		// + "/lesson";
 
-		 String docId = "@tmp/"
-		 + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		 + "/lesson01";
+		String docId = "@tmp/"
+				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
+				+ "/"
+				+ GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue();
 
 		Realtime.load(docId, onLoaded, initializer, null);
 

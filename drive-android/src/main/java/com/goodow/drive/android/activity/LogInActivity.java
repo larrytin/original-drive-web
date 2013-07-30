@@ -3,6 +3,7 @@ package com.goodow.drive.android.activity;
 import com.goodow.android.drive.R;
 import com.goodow.api.services.account.Account;
 import com.goodow.api.services.account.model.AccountInfo;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
@@ -80,18 +81,17 @@ public class LogInActivity extends RoboActivity {
 					file.mkdir();
 				}
 
-				// 通知。。。
+				// 通知
 				Realtime.authorize(userId, token);
-
-				// String docId = "@tmp/"
-				// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-				// + "/offline";
+				Log.i(TAG, "userId: " + userId + "\n token: " + token);
 
 				String docId = "@tmp/"
 						+ GlobalDataCacheForMemorySingleton.getInstance()
-								.getUserId() + "/offline01";
+								.getUserId()
+						+ "/"
+						+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
+								.getValue();
 
-				Log.i(TAG, "Offine DocId:" + docId);
 				new OfflineFileObserver().startObservation(docId);
 
 				Intent intent = new Intent(LogInActivity.this,

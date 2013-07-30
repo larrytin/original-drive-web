@@ -5,14 +5,15 @@ import java.io.FileOutputStream;
 import java.io.OutputStream;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+import roboguice.service.RoboService;
 import android.annotation.SuppressLint;
-import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
+import com.goodow.api.services.attachment.Attachment;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
@@ -29,12 +30,14 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
+import com.google.inject.Inject;
 
-public class MediaDownloadService extends Service {
+public class MediaDownloadService extends RoboService {
 	private BlockingQueue<CollaborativeMap> downloadUrlQueue = new LinkedBlockingDeque<CollaborativeMap>();
 
 	private final IBinder myBinder = new MyBinder();
-
+@Inject
+private Attachment attachment;
 	private IDownloadProcess downloadProcess;
 
 	private CollaborativeMap downloadRes;

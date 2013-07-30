@@ -1,13 +1,12 @@
 package com.goodow.drive.android.fragment;
 
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
-import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Context;
@@ -127,7 +126,6 @@ public class LeftMenuFragment extends ListFragment {
 				.getTag();
 
 		FragmentTransaction fragmentTransaction;
-		IRemoteDataFragment fragment;
 		switch (menuTypeEnum) {
 		case USER_NAME:
 			// TODO
@@ -135,46 +133,37 @@ public class LeftMenuFragment extends ListFragment {
 			break;
 
 		case USER_REMOTE_DATA:
-			// fragment = mainActivity.getDataListFragment();
-			//
-			// fragmentTransaction = mainActivity.getFragmentManager()
-			// .beginTransaction();
-			// fragmentTransaction
-			// .replace(R.id.contentLayout, (Fragment) fragment);
-			// fragmentTransaction.commit();
-
 			String favoritesDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
-							.getUserId() + "/favorites01";
+							.getUserId()
+					+ "/"
+					+ GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID
+							.getValue();
 			mainActivity.getRemoteControlObserver().changeMapItem(
 					favoritesDocId);
-			
+
 			break;
 
 		case USER_LESSON_DATA:
-			// fragment = mainActivity.getLessonListFragment();
-			//
-			// fragmentTransaction = mainActivity.getFragmentManager()
-			// .beginTransaction();
-			// fragmentTransaction
-			// .replace(R.id.contentLayout, (Fragment) fragment);
-			// fragmentTransaction.commit();
-
 			String lessonDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
-							.getUserId() + "/lesson01";
+							.getUserId()
+					+ "/"
+					+ GlobalConstant.DocumentIdAndDataKey.LESSONDOCID
+							.getValue();
 			mainActivity.getRemoteControlObserver().changeMapItem(lessonDocId);
-			
+
 			break;
 
 		case USER_OFFLINE_DATA:
-			fragment = mainActivity.getOfflineListFragment();
+			String offlineDocId = "@tmp/"
+					+ GlobalDataCacheForMemorySingleton.getInstance()
+							.getUserId()
+					+ "/"
+					+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
+							.getValue();
+			mainActivity.getRemoteControlObserver().changeMapItem(offlineDocId);
 
-			fragmentTransaction = mainActivity.getFragmentManager()
-					.beginTransaction();
-			fragmentTransaction
-					.replace(R.id.contentLayout, (Fragment) fragment);
-			fragmentTransaction.commit();
 			break;
 
 		case LOCAL_RES:
