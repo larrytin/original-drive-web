@@ -110,12 +110,18 @@ public class OfflineFileObserver {
 
 					newFile = model_unlogin.createMap(null);
 					newFile.set("title", execute.getFilename());
-//					newFile.set(
-//							"type",
-//							execute.getFilename().substring(
-//									execute.getFilename().lastIndexOf(".")));
-					newFile.set("url", DriveModule.DRIVE_SERVER
-							+ "/serve?id=" + attachmentId);
+
+					for (SomeEnums.MIME_TYPE_Table mimeType : SomeEnums.MIME_TYPE_Table
+							.values()) {
+						if (execute.getContentType().equals(
+								mimeType.getMimeType())) {
+							newFile.set("type", mimeType.getType());
+
+						}
+					}
+
+					newFile.set("url", DriveModule.DRIVE_SERVER + "/serve?id="
+							+ attachmentId);
 					newFile.set("progress", "0");
 					newFile.set("status",
 							GlobalConstant.DownloadStatusEnum.WAITING
@@ -193,10 +199,19 @@ public class OfflineFileObserver {
 		ModelInitializerHandler initializer = new ModelInitializerHandler() {
 			@Override
 			public void onInitializer(Model model_) {
-				model = model_;
-				root = model.getRoot();
+				if (isLogin) {
+					model = model_;
+					root = model.getRoot();
 
-				root.set(OFFLINE, model.createList());
+					root.set(OFFLINE, model.createList());
+					
+				} else {
+					model_unlogin = model_;
+					root = model_unlogin.getRoot();
+
+					root.set(OFFLINE, model_unlogin.createList());
+					
+				}
 			}
 		};
 

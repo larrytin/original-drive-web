@@ -47,6 +47,7 @@ public class LeftMenuFragment extends ListFragment {
 		public LeftMenuAdapter(Context context, int resource,
 				int textViewResourceId, List<MenuTypeEnum> objects) {
 			super(context, resource, textViewResourceId, objects);
+			
 		}
 
 		@Override
@@ -55,6 +56,7 @@ public class LeftMenuFragment extends ListFragment {
 			if (null == row) {
 				row = ((Activity) this.getContext()).getLayoutInflater()
 						.inflate(R.layout.row_leftmenu, parent, false);
+				
 			}
 
 			MenuTypeEnum item = getItem(position);
@@ -72,25 +74,26 @@ public class LeftMenuFragment extends ListFragment {
 				listItem.setText(GlobalDataCacheForMemorySingleton
 						.getInstance().getUserName());
 				img_left.setImageResource(R.drawable.ic_drive_owned_by_me);
+				
 				break;
-
 			case USER_REMOTE_DATA:
 				img_left.setImageResource(R.drawable.ic_drive_my_drive);
+				
 				break;
-
 			case USER_LESSON_DATA:
 				img_left.setImageResource(R.drawable.ic_type_folder);
+				
 				break;
-
 			case USER_OFFLINE_DATA:
 				img_left.setImageResource(R.drawable.ic_type_zip);
+				
 				break;
-
 			case LOCAL_RES:
 				img_left.setImageResource(R.drawable.ic_type_zip);
+				
 				break;
-
 			default:
+				
 				break;
 			}
 
@@ -110,6 +113,7 @@ public class LeftMenuFragment extends ListFragment {
 
 		for (MenuTypeEnum type : MenuTypeEnum.values()) {
 			MENULIST.add(type);
+			
 		}
 
 		setListAdapter(new LeftMenuAdapter(getActivity(),
@@ -119,6 +123,7 @@ public class LeftMenuFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
+		
 		return inflater.inflate(R.layout.fragment_leftmenu, container, false);
 	}
 
@@ -131,8 +136,8 @@ public class LeftMenuFragment extends ListFragment {
 		case USER_NAME:
 			// TODO
 			Toast.makeText(mainActivity, "1", Toast.LENGTH_SHORT).show();
+			
 			break;
-
 		case USER_REMOTE_DATA:
 			String favoritesDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
@@ -144,7 +149,6 @@ public class LeftMenuFragment extends ListFragment {
 					favoritesDocId);
 
 			break;
-
 		case USER_LESSON_DATA:
 			String lessonDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
@@ -155,7 +159,6 @@ public class LeftMenuFragment extends ListFragment {
 			mainActivity.getRemoteControlObserver().changeMapItem(lessonDocId);
 
 			break;
-
 		case USER_OFFLINE_DATA:
 			String offlineDocId = "@tmp/"
 					+ GlobalDataCacheForMemorySingleton.getInstance()
@@ -166,7 +169,6 @@ public class LeftMenuFragment extends ListFragment {
 			mainActivity.getRemoteControlObserver().changeMapItem(offlineDocId);
 
 			break;
-
 		case LOCAL_RES:
 			FragmentTransaction fragmentTransaction;
 			fragmentTransaction = mainActivity.getFragmentManager()
@@ -176,8 +178,8 @@ public class LeftMenuFragment extends ListFragment {
 			fragmentTransaction.commit();
 			
 			break;
-
 		default:
+			
 			break;
 		}
 

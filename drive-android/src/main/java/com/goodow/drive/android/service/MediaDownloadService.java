@@ -2,7 +2,6 @@ package com.goodow.drive.android.service;
 
 import java.io.File;
 import java.io.FileOutputStream;
-import java.io.OutputStream;
 import java.lang.Thread.State;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
@@ -13,7 +12,6 @@ import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
-import android.util.Log;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
@@ -33,22 +31,18 @@ import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
 
 public class MediaDownloadService extends Service {
-	private HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
-	private JsonFactory JSON_FACTORY = new JacksonFactory();
-	private BlockingQueue<CollaborativeMap> downloadUrlQueue = new LinkedBlockingDeque<CollaborativeMap>();
-	private CollaborativeMap downloadRes;
-	private IDownloadProcess downloadProcess;
-	private OutputStream out;
-
 	private final IBinder myBinder = new MyBinder();
 
-	private String TAG = "drive_download";
+	private BlockingQueue<CollaborativeMap> downloadUrlQueue = new LinkedBlockingDeque<CollaborativeMap>();
+	private ResDownloadThread resDownloadThread = new ResDownloadThread();
+	private HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
+	private JsonFactory JSON_FACTORY = new JacksonFactory();
+	private CollaborativeMap downloadRes;
+	private IDownloadProcess downloadProcess;
 
 	public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
-
 	public static final String URL_6M = "http://mirror.bjtu.edu.cn/apache/maven/maven-3/3.1.0-alpha-1/binaries/apache-maven-3.1.0-alpha-1-bin.zip";
 
-	private ResDownloadThread resDownloadThread = new ResDownloadThread();
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler() {
 		@Override
@@ -56,8 +50,8 @@ public class MediaDownloadService extends Service {
 			switch (msg.what) {
 			case 1:
 				int progress = msg.getData().getInt("progress");
-
 				downloadProcess.downLoadProgress(progress);
+
 				break;
 			case -1:
 				downloadProcess.downLoadFinish();
@@ -68,6 +62,10 @@ public class MediaDownloadService extends Service {
 	};
 
 	private void startResDownloadTread(final CollaborativeMap res) {
+		// 广播通知离线文件夹界面刷新
+		Intent intent = new Intent();
+		intent.setAction("NEW_RES_DOWNLOADING");
+		getBaseContext().sendBroadcast(intent);
 
 		// 这里会发生阻塞, 这里阻塞很危险, 会导致ANR, 所以还是不要使用 BlockingQueue
 		downloadUrlQueue.add(res);
@@ -76,19 +74,17 @@ public class MediaDownloadService extends Service {
 		switch (state) {
 		// 线程被阻塞，在等待一个锁。
 		case BLOCKED:
-			break;
 
+			break;
 		// 线程已被创建，但从未启动
 		case NEW:
 			resDownloadThread.start();
 
 			break;
-
 		// 线程可能已经运行
 		case RUNNABLE:
 
 			break;
-
 		// 线程已被终止
 		case TERMINATED:
 			// note : 如果下载线程被异常终止了, 就重新创建一个
@@ -96,7 +92,6 @@ public class MediaDownloadService extends Service {
 			resDownloadThread.start();
 
 			break;
-
 		// 线程正在等待一个指定的时间。
 		case TIMED_WAITING:
 
@@ -116,6 +111,7 @@ public class MediaDownloadService extends Service {
 					if (!GlobalConstant.DownloadStatusEnum.COMPLETE.getStatus()
 							.equals(downloadRes.get("status"))) {
 
+						// 广播通知离线文件夹界面刷新
 						Intent intent = new Intent();
 						intent.setAction("NEW_RES_DOWNLOADING");
 						getBaseContext().sendBroadcast(intent);
@@ -124,7 +120,6 @@ public class MediaDownloadService extends Service {
 
 						final String urlString = downloadRes.get("url");
 						doDownLoad(urlString);
-
 					}
 				}
 			} catch (Exception e) {
@@ -135,6 +130,7 @@ public class MediaDownloadService extends Service {
 
 	public final class MyBinder extends Binder {
 		public String getDownloadResBlobKey() {
+
 			return MediaDownloadService.this.downloadRes.get("blobKey");
 		}
 
@@ -180,21 +176,18 @@ public class MediaDownloadService extends Service {
 							(int) (downloader.getProgress() * 100));
 
 					handler.sendMessage(message);
-
 				}
 
 				downloadRes.set("progress", Integer.toString((int) (downloader
 						.getProgress() * 100)));
 
 				break;
-
 			case MEDIA_COMPLETE:
 				if (downloadProcess != null) {
 					Message message = new Message();
 					message.what = -1;
 
 					handler.sendMessage(message);
-
 				}
 
 				downloadRes.set("progress", "100");
@@ -202,10 +195,9 @@ public class MediaDownloadService extends Service {
 						DownloadStatusEnum.COMPLETE.getStatus());
 
 				break;
-
 			default:
-				break;
 
+				break;
 			}
 		}
 	}
@@ -218,7 +210,6 @@ public class MediaDownloadService extends Service {
 							+ "/"
 							+ downloadRes.get("blobKey"));
 			FileOutputStream outputStream = new FileOutputStream(newFile);
-			setOut(outputStream);
 
 			MediaHttpDownloader downloader = new MediaHttpDownloader(
 					HTTP_TRANSPORT, new HttpRequestInitializer() {
@@ -229,16 +220,17 @@ public class MediaDownloadService extends Service {
 					});
 
 			if (DriveModule.DRIVE_SERVER.endsWith(".goodow.com")) {
-				downloader.setDirectDownloadEnabled(false);
-				downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+				downloader.setDirectDownloadEnabled(false);// 设为多块下载
+				downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);// 设置每一块的大小
+
 			} else {
 				downloader.setDirectDownloadEnabled(true); // 设为单块下载
+
 			}
 
-			Log.i(TAG, downloader.getChunkSize() + "");
-			downloader.setProgressListener(new CustomProgressListener());
+			downloader.setProgressListener(new CustomProgressListener());// 设置监听器
 
-			downloader.download(new GenericUrl(params[0]), out);// 启动下载
+			downloader.download(new GenericUrl(params[0]), outputStream);// 启动下载
 		} catch (Exception e) {
 			e.printStackTrace();
 		}
@@ -246,15 +238,8 @@ public class MediaDownloadService extends Service {
 
 	@Override
 	public IBinder onBind(Intent intent) {
+
 		return myBinder;
-	}
-
-	public OutputStream getOut() {
-		return out;
-	}
-
-	public void setOut(OutputStream out) {
-		this.out = out;
 	}
 
 }

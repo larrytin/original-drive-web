@@ -23,6 +23,7 @@ public class DownloadBroadcastReceiver extends BroadcastReceiver {
 		String token = json.getString("token");
 		if (Realtime.getToken() == null) {
 			Realtime.authorize(userId, token);
+			
 		}
 
 		String docId = "@tmp/" + userId + "/"

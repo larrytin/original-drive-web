@@ -305,6 +305,8 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     if (grid == undefined) {
       grid = new good.drive.nav.grid.View();
       grid.render(goog.dom.getElement('viewmanager'));
+      var rightmenu = new good.drive.search.
+      Rightmenu(grid.getElement(), grid, this.menuCallback);
     }
     grid.clear();
     if (search_type == undefined && path == 'search?limit=8') {
@@ -329,14 +331,15 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
             });
             good.drive.nav.grid.View.visiable(grid);
             good.drive.search.AdvancedMenu.SEARCHGRID = grid;
-            var rightmenu = new good.drive.search.
-               Rightmenu(grid.getElement(), grid);
+            
           }
         }
       });
     }
 };
 
+good.drive.search.AdvancedMenu.prototype.menuCallback = function(e, data, index) {
+};
 
 /**
  *

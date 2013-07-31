@@ -30,6 +30,6 @@
         android:layout_marginRight="20dp"
         android:background="@drawable/selector_delbutton_bg"
         android:contentDescription="@string/contentDescription"
-        android:src="@drawable/ic_update_normal" />
+        android:src="@drawable/action_discussion_edit" />
 
 </RelativeLayout>

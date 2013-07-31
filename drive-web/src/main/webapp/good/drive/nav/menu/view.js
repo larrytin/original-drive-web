@@ -92,6 +92,9 @@ good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
     case 'i':
       popupMenu.addItem(new goog.ui.MenuItem(value[1]));
       break;
+    case 'm':
+      popupMenu.addItem(value[1]);
+      break;
     default:
       break;
     }
