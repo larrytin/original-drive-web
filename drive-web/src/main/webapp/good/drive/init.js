@@ -85,7 +85,10 @@ good.drive.init.init = function() {
   
   var advancedMenu = new good.drive.search.AdvancedMenu();
   advancedMenu.init();
-
+  var rightmenu = new good.drive.search.
+  Rightmenu(good.drive.search.AdvancedMenu.SEARCHGRID.getElement(),
+      good.drive.search.AdvancedMenu.SEARCHGRID);
+  
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
   var leftCreateBtn = leftButton.createBtn();

@@ -29,6 +29,13 @@ good.drive.search.AdvancedMenu = function() {
 
   var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
   var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
+  
+  var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
+  if (grid == undefined) {
+    grid = new good.drive.nav.grid.View();
+    grid.render(goog.dom.getElement('viewmanager'));
+    good.drive.search.AdvancedMenu.SEARCHGRID = grid;
+  }
   var gradeArray = new Array('大班', '中班', '小班');
   this._typeArray = typeArray;
   this._fieldArray = fieldArray;
@@ -302,12 +309,6 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     }
 
     var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
-    if (grid == undefined) {
-      grid = new good.drive.nav.grid.View();
-      grid.render(goog.dom.getElement('viewmanager'));
-      var rightmenu = new good.drive.search.
-      Rightmenu(grid.getElement(), grid, this.menuCallback);
-    }
     grid.clear();
     if (search_type == undefined && path == 'search?limit=8') {
       return;
@@ -338,8 +339,6 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     }
 };
 
-good.drive.search.AdvancedMenu.prototype.menuCallback = function(e, data, index) {
-};
 
 /**
  *
