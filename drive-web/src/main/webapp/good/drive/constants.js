@@ -12,6 +12,12 @@ good.constants.SERVERADRESS =
 /**@type {string} */
 good.constants.NAME = 'attachment';
 
+/**@type {string} */
+good.constants.DEVICE = 'device';
+
+/**@type {string} */
+good.constants.PRESENCE = 'presence';
+
 /** @type {string} */
 good.constants.VERSION = 'v0.0.1';
 

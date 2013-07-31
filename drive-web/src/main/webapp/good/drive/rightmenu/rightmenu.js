@@ -114,4 +114,22 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
  * @param {string} subscribeId
  */
 good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
+  var auth = good.auth.Auth.current;
+  
+  var message = {'userId' : auth.userId,
+                 'token' : auth.access_token,
+                 'attachmentId' : fileId};
+  var path = 'pushToGcm?message=' +
+             encodeURIComponent(goog.json.serialize(message)) +
+             '&messageType=d&' + 'subscribeId=' + subscribeId;
+  var rpc = new good.net.CrossDomainRpc('POST',
+      good.constants.PRESENCE,
+      good.config.VERSION, path,
+      good.config.SERVERADRESS);
+  rpc.send(function(json) {
+    if (json && !json['error']) {
+      alert('发送成功');
+    }
+  });
+  
 };

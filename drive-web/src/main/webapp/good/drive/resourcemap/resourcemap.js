@@ -20,6 +20,11 @@ good.drive.resourcemap.Resourcemap.init = function() {
     var id = pathlist.get(pathlist.length() - 1);
     var docid = path.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
 
+    var input_text = goog.dom.getElement('gbqfq');
+    var search_input = goog.dom.getElement('search_input');
+    goog.dom.removeChildren(search_input);
+    input_text.value = '';
+    menu.inputstyle();
     if (docid == good.constants.PUBLICRESDOCID) {
       var model = goog.object.get(good.drive.nav
           .folders.AbstractControl.docs, docid);
@@ -33,12 +38,6 @@ good.drive.resourcemap.Resourcemap.init = function() {
           menu.createCondition(contentType);
           menu.inputstyle();
           menu.search();
-    } else {
-      var input_text = goog.dom.getElement('gbqfq');
-      var search_btn = goog.dom.getElement('gbqfb');
-      goog.dom.removeChildren(search_btn);
-      input_text.value = '';
-      menu.inputstyle();
     }
   });
 };
