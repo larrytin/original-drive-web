@@ -19,20 +19,26 @@ good.drive.resourcemap.Resourcemap.init = function() {
   pathlist.addValuesAddedListener(function(evt) {
     var id = pathlist.get(pathlist.length() - 1);
     var docid = path.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
-    
+
     if (docid == good.constants.PUBLICRESDOCID) {
       var model = goog.object.get(good.drive.nav
           .folders.AbstractControl.docs, docid);
           var data = model.getObject(id);
           var query = data.get(good.constants.QUERY);
           var tags = query.get(good.constants.TAGS).asArray();
-          var contentType = query.get(good.constants.CONTENTTYPE); 
-          goog.array.forEach(tags, function(e){
+          var contentType = query.get(good.constants.CONTENTTYPE);
+          goog.array.forEach(tags, function(e) {
             menu.createCondition(e);
           });
           menu.createCondition(contentType);
           menu.inputstyle();
           menu.search();
+    } else {
+      var input_text = goog.dom.getElement('gbqfq');
+      var search_btn = goog.dom.getElement('gbqfb');
+      goog.dom.removeChildren(search_btn);
+      input_text.value = '';
+      menu.inputstyle();
     }
   });
 };

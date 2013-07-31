@@ -13,26 +13,25 @@ import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
-import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 
-public class DataDetailFragment extends Fragment implements IRemoteDataFragment{
+public class DataDetailFragment extends Fragment implements IRemoteDataFragment {
 	private CollaborativeMap file;
 	private TextView fileName;
 	private Button downloButton;
 
 	public void backFragment() {
 		MainActivity activity = (MainActivity) getActivity();
-		
+
 		activity.setDataDetailLayoutState(View.INVISIBLE);
-		
+
 		activity.setIRemoteFrament(activity.getLastiRemoteDataFragment());
 	}
 
 	public void setFile(CollaborativeMap file) {
 		this.file = file;
 	}
-	
+
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
@@ -64,23 +63,14 @@ public class DataDetailFragment extends Fragment implements IRemoteDataFragment{
 		public void onClick(View v) {
 			file.set("status", DownloadStatusEnum.WAITING.getStatus());
 
-			CollaborativeList offlineList = OfflineFileObserver.getList();
-			out: do {
-				for (int i = 0; i < offlineList.length(); i++) {
-					CollaborativeMap map = offlineList.get(i);
-					if (file.get("blobKey").equals(map.get("blobKey"))) {
-						break out;
-					}
-				}
-
-				OfflineFileObserver.addFile(file);
-			} while (false);
+			OfflineFileObserver.addFile(file, null);
+			
 		}
 	};
 
 	@Override
 	public void setMapListener(CollaborativeMap map) {
 		// TODO Auto-generated method stub
-		
+
 	}
 }

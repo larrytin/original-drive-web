@@ -21,60 +21,65 @@ import java.io.File;
 import android.os.Environment;
 
 public class DriveModule extends AbstractModule {
-  private static final String DRIVE_SERVER = "http://192.168.1.15:8880";
+	public static final String DRIVE_SERVER = "http://192.168.1.15:8880";
 
-  // private static final String DRIVE_SERVER = "http://server.drive.goodow.com";
+	// private static final String DRIVE_SERVER =
+	// "http://server.drive.goodow.com";
 
-  @Override
-  protected void configure() {
-    File file;
-    String filePathString = "";
-    File storage;
+	@Override
+	protected void configure() {
+		File file;
+		String filePathString = "";
+		File storage;
 
-    if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
-      storage = Environment.getExternalStorageDirectory();
-      filePathString = "/retech";
-    } else {
-      storage = Environment.getDataDirectory();
-      filePathString = "/data/com.goodow.drive.android/retech";
-    }
+		if (Environment.getExternalStorageState().equals(
+				Environment.MEDIA_MOUNTED)) {
+			storage = Environment.getExternalStorageDirectory();
+			filePathString = "/retech";
+		} else {
+			storage = Environment.getDataDirectory();
+			filePathString = "/data/com.goodow.drive.android/retech";
+		}
 
-    file = new File(storage, filePathString);
+		file = new File(storage, filePathString);
 
-    if (!file.exists()) {
-      file.mkdir();
-    }
+		if (!file.exists()) {
+			file.mkdir();
+		}
 
-    bind(MyApplication.class).asEagerSingleton();
+		bind(MyApplication.class).asEagerSingleton();
 
-    GlobalDataCacheForMemorySingleton.getInstance().setStoragePaht(file.getAbsolutePath());
-  }
+		GlobalDataCacheForMemorySingleton.getInstance().setStoragePaht(
+				file.getAbsolutePath());
+	}
 
-  @Provides
-  @Singleton
-  Attachment provideAttachment() {
-    Attachment.Builder endpointBuilder =
-        new Attachment.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-            new HttpRequestInitializer() {
-              @Override
-              public void initialize(HttpRequest httpRequest) {
-              }
-            });
-    endpointBuilder.setRootUrl(RealtimeModule.getEndpointRootUrl(DRIVE_SERVER));
-    return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
-  }
+	@Provides
+	@Singleton
+	Attachment provideAttachment() {
+		Attachment.Builder endpointBuilder = new Attachment.Builder(
+				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					@Override
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		endpointBuilder.setRootUrl(RealtimeModule
+				.getEndpointRootUrl(DRIVE_SERVER));
+		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+	}
 
-  @Provides
-  @Singleton
-  Account provideDevice(@ServerAddress String serverAddress) {
-    Account.Builder endpointBuilder =
-        new Account.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
-            new HttpRequestInitializer() {
-              @Override
-              public void initialize(HttpRequest httpRequest) {
-              }
-            });
-    endpointBuilder.setRootUrl(RealtimeModule.getEndpointRootUrl(serverAddress));
-    return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
-  }
+	@Provides
+	@Singleton
+	Account provideDevice(@ServerAddress String serverAddress) {
+		Account.Builder endpointBuilder = new Account.Builder(
+				AndroidHttp.newCompatibleTransport(), new JacksonFactory(),
+				new HttpRequestInitializer() {
+					@Override
+					public void initialize(HttpRequest httpRequest) {
+					}
+				});
+		endpointBuilder.setRootUrl(RealtimeModule
+				.getEndpointRootUrl(serverAddress));
+		return CloudEndpointUtils.updateBuilder(endpointBuilder).build();
+	}
 }

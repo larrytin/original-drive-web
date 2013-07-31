@@ -3,21 +3,22 @@ package com.goodow.drive.android.service;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.OutputStream;
+import java.lang.Thread.State;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import roboguice.service.RoboService;
 import android.annotation.SuppressLint;
+import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.Handler;
 import android.os.IBinder;
 import android.os.Message;
 import android.util.Log;
-import com.goodow.api.services.attachment.Attachment;
 import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
-import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.module.DriveModule;
 import com.goodow.realtime.CollaborativeMap;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.googleapis.media.MediaHttpDownloader;
@@ -30,31 +31,24 @@ import com.google.api.client.http.HttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.JsonObjectParser;
 import com.google.api.client.json.jackson2.JacksonFactory;
-import com.google.inject.Inject;
 
-public class MediaDownloadService extends RoboService {
+public class MediaDownloadService extends Service {
+	private HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
+	private JsonFactory JSON_FACTORY = new JacksonFactory();
 	private BlockingQueue<CollaborativeMap> downloadUrlQueue = new LinkedBlockingDeque<CollaborativeMap>();
-
-	private final IBinder myBinder = new MyBinder();
-@Inject
-private Attachment attachment;
-	private IDownloadProcess downloadProcess;
-
 	private CollaborativeMap downloadRes;
-
+	private IDownloadProcess downloadProcess;
 	private OutputStream out;
 
-	public static final String TAG = "drive_download";
+	private final IBinder myBinder = new MyBinder();
 
-	public static final HttpTransport HTTP_TRANSPORT = AndroidHttp
-			.newCompatibleTransport();
-
-	public static final JsonFactory JSON_FACTORY = new JacksonFactory();
+	private String TAG = "drive_download";
 
 	public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
 
 	public static final String URL_6M = "http://mirror.bjtu.edu.cn/apache/maven/maven-3/3.1.0-alpha-1/binaries/apache-maven-3.1.0-alpha-1-bin.zip";
 
+	private ResDownloadThread resDownloadThread = new ResDownloadThread();
 	@SuppressLint("HandlerLeak")
 	private Handler handler = new Handler() {
 		@Override
@@ -73,38 +67,70 @@ private Attachment attachment;
 		}
 	};
 
-	@Override
-	public void onCreate() {
-		super.onCreate();
-		new Thread() {
-			@Override
-			public void run() {
+	private void startResDownloadTread(final CollaborativeMap res) {
 
+		// 这里会发生阻塞, 这里阻塞很危险, 会导致ANR, 所以还是不要使用 BlockingQueue
+		downloadUrlQueue.add(res);
+
+		State state = resDownloadThread.getState();
+		switch (state) {
+		// 线程被阻塞，在等待一个锁。
+		case BLOCKED:
+			break;
+
+		// 线程已被创建，但从未启动
+		case NEW:
+			resDownloadThread.start();
+
+			break;
+
+		// 线程可能已经运行
+		case RUNNABLE:
+
+			break;
+
+		// 线程已被终止
+		case TERMINATED:
+			// note : 如果下载线程被异常终止了, 就重新创建一个
+			resDownloadThread = new ResDownloadThread();
+			resDownloadThread.start();
+
+			break;
+
+		// 线程正在等待一个指定的时间。
+		case TIMED_WAITING:
+
+			break;
+		default:
+			break;
+		}
+	}
+
+	private class ResDownloadThread extends Thread {
+		public void run() {
+			try {
 				while (true) {
-					try {
-						downloadRes = MediaDownloadService.this.downloadUrlQueue
-								.take();
+					downloadRes = MediaDownloadService.this.downloadUrlQueue
+							.take();
 
-						if (!GlobalConstant.DownloadStatusEnum.COMPLETE
-								.getStatus().equals(downloadRes.get("status"))) {
+					if (!GlobalConstant.DownloadStatusEnum.COMPLETE.getStatus()
+							.equals(downloadRes.get("status"))) {
 
-							Intent intent = new Intent();
-							intent.setAction("NEW_RES_DOWNLOADING");
-							getBaseContext().sendBroadcast(intent);
+						Intent intent = new Intent();
+						intent.setAction("NEW_RES_DOWNLOADING");
+						getBaseContext().sendBroadcast(intent);
 
-							downloadRes.set("status", "downloading");
+						downloadRes.set("status", "downloading");
 
-							final String urlString = downloadRes.get("url");
-							doDownLoad(urlString);
+						final String urlString = downloadRes.get("url");
+						doDownLoad(urlString);
 
-						}
-
-					} catch (InterruptedException e) {
-						e.printStackTrace();
 					}
 				}
-			};
-		}.start();
+			} catch (Exception e) {
+				e.printStackTrace();
+			}
+		}
 	}
 
 	public final class MyBinder extends Binder {
@@ -117,7 +143,7 @@ private Attachment attachment;
 		}
 
 		public void addResDownload(final CollaborativeMap res) {
-			MediaDownloadService.this.downloadUrlQueue.add(res);
+			startResDownloadTread(res);
 		}
 
 		public void removeResDownload(final CollaborativeMap res) {
@@ -188,7 +214,9 @@ private Attachment attachment;
 		try {
 			File newFile = new File(
 					GlobalDataCacheForMemorySingleton.getInstance
-							.getOfflineResDirPath() + "/"+downloadRes.get("blobKey"));
+							.getOfflineResDirPath()
+							+ "/"
+							+ downloadRes.get("blobKey"));
 			FileOutputStream outputStream = new FileOutputStream(newFile);
 			setOut(outputStream);
 
@@ -199,8 +227,14 @@ private Attachment attachment;
 							request.setParser(new JsonObjectParser(JSON_FACTORY));
 						}
 					});
-			// downloader.setDirectDownloadEnabled(true); //设为单块下载
-			downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+
+			if (DriveModule.DRIVE_SERVER.endsWith(".goodow.com")) {
+				downloader.setDirectDownloadEnabled(false);
+				downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);
+			} else {
+				downloader.setDirectDownloadEnabled(true); // 设为单块下载
+			}
+
 			Log.i(TAG, downloader.getChunkSize() + "");
 			downloader.setProgressListener(new CustomProgressListener());
 

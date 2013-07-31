@@ -3,6 +3,7 @@ goog.provide('good.drive.creation.fileupload');
 
 goog.require('good.constants');
 goog.require('good.drive.nav.folders.Model');
+goog.require('good.drive.search');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -17,6 +18,8 @@ good.drive.creation.Fileupload = function() {
   var upload_div = goog.dom.getElementByClass('doclistmole');
   var uploadtable = goog.dom.getElementByClass('upload-uploader-table');
   var close_upload = goog.dom.getElement('close_upload');
+  var menu = new good.drive.search.AdvancedMenu();
+  this._menu = menu;
   this._file = filepath;
   this._upload_div = upload_div;
   this._uploadtable = uploadtable;
@@ -212,7 +215,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
   xhr.open('GET', url, true);
   xhr.onload = function(e) {
     var responseText = this.responseText;
-    if (responseText.length == 0) {      
+    if (responseText.length == 0) {
       return;
     }
     var json = goog.json.parse(responseText);
@@ -242,13 +245,14 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
       });
     }
   };  
-  xhr.send();  
+  xhr.send();
 };
 
 /**
  * @param {JSON} json
  */
 good.drive.creation.Fileupload.prototype.insertfile = function(json) {
+  var that = this;
   var rpc = new good.net.CrossDomainRpc('POST',
       good.constants.NAME,
       good.constants.VERSION, 'attachment',
@@ -257,6 +261,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json) {
   rpc.send(function(json) {
    if (json && !json['error']) {
      goog.dom.getElement(json['filename']).innerText = '上传结束';
+     that._menu.search('click');
    }
   });
 };
@@ -267,6 +272,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json) {
  */
 good.drive.creation.Fileupload.prototype.updateAgain =
   function(fileId, updatejson) {
+  var that = this;
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
@@ -281,7 +287,8 @@ good.drive.creation.Fileupload.prototype.updateAgain =
            good.constants.SERVERADRESS);
        rpc.body = updatejson;
        rpc.send(function(json) {
-         goog.dom.getElement(json['filename']).innerText = '更新成功';         
+         goog.dom.getElement(json['filename']).innerText = '更新成功';
+         that._menu.search('click');
       });
        }
      });

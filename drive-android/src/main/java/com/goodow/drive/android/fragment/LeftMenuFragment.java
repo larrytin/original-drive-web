@@ -1,11 +1,8 @@
 package com.goodow.drive.android.fragment;
 
-import com.goodow.android.drive.R;
-import com.goodow.drive.android.activity.MainActivity;
-import com.goodow.drive.android.global_data_cache.GlobalConstant;
-import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import java.util.ArrayList;
 import java.util.List;
+
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
@@ -19,6 +16,11 @@ import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.goodow.android.drive.R;
+import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 public class LeftMenuFragment extends ListFragment {
 	public static enum MenuTypeEnum {
@@ -125,7 +127,6 @@ public class LeftMenuFragment extends ListFragment {
 		LeftMenuFragment.MenuTypeEnum menuTypeEnum = (LeftMenuFragment.MenuTypeEnum) v
 				.getTag();
 
-		FragmentTransaction fragmentTransaction;
 		switch (menuTypeEnum) {
 		case USER_NAME:
 			// TODO
@@ -167,12 +168,13 @@ public class LeftMenuFragment extends ListFragment {
 			break;
 
 		case LOCAL_RES:
-
+			FragmentTransaction fragmentTransaction;
 			fragmentTransaction = mainActivity.getFragmentManager()
 					.beginTransaction();
 			fragmentTransaction.replace(R.id.contentLayout,
 					mainActivity.getLocalResFragment());
 			fragmentTransaction.commit();
+			
 			break;
 
 		default:
