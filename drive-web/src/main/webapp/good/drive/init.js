@@ -15,6 +15,7 @@ goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.folders.PublicViewControl');
+goog.require('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
@@ -59,14 +60,20 @@ good.drive.init.init = function() {
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
   
+  var myClassViewControl = 
+    new good.drive.nav.folders.MyClassViewControl(
+        good.constants.MYCLASSRESDOCID)
   var myclass = new good.drive.nav.folders.Tree('我的课程',
-      good.constants.MYCLASSRESDOCID);
+      undefined, myClassViewControl);
+  
   var myResTree = new good.drive.nav.folders.Tree('我的收藏夹',
       good.constants.MYRESDOCID);
+  
   var puclicViewControl = new good.drive.nav.folders.PublicViewControl(
       good.constants.PUBLICRESDOCID);
   var publicResTree = new good.drive.nav.folders.Tree('公共资料库',
       undefined, puclicViewControl);
+  
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   pathControl.addPath(good.constants.MYRESDOCID, myResTree);
   pathControl.addPath(good.constants.MYCLASSRESDOCID, myclass);
@@ -98,7 +105,7 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        view.addLeaf(createInput.value);
+        view.addLeaf({'label': createInput.value, 'isclass': false});
         break;
       case 'c':
         break;
@@ -106,7 +113,6 @@ good.drive.init.init = function() {
         break;
     }
   });
-
   var modifydialog = dialog.modifyFolderDialog(function(evt) {
     var docid = pathControl.currentDocId;
     var view = pathControl.getViewBydocId(docid);
@@ -120,7 +126,7 @@ good.drive.init.init = function() {
         break;
     }
   });
-
+  
   var menu = new good.drive.nav.menu.View();
   var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
     var docid = pathControl.currentDocId;
@@ -128,7 +134,7 @@ good.drive.init.init = function() {
     switch (goog.array.indexOf(
       createPopup.getChildIds(), e.target.getId())) {
         case 0:
-          view.setVisible(true);
+          createdialog.setVisible(true);
           break;
         default:
           break;
@@ -150,7 +156,8 @@ good.drive.init.init = function() {
     });
   }
   var leftSubmenuChildIds = undefined;
-  var leftSubmenu = menu.leftSubMenu(myclass.tree.getChildrenElement(), function(e) {
+  var leftSubmenu = menu.leftSubMenu(myResTree.tree.getChildrenElement(),
+      function(e) {
       if (leftSubmenuChildIds == undefined) {
         leftSubmenuChildIds = leftSubmenu.getChildIds();
       }
@@ -177,34 +184,75 @@ good.drive.init.init = function() {
           break;
       }
     });
+  
+  var newClassInput = undefined;
+  var newClassDialog = dialog.genDialog('新建课程', function(evt) {
+    if (newClassInput == undefined) {
+      newClassInput = goog.dom.getElement('newclassdialog');
+    }
+    var docid = pathControl.currentDocId;
+    var view = pathControl.getViewBydocId(docid);
+    switch (evt.key) {
+      case 'cr':
+        view.addLeaf({'label': newClassInput.value, 'isclass': true});
+        break;
+      case 'c':
+        break;
+      default:
+        break;
+    }
+  }, 'newclassdialog');
+  
   var bindPopup = false;
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
-  myclass.tree.getHandler().listen(
-      myclass.tree, goog.ui.tree.BaseNode.EventType.EXPAND,
-      function (e) {
-        var target = e.target;
-        if (bindPopup) {
-          return;
+  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['s', ''], ['i', '删除']];
+  var myClassMenuChildIds = undefined;
+  var myClassMenu = menu.genPopupMenu(
+      myclass.tree.getChildrenElement(), type, function(e) {
+        if (myClassMenuChildIds == undefined) {
+          myClassMenuChildIds = myClassMenu.getChildIds();
         }
-        if (target.title != undefined) {
-          return;
-        }
-        bindPopup = true;
-        var myClassNode = target.getChildAt(0);
-        var type = [['i', '新建课程'], ['s', ''], ['i', '删除课程']];
-        menu.genPopupMenu(myClassNode.getElement(), type, function(e) {
-          alert('a');
-        }, corner);
-        var myFolderNode = target.getChildAt(1);
-        menu.genPopupMenu(myFolderNode.getElement(), [['i', 'abc']], function(e) {
-          alert('a');
-        }, corner);
-      });
+        var docid = pathControl.currentDocId;
+        var view = pathControl.getViewBydocId(docid);
+        switch (goog.array.indexOf(myClassMenuChildIds, e.target.getId())) {
+        case 0:
+          newClassDialog.setVisible(true);
+          break;
+        case 1:
+          createdialog.setVisible(true);
+          break;
+        case 3:
+          view.removeLeaf();
+          break;
+        default:
+          break;
+      }
+  }, corner);
+  myClassMenu.getHandler().listen(myClassMenu,
+      goog.ui.Menu.EventType.BEFORE_SHOW,
+      function(e) {
+    var data = good.drive.nav.folders.Path.INSTANCE.getCurrentData();
+    var target = e.target;
+    var isClass = data.get('isclass');
+    if (isClass == undefined) {
+      return;
+    }
+    var item1 = target.getItemAt(0);
+    var item2 = target.getItemAt(1);
+    if(isClass) {
+      item1.setEnabled(false);
+      item2.setEnabled(false);
+      return;
+    }
+    item1.setEnabled(true);
+    item2.setEnabled(true);
+  });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var ceshi = new good.drive.rightmenu.Rightmenu();
 };
+
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);
