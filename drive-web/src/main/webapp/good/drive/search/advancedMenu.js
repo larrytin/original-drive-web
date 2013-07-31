@@ -35,6 +35,7 @@ good.drive.search.AdvancedMenu = function() {
     grid = new good.drive.nav.grid.View();
     grid.render(goog.dom.getElement('viewmanager'));
     good.drive.search.AdvancedMenu.SEARCHGRID = grid;
+    good.drive.nav.grid.View.visiable(grid);
   }
   var gradeArray = new Array('大班', '中班', '小班');
   this._typeArray = typeArray;
@@ -331,9 +332,6 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
               grid.add(cell);
               cell.renderCell();
             });
-            good.drive.nav.grid.View.visiable(grid);
-            good.drive.search.AdvancedMenu.SEARCHGRID = grid;
-            
           }
         }
       });
