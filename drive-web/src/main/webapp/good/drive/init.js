@@ -47,6 +47,7 @@ window.gdrOnLoad = good.drive.init.start;
 good.drive.init.init = function() {
   var createInput;
   var modifeInput;
+  var navFolderslist = goog.dom.getElement('navfolderslist');
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
   var baseDocid = '@tmp/' + good.auth.Auth.current.userId + '/';
   good.constants.MYRESDOCID = baseDocid +
@@ -64,15 +65,15 @@ good.drive.init.init = function() {
     new good.drive.nav.folders.MyClassViewControl(
         good.constants.MYCLASSRESDOCID)
   var myclass = new good.drive.nav.folders.Tree('我的课程',
-      undefined, myClassViewControl);
+      undefined, navFolderslist, myClassViewControl);
   
   var myResTree = new good.drive.nav.folders.Tree('我的收藏夹',
-      good.constants.MYRESDOCID);
+      good.constants.MYRESDOCID, navFolderslist);
   
   var puclicViewControl = new good.drive.nav.folders.PublicViewControl(
       good.constants.PUBLICRESDOCID);
   var publicResTree = new good.drive.nav.folders.Tree('公共资料库',
-      undefined, puclicViewControl);
+      undefined, navFolderslist, puclicViewControl);
   
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   pathControl.addPath(good.constants.MYRESDOCID, myResTree);
@@ -84,6 +85,9 @@ good.drive.init.init = function() {
   };
   
   var advancedMenu = new good.drive.search.AdvancedMenu();
+  advancedMenu.menuCallback = function(e, data, index) {
+    var s = '';
+  };
   advancedMenu.init();
 
   good.drive.nav.folders.AbstractControl.linkload();
@@ -206,7 +210,7 @@ good.drive.init.init = function() {
   var bindPopup = false;
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
-  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['s', ''], ['i', '删除']];
+  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '修改'], ['s', ''], ['i', '删除']];
   var myClassMenuChildIds = undefined;
   var myClassMenu = menu.genPopupMenu(
       myclass.tree.getChildrenElement(), type, function(e) {
@@ -222,7 +226,14 @@ good.drive.init.init = function() {
         case 1:
           createdialog.setVisible(true);
           break;
-        case 3:
+        case 2:
+          modifydialog.setVisible(true);
+          if (modifeInput == undefined) {
+            modifeInput = goog.dom.getElement('modifyFolder');
+          }
+          modifeInput.value = view.getCurrentItem().title;
+          break;
+        case 4:
           view.removeLeaf();
           break;
         default:

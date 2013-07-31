@@ -17,9 +17,9 @@
     <br>Your browser must support JavaScript to display the Goodow Drive web user interface.
   </div>
 </noscript>
-<script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
-<script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
-<script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
+<script type="text/javascript" src="http://192.168.1.15:8080/_ah/channel/jsapi"></script>
+<script type="text/javascript" src="http://192.168.1.15:8080/good/realtime/realtime.nocache.js"></script>
+<script type="text/javascript" src="http://192.168.1.15:8080/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
 <script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
@@ -27,6 +27,154 @@
 </script>
 <!-- <script src="drive-compiled.js"></script> -->
 <style type="text/css">
+
+.previewpane.density-tiny {
+right: 16px;
+}
+
+.previewpane {
+background-color: white;
+-webkit-box-sizing: border-box;
+-moz-box-sizing: border-box;
+box-sizing: border-box;
+border-left: 1px solid #e6e6e6;
+border-right: 1px solid #e6e6e6;
+bottom: 0;
+font-size: 13px;
+padding-left: 28px;
+position: absolute;
+width: 365px;
+z-index: 12;
+}
+
+.previewpane-header {
+overflow: hidden;
+}
+
+.previewpane-header-title {
+margin-top: 16px;
+}
+
+.previewpane-header-name {
+font-weight: bold;
+margin-left: 7px;
+margin-top: 1px;
+overflow: hidden;
+text-overflow: ellipsis;
+-o-text-overflow: ellipsis;
+vertical-align: top;
+white-space: nowrap;
+width: 287px;
+}
+
+.previewpane-single-container {
+overflow-x: hidden;
+overflow-y: auto;
+padding-bottom: 16px;
+}
+
+.previewpane-single-contents {
+width: 309px;
+}
+
+.previewpane-header-thumbnail-mask {
+border: 1px solid #e6e6e6;
+height: 309px;
+margin-top: 10px;
+overflow: hidden;
+text-align: center;
+width: 309px;
+}
+
+.previewpane-subpanel {
+line-height: 24px;
+margin-top: 30px;
+}
+
+.previewpane-subpanel {
+clear: both;
+overflow: hidden;
+}
+
+.previewpane-subpanel-header {
+width: 100%;
+}
+
+.previewpane-subpanel-title {
+background: #fff;
+color: #999;
+float: left;
+font-size: 11px;
+font-weight: bold;
+padding-right: 5px;
+text-transform: uppercase;
+z-index: 1;
+}
+
+.previewpane-subpanel-link {
+background: #fff;
+float: right;
+outline: none;
+padding-left: 5px;
+z-index: 1;
+}
+
+.previewpane-subpanel-link {
+font-size: 13px;
+color: #15c;
+cursor: pointer;
+}
+
+.previewpane-subpanel-manage-icon {
+background-image: url(https://ssl.gstatic.com/docs/doclist/images/icons_35.png);
+background-position: -1540px 0;
+background-repeat: no-repeat;
+cursor: pointer;
+height: 16px;
+margin-top: 4px;
+width: 16px;
+}
+
+.previewpane-subpanel-separator-container {
+padding-top: 12px;
+width: 100%;
+}
+
+.previewpane-subpanel-separator {
+border-top: 1px solid #f2f2f2;
+}
+
+.previewpane-closer {
+height: 17px;
+padding: 17px 16px;
+position: absolute;
+right: 0;
+top: 0;
+width: 10px;
+}
+
+.search-input-clear {
+cursor: pointer;
+outline: none;
+margin: 0;
+padding: 4px 3px 3px;
+}
+
+.search-input-clear-icon {
+background-position: -1805px 0;
+-moz-opacity: .55;
+-khtml-opacity: .55;
+opacity: .55;
+filter: alpha(opacity=55);
+}
+
+.search-input-clear-icon {
+background-image: url(https://ssl.gstatic.com/docs/doclist/images/icons_35.png);
+background-repeat: no-repeat;
+height: 10px;
+margin: 5px 2px;
+width: 10px;
+}
 </style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
@@ -201,6 +349,95 @@
                       </tr>
                     </tbody>
                   </table>
+                  <div class="previewpane density-tiny" style="height: 248px;">
+                    <div class="previewpane-content">
+                      <div class="previewpane-contents">
+                        <div class="previewpane-singleselection">
+                          <div class="previewpane-header">
+                            <div class="previewpane-component">
+                              <div class="previewpane-header-title">
+                               <span class="previewpane-header-name goog-inline-block">需求整理</span>
+                              </div>
+                            </div>
+                          </div>
+                          <div class="previewpane-single-container jfk-scrollbar" style="height: 130px;">
+                            <div class="previewpane-single-contents">
+                              <div class="previewpane-single-thumbnail">
+                                <div class="previewpane-component">
+                                  <div class="previewpane-header-thumbnail-container">
+                                    <a
+                                      href=""
+                                      target="_blank" rel="noreferrer">
+                                      <div class="previewpane-header-thumbnail-mask">
+                                        <img alt="需求整理"
+                                          src="https://lh6.google.com/pBze4j_p2zdcNbUozvOz5DFcFqK0RQoQz_zRAdNM9-rD6-AHtLyReIjbdCkGDvlZ2soMqjgLxKWrMudn_Tl9SFBrbSUR=s309"
+                                          class="previewpane-header-thumbnail">
+                                      </div></a>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="previewpane-mediapreview">
+                                <div class="previewpane-component">
+                                  <div class="mediapanel">
+                                    <div class="mediapanel-mediaplayer-container">
+                                      <div style="display: none;">
+                                        <img src="">&nbsp;正在加载...
+                                      </div>
+                                      <div style="display: none;"></div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <div class="previewpane-subpanelmanager">
+                                <div class="previewpane-component">
+                                  <div class="previewpane-component previewpane-subpanel">
+                                    <div class="previewpane-subpanel-header">
+                                      <span class="goog-inline-block previewpane-subpanel-title">领域</span>                                      
+                                    </div>
+                                    <div class="description-subpanel">
+                                      <div class="description-subpanel-view">
+                                        <div class="description-subpanel-contents description-subpanel-no-description">
+                                        <div id="fieldcombo" class="combo"></div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="previewpane-component previewpane-subpanel">
+                                    <div class="previewpane-subpanel-header">
+                                      <span class="goog-inline-block previewpane-subpanel-title">年级</span>                                      
+                                    </div>
+                                    <div class="description-subpanel">
+                                      <div class="description-subpanel-view">
+                                        <div class="description-subpanel-contents description-subpanel-no-description">                                         
+                                        <div id="gradecombo" class="combo"></div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="previewpane-component previewpane-subpanel">
+                                    <div class="previewpane-subpanel-header">
+                                      <span class="goog-inline-block previewpane-subpanel-title">类型</span>                                      
+                                    </div>
+                                    <div class="description-subpanel">
+                                      <div class="description-subpanel-view">
+                                        <div class="description-subpanel-contents description-subpanel-no-description">
+                                          <div id="typecombo" class="combo"></div>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="previewpane-closer search-input-clear goog-inline-block" aria-label="关闭预览窗格" tabindex="0" title="关闭预览窗格"
+                      role="button" style="-webkit-user-select: none;">
+                      <div class="search-input-clear-icon doclist-small-light-x"></div>
+                    </div>
+                  </div>
                 </div>
               </td>
             </tr>
