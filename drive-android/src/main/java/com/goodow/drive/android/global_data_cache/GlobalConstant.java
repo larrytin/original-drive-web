@@ -3,7 +3,7 @@ package com.goodow.drive.android.global_data_cache;
 public final class GlobalConstant {
 	public static enum SupportResTypeEnum {
 		DOC("doc"), PDF("pdf"), MP3("mp3"), MP4("mp4"), FLASH("swf"), TEXT(
-				"txt"), PNG("png");
+				"txt"), PNG("png"), JPEG("jpg"), EXCEL("xls");
 		private final String typeName;
 
 		private SupportResTypeEnum(String typeName) {
@@ -30,9 +30,9 @@ public final class GlobalConstant {
 	}
 
 	public static enum DocumentIdAndDataKey {
-		FAVORITESDOCID("favorites"), LESSONDOCID("lesson"), REMOTECONTROLDOCID("remotecontrol"), OFFLINEDOCID(
-				"offline"), FOLDERSKEY("folders"), FILESKEY("files"), OFFLINEKEY(
-				"offline"), CURRENTPATHKEY("currentpath"), CURRENTDOCIDKEY(
+		FAVORITESDOCID("favorites"), LESSONDOCID("lesson"), REMOTECONTROLDOCID(
+				"remotecontrol"), OFFLINEDOCID("offline"), FOLDERSKEY("folders"), FILESKEY(
+				"files"), OFFLINEKEY("offline"), CURRENTPATHKEY("currentpath"), CURRENTDOCIDKEY(
 				"currentdocid"), PATHKEY("path");
 
 		private final String value;

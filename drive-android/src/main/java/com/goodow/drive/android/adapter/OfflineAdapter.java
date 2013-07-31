@@ -1,16 +1,24 @@
 package com.goodow.drive.android.adapter;
 
+import java.io.File;
+
 import android.annotation.SuppressLint;
+import android.app.AlertDialog;
+import android.content.DialogInterface;
 import android.os.Handler;
 import android.os.Message;
 import android.view.View;
+import android.view.View.OnClickListener;
 import android.view.ViewGroup;
 import android.widget.BaseAdapter;
+import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.ProgressBar;
 import android.widget.TextView;
+
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -90,7 +98,7 @@ public class OfflineAdapter extends BaseAdapter {
 		ImageView imageView = (ImageView) row
 				.findViewById(R.id.offlineFileIcon);
 		imageView.setImageResource(ToolsFunctionForThisProgect
-				.getFileIconByFileFullName("."+item.get("type")));
+				.getFileIconByFileFullName("." + item.get("type")));
 
 		final TextView offlinefilename = (TextView) row
 				.findViewById(R.id.offlineFileName);
@@ -147,11 +155,53 @@ public class OfflineAdapter extends BaseAdapter {
 				if ("status".equals(newValue)) {
 					String newStatus = (String) event.getNewValue();
 					downloadStatus.setText(newStatus);
+
 				}
+			}
+		});
+
+		ImageButton delButton = (ImageButton) row.findViewById(R.id.delButton);
+		delButton.setOnClickListener(new OnClickListener() {
+			@Override
+			public void onClick(View v) {
+
+				AlertDialog alertDialog = new AlertDialog.Builder(activity)
+						.setPositiveButton(R.string.dailogOK,
+								new DialogInterface.OnClickListener() {
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+										offlineList.remove(position);
+
+										File file = new File(
+												GlobalDataCacheForMemorySingleton.getInstance
+														.getOfflineResDirPath()
+														+ "/"
+														+ item.get("blobKey"));
+										if (file.exists()) {
+											file.delete();
+										}
+
+										OfflineAdapter.this
+												.notifyDataSetChanged();
+
+									}
+								})
+						.setNegativeButton(R.string.dailogCancel,
+								new DialogInterface.OnClickListener() {
+
+									@Override
+									public void onClick(DialogInterface dialog,
+											int which) {
+
+									}
+								}).setMessage(R.string.del_DailogMessage)
+						.create();
+
+				alertDialog.show();
 			}
 		});
 
 		return row;
 	}
-
 }

@@ -98,8 +98,10 @@ public class MainActivity extends RoboActivity {
 
 			if (state == View.VISIBLE) {
 				animation = AnimationUtils.makeInAnimation(this, false);
+
 			} else {
 				animation = AnimationUtils.makeOutAnimation(this, true);
+
 			}
 
 			dataDetailLayout.startAnimation(animation);
@@ -112,7 +114,7 @@ public class MainActivity extends RoboActivity {
 		super.onCreateOptionsMenu(menu);
 
 		MenuItem back2Login = menu.add(0, 0, 0, R.string.actionBar_back);
-		back2Login.setIcon(R.drawable.action_discussion_previous);
+		back2Login.setIcon(R.drawable.discussion_indicator_opened);
 		back2Login.setShowAsAction(MenuItem.SHOW_AS_ACTION_IF_ROOM);
 
 		return true;
@@ -231,6 +233,7 @@ public class MainActivity extends RoboActivity {
 	}
 
 	public IRemoteDataFragment getLastiRemoteDataFragment() {
+
 		return lastiRemoteDataFragment;
 	}
 
@@ -242,9 +245,12 @@ public class MainActivity extends RoboActivity {
 	public void openState(int visibility) {
 		if (null != openFailure_text) {
 			openFailure_text.setVisibility(visibility);
+			
 		}
+
 		if (null != openFailure_img) {
 			openFailure_img.setVisibility(visibility);
+			
 		}
 	}
 
@@ -269,13 +275,14 @@ public class MainActivity extends RoboActivity {
 				.equals(fragmentName)) {
 			fragmentTransaction
 					.replace(R.id.contentLayout, offlineListFragment);
-
+			
 		}
 
 		fragmentTransaction.commit();
 	}
 
 	public RemoteControlObserver getRemoteControlObserver() {
+
 		return remoteControlObserver;
 	}
 
@@ -287,6 +294,7 @@ public class MainActivity extends RoboActivity {
 		private CollaborativeList list;
 
 		public CollaborativeList getList() {
+
 			return list;
 		}
 
@@ -294,12 +302,14 @@ public class MainActivity extends RoboActivity {
 			if (null != map) {
 				map.set(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
 						.getValue(), docId);
+				
 			}
 		}
 
 		public void clearList() {
 			if (null != list && 0 < list.length()) {
 				list.clear();
+				
 			}
 		}
 
@@ -330,6 +340,7 @@ public class MainActivity extends RoboActivity {
 								MainActivity.this.initFragment(newValue);
 
 								clearList();
+								
 							}
 						}
 					});
