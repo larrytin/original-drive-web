@@ -8,6 +8,7 @@ goog.require('good.drive.rightmenu.preview');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.Uri');
 goog.require('goog.dom');
+goog.require('goog.ui.ComboBox');
 goog.require('goog.ui.Dialog');
 
 /**
@@ -97,7 +98,8 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
  * @param {string} fileId
  * @param {Function} fn
  */
-good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
+good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) { 
+  this.createCombox();  
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
@@ -132,4 +134,42 @@ good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
     }
   });
   
+};
+
+/**
+ *
+ */
+good.drive.rightmenu.Rightmenu.prototype.createCombox = function() {
+  var fieldcombo = goog.dom.getElement('fieldcombo');
+  var gradecombo = goog.dom.getElement('gradecombo');
+  var typecombo = goog.dom.getElement('typecombo');
+  
+  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
+  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
+  var gradeArray = new Array('大班', '中班', '小班');
+  
+  var typecb = new goog.ui.ComboBox();
+  goog.array.forEach(typeArray, function(item) {    
+    typecb.setUseDropdownArrow(true);
+    typecb.setDefaultText('Select 。。。');
+    typecb.addItem(new goog.ui.ComboBoxItem(item));
+  });
+  
+  var fieldcb = new goog.ui.ComboBox();
+  goog.array.forEach(fieldArray, function(item) {    
+    fieldcb.setUseDropdownArrow(true);
+    fieldcb.setDefaultText('Select 。。。');
+    fieldcb.addItem(new goog.ui.ComboBoxItem(item));
+  });
+  
+  var gradecb = new goog.ui.ComboBox();
+  goog.array.forEach(gradeArray, function(item) {    
+    gradecb.setUseDropdownArrow(true);
+    gradecb.setDefaultText('Select 。。。');
+    gradecb.addItem(new goog.ui.ComboBoxItem(item));
+  });
+  
+  typecb.render(typecombo);
+  fieldcb.render(fieldcombo);
+  gradecb.render(gradecombo);  
 };

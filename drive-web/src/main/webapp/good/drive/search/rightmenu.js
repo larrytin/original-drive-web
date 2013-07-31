@@ -13,7 +13,7 @@ goog.require('goog.ui.SubMenu');
  * @param {Element} dom
  * @param {good.drive.nav.grid} grid
  */
-good.drive.search.Rightmenu = function(dom, grid, callback) {
+good.drive.search.Rightmenu = function(dom, grid, handle) {
   
   var rpc = new good.net.CrossDomainRpc('GET', good.constants.DEVICE,
       good.config.VERSION, 'deviceinfo',
@@ -33,49 +33,51 @@ good.drive.search.Rightmenu = function(dom, grid, callback) {
             menuCorner: undefined, contextMenu: true};
         var rightmenuChildIds = undefined;
         var rightMenu = menu.genPopupMenu(dom, type, function(e) {
-          var selectedElemnet = grid.getSelectedItem();
-          var data = selectedElemnet.data;
-          if (rightmenuChildIds == undefined) {
-            rightmenuChildIds = rightMenu.getChildIds();
-          }
-          var rightmenusource = new good.drive.rightmenu.Rightmenu();
-          var menu = new good.drive.search.AdvancedMenu();
-          var index = goog.array.indexOf(rightmenuChildIds, e.target.getId());
-          switch (index) {
-            case 0:
-              rightmenusource.preview(data.id);
-              break;
-            case 1:
-              alert('ss');
-              break;
-            case 2:
-              break;
-            case 3:
-              break;
-            case 4:
-              rightmenusource.uploadAgain(data.id, function() {
-                alert('22');
-              });
-              break;
-            case 5:
-              rightmenusource.deletefn(data.id, function() {
-                menu.search('click');
-              });
-              break;     
-            default:              
-              var deviceId = undefined;
-              var action = e.target.getCaption();
-               goog.array.forEach(items, function(item) {
-                 if (item.name == action) {
-                   deviceId = item.id;
-                 }
-              });
-               rightmenusource.send(data.id, deviceId);
-              break;
-           }
-          if (callback != undefined) {
-            callback(e, data, index);
-          }
+          if (handle != undefined ) {
+            handle();
+          } else {
+            var selectedElemnet = grid.getSelectedItem();
+            var data = selectedElemnet.data;
+            if (rightmenuChildIds == undefined) {
+              rightmenuChildIds = rightMenu.getChildIds();
+            }
+            var rightmenusource = new good.drive.rightmenu.Rightmenu();
+            var menu = new good.drive.search.AdvancedMenu();
+            var index = goog.array.indexOf(rightmenuChildIds, e.target.getId());
+            switch (index) {
+              case 0:
+                rightmenusource.preview(data.id);
+                break;
+              case 1:
+                rightmenusource.detailInfo(data.id, function() {
+                  
+                });
+                break;
+              case 2:
+                break;
+              case 3:
+                break;
+              case 4:
+                rightmenusource.uploadAgain(data.id, function() {                
+                });
+                break;
+              case 5:
+                rightmenusource.deletefn(data.id, function() {
+                  menu.search('click');
+                });
+                break;     
+              default:              
+                var deviceId = undefined;
+                var action = e.target.getCaption();
+                 goog.array.forEach(items, function(item) {
+                   if (item.name == action) {
+                     deviceId = item.id;
+                   }
+                });
+                 rightmenusource.send(data.id, deviceId);
+                break;
+             }           
+          }          
         }, corner);
       }
     }    
