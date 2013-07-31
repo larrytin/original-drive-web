@@ -98,15 +98,41 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
  * @param {string} fileId
  * @param {Function} fn
  */
-good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) { 
-  this.createCombox();  
+good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {  
+  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
+  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
+  var gradeArray = new Array('大班', '中班', '小班');
+  var fieldcombo = goog.dom.getElement('fieldcombo');
+  var gradecombo = goog.dom.getElement('gradecombo');
+  var typecombo = goog.dom.getElement('typecombo');
+  var filename = goog.dom.getElement('filename');
+  var thumbnail = goog.dom.getElement('thumbnail');
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
       good.constants.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
-      fn(json);
+      filename.innerText = json.filename;
+      if(good.constants.DRIVE_SERVER.indexOf('.googow.com') != -1){
+        thumbnail.src = json.thumbnail;
+      } else {
+        var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
+        var uri = new goog.Uri(json.thumbnail);
+        uri.setDomain(uri_server.getDomain());        
+        uri.setScheme(uri_server.getScheme());
+        thumbnail.src = uri.toString();
+        var tags = json.tags;
+        goog.array.forEach(tags, function(item) {
+          if (goog.array.contains(fieldArray, item)) {
+            fieldcombo.value = item;
+          } else if ( goog.array.contains(gradeArray, item)){
+            gradecombo.value = item;
+          }
+        });
+        typecombo.value = json.contentType;
+      }
+      
     }
   });
 };
@@ -134,42 +160,4 @@ good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
     }
   });
   
-};
-
-/**
- *
- */
-good.drive.rightmenu.Rightmenu.prototype.createCombox = function() {
-  var fieldcombo = goog.dom.getElement('fieldcombo');
-  var gradecombo = goog.dom.getElement('gradecombo');
-  var typecombo = goog.dom.getElement('typecombo');
-  
-  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
-  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
-  var gradeArray = new Array('大班', '中班', '小班');
-  
-  var typecb = new goog.ui.ComboBox();
-  goog.array.forEach(typeArray, function(item) {    
-    typecb.setUseDropdownArrow(true);
-    typecb.setDefaultText('Select 。。。');
-    typecb.addItem(new goog.ui.ComboBoxItem(item));
-  });
-  
-  var fieldcb = new goog.ui.ComboBox();
-  goog.array.forEach(fieldArray, function(item) {    
-    fieldcb.setUseDropdownArrow(true);
-    fieldcb.setDefaultText('Select 。。。');
-    fieldcb.addItem(new goog.ui.ComboBoxItem(item));
-  });
-  
-  var gradecb = new goog.ui.ComboBox();
-  goog.array.forEach(gradeArray, function(item) {    
-    gradecb.setUseDropdownArrow(true);
-    gradecb.setDefaultText('Select 。。。');
-    gradecb.addItem(new goog.ui.ComboBoxItem(item));
-  });
-  
-  typecb.render(typecombo);
-  fieldcb.render(fieldcombo);
-  gradecb.render(gradecombo);  
 };
