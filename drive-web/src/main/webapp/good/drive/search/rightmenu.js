@@ -32,10 +32,7 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
         var corner = {targetCorner: undefined,
             menuCorner: undefined, contextMenu: true};
         var rightmenuChildIds = undefined;
-        var rightMenu = menu.genPopupMenu(dom, type, function(e) {
-          if (handle != undefined ) {
-            handle();
-          } else {
+        var rightMenu = menu.genPopupMenu(dom, type, function(e) {      
             var selectedElemnet = grid.getSelectedItem();
             var data = selectedElemnet.data;
             if (rightmenuChildIds == undefined) {
@@ -76,8 +73,10 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
                 });
                  rightmenusource.send(data.id, deviceId);
                 break;
-             }           
-          }          
+             } 
+            if (handle != undefined ) {
+              handle();
+            }                   
         }, corner);
       }
     }    
