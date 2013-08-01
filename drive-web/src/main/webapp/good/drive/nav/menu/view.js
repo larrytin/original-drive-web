@@ -83,7 +83,7 @@ good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
 }
 
 good.drive.nav.menu.View.prototype.clearItem = function(popupMenu) {
-  for (var i = 0; i < getChildCount(); i++) {
+  for (var i = 0; i < popupMenu.getChildCount(); i++) {
     popupMenu.removeChildAt(0);
   } 
 };
