@@ -21,6 +21,7 @@ goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.rightmenu');
+goog.require('good.drive.rightmenu.detailinfo');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.search');
 goog.require('goog.dom');
@@ -172,6 +173,11 @@ good.drive.init.init = function() {
       default:
         break;
     }
+  });
+  
+  var detailinfo = new good.drive.rightmenu.
+  DetailInfo(function() {
+    advancedMenu.search('click');
   });
   
   var menu = new good.drive.nav.menu.View();

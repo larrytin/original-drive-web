@@ -358,7 +358,8 @@ white-space: nowrap;
                       </tr>
                     </tbody>
                   </table>
-                  <div class="previewpane density-tiny" style="height: 248px;">
+                  <div id="previewpane" class="previewpane density-tiny" style="height: 248px; display: none;">
+                    <input id="fileId" type="hidden">
                     <div class="previewpane-content">
                       <div class="previewpane-contents">
                         <div class="previewpane-singleselection">
@@ -463,7 +464,7 @@ white-space: nowrap;
                                         <div class="description-subpanel-contents description-subpanel-no-description">                                          
                                              
                                              <div class="folders-subpanel-row">
-                                             <a role="button" id="info_btn"  class="gbqfbb">确定</a> 
+                                             <a role="button" id="update_info"  class="gbqfbb">确定</a> 
                                              </div>       
                                         </div>
                                       </div>
@@ -476,7 +477,7 @@ white-space: nowrap;
                         </div>
                       </div>
                     </div>
-                    <div class="previewpane-closer search-input-clear goog-inline-block" aria-label="关闭预览窗格" tabindex="0" title="关闭预览窗格"
+                    <div id="previewpane-closer" class="previewpane-closer search-input-clear goog-inline-block" 
                       role="button" style="-webkit-user-select: none;">
                       <div class="search-input-clear-icon doclist-small-light-x"></div>
                     </div>

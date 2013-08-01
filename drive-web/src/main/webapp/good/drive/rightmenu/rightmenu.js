@@ -98,15 +98,15 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
  * @param {string} fileId
  * @param {Function} fn
  */
-good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {  
-  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
-  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
-  var gradeArray = new Array('大班', '中班', '小班');
+good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
+  var previewpane = goog.dom.getElement('previewpane');
   var fieldcombo = goog.dom.getElement('fieldcombo');
   var gradecombo = goog.dom.getElement('gradecombo');
   var typecombo = goog.dom.getElement('typecombo');
   var filename = goog.dom.getElement('filename');
   var thumbnail = goog.dom.getElement('thumbnail');
+  var fileId_Txt = goog.dom.getElement('fileId');
+  fileId_Txt.value = fileId;
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
@@ -121,18 +121,20 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
         var uri = new goog.Uri(json.thumbnail);
         uri.setDomain(uri_server.getDomain());        
         uri.setScheme(uri_server.getScheme());
-        thumbnail.src = uri.toString();
-        var tags = json.tags;
-        goog.array.forEach(tags, function(item) {
-          if (goog.array.contains(fieldArray, item)) {
-            fieldcombo.value = item;
-          } else if ( goog.array.contains(gradeArray, item)){
-            gradecombo.value = item;
-          }
-        });
-        typecombo.value = json.contentType;
+        uri.setScheme(uri_server.getScheme());
+        uri.setPort(uri_server.getPort());
+        thumbnail.src = uri.toString();        
       }
-      
+      var tags = json.tags;
+      goog.array.forEach(tags, function(item) {
+        if (goog.array.contains(good.constants.FIELDARRAY, item)) {
+          fieldcombo.value = item;
+        } else if ( goog.array.contains(good.constants.GRADEARRAY, item)){
+          gradecombo.value = item;
+        }
+      });
+      typecombo.value = json.contentType;
+      previewpane.style.display = 'block';
     }
   });
 };

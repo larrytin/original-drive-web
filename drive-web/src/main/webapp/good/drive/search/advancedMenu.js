@@ -27,20 +27,16 @@ good.drive.search.AdvancedMenu = function() {
   var pop = new goog.ui.PopupMenu();
   popupElt.style.minWidth = '509px';
 
-  var typeArray = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
-  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
-  
   var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
   if (grid == undefined) {
     grid = new good.drive.nav.grid.View();
     grid.render(goog.dom.getElement('viewmanager'));
     good.drive.search.AdvancedMenu.SEARCHGRID = grid;
     good.drive.nav.grid.View.visiable(grid);
-  }
-  var gradeArray = new Array('大班', '中班', '小班');
-  this._typeArray = typeArray;
-  this._fieldArray = fieldArray;
-  this._gradeArray = gradeArray;
+  }  
+  this._typeArray = good.constants.TYPEARRAY;
+  this._fieldArray = good.constants.FIELDARRAY;
+  this._gradeArray = good.constants.GRADEARRAY;
   this._pop = pop;
   this._search_input = search_input;
   this._input_text = input_text;
@@ -252,11 +248,7 @@ good.drive.search.AdvancedMenu.prototype.trim = function(str) {
  */
 good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
   var that = this;
-  var type = {'动画': 'application/x-shockwave-flash',
-      '视频': 'video/mpeg',
-      '音频': 'audio/mp3',
-      '图片': 'image/jpeg',
-      '文本': 'text/plain'};
+  
   var contentType = undefined;
   var tags = new Array();
   if (that._search_input.children.length != 0) {
@@ -264,7 +256,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
       var child = that._search_input.children[i];
       var spantext = child.children[0].innerText;
       if (goog.array.contains(this._typeArray, spantext)) {
-        contentType = type[spantext];
+        contentType = good.constants.TYPE[spantext];
       } else if (goog.array.contains(this._fieldArray, spantext) ||
           goog.array.contains(this._gradeArray, spantext)) {
         goog.array.insert(tags, spantext);
@@ -304,14 +296,14 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     }
 
     if (flag) {
-      path = path + '&limit=8';
+      path = path + '&limit=10';
     } else {
-      path = path + '?limit=8';
+      path = path + '?limit=10';
     }
 
     var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
     grid.clear();
-    if (search_type == undefined && path == 'search?limit=8') {
+    if (search_type == undefined && path == 'search?limit=10') {
       return;
     } else {
     //连接服务器查询
@@ -332,6 +324,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
               grid.add(cell);
               cell.renderCell();
             });
+            good.drive.nav.grid.View.visiable(grid);
           }
         }
       });

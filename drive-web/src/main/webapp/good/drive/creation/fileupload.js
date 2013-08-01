@@ -296,52 +296,6 @@ good.drive.creation.Fileupload.prototype.updateAgain =
 
 
 /**
- * @param {string} fileId
- * @param {Array.<string>} tags
- * @param {string} content_Type
- * @param {Function} handler
- */
-good.drive.creation.Fileupload.prototype.updatefile = function(fileId,
-    tags, content_Type, handler) {
-  if ((tags != null && tags.length > 0) ||
-      (content_Type != null && content_Type != '')) {
-    var rpc = new good.net.CrossDomainRpc('GET',
-        good.constants.NAME,
-        good.constants.VERSION, 'attachment/' + fileId,
-        good.constants.SERVERADRESS);
-    rpc.send(function(json) {
-       if (json && !json['error']) {
-         if (tags != null && tags.length > 0) {
-           if (json['tags'] != undefined &&
-               !goog.array.isEmpty(json['tags'])) {
-             goog.array.forEach(tags, function(e) {
-              if (!goog.array.contains(json['tags'], e)) {
-                goog.array.insert(json['tags'], e);
-              }
-            });
-           }else {
-             json['tags'] = tags;
-           }
-         }
-         if (content_Type != null && content_Type != '') {
-           json['contentType'] = content_Type;
-         }
-         var rpc = new good.net.CrossDomainRpc('POST',
-             good.constants.NAME,
-             good.constants.VERSION, 'update',
-             good.constants.SERVERADRESS);
-         rpc.body = json;
-         rpc.send(function(json) {
-           handler();
-        });
-       }
-    });
-  } else {
-    handler();
-  }
-};
-
-/**
  * @return {Array.<string>}
  */
 good.drive.creation.Fileupload.prototype.getTags = function() {
