@@ -16,33 +16,6 @@ goog.require('goog.ui.registry');
  * @constructor
  */
 good.drive.nav.menu.View = function() {
-  var render = goog.ui.ContainerRenderer.getCustomRenderer(
-      good.drive.nav.menu.ViewRenderer, 'detroit-createmenu');
-  var itemRender = goog.ui.ControlRenderer.getCustomRenderer(
-      goog.ui.MenuItemRenderer, 'detroit-createmenuitem');
-  goog.ui.registry.setDecoratorByClassName(
-      'detroit-createmenuitem', function() {
-        return new goog.ui.MenuItem('', null, null, itemRender);
-      });
-  var create = new goog.ui.PopupMenu(null, render);
-  create.decorateContent = function(element) {
-    var renderer = this.getRenderer();
-    var contentElements = this.getDomHelper().getElementsByTagNameAndClass(
-        'div', goog.getCssName(renderer.getCssClass(), 'entries-col'),
-        element);
-    var length = contentElements.length;
-    for (var i = 0; i < length; i++) {
-      renderer.decorateChildren(this, contentElements[i]);
-    }
-  };
-  create.setToggleMode(true);
-  create.decorate(goog.dom.getElement('dMenu'));
-  this.create_ = create;
-
-
-  var left = new goog.ui.PopupMenu();
-  left.decorate(goog.dom.getElement('leftsubmenu'));
-  this.left_ = left;
 };
 /**
  * @param {Element} dom
@@ -107,10 +80,31 @@ good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
-  this.create_.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
+  var render = goog.ui.ContainerRenderer.getCustomRenderer(
+      good.drive.nav.menu.ViewRenderer, 'detroit-createmenu');
+  var itemRender = goog.ui.ControlRenderer.getCustomRenderer(
+      goog.ui.MenuItemRenderer, 'detroit-createmenuitem');
+  goog.ui.registry.setDecoratorByClassName(
+      'detroit-createmenuitem', function() {
+        return new goog.ui.MenuItem('', null, null, itemRender);
+      });
+  var create = new goog.ui.PopupMenu(null, render);
+  create.decorateContent = function(element) {
+    var renderer = this.getRenderer();
+    var contentElements = this.getDomHelper().getElementsByTagNameAndClass(
+        'div', goog.getCssName(renderer.getCssClass(), 'entries-col'),
+        element);
+    var length = contentElements.length;
+    for (var i = 0; i < length; i++) {
+      renderer.decorateChildren(this, contentElements[i]);
+    }
+  };
+  create.setToggleMode(true);
+  create.decorate(goog.dom.getElement('dMenu'));
+  create.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
       goog.positioning.Corner.TOP_LEFT);
-  goog.events.listen(this.create_, 'action', handle);
-  return this.create_;
+  goog.events.listen(create, 'action', handle);
+  return create;
 };
 
 /**
@@ -119,11 +113,13 @@ good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.leftSubMenu = function(dom, handle) {
-  this.left_.attach(dom, undefined, undefined, true);
-  this.left_.getHandler().listen(
-      this.left_, goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
+  var left = new goog.ui.PopupMenu();
+  left.decorate(goog.dom.getElement('leftsubmenu'));
+  left.attach(dom, undefined, undefined, true);
+  left.getHandler().listen(
+      left, goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
     var str = '';
   });
-  goog.events.listen(this.left_, 'action', handle);
-  return this.left_;
+  goog.events.listen(left, 'action', handle);
+  return left;
 };
