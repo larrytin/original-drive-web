@@ -22,6 +22,7 @@ goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
+goog.require('good.drive.role');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.search');
 goog.require('goog.dom');
@@ -62,6 +63,7 @@ good.drive.init.init = function() {
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
   
+  var role = new good.drive.role.Role(auth.userId);
   var myclassLabel = '我的课程';
   var myClassViewControl = 
     new good.drive.nav.folders.MyClassViewControl(
@@ -88,8 +90,7 @@ good.drive.init.init = function() {
   
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
-  var leftCreateBtn = leftButton.createBtn();
-  var leftUpdateBtn = leftButton.updateBtn();
+  var leftCreateBtn = leftButton.createBtn(); 
 
   var toolBarButton = new good.drive.nav.button.ToolBarButton();
   var toolBarCreate = toolBarButton.createTolBtn();
@@ -193,21 +194,24 @@ good.drive.init.init = function() {
           break;
     }
   });
-
-//    var moverEvent = good.drive.creation.Mouserevent(
-//        leftUpdateBtn.getElement());
-  if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
-    var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
-    menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
-    });
-  } else {
-    var menulst = '文件...';
-    var fileupload = new good.drive.creation.Fileupload();
-    fileupload.fileChange();
-    menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
-      fileupload.fileClick('new', '');
-    });
+  if (good.drive.role.Role.USERNAME == good.constants.ADMIN) {
+    var leftUpdateBtn = leftButton.updateBtn();
+//  var moverEvent = good.drive.creation.Mouserevent(
+//      leftUpdateBtn.getElement());
+    if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
+      var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
+      menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+      });
+    } else {
+      var menulst = '文件...';
+      var fileupload = new good.drive.creation.Fileupload();
+      fileupload.fileChange();
+      menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+        fileupload.fileClick('new', '');
+      });
+    }
   }
+  
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(myResTree.tree.getChildrenElement(),
       function(e) {

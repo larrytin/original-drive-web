@@ -26,7 +26,7 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
         goog.array.forEach(items, function(item) {
           submenu.addItem(new goog.ui.MenuItem(item.name));
         });
-        var menu = new good.drive.nav.menu.View();  
+        var menu = new good.drive.nav.menu.View();              
         var type = [['i', '预览'], ['i', '详细信息'], ['i', '安排课程'],
                    ['i', '收藏'], ['i', '重新上传'], ['i', '删除'], ['m', submenu]];
         var corner = {targetCorner: undefined,
@@ -46,8 +46,7 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
                 rightmenusource.preview(data.id);
                 break;
               case 1:
-                rightmenusource.detailInfo(data.id, function() {
-                  
+                rightmenusource.detailInfo(data.id, function() {                  
                 });
                 break;
               case 2:
@@ -59,9 +58,9 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
                 });
                 break;
               case 5:
-                rightmenusource.deletefn(data.id, function() {
+                /*rightmenusource.deletefn(data.id, function() {
                   menu.search('click');
-                });
+                });*/
                 break;     
               default:              
                 var deviceId = undefined;
@@ -78,6 +77,18 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
               handle(e, data, index);
             }                   
         }, corner);
+        
+        rightMenu.getHandler().listen(rightMenu,
+            goog.ui.Menu.EventType.BEFORE_SHOW ,function(e){
+          var target = e.target;                   
+          if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
+            var itemupdate = target.getItemAt(4);
+            itemupdate.setEnabled(false);
+          } else {
+            var item = target.getItemAt(5);
+            item.setEnabled(false);
+          }
+        });
       }
     }    
   });  

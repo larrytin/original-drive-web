@@ -99,6 +99,7 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
  * @param {Function} fn
  */
 good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
+  
   var previewpane = goog.dom.getElement('previewpane');
   var fieldcombo = goog.dom.getElement('fieldcombo');
   var gradecombo = goog.dom.getElement('gradecombo');
@@ -106,7 +107,15 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
   var filename = goog.dom.getElement('filename');
   var thumbnail = goog.dom.getElement('thumbnail');
   var fileId_Txt = goog.dom.getElement('fileId');
+  var update_info = goog.dom.getElement('update_info');
   fileId_Txt.value = fileId;
+ if (good.drive.role.Role.USERNAME != good.constants.ADMIN){
+   fieldcombo.disabled = 'true';
+   gradecombo.disabled = 'true';
+   typecombo.disabled = 'ture';
+   update_info.disabled = 'true';
+  }
+
   var rpc = new good.net.CrossDomainRpc('GET',
       good.constants.NAME,
       good.constants.VERSION, 'attachment/' + fileId,
