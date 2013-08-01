@@ -325,7 +325,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
                   uri.setScheme(uri_server.getScheme());
                   uri.setScheme(uri_server.getScheme());
                   uri.setPort(uri_server.getPort());
-                  item['thumbnail'] = uri.toString() + '=s150';
+                  item['thumbnail'] = uri.toString() + '=s218';
                 }
               }
               var cell = grid.createCell(item);
