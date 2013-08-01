@@ -12,9 +12,10 @@ goog.require('goog.ui.SubMenu');
  * @constructor
  * @param {Element} dom
  * @param {good.drive.nav.grid} grid
+ * @param {Function} handle
  */
 good.drive.search.Rightmenu = function(dom, grid, handle) {
-  
+
   var rpc = new good.net.CrossDomainRpc('GET', good.constants.DEVICE,
       good.config.VERSION, 'deviceinfo',
       good.config.SERVERADRESS);
@@ -26,13 +27,13 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
         goog.array.forEach(items, function(item) {
           submenu.addItem(new goog.ui.MenuItem(item.name));
         });
-        var menu = new good.drive.nav.menu.View();              
+        var menu = new good.drive.nav.menu.View();
         var type = [['i', '预览'], ['i', '详细信息'], ['i', '安排课程'],
                    ['i', '收藏'], ['i', '重新上传'], ['i', '删除'], ['m', submenu]];
         var corner = {targetCorner: undefined,
             menuCorner: undefined, contextMenu: true};
         var rightmenuChildIds = undefined;
-        var rightMenu = menu.genPopupMenu(dom, type, function(e) {      
+        var rightMenu = menu.genPopupMenu(dom, type, function(e) {
             var selectedElemnet = grid.getSelectedItem();
             var data = selectedElemnet.data;
             if (rightmenuChildIds == undefined) {
@@ -46,7 +47,7 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
                 rightmenusource.preview(data.id);
                 break;
               case 1:
-                rightmenusource.detailInfo(data.id, function() {                  
+                rightmenusource.detailInfo(data.id, function() {
                 });
                 break;
               case 2:
@@ -54,15 +55,15 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
               case 3:
                 break;
               case 4:
-                rightmenusource.uploadAgain(data.id, function() {                
+                rightmenusource.uploadAgain(data.id, function() {
                 });
                 break;
               case 5:
                 /*rightmenusource.deletefn(data.id, function() {
                   menu.search('click');
                 });*/
-                break;     
-              default:              
+                break;
+              default:
                 var deviceId = undefined;
                 var action = e.target.getCaption();
                  goog.array.forEach(items, function(item) {
@@ -72,15 +73,15 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
                 });
                  rightmenusource.send(data.id, deviceId);
                 break;
-             } 
-            if (handle != undefined ) {
+             }
+            if (handle != undefined) {
               handle(e, data, index);
-            }                   
+            }
         }, corner);
-        
+
         rightMenu.getHandler().listen(rightMenu,
-            goog.ui.Menu.EventType.BEFORE_SHOW ,function(e){
-          var target = e.target;                   
+            goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
+          var target = e.target;
           if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
             var itemupdate = target.getItemAt(4);
             itemupdate.setEnabled(false);
@@ -90,9 +91,8 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
           }
         });
       }
-    }    
-  });  
-  
+    }
+  });
 };
 
 

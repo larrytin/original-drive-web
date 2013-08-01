@@ -12,8 +12,8 @@ good.drive.role.Role = function(userId) {
       good.config.VERSION, 'accountinfo/' + userId,
       good.config.SERVERADRESS);
   rpc.send(function(json) {
-    if (json && json['token']) {     
-      good.drive.role.Role.USERNAME = json['name'];      
+    if (json && json['token']) {
+      good.drive.role.Role.USERNAME = json['name'];
     }
   });
 };

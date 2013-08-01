@@ -99,7 +99,6 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
  * @param {Function} fn
  */
 good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
-  
   var previewpane = goog.dom.getElement('previewpane');
   var fieldcombo = goog.dom.getElement('fieldcombo');
   var gradecombo = goog.dom.getElement('gradecombo');
@@ -109,7 +108,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
   var fileId_Txt = goog.dom.getElement('fileId');
   var update_info = goog.dom.getElement('update_info');
   fileId_Txt.value = fileId;
- if (good.drive.role.Role.USERNAME != good.constants.ADMIN){
+ if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
    fieldcombo.disabled = 'true';
    gradecombo.disabled = 'true';
    typecombo.disabled = 'ture';
@@ -123,22 +122,22 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
   rpc.send(function(json) {
     if (json && !json['error']) {
       filename.innerText = json.filename;
-      if(good.constants.DRIVE_SERVER.indexOf('.googow.com') != -1){
+      if (good.constants.DRIVE_SERVER.indexOf('.googow.com') != -1) {
         thumbnail.src = json.thumbnail;
       } else {
         var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
         var uri = new goog.Uri(json.thumbnail);
-        uri.setDomain(uri_server.getDomain());        
+        uri.setDomain(uri_server.getDomain());
         uri.setScheme(uri_server.getScheme());
         uri.setScheme(uri_server.getScheme());
         uri.setPort(uri_server.getPort());
-        thumbnail.src = uri.toString()+'=s300';        
+        thumbnail.src = uri.toString() + '=s300';
       }
       var tags = json.tags;
       goog.array.forEach(tags, function(item) {
         if (goog.array.contains(good.constants.FIELDARRAY, item)) {
           fieldcombo.value = item;
-        } else if ( goog.array.contains(good.constants.GRADEARRAY, item)){
+        } else if (goog.array.contains(good.constants.GRADEARRAY, item)) {
           gradecombo.value = item;
         }
       });
@@ -154,7 +153,6 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
  */
 good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
   var auth = good.auth.Auth.current;
-  
   var message = {'userId' : auth.userId,
                  'token' : auth.access_token,
                  'attachmentId' : fileId};
@@ -170,5 +168,5 @@ good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
       alert('发送成功');
     }
   });
-  
+
 };

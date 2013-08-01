@@ -244,7 +244,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
         }
       });
     }
-  };  
+  };
   xhr.send();
 };
 
