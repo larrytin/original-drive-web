@@ -8,11 +8,14 @@ import android.app.AlertDialog;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.animation.Animation;
+import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -63,33 +66,74 @@ public class MainActivity extends RoboActivity {
 	private LessonListFragment lessonListFragment;
 
 	public LocalResFragment getLocalResFragment() {
+
 		return localResFragment;
 	}
 
 	public DataDetailFragment getDataDetailFragment() {
+
 		return dataDetailFragment;
 	}
 
 	public DataListFragment getDataListFragment() {
+
 		return dataListFragment;
 	}
 
 	public OfflineListFragment getOfflineListFragment() {
+
 		return offlineListFragment;
 	}
 
 	public LessonListFragment getLessonListFragment() {
+
 		return lessonListFragment;
 	}
 
 	public void hideLeftMenuLayout() {
 		if (null != leftMenu && null != middleLayout) {
+			leftMenuFragment.hiddenView();
+
 			Animation out = AnimationUtils.makeOutAnimation(this, false);
+			out.setAnimationListener(new AnimationListener() {
+				@Override
+				public void onAnimationStart(Animation animation) {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void onAnimationRepeat(Animation animation) {
+					// TODO Auto-generated method stub
+				}
+
+				@Override
+				public void onAnimationEnd(Animation animation) {
+					leftMenu.setVisibility(LinearLayout.INVISIBLE);
+					middleLayout.setVisibility(LinearLayout.INVISIBLE);
+					setLeftMenuLayoutX(0);// 重置其位置,放置负数循环叠加
+					setLeftMenuLayoutX(-leftMenu.getWidth());
+
+					Log.i("Scorll", leftMenu.getLeft() + "");
+				}
+			});
+
 			leftMenu.startAnimation(out);
 
-			leftMenu.setVisibility(LinearLayout.INVISIBLE);
-			middleLayout.setVisibility(LinearLayout.INVISIBLE);
 		}
+	}
+
+	private void showLeftMenuLayout() {
+		Animation in = AnimationUtils.makeInAnimation(this, true);
+		leftMenu.startAnimation(in);
+		leftMenu.setVisibility(LinearLayout.VISIBLE);
+		leftMenuFragment.showView();
+
+	}
+
+	private void setLeftMenuLayoutX(int x) {
+		leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(),
+				leftMenu.getBottom());
+
 	}
 
 	public void setDataDetailLayoutState(int state) {
@@ -140,10 +184,8 @@ public class MainActivity extends RoboActivity {
 				hideLeftMenuLayout();
 
 			} else {
-				Animation in = AnimationUtils.makeInAnimation(this, true);
-				leftMenu.startAnimation(in);
-
-				leftMenu.setVisibility(LinearLayout.VISIBLE);
+				setLeftMenuLayoutX(0);
+				showLeftMenuLayout();
 				middleLayout.setVisibility(LinearLayout.VISIBLE);
 
 			}
@@ -182,10 +224,12 @@ public class MainActivity extends RoboActivity {
 
 	public void setActionBarTitle(String title) {
 		actionBar.setTitle(title);
+
 	}
 
 	public void restActionBarTitle() {
 		actionBar.setTitle(R.string.app_name);
+
 	}
 
 	@Override
@@ -215,6 +259,7 @@ public class MainActivity extends RoboActivity {
 			@Override
 			public void onClick(View v) {
 				hideLeftMenuLayout();
+
 			}
 		});
 
@@ -226,10 +271,12 @@ public class MainActivity extends RoboActivity {
 
 		remoteControlObserver = new RemoteControlObserver();
 		remoteControlObserver.startObservation(docId);
+
 	}
 
 	public void setIRemoteFrament(IRemoteDataFragment iRemoteDataFragment) {
 		this.iRemoteDataFragment = iRemoteDataFragment;
+
 	}
 
 	public IRemoteDataFragment getLastiRemoteDataFragment() {
@@ -240,23 +287,25 @@ public class MainActivity extends RoboActivity {
 	public void setLastiRemoteDataFragment(
 			IRemoteDataFragment lastiRemoteDataFragment) {
 		this.lastiRemoteDataFragment = lastiRemoteDataFragment;
+
 	}
 
 	public void openState(int visibility) {
 		if (null != openFailure_text) {
 			openFailure_text.setVisibility(visibility);
-			
+
 		}
 
 		if (null != openFailure_img) {
 			openFailure_img.setVisibility(visibility);
-			
+
 		}
 	}
 
 	public void setOpenStateView(TextView textView, ImageView imageView) {
 		openFailure_text = textView;
 		openFailure_img = imageView;
+
 	}
 
 	private void initFragment(String fragmentName) {
@@ -275,10 +324,11 @@ public class MainActivity extends RoboActivity {
 				.equals(fragmentName)) {
 			fragmentTransaction
 					.replace(R.id.contentLayout, offlineListFragment);
-			
+
 		}
 
 		fragmentTransaction.commit();
+
 	}
 
 	public RemoteControlObserver getRemoteControlObserver() {
@@ -302,14 +352,14 @@ public class MainActivity extends RoboActivity {
 			if (null != map) {
 				map.set(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
 						.getValue(), docId);
-				
+
 			}
 		}
 
 		public void clearList() {
 			if (null != list && 0 < list.length()) {
 				list.clear();
-				
+
 			}
 		}
 
@@ -340,7 +390,7 @@ public class MainActivity extends RoboActivity {
 								MainActivity.this.initFragment(newValue);
 
 								clearList();
-								
+
 							}
 						}
 					});
@@ -367,4 +417,65 @@ public class MainActivity extends RoboActivity {
 		}
 
 	}
+
+	private float startPoint = 0;
+
+	@Override
+	public boolean onTouchEvent(MotionEvent event) {
+		switch (event.getAction()) {
+		case MotionEvent.ACTION_DOWN:
+			if (leftMenu.getVisibility() == View.INVISIBLE) {
+				showLeftMenuLayout();
+			}
+
+			startPoint = event.getX();
+
+			break;
+		case MotionEvent.ACTION_UP:
+			if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 3) {
+				hideLeftMenuLayout();
+
+			} else {
+				setLeftMenuLayoutX(0);
+				middleLayout.setVisibility(View.VISIBLE);
+
+			}
+
+			startPoint = 0;
+
+			break;
+		case MotionEvent.ACTION_MOVE:
+			do {
+				if (startPoint >= event.getX()) {
+					break;
+				}
+
+				if (leftMenu.getLeft() >= 0) {
+					break;
+				}
+
+				int add = leftMenu.getLeft() + 4;
+				if (add < 0) {
+					setLeftMenuLayoutX(add);
+
+				} else {
+					setLeftMenuLayoutX(0);
+
+				}
+
+				if (leftMenu.getLeft() >= 0) {
+					middleLayout.setVisibility(View.VISIBLE);
+
+				}
+			} while (false);
+
+			break;
+		default:
+
+			break;
+		}
+
+		return true;
+	}
+
 }

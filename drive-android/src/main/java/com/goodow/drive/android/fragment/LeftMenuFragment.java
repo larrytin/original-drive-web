@@ -11,6 +11,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
+import android.view.animation.AnimationUtils;
 import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
@@ -20,23 +22,10 @@ import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalConstant.MenuTypeEnum;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 public class LeftMenuFragment extends ListFragment {
-	public static enum MenuTypeEnum {
-		USER_NAME("用户帐户名称"), USER_LESSON_DATA("我的课程"), USER_REMOTE_DATA("我的收藏夹"), USER_OFFLINE_DATA(
-				"离线文件"), LOCAL_RES("本地资源");
-		private final String menuName;
-
-		private MenuTypeEnum(String menuName) {
-			this.menuName = menuName;
-		}
-
-		public String getMenuName() {
-			return menuName;
-		}
-	}
-
 	private class LeftMenuAdapter extends ArrayAdapter<MenuTypeEnum> {
 		/**
 		 * @param context
@@ -47,7 +36,7 @@ public class LeftMenuFragment extends ListFragment {
 		public LeftMenuAdapter(Context context, int resource,
 				int textViewResourceId, List<MenuTypeEnum> objects) {
 			super(context, resource, textViewResourceId, objects);
-			
+
 		}
 
 		@Override
@@ -56,7 +45,7 @@ public class LeftMenuFragment extends ListFragment {
 			if (null == row) {
 				row = ((Activity) this.getContext()).getLayoutInflater()
 						.inflate(R.layout.row_leftmenu, parent, false);
-				
+
 			}
 
 			MenuTypeEnum item = getItem(position);
@@ -74,26 +63,26 @@ public class LeftMenuFragment extends ListFragment {
 				listItem.setText(GlobalDataCacheForMemorySingleton
 						.getInstance().getUserName());
 				img_left.setImageResource(R.drawable.ic_drive_owned_by_me);
-				
+
 				break;
 			case USER_REMOTE_DATA:
 				img_left.setImageResource(R.drawable.ic_drive_my_drive);
-				
+
 				break;
 			case USER_LESSON_DATA:
 				img_left.setImageResource(R.drawable.ic_type_folder);
-				
+
 				break;
 			case USER_OFFLINE_DATA:
 				img_left.setImageResource(R.drawable.ic_type_zip);
-				
+
 				break;
 			case LOCAL_RES:
 				img_left.setImageResource(R.drawable.ic_type_zip);
-				
+
 				break;
 			default:
-				
+
 				break;
 			}
 
@@ -113,7 +102,7 @@ public class LeftMenuFragment extends ListFragment {
 
 		for (MenuTypeEnum type : MenuTypeEnum.values()) {
 			MENULIST.add(type);
-			
+
 		}
 
 		setListAdapter(new LeftMenuAdapter(getActivity(),
@@ -123,20 +112,19 @@ public class LeftMenuFragment extends ListFragment {
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		
+
 		return inflater.inflate(R.layout.fragment_leftmenu, container, false);
 	}
 
 	@Override
 	public void onListItemClick(ListView l, View v, int position, long id) {
-		LeftMenuFragment.MenuTypeEnum menuTypeEnum = (LeftMenuFragment.MenuTypeEnum) v
-				.getTag();
+		MenuTypeEnum menuTypeEnum = (MenuTypeEnum) v.getTag();
 
 		switch (menuTypeEnum) {
 		case USER_NAME:
 			// TODO
 			Toast.makeText(mainActivity, "1", Toast.LENGTH_SHORT).show();
-			
+
 			break;
 		case USER_REMOTE_DATA:
 			String favoritesDocId = "@tmp/"
@@ -176,10 +164,10 @@ public class LeftMenuFragment extends ListFragment {
 			fragmentTransaction.replace(R.id.contentLayout,
 					mainActivity.getLocalResFragment());
 			fragmentTransaction.commit();
-			
+
 			break;
 		default:
-			
+
 			break;
 		}
 
@@ -187,4 +175,17 @@ public class LeftMenuFragment extends ListFragment {
 		mainActivity.setDataDetailLayoutState(View.INVISIBLE);
 	}
 
+	public void hiddenView() {
+		View view = getView();
+		Animation out = AnimationUtils.makeOutAnimation(getActivity(), false);
+		view.startAnimation(out);
+		view.setVisibility(View.INVISIBLE);
+	}
+
+	public void showView() {
+		View view = getView();
+		Animation in = AnimationUtils.makeInAnimation(getActivity(), true);
+		view.startAnimation(in);
+		view.setVisibility(View.VISIBLE);
+	}
 }
