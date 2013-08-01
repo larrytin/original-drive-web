@@ -82,6 +82,15 @@ good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
   });
 }
 
+good.drive.nav.menu.View.prototype.hideItem = function(popupMenu, hides) {
+  goog.array.forEach(popupMenu.getItems(), function(value) {
+    value.setVisible(true);
+  });
+  goog.array.forEach(hides, function(value) {
+    popupMenu.getChildAt(value).setVisible(false);
+  });
+}
+
 good.drive.nav.menu.View.prototype.clearItem = function(popupMenu) {
   for (var i = 0; i < popupMenu.getChildCount(); i++) {
     popupMenu.removeChildAt(0);
