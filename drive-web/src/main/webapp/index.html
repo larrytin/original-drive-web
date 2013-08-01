@@ -175,6 +175,15 @@ height: 10px;
 margin: 5px 2px;
 width: 10px;
 }
+
+.folders-subpanel-row {
+clear: both;
+color: #222;
+overflow: hidden;
+padding: 2px 0 3px;
+text-overflow: ellipsis;
+white-space: nowrap;
+}
 </style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
@@ -334,7 +343,7 @@ width: 10px;
                 </div></td>
               <td id="goog-splitpane-second-container" class="goog-splitpane-second-container navpane-resize-transition" valign="top"
                 style="-moz-box-sizing: border-box; width: 1280px; height: 313px;">
-                <div id="viewpane" class="viewpane" style="height: 292px;">
+                <div id="viewpane" class="viewpane" style="height: 1000px;">
                   <div id="viewpane-toolbar" class="viewpane-toolbar density-tiny">
                     <div class="goog-inline-block viewpane-toolbar-selection"></div>
                     <div class="goog-inline-block viewpane-toolbar-list"></div>
@@ -356,7 +365,7 @@ width: 10px;
                           <div class="previewpane-header">
                             <div class="previewpane-component">
                               <div class="previewpane-header-title">
-                               <span class="previewpane-header-name goog-inline-block">需求整理</span>
+                               <span id="filename" class="previewpane-header-name goog-inline-block">需求整理</span>
                               </div>
                             </div>
                           </div>
@@ -369,9 +378,7 @@ width: 10px;
                                       href=""
                                       target="_blank" rel="noreferrer">
                                       <div class="previewpane-header-thumbnail-mask">
-                                        <img alt="需求整理"
-                                          src="https://lh6.google.com/pBze4j_p2zdcNbUozvOz5DFcFqK0RQoQz_zRAdNM9-rD6-AHtLyReIjbdCkGDvlZ2soMqjgLxKWrMudn_Tl9SFBrbSUR=s309"
-                                          class="previewpane-header-thumbnail">
+                                        <img id="thumbnail" class="previewpane-header-thumbnail">
                                       </div></a>
                                   </div>
                                 </div>
@@ -397,7 +404,16 @@ width: 10px;
                                     <div class="description-subpanel">
                                       <div class="description-subpanel-view">
                                         <div class="description-subpanel-contents description-subpanel-no-description">
-                                        <div id="fieldcombo" class="combo"></div>
+                                        
+                                        <select id="fieldcombo" style="width: 150px;">
+                                        <option value ="">选择领域</option>                                               
+                                                <option value ="语言">语言</option>
+                                                <option value="数学">数学</option>
+                                                <option value="科学">科学</option>
+                                                <option value="社会">社会</option>
+                                                <option value="健康">健康</option>
+                                                <option value="艺术">艺术</option>                                                
+                                              </select>  
                                         </div>
                                       </div>
                                     </div>
@@ -409,7 +425,12 @@ width: 10px;
                                     <div class="description-subpanel">
                                       <div class="description-subpanel-view">
                                         <div class="description-subpanel-contents description-subpanel-no-description">                                         
-                                        <div id="gradecombo" class="combo"></div>
+                                        <select id="gradecombo" style="width: 150px;">
+                                                <option value ="">选择年级</option>
+                                                <option value ="大班">大班</option>
+                                                <option value ="中班">中班</option>
+                                                <option value="小班">小班</option>
+                                              </select>  
                                         </div>
                                       </div>
                                     </div>
@@ -420,8 +441,30 @@ width: 10px;
                                     </div>
                                     <div class="description-subpanel">
                                       <div class="description-subpanel-view">
-                                        <div class="description-subpanel-contents description-subpanel-no-description">
-                                          <div id="typecombo" class="combo"></div>
+                                        <div class="description-subpanel-contents description-subpanel-no-description">                                          
+                                            <select id="typecombo" style="width: 150px;">
+                                            <option value ="">选择类型</option>
+                                                <option value ="application/x-shockwave-flash">动画</option>
+                                                <option value ="video/mpeg">视频</option>
+                                                <option value="audio/mp3">音频</option>
+                                                <option value="image/jpeg">图片</option>
+                                                <option value="text/plain">文本</option>
+                                              </select>                                          
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                    <div class="previewpane-component previewpane-subpanel">
+                                    <div class="previewpane-subpanel-header">
+                                      <span class="goog-inline-block previewpane-subpanel-title">操作</span>                                      
+                                    </div>
+                                    <div class="description-subpanel">
+                                      <div class="description-subpanel-view">
+                                        <div class="description-subpanel-contents description-subpanel-no-description">                                          
+                                             
+                                             <div class="folders-subpanel-row">
+                                             <a role="button" id="info_btn"  class="gbqfbb">确定</a> 
+                                             </div>       
                                         </div>
                                       </div>
                                     </div>
