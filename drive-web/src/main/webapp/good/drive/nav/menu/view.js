@@ -51,14 +51,20 @@ good.drive.nav.menu.View.prototype.genPopupMenu =
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.reload = function(popupMenu, items, handle) {
+  this.clearItem(popupMenu);
   this.genItems_(popupMenu, items);
   if (handel == undefined) {
     return;
   }
-  goog.events.listen(popupMenu, 'action', handle);
+  if (handle != undefined) {
+    goog.events.listen(popupMenu, 'action', handle);
+  }
 };
 
 good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
+  if (goog.array.isEmpty(items)) {
+    return;
+  }
   goog.array.forEach(items, function(value) {
     switch (value[0]) {
     case 's':
@@ -75,6 +81,12 @@ good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
     }
   });
 }
+
+good.drive.nav.menu.View.prototype.clearItem = function(popupMenu) {
+  for (var i = 0; i < getChildCount(); i++) {
+    popupMenu.removeChildAt(0);
+  } 
+};
 
 /**
  * @param {Element} dom
