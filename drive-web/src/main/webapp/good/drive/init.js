@@ -138,7 +138,7 @@ good.drive.init.init = function() {
         }
         var cellData = good.drive.search.AdvancedMenu.SEARCHGRID.
         getSelectedItem().data;
-        node.map.get('files').push(cellData);
+        moToClassTree.moveToNode(cellData);
         break;
       case 'c':
         break;
