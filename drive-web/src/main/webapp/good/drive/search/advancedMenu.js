@@ -33,7 +33,7 @@ good.drive.search.AdvancedMenu = function() {
     grid.render(goog.dom.getElement('viewmanager'));
     good.drive.search.AdvancedMenu.SEARCHGRID = grid;
     good.drive.nav.grid.View.visiable(grid);
-  }  
+  }
   this._typeArray = good.constants.TYPEARRAY;
   this._fieldArray = good.constants.FIELDARRAY;
   this._gradeArray = good.constants.GRADEARRAY;
@@ -248,7 +248,7 @@ good.drive.search.AdvancedMenu.prototype.trim = function(str) {
  */
 good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
   var that = this;
-  
+
   var contentType = undefined;
   var tags = new Array();
   if (that._search_input.children.length != 0) {
@@ -316,18 +316,18 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
         if (json && !json['error']) {
           if (json['items'] != undefined) {
             goog.array.forEach(json['items'], function(item) {
-              
+
               if (item['thumbnail'] != undefined) {
-                if(good.constants.DRIVE_SERVER.indexOf('.googow.com') == -1){                  
+                if (good.constants.DRIVE_SERVER.indexOf('.googow.com') == -1) {
                   var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
                   var uri = new goog.Uri(item['thumbnail']);
-                  uri.setDomain(uri_server.getDomain());        
+                  uri.setDomain(uri_server.getDomain());
                   uri.setScheme(uri_server.getScheme());
                   uri.setScheme(uri_server.getScheme());
                   uri.setPort(uri_server.getPort());
-                  item['thumbnail'] = uri.toString() + '=s100'; 
+                  item['thumbnail'] = uri.toString() + '=s150';
                 }
-              }            
+              }
               var cell = grid.createCell(item);
               cell.getLabelData = function(data) {
                 return data.filename;

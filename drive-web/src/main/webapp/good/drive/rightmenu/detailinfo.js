@@ -31,7 +31,7 @@ good.drive.rightmenu.DetailInfo = function(handle) {
 good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
   var fieldcombo = goog.dom.getElement('fieldcombo');
   var gradecombo = goog.dom.getElement('gradecombo');
-  var typecombo = goog.dom.getElement('typecombo'); 
+  var typecombo = goog.dom.getElement('typecombo');
   var fileId_Txt = goog.dom.getElement('fileId');
   var fileId = fileId_Txt.value;
   var tags = new Array();
@@ -44,6 +44,9 @@ good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
   this.updatefile(fileId, tags, typecombo.value, handle);
 };
 
+/**
+ *
+ */
 good.drive.rightmenu.DetailInfo.prototype.close = function() {
   var previewpane = goog.dom.getElement('previewpane');
   previewpane.style.display = 'none';
@@ -91,5 +94,5 @@ good.drive.rightmenu.DetailInfo.prototype.updatefile = function(fileId,
            that.close();
         });
        }
-    });  
+    });
 };
