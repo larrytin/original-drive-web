@@ -65,7 +65,9 @@ good.drive.nav.menu.View.prototype.genPopupMenu =
     popupMenu.attach(dom, corner.targetCorner,
         corner.menuCorner, corner.contextMenu);
   }
-  goog.events.listen(popupMenu, 'action', handle);
+  if (handle != undefined) {
+    goog.events.listen(popupMenu, 'action', handle);
+  }
   return popupMenu;
 };
 

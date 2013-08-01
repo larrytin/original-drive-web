@@ -63,25 +63,25 @@ good.drive.init.init = function() {
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
   
-  var role = new good.drive.role.Role(auth.userId, function(username) {
-    if (username == good.constants.ADMIN) {
-      var leftUpdateBtn = leftButton.updateBtn();
-//    var moverEvent = good.drive.creation.Mouserevent(
-//        leftUpdateBtn.getElement());
-      if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
-        var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
-        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
-        });
-      } else {
-        var menulst = '文件...';
-        var fileupload = new good.drive.creation.Fileupload();
-        fileupload.fileChange();
-        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
-          fileupload.fileClick('new', '');
-        });
-      }
-    }
-  });
+//  var role = new good.drive.role.Role(auth.userId, function(username) {
+//    if (username == good.constants.ADMIN) {
+//      var leftUpdateBtn = leftButton.updateBtn();
+////    var moverEvent = good.drive.creation.Mouserevent(
+////        leftUpdateBtn.getElement());
+//      if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
+//        var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
+//        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+//        });
+//      } else {
+//        var menulst = '文件...';
+//        var fileupload = new good.drive.creation.Fileupload();
+//        fileupload.fileChange();
+//        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+//          fileupload.fileClick('new', '');
+//        });
+//      }
+//    }
+//  });
   
   var myclassLabel = '我的课程';
   var myClassViewControl = 
@@ -169,30 +169,33 @@ good.drive.init.init = function() {
   var advancedMenu = new good.drive.search.AdvancedMenu();
   advancedMenu.init();
   var rightmenu = new good.drive.search.
-  Rightmenu(good.drive.search.AdvancedMenu.SEARCHGRID.getElement(),
-      good.drive.search.AdvancedMenu.SEARCHGRID,
-      function(e, data, index) {
-    if (moToresTree == undefined) {
-      var data = myResTree.control().model().getData();
-      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
-      moToresTree.setData(data);
-    }
-    switch (index) {
-      case 2:
-        moToDialog.setVisible(true);
-        if (moToClassTree == undefined) {
-          var data = myclass.control().model().getData();
-          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
-              undefined,
-              goog.dom.getElement('moveTo'));
-          moToClassTree.setData(data);
-        }
-        break;
-      case 3:
-        break;
-      default:
-        break;
-    }
+  Rightmenu(goog.dom.getElement('viewmanager'),
+      good.drive.search.AdvancedMenu.SEARCHGRID);
+//      function(e, data, index) {
+//    if (moToresTree == undefined) {
+//      var data = myResTree.control().model().getData();
+//      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
+//      moToresTree.setData(data);
+//    }
+//    switch (index) {
+//      case 2:
+//        moToDialog.setVisible(true);
+//        if (moToClassTree == undefined) {
+//          var data = myclass.control().model().getData();
+//          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
+//              undefined,
+//              goog.dom.getElement('moveTo'));
+//          moToClassTree.setData(data);
+//        }
+//        break;
+//      case 3:
+//        break;
+//      default:
+//        break;
+//    }
+//  });
+  goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
+    var s = '';
   });
   
   var detailinfo = new good.drive.rightmenu.
