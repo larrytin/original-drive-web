@@ -61,10 +61,11 @@ good.drive.init.init = function() {
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
   
+  var myclassLabel = '我的课程';
   var myClassViewControl = 
     new good.drive.nav.folders.MyClassViewControl(
         good.constants.MYCLASSRESDOCID)
-  var myclass = new good.drive.nav.folders.Tree('我的课程',
+  var myclass = new good.drive.nav.folders.Tree(myclassLabel,
       undefined, navFolderslist, myClassViewControl);
   
   var myResTree = new good.drive.nav.folders.Tree('我的收藏夹',
@@ -83,15 +84,6 @@ good.drive.init.init = function() {
     good.drive.nav.grid.View.initGrid();
     good.drive.resourcemap.Resourcemap.init();
   };
-  
-  var advancedMenu = new good.drive.search.AdvancedMenu();
-  advancedMenu.menuCallback = function(e, data, index) {
-    var s = '';
-  };
-  advancedMenu.init();
-  var rightmenu = new good.drive.search.
-  Rightmenu(good.drive.search.AdvancedMenu.SEARCHGRID.getElement(),
-      good.drive.search.AdvancedMenu.SEARCHGRID);
   
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
@@ -128,6 +120,54 @@ good.drive.init.init = function() {
         view.renameLeaf(modifeInput.value);
         break;
       case 'c':
+        break;
+      default:
+        break;
+    }
+  });
+  
+  var moToClassTree = undefined;
+  var moToresTree = undefined;
+  var moToDialog = dialog.moveToDialog(myclassLabel, function(e) {
+    switch (e.key) {
+      case 'mv':
+        var node = moToClassTree.getCurrentItem();
+        if (node == moToClassTree.tree) {
+          return;
+        }
+        var cellData = good.drive.search.AdvancedMenu.SEARCHGRID.
+        getSelectedItem().data;
+        node.map.get('files').push(cellData);
+        break;
+      case 'c':
+        break;
+      default:
+        break;
+    }
+  });
+  var advancedMenu = new good.drive.search.AdvancedMenu();
+  advancedMenu.init();
+  var rightmenu = new good.drive.search.
+  Rightmenu(good.drive.search.AdvancedMenu.SEARCHGRID.getElement(),
+      good.drive.search.AdvancedMenu.SEARCHGRID,
+      function(e, data, index) {
+    if (moToresTree == undefined) {
+      var data = myResTree.control().model().getData();
+      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
+      moToresTree.setData(data);
+    }
+    switch (index) {
+      case 2:
+        moToDialog.setVisible(true);
+        if (moToClassTree == undefined) {
+          var data = myclass.control().model().getData();
+          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
+              undefined,
+              goog.dom.getElement('moveTo'));
+          moToClassTree.setData(data);
+        }
+        break;
+      case 3:
         break;
       default:
         break;

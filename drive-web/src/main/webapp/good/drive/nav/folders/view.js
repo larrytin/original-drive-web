@@ -13,7 +13,7 @@ goog.require('goog.ui.tree.TreeControl');
  * @param {string} docid
  * @param {good.drive.nav.folders.ViewControl} control
  */
-good.drive.nav.folders.Tree = function(title, docid, control) {
+good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   if (control == undefined) {
     control = new good.drive.nav.folders.ViewControl(docid);
   }
@@ -22,7 +22,7 @@ good.drive.nav.folders.Tree = function(title, docid, control) {
   this.control_.setTitle(title);
   var root = new goog.ui.tree.TreeControl('',
       good.drive.nav.folders.Tree.defaultConfig);
-  root.render(goog.dom.getElement('navfolderslist'));
+  root.render(targetElm);
   root.setShowRootLines(false);
   root.setShowRootNode(false);
   root.setShowLines(false);
@@ -38,25 +38,9 @@ good.drive.nav.folders.Tree = function(title, docid, control) {
   this.tree = tree_;
 
   window.treebak = this;
-  var sb = new goog.string.StringBuffer();
-  for (var i in good.drive.nav.folders.labelElm) {
-    sb.append(good.drive.nav.folders.labelElm[i].outerHTML);
-  }
-  this.sb_ = sb;
 
   this.currentItem_ = undefined;
 };
-
-/** {struct} */
-good.drive.nav.folders.labelElm = [
-  goog.dom.createDom('span',
-      {'class': 'goog-inline-block treedoclistview-init-spacing'}, ' '),
-  goog.dom.createDom('span',
-      {'class': 'goog-inline-block treedoclistview-node-icon' +
-            ' drive-sprite-folder-list-icon icon-color-1'}, ' '),
-  goog.dom.createDom('span',
-      {'class': 'goog-inline-block treedoclistview-spacing'}, ' ')
-];
 
 
 /**
@@ -66,10 +50,10 @@ good.drive.nav.folders.labelElm = [
  * @return {goog.ui.tree.TreeNode}
  */
 good.drive.nav.folders.Tree.prototype.insertNode =
-    function(parent, idx, title) {
+    function(parent, data, title) {
   var childNode = parent.getTree().createNode('');
   parent.addChild(childNode);
-  this.setNodeTitle(childNode, title);
+  this.setNodeTitle(childNode, data, title);
   if (parent.getExpanded()) {
     this.customNode(childNode);
   }
@@ -143,13 +127,37 @@ good.drive.nav.folders.Tree.prototype.getCurrentItem = function() {
  * @param {string} title
  */
 good.drive.nav.folders.Tree.prototype.setNodeTitle =
-    function(node, title) {
+    function(node, data, title) {
+  var sb = new goog.string.StringBuffer();
+  var folderclass = this.getFolderIcon(data);
+  sb.append(goog.dom.createDom('span',
+      {'class': 'goog-inline-block treedoclistview-init-spacing'},
+      ' ').outerHTML);
+  sb.append(goog.dom.createDom('span',
+      {'class': 'goog-inline-block treedoclistview-node-icon' +
+      ' drive-sprite-folder-list-icon ' +
+      folderclass}, ' ').outerHTML);
+  sb.append(goog.dom.createDom('span',
+      {'class': 'goog-inline-block treedoclistview-spacing'},
+      ' ').outerHTML);
   var titleElm = goog.dom.createDom('span',
       {'class': 'treedoclistview-node-name'},
       goog.dom.createDom('span', {'dir': 'ltr'}, title));
-  node.setHtml(this.sb_.toString() + titleElm.outerHTML);
+  node.setHtml(sb.toString() + titleElm.outerHTML);
   node.title = title;
 };
+
+good.drive.nav.folders.Tree.prototype.getFolderIcon = function(data) {
+  var isclass = data.get('isclass');
+  if(isclass == undefined) {
+    return 'icon-color-1';
+  }
+  return isclass ? 'icon-color-6' : 'icon-color-1';
+};
+
+good.drive.nav.folders.Tree.prototype.setData = function(data) {
+  this.control().mappingView(this, data);
+}
 
 /**
  * @param {goog.ui.tree.TreeControl} tree
@@ -200,19 +208,16 @@ good.drive.nav.folders.Tree.prototype.removeNode = function(parent, idx) {
 };
 
 /**
- * @param {string} str
+ * @param {Object} param
  */
-good.drive.nav.folders.Tree.prototype.addLeaf = function(str) {
-  if (str.length == 0) {
-    return;
-  }
+good.drive.nav.folders.Tree.prototype.addLeaf = function(param) {
   var selected = this.getCurrentItem();
   selected.setExpanded(true);
-  this.control().addLeaf(selected, str);
+  this.control().addLeaf(selected, param);
 };
 
 /**
- * @param {string} str
+ * @param {Object} str
  */
 good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
   var selected = this.getCurrentItem();

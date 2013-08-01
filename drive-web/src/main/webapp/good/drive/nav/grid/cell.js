@@ -38,7 +38,10 @@ good.drive.nav.grid.Cell.prototype.getImageData = function(data) {
 };
 
 good.drive.nav.grid.Cell.prototype.getLabelData = function(data) {
-  return data.get(this.keytype.LABEL[0]);
+  if (data instanceof good.realtime.CollaborativeMap) {
+    return data.get(this.keytype.LABEL[0]);
+  }
+  return data.filename;
 };
 
 /** @override */

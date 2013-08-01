@@ -9,8 +9,12 @@ goog.require('good.drive.nav.folders.Model');
  */
 good.drive.nav.folders.AbstractControl = function(str) {
   var that = this;
+  if(str != undefined) {
     var model = new good.drive.nav.folders.Model(str);
-    goog.object.add(good.drive.nav.folders.AbstractControl.docs, str, model);
+    if (!goog.object.contains(
+        good.drive.nav.folders.AbstractControl.docs, str)) {
+      goog.object.add(good.drive.nav.folders.AbstractControl.docs, str, model);
+    }
     model.connect = function(doc) {
       that.connect(doc);
     };
@@ -18,6 +22,7 @@ good.drive.nav.folders.AbstractControl = function(str) {
       that.initdata(mod);
     };
     that._model = model;
+  }
 };
 
 /**

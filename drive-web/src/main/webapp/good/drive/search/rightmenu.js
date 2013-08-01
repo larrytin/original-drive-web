@@ -75,7 +75,7 @@ good.drive.search.Rightmenu = function(dom, grid, handle) {
                 break;
              } 
             if (handle != undefined ) {
-              handle();
+              handle(e, data, index);
             }                   
         }, corner);
       }

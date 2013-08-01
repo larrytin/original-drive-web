@@ -1715,6 +1715,12 @@ z-index: 2;
     height: 13px;
     width: 16px;
 }
+.drive-sprite-folder-list-icon.icon-color-6 {
+  background: no-repeat url("../images/wjjp.png") 0 0;
+  background-size: 16px 335px;
+  width: 16px;
+  height: 13px;
+}
 .treedoclistview-node-icon {
     top: 1px;
 }

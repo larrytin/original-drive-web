@@ -140,24 +140,31 @@ good.drive.nav.folders.Model.prototype.loadOther = function() {
 };
 
 /**
- * @param {string} str
+ * @param {Object} keyType
  * @return {good.realtime.CollaborativeMap}
  */
 good.drive.nav.folders.Model.prototype.getLeaf =
-    function(str) {
+    function(keyType) {
   var map = this._mod.createMap();
-  map.set(
-      good.drive.nav.folders.ViewControl.ViewControlType.LABEL,
-      str);
-  var list = this._mod.createList();
-  map.set(
-      good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS,
-      list);
-  list = this._mod.createList();
-  map.set(
-      good.drive.nav.folders.ViewControl.ViewControlType.FILES,
-      list);
-
+  var that = this;
+  goog.object.forEach(keyType, function(value, key) {
+    switch (value[1]) {
+    case 'string':
+      map.set(value[0], '');
+      break;
+    case 'list':
+      map.set(value[0], that._mod.createList());
+      break;
+    case 'map':
+      map.set(value[0], that._mod.createMap());
+      break;
+    case 'boolean':
+      map.set(value[0], value[2]);
+      break;
+    default:
+      break;
+    }
+  });
   return map;
 };
 
