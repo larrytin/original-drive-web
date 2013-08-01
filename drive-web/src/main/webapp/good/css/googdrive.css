@@ -1158,8 +1158,16 @@ px
   transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s,
     width 0.218s ease 0s;
 }
+
 .drive-sprite-core-upload {
-  background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 0/21px 405px transparent;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image:url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png);
+  background-origin: padding-box;
+  background-position: 0 0;
+  background-repeat: no-repeat;
+  background-size: 21px 405px;
   height: 16px;
   width: 19px;
 }
@@ -1214,14 +1222,29 @@ px
   vertical-align: middle;
 }
 
+
 .drive-sprite-core-share {
-  background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -355px/21px 405px transparent;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image:url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png);
+  background-origin: padding-box;
+  background-position: 0 -355px;
+  background-repeat: no-repeat;
+  background-size: 21px 405px;
   height: 21px;
   width: 21px;
 }
 
 .drive-sprite-core-share-white {
-  background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -244px/21px 405px transparent;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image:url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png);
+  background-origin: padding-box;
+  background-position: 0 -244px;
+  background-repeat: no-repeat;
+  background-size: 21px 405px;
   height: 21px;
   width: 21px;
 }
@@ -1229,9 +1252,15 @@ px
   margin-top: 5px;
 }
 
-
 .drive-sprite-core-organize {
-  background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -39px/21px 405px transparent;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image:url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png);
+  background-origin: padding-box;
+  background-position: 0 -39px;
+  background-repeat: no-repeat;
+  background-size: 21px 405px;
   height: 21px;
   width: 21px;
 }
@@ -1243,7 +1272,14 @@ px
   vertical-align: middle;
 }
 .drive-sprite-core-trash {
-  background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -118px/21px 405px transparent;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image:url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png);
+  background-origin: padding-box;
+  background-position: 0 -118px;
+  background-repeat: no-repeat;
+  background-size: 21px 405px;
   height: 21px;
   width: 21px;
 }
@@ -1365,7 +1401,14 @@ z-index: 2;
 }
 
 .drive-sprite-core-settings {
-  background: url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png) no-repeat scroll 0 -183px/21px 405px transparent;
+  background-attachment: scroll;
+  background-clip: border-box;
+  background-color: transparent;
+  background-image:url(../images/core-2cc2bab0594cbf8fbdff28fa69e29d2b.png);
+  background-origin: padding-box;
+  background-position: 0 -183px;
+  background-repeat: no-repeat;
+  background-size: 21px 405px;
   height: 21px;
   width: 21px;
 }
@@ -4760,9 +4803,28 @@ display: inline-block;
 margin-top: 29px!important;
 }
 
-.drive-sprite-folder-grid-icon.icon-color-1 {
-background: no-repeat url(../images/wjj.png) 0 0;
+
+.drive-sprite-folder-grid-icon, .icon-color-1 {
+background-image: url(../images/folder_grid.png);
 background-size: 110px 2063px;
+background-repeat: no-repeat;
 width: 110px;
 height: 85px;
+}
+
+
+.gv-image img {
+border: 1px solid #ddd;
+border-radius: 3px;
+padding: 1px;
+vertical-align: top;
+-webkit-box-shadow: 3px 3px 0 -1px #ddd;
+-moz-box-shadow: 3px 3px 0 -1px #ddd;
+box-shadow: 3px 3px 0 -1px #ddd;
+}
+
+.gv-doc-hovered .gv-image img {
+-webkit-box-shadow: none;
+-moz-box-shadow: none;
+box-shadow: none;
 }

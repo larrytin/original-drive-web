@@ -27,14 +27,25 @@ goog.inherits(good.drive.nav.grid.Cell, goog.ui.Component);
 /** */
 good.drive.nav.grid.Cell.prototype.renderCell = function() {
   var label = this.getLabelData(this.data);
+  var imageData = this.getImageData(this.data);
   var labelElm = goog.dom.createDom('div',
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
+  var labelElm1 = goog.dom.createDom('a', {'href': '#', 'class': 'gridview-thumbnail-link'},
+      goog.dom.createDom('div', {'class': 'doclist-gv-thumb-container' +
+        ' doclist-gv-thumb-folder'}));
+  goog.dom.appendChild(this.getImageContainerElement(), labelElm1);
+  goog.dom.appendChild(labelElm1, imageData);
 };
 
 good.drive.nav.grid.Cell.prototype.getImageData = function(data) {
-  return data.get(this.keytype.LABEL[0]);
+  if (data instanceof good.realtime.CollaborativeMap) {
+  } else {
+    if (data.thumbnail != null)
+      return  goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  data.thumbnail});
+  }
+  return goog.dom.createDom('div', {'class': 'gv-image-el drive-sprite-folder-grid-icon'});
 };
 
 good.drive.nav.grid.Cell.prototype.getLabelData = function(data) {
@@ -159,9 +170,10 @@ good.drive.nav.grid.Cell.prototype.toHtml = function(sb) {
   sb.append('<div class="',
       this.defaultConfig.cssCellRoot, '" id="', this.getId(), '">',
       '<div><div class="gv-dynamic-thumbnail"',
-      ' style="width: 249px; height: 255px">',
+      ' style="width: 230px; height: 237px">',
       this.getImageHtml(), this.getLabelHtml(), '</div></div></div>');
 };
+
 
 
 /**
@@ -187,8 +199,8 @@ good.drive.nav.grid.Cell.prototype.getImageBottonElement = function() {
  */
 good.drive.nav.grid.Cell.prototype.getImageHtml = function() {
   var sb = new goog.string.StringBuffer();
-  sb.append('<div class="', this.getImageClassName(), '">',
-      '<div class="gv-view-bottom"><div class="gv-view-center">',
+  sb.append('<div class="', this.getImageClassName(), '" style="width: 230px;height:213px;">',
+      '<div class="gv-view-bottom" style="width:230px;"><div class="gv-view-center">',
       '<div class="gv-selection">', this.getImageContainerHtml(),
       '</div></div></div></div>');
   return sb.toString();
