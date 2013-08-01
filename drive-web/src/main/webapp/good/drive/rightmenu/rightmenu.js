@@ -123,7 +123,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
         uri.setScheme(uri_server.getScheme());
         uri.setScheme(uri_server.getScheme());
         uri.setPort(uri_server.getPort());
-        thumbnail.src = uri.toString();        
+        thumbnail.src = uri.toString()+'=s300';        
       }
       var tags = json.tags;
       goog.array.forEach(tags, function(item) {
