@@ -163,14 +163,14 @@ good.drive.nav.grid.Cell.prototype.select = function() {
 };
 
 /**
- * @param {good.drive.nav.grid.Cell} selected
+ * @param {boolean} selected
  */
 good.drive.nav.grid.Cell.prototype.setSelectedInternal =
   function(selected) {
   if (this.selected_ == selected) {
     return;
   }
-  this.selected_ == selected;
+  this.selected_ = selected;
   var cellElm = this.getContentElement();
   cellElm.className = this.defaultConfig.cssCellRoot;
 };
