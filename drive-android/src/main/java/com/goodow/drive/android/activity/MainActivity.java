@@ -5,8 +5,13 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
+import android.content.BroadcastReceiver;
+import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,6 +25,7 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
@@ -29,7 +35,9 @@ import com.goodow.drive.android.fragment.LessonListFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDataKey;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -42,6 +50,8 @@ import com.goodow.realtime.ValueChangedEvent;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
+	private final String TAG = this.getClass().getSimpleName();
+
 	private IRemoteDataFragment iRemoteDataFragment;
 	private IRemoteDataFragment lastiRemoteDataFragment;
 
@@ -58,12 +68,12 @@ public class MainActivity extends RoboActivity {
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
 
-	private LeftMenuFragment leftMenuFragment;
-	private DataListFragment dataListFragment;
-	private LocalResFragment localResFragment;
-	private OfflineListFragment offlineListFragment;
-	private DataDetailFragment dataDetailFragment;
-	private LessonListFragment lessonListFragment;
+	private LeftMenuFragment leftMenuFragment = new LeftMenuFragment();
+	private DataListFragment dataListFragment = new DataListFragment();
+	private LocalResFragment localResFragment = new LocalResFragment();
+	private OfflineListFragment offlineListFragment = new OfflineListFragment();
+	private DataDetailFragment dataDetailFragment = new DataDetailFragment();
+	private LessonListFragment lessonListFragment = new LessonListFragment();
 
 	public LocalResFragment getLocalResFragment() {
 
@@ -71,23 +81,7 @@ public class MainActivity extends RoboActivity {
 	}
 
 	public DataDetailFragment getDataDetailFragment() {
-
 		return dataDetailFragment;
-	}
-
-	public DataListFragment getDataListFragment() {
-
-		return dataListFragment;
-	}
-
-	public OfflineListFragment getOfflineListFragment() {
-
-		return offlineListFragment;
-	}
-
-	public LessonListFragment getLessonListFragment() {
-
-		return lessonListFragment;
 	}
 
 	public void hideLeftMenuLayout() {
@@ -98,22 +92,19 @@ public class MainActivity extends RoboActivity {
 			out.setAnimationListener(new AnimationListener() {
 				@Override
 				public void onAnimationStart(Animation animation) {
-					// TODO Auto-generated method stub
 				}
 
 				@Override
 				public void onAnimationRepeat(Animation animation) {
-					// TODO Auto-generated method stub
 				}
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					leftMenu.setVisibility(LinearLayout.INVISIBLE);
 					middleLayout.setVisibility(LinearLayout.INVISIBLE);
-					setLeftMenuLayoutX(0);// 重置其位置,放置负数循环叠加
+					setLeftMenuLayoutX(0);// 重置其位置,防止负数循环叠加
 					setLeftMenuLayoutX(-leftMenu.getWidth());
 
-					Log.i("Scorll", leftMenu.getLeft() + "");
 				}
 			});
 
@@ -133,7 +124,7 @@ public class MainActivity extends RoboActivity {
 	private void setLeftMenuLayoutX(int x) {
 		leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(),
 				leftMenu.getBottom());
-
+		Log.i("Scorll", "set:" + leftMenu.getLeft());
 	}
 
 	public void setDataDetailLayoutState(int state) {
@@ -203,7 +194,10 @@ public class MainActivity extends RoboActivity {
 									GlobalDataCacheForMemorySingleton.getInstance
 											.setAccess_token(null);
 
-									finish();
+									Intent intent = new Intent(
+											MainActivity.this,
+											LogInActivity.class);
+									startActivity(intent);
 								}
 							})
 					.setNegativeButton(R.string.dailogCancel,
@@ -236,24 +230,19 @@ public class MainActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
+
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
-		lessonListFragment = new LessonListFragment();
-		dataListFragment = new DataListFragment();
-		offlineListFragment = new OfflineListFragment();
-		localResFragment = new LocalResFragment();
 
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
 
-		dataDetailFragment = new DataDetailFragment();
 		fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
 
-		leftMenuFragment = new LeftMenuFragment();
 		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
 
-		fragmentTransaction.commit();
+		fragmentTransaction.commitAllowingStateLoss();
 
 		middleLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -272,6 +261,42 @@ public class MainActivity extends RoboActivity {
 		remoteControlObserver = new RemoteControlObserver();
 		remoteControlObserver.startObservation(docId);
 
+	}
+
+	@Override
+	protected void onRestart() {
+		// TODO Auto-generated method stub
+		super.onRestart();
+	}
+
+	@Override
+	protected void onStart() {
+		// TODO Auto-generated method stub
+		super.onStart();
+	}
+
+	@Override
+	protected void onResume() {
+		// TODO Auto-generated method stub
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		// TODO Auto-generated method stub
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		// TODO Auto-generated method stub
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		// TODO Auto-generated method stub
+		super.onDestroy();
 	}
 
 	public void setIRemoteFrament(IRemoteDataFragment iRemoteDataFragment) {
@@ -308,27 +333,34 @@ public class MainActivity extends RoboActivity {
 
 	}
 
-	private void initFragment(String fragmentName) {
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction();
+	private void switchFragment(DocumentIdAndDataKey doc) {
+		if (null != doc) {
+			Fragment newFragment = null;
 
-		if (GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue().equals(
-				fragmentName)) {
-			fragmentTransaction.replace(R.id.contentLayout, lessonListFragment);
+			switch (doc) {
+			case LESSONDOCID:
+				newFragment = lessonListFragment;
 
-		} else if (GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID
-				.getValue().equals(fragmentName)) {
-			fragmentTransaction.replace(R.id.contentLayout, dataListFragment);
+				break;
+			case FAVORITESDOCID:
+				newFragment = dataListFragment;
 
-		} else if (GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID.getValue()
-				.equals(fragmentName)) {
-			fragmentTransaction
-					.replace(R.id.contentLayout, offlineListFragment);
+				break;
+			case OFFLINEDOCID:
+				newFragment = offlineListFragment;
 
+				break;
+			default:
+				break;
+			}
+
+			if (newFragment != null) {
+				FragmentTransaction fragmentTransaction = getFragmentManager()
+						.beginTransaction();
+				fragmentTransaction.replace(R.id.contentLayout, newFragment);
+				fragmentTransaction.commitAllowingStateLoss();
+			}
 		}
-
-		fragmentTransaction.commit();
-
 	}
 
 	public RemoteControlObserver getRemoteControlObserver() {
@@ -376,6 +408,18 @@ public class MainActivity extends RoboActivity {
 							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
 									.getValue());
 
+					String currentDocId = map
+							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+									.getValue());
+
+					currentDocId = currentDocId.substring(currentDocId
+							.lastIndexOf("/") + 1);
+
+					DocumentIdAndDataKey doc = DocumentIdAndDataKey
+							.getEnumWithValue(currentDocId);
+
+					switchFragment(doc);
+
 					map.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
 						@Override
 						public void handleEvent(ValueChangedEvent event) {
@@ -387,7 +431,10 @@ public class MainActivity extends RoboActivity {
 								newValue = newValue.substring(newValue
 										.lastIndexOf("/") + 1);
 
-								MainActivity.this.initFragment(newValue);
+								DocumentIdAndDataKey doc = DocumentIdAndDataKey
+										.getEnumWithValue(newValue);
+
+								switchFragment(doc);
 
 								clearList();
 
@@ -427,12 +474,13 @@ public class MainActivity extends RoboActivity {
 			if (leftMenu.getVisibility() == View.INVISIBLE) {
 				showLeftMenuLayout();
 			}
-
+			Log.i("Scorll", "DOWN:" + leftMenu.getLeft());
 			startPoint = event.getX();
 
 			break;
 		case MotionEvent.ACTION_UP:
-			if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 3) {
+			Log.i("Scorll", "UP:" + leftMenu.getLeft());
+			if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 4) {
 				hideLeftMenuLayout();
 
 			} else {

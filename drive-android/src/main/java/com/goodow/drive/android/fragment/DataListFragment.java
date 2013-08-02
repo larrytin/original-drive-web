@@ -19,9 +19,10 @@ import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.activity.play.AudioPlayActivity;
 import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.CollaborativeAdapter;
+import com.goodow.drive.android.adapter.CollaborativeAdapter.OnItemClickListener;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.toolutils.SomeEnums;
+import com.goodow.drive.android.toolutils.Tools;
 import com.goodow.realtime.BaseModelEvent;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -277,7 +278,7 @@ public class DataListFragment extends ListFragment implements
 
 										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										intent.setAction(Intent.ACTION_VIEW);
-										String type = SomeEnums
+										String type = Tools
 												.getMIMEType((String) map
 														.get("type"));
 										intent.setDataAndType(
@@ -371,7 +372,27 @@ public class DataListFragment extends ListFragment implements
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
-		adapter = new CollaborativeAdapter(this, null, null);
+		adapter = new CollaborativeAdapter(this.getActivity(), this, null,
+				null, new OnItemClickListener() {
+
+					@Override
+					public void onItemClick(CollaborativeMap file) {
+						MainActivity activity = (MainActivity) DataListFragment.this
+								.getActivity();
+
+						DataDetailFragment dataDetailFragment = activity
+								.getDataDetailFragment();
+
+						dataDetailFragment.setFile(file);
+
+						dataDetailFragment.initView();
+
+						activity.setDataDetailLayoutState(View.VISIBLE);
+
+						activity.setIRemoteFrament(dataDetailFragment);
+
+					}
+				});
 		setListAdapter(adapter);
 
 		initEventHandler();

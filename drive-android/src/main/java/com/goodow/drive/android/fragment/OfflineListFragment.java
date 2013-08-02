@@ -14,7 +14,12 @@ import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.adapter.OfflineAdapter;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
+import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
+import com.goodow.realtime.EventHandler;
+import com.goodow.realtime.ObjectChangedEvent;
+import com.goodow.realtime.ValuesAddedEvent;
+import com.goodow.realtime.ValuesRemovedEvent;
 
 public class OfflineListFragment extends ListFragment implements
 		IRemoteDataFragment {
@@ -35,8 +40,15 @@ public class OfflineListFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		adapter = new OfflineAdapter((MainActivity) this.getActivity(),
-				OfflineFileObserver.getList());
+		CollaborativeList list = OfflineFileObserver.getList();
+		adapter = new OfflineAdapter((MainActivity) this.getActivity(), list);
+		// list.addObjectChangedListener(new EventHandler<ObjectChangedEvent>()
+		// {
+		// @Override
+		// public void handleEvent(ObjectChangedEvent event) {
+		// adapter.notifyDataSetInvalidated();
+		// }
+		// });
 		setListAdapter(adapter);
 
 		return inflater.inflate(R.layout.fragment_folderlist, container, false);
@@ -63,7 +75,7 @@ public class OfflineListFragment extends ListFragment implements
 	@Override
 	public void onPause() {
 		super.onPause();
-		
+
 		((MainActivity) getActivity()).unregisterReceiver(broadcastReceiver);
 	}
 }

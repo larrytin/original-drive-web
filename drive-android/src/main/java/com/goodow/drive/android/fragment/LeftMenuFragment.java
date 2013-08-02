@@ -2,7 +2,6 @@ package com.goodow.drive.android.fragment;
 
 import java.util.ArrayList;
 import java.util.List;
-
 import android.app.Activity;
 import android.app.FragmentTransaction;
 import android.app.ListFragment;
@@ -17,8 +16,6 @@ import android.widget.ArrayAdapter;
 import android.widget.ImageView;
 import android.widget.ListView;
 import android.widget.TextView;
-import android.widget.Toast;
-
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
@@ -77,10 +74,10 @@ public class LeftMenuFragment extends ListFragment {
 				img_left.setImageResource(R.drawable.ic_type_zip);
 
 				break;
-			case LOCAL_RES:
-				img_left.setImageResource(R.drawable.ic_type_zip);
-
-				break;
+//			case LOCAL_RES:
+//				img_left.setImageResource(R.drawable.ic_type_zip);
+//
+//				break;
 			default:
 
 				break;
@@ -123,7 +120,6 @@ public class LeftMenuFragment extends ListFragment {
 		switch (menuTypeEnum) {
 		case USER_NAME:
 			// TODO
-			Toast.makeText(mainActivity, "1", Toast.LENGTH_SHORT).show();
 
 			break;
 		case USER_REMOTE_DATA:
@@ -136,6 +132,13 @@ public class LeftMenuFragment extends ListFragment {
 			mainActivity.getRemoteControlObserver().changeMapItem(
 					favoritesDocId);
 
+			// FragmentTransaction fragmentTransaction1;
+			// fragmentTransaction1 = mainActivity.getFragmentManager()
+			// .beginTransaction();
+			// fragmentTransaction1.replace(R.id.contentLayout,
+			// mainActivity.getDataListFragment());
+			// fragmentTransaction1.commit();
+
 			break;
 		case USER_LESSON_DATA:
 			String lessonDocId = "@tmp/"
@@ -145,6 +148,13 @@ public class LeftMenuFragment extends ListFragment {
 					+ GlobalConstant.DocumentIdAndDataKey.LESSONDOCID
 							.getValue();
 			mainActivity.getRemoteControlObserver().changeMapItem(lessonDocId);
+
+			// FragmentTransaction fragmentTransaction2;
+			// fragmentTransaction2 = mainActivity.getFragmentManager()
+			// .beginTransaction();
+			// fragmentTransaction2.replace(R.id.contentLayout,
+			// mainActivity.getLessonListFragment());
+			// fragmentTransaction2.commit();
 
 			break;
 		case USER_OFFLINE_DATA:
@@ -156,16 +166,23 @@ public class LeftMenuFragment extends ListFragment {
 							.getValue();
 			mainActivity.getRemoteControlObserver().changeMapItem(offlineDocId);
 
-			break;
-		case LOCAL_RES:
-			FragmentTransaction fragmentTransaction;
-			fragmentTransaction = mainActivity.getFragmentManager()
-					.beginTransaction();
-			fragmentTransaction.replace(R.id.contentLayout,
-					mainActivity.getLocalResFragment());
-			fragmentTransaction.commit();
+			// FragmentTransaction fragmentTransaction3;
+			// fragmentTransaction3 = mainActivity.getFragmentManager()
+			// .beginTransaction();
+			// fragmentTransaction3.replace(R.id.contentLayout,
+			// mainActivity.getOfflineListFragment());
+			// fragmentTransaction3.commit();
 
 			break;
+		// case LOCAL_RES:
+		// FragmentTransaction fragmentTransaction;
+		// fragmentTransaction = mainActivity.getFragmentManager()
+		// .beginTransaction();
+		// fragmentTransaction.replace(R.id.contentLayout,
+		// mainActivity.getLocalResFragment());
+		// fragmentTransaction.commit();
+		//
+		// break;
 		default:
 
 			break;

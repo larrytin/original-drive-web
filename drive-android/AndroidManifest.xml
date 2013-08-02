@@ -31,16 +31,12 @@
     <!-- 往SDCard写入数据权限 -->
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
     <!-- 查看网络状态权限 -->
-    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" >
-    </uses-permission>
-    <uses-permission android:name="android.permission.READ_PHONE_STATE" >
-    </uses-permission>
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_WIFI_STATE" />
+    <uses-permission android:name="android.permission.CHANGE_WIFI_STATE" />
+    <uses-permission android:name="android.permission.READ_PHONE_STATE" />
+    <uses-permission android:name="android.permission.KILL_BACKGROUND_PROCESSES" />
 
     <application
         android:name="com.goodow.realtime.android.RealtimeApplication"
@@ -54,7 +50,7 @@
       services and handle them to the custom IntentService.
 
       The com.google.android.c2dm.permission.SEND permission is necessary
-      so only GCM services can send data messages for the app.
+      so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.goodow.realtime.android.gcm.GCMRedirectedBroadcastReceiver"
@@ -69,7 +65,7 @@
                 <category android:name="com.goodow.android.drive" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.goodow.drive.android.service.DownloadBroadcastReceiver">
+        <receiver android:name="com.goodow.drive.android.service.DownloadBroadcastReceiver" >
             <intent-filter>
                 <action android:name="com.goodow.realtime.android.action.DOWNLOAD" />
             </intent-filter>
@@ -79,7 +75,7 @@
       handle received messages.
 
       By default, it must be named .GCMIntentService, unless the
-      application uses a custom BroadcastReceiver that redefines its name.
+      application uses a custom BroadcastReceiver that redefines its name.
         -->
         <service android:name="com.goodow.realtime.android.gcm.GCMIntentService" />
 

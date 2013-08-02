@@ -20,7 +20,7 @@ import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.LocalResAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.toolutils.SomeEnums;
+import com.goodow.drive.android.toolutils.Tools;
 import com.goodow.realtime.CollaborativeMap;
 
 public class LocalResFragment extends ListFragment implements
@@ -84,7 +84,7 @@ public class LocalResFragment extends ListFragment implements
 
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.setAction(Intent.ACTION_VIEW);
-					String type = SomeEnums.getMIMEType((String) map
+					String type = Tools.getMIMEType((String) map
 							.get("type"));
 					intent.setDataAndType(Uri.fromFile(file), type);
 				}

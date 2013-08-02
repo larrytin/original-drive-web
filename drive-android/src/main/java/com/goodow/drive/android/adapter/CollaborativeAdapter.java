@@ -1,6 +1,6 @@
 package com.goodow.drive.android.adapter;
 
-import android.app.ListFragment;
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.View.OnClickListener;
@@ -11,26 +11,29 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
-import com.goodow.drive.android.activity.MainActivity;
-import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 
 public class CollaborativeAdapter extends BaseAdapter {
+	public static abstract interface OnItemClickListener {
+		public abstract void onItemClick(CollaborativeMap file);
+	}
+
 	private CollaborativeList folderList;
 	private CollaborativeList fileList;
 	private LayoutInflater layoutInflater;
 	private IRemoteDataFragment fragment;
+	private OnItemClickListener onItemClickListener;
 
-	public CollaborativeAdapter(IRemoteDataFragment fragment,
-			CollaborativeList folderList, CollaborativeList fileList) {
-		super();
+	public CollaborativeAdapter(Context context, IRemoteDataFragment fragment,
+			CollaborativeList folderList, CollaborativeList fileList,
+			OnItemClickListener onItemClickListener) {
 		this.folderList = folderList;
 		this.fileList = fileList;
 		this.fragment = fragment;
-		this.layoutInflater = LayoutInflater
-				.from(((ListFragment) this.fragment).getActivity());
+		this.layoutInflater = LayoutInflater.from(context);
+		this.onItemClickListener = onItemClickListener;
 	}
 
 	@Override
@@ -128,7 +131,7 @@ public class CollaborativeAdapter extends BaseAdapter {
 			if (null != folderList && position < folderList.length() + 1) {
 				img_left.setImageResource(R.drawable.ic_type_folder);
 				button.setVisibility(View.INVISIBLE);
-				
+
 			} else {
 				img_left.setImageResource(ToolsFunctionForThisProgect
 						.getFileIconByFileFullName("." + item.get("type")));
@@ -136,19 +139,7 @@ public class CollaborativeAdapter extends BaseAdapter {
 				button.setOnClickListener(new OnClickListener() {
 					@Override
 					public void onClick(View v) {
-						MainActivity activity = (MainActivity) ((ListFragment) fragment)
-								.getActivity();
-
-						DataDetailFragment dataDetailFragment = activity
-								.getDataDetailFragment();
-
-						dataDetailFragment.setFile(item);
-
-						dataDetailFragment.initView();
-
-						activity.setDataDetailLayoutState(View.VISIBLE);
-
-						activity.setIRemoteFrament(dataDetailFragment);
+						onItemClickListener.onItemClick(item);
 					}
 				});
 			}
