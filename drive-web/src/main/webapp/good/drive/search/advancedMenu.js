@@ -302,7 +302,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     }
 
     var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
-    grid.clear();
+  
     if (search_type == undefined && path == 'search?limit=10') {
       return;
     } else {
@@ -315,6 +315,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
         //填充网格数据
         if (json && !json['error']) {
           if (json['items'] != undefined) {
+            grid.clear();
             goog.array.forEach(json['items'], function(item) {
 
               if (item['thumbnail'] != undefined) {

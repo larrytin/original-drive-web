@@ -27,6 +27,7 @@ good.drive.search.Rightmenu = function(dom) {
   var rightmenuChildIds = undefined;
   var rightMenu = menu.genPopupMenu(dom, type, undefined, corner);
   this._rightMenu = rightMenu;
+  this._subMenu = submenu;
 
   rightMenu.getHandler().listen(rightMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
@@ -118,11 +119,17 @@ good.drive.search.Rightmenu = function(dom) {
 
 
 /**
- *
  * @return {goog.ui.PopupMenu}
  */
 good.drive.search.Rightmenu.prototype.getRightMenu = function() {
   return this._rightMenu;
+};
+
+/**
+ * @return {goog.ui.SubMenu}
+ */
+good.drive.search.Rightmenu.prototype.getsubMenu = function() {
+  return this._subMenu;
 };
 
 
