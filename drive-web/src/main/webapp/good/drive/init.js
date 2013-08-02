@@ -171,31 +171,36 @@ good.drive.init.init = function() {
   var rightmenu = new good.drive.search.
   Rightmenu(goog.dom.getElement('viewmanager'),
       good.drive.search.AdvancedMenu.SEARCHGRID);
-//      function(e, data, index) {
-//    if (moToresTree == undefined) {
-//      var data = myResTree.control().model().getData();
-//      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
-//      moToresTree.setData(data);
-//    }
-//    switch (index) {
-//      case 2:
-//        moToDialog.setVisible(true);
-//        if (moToClassTree == undefined) {
-//          var data = myclass.control().model().getData();
-//          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
-//              undefined,
-//              goog.dom.getElement('moveTo'));
-//          moToClassTree.setData(data);
-//        }
-//        break;
-//      case 3:
-//        break;
-//      default:
-//        break;
-//    }
-//  });
   goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
-    var s = '';
+    var caption = e.target.getCaption();
+    if (moToresTree == undefined) {
+      var data = myResTree.control().model().getData();
+      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
+      moToresTree.setData(data);
+    }
+    switch (caption) {
+      case '安排课程':
+        moToDialog.setVisible(true);
+        if (moToClassTree == undefined) {
+          var data = myclass.control().model().getData();
+          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
+              undefined,
+              goog.dom.getElement('moveTo'));
+          moToClassTree.setData(data);
+        }
+        break;
+      case '收藏':
+        break;
+      case '重命名':
+        break;
+      case '删除':
+        var curGrid = good.drive.nav.grid.View.currentGrid;
+        var cell = curGrid.getSelectedItem();
+        curGrid.removeCell(cell.data);
+        break;
+      default:
+        break;
+    }
   });
   
   var detailinfo = new good.drive.rightmenu.
