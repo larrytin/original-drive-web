@@ -146,7 +146,8 @@ good.drive.nav.grid.View.prototype.bindDataEvent = function(data) {
     for (var i in vals) {
       var val = vals[i];
       that.removeCell(val);
-      if (that.docid == undefined) {
+      if (that.docid == undefined ||
+          !(val instanceof good.realtime.CollaborativeMap)) {
         continue;
       }
       var cells = goog.object.get(good.drive.nav.grid.View.grids, that.docid);

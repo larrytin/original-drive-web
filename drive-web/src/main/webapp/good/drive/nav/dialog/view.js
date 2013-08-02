@@ -91,16 +91,7 @@ good.drive.nav.dialog.View.prototype.genButtonSet = function(buttons) {
 good.drive.nav.dialog.View.prototype.moveToDialog = function(title, handle) {
   var sb = new goog.string.StringBuffer();
   var dialog = new goog.ui.Dialog(null, true);
-  sb.append(goog.dom.createDom('div', {'class': 'folders-popup-summary'},
-      goog.dom.createDom('div', {'class': 'goog-control'},
-      '目前此项位于 ',
-      goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-init-spacing'}),
-      goog.dom.createDom('span', {'class': 'treedoclistview-node-name'},
-          goog.dom.createDom('span', {'dir': 'ltr'}, title)),
-          '中')).outerHTML);
-  sb.append(goog.dom.createDom(
-      'div', {'class': 'folders-popup single-selection navpane nav-tree-folder-view', 'id': 'moveTo'}).outerHTML);
-  dialog.setContent(sb.toString());
+  dialog.setContent(this.getMoveToContent(title, 'moveTo'));
   dialog.setTitle('移至');
   dialog.setButtonSet(this.genButtonSet([
                                          {key: 'mv',
@@ -112,6 +103,35 @@ good.drive.nav.dialog.View.prototype.moveToDialog = function(title, handle) {
       handle);
   return dialog;
 }
+
+good.drive.nav.dialog.View.prototype.favoritesToDialog = function(title, handle) {
+  var dialog = new goog.ui.Dialog(null, true);
+  dialog.setContent(this.getMoveToContent(title, 'favoritesTo'));
+  dialog.setTitle('收藏至');
+  dialog.setButtonSet(this.genButtonSet([
+                                         {key: 'fv',
+                                           caption: '收藏'},
+                                           {key: 'c',
+                                             caption: '取消'}
+                                           ]));
+  goog.events.listen(dialog, goog.ui.Dialog.EventType.SELECT,
+      handle);
+  return dialog;
+};
+
+good.drive.nav.dialog.View.prototype.getMoveToContent = function(title, target) {
+  var sb = new goog.string.StringBuffer();
+  sb.append(goog.dom.createDom('div', {'class': 'folders-popup-summary'},
+      goog.dom.createDom('div', {'class': 'goog-control'},
+      '目前此项位于 ',
+      goog.dom.createDom('span', {'class': 'goog-inline-block treedoclistview-init-spacing'}),
+      goog.dom.createDom('span', {'class': 'treedoclistview-node-name'},
+          goog.dom.createDom('span', {'dir': 'ltr'}, title)),
+          '中')).outerHTML);
+  sb.append(goog.dom.createDom(
+      'div', {'class': 'folders-popup single-selection navpane nav-tree-folder-view', 'id': target}).outerHTML);
+  return sb.toString();
+};
 
 /**
  * @param {Function} handle

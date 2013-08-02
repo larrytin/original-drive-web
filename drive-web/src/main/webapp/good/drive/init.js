@@ -71,7 +71,8 @@ good.drive.init.init = function() {
   var myclass = new good.drive.nav.folders.Tree(myclassLabel,
       undefined, navFolderslist, myClassViewControl);
   
-  var myResTree = new good.drive.nav.folders.Tree('我的收藏夹',
+  var myResLabel = '我的收藏夹';
+  var myResTree = new good.drive.nav.folders.Tree(myResLabel,
       good.constants.MYRESDOCID, navFolderslist);
   
   var puclicViewControl = new good.drive.nav.folders.PublicViewControl(
@@ -148,7 +149,20 @@ good.drive.init.init = function() {
         break;
       case 'c':
         break;
-      default:
+    }
+  });
+  var faToDialog = dialog.favoritesToDialog(myResLabel, function(e) {
+    switch (e.key) {
+      case 'fv':
+        var node = moToresTree.getCurrentItem();
+        if (node == moToresTree.tree) {
+          return;
+        }
+        var cellData = good.drive.search.AdvancedMenu.SEARCHGRID.
+        getSelectedItem().data;
+        moToresTree.moveToNode(cellData);
+        break;
+      case 'c':
         break;
     }
   });
@@ -171,9 +185,12 @@ good.drive.init.init = function() {
         }
         break;
       case '收藏':
+        faToDialog.setVisible(true);
         if (moToresTree == undefined) {
           var data = myResTree.control().model().getData();
-          moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
+          moToresTree = new good.drive.nav.folders.Tree(data.get('label'),
+              undefined,
+              goog.dom.getElement('favoritesTo'));
           moToresTree.setData(data);
         }
         break;

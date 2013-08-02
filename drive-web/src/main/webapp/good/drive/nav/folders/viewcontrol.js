@@ -105,8 +105,23 @@ good.drive.nav.folders.ViewControl.prototype.buildPath =
     return;
   }
   var paths = [];
-  pathlist.clear();
   this.buildPath_(parentNode, paths);
+  var i = 0;
+  var pathsLength = goog.array.count(paths, function() {
+    return true;
+  });
+  if (pathsLength == pathlist.length()) {
+    while (true) {
+      if (i > pathlist.length()) {
+        return; 
+      }
+      if (pathlist.get(i) != paths[i]) {
+        break;
+      }
+      i++;
+    }
+  }
+  pathlist.clear();
   pathlist.pushAll(paths);
 };
 
