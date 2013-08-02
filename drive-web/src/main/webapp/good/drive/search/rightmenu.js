@@ -31,9 +31,11 @@ good.drive.search.Rightmenu = function(dom) {
 
   rightMenu.getHandler().listen(rightMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
+    var grid = good.drive.nav.grid.View.currentGrid;
+    var selectedElemnet = grid.getSelectedItem();
+    var data = selectedElemnet.data;
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.currentDocId;
-    var target = e.target;
     var grid = good.drive.nav.grid.View.currentGrid;
     switch (docId) {
     case good.constants.MYCLASSRESDOCID:
@@ -43,6 +45,11 @@ good.drive.search.Rightmenu = function(dom) {
         menu.hideItem(rightMenu, array);
       } else {
         var array = new Array(0, 4, 6, 9);
+        if (data.contentType ==
+          'application/x-print') {
+          array.push(11);
+          array.push(12);
+         }
         menu.hideItem(rightMenu, array);
       }
       break;
@@ -53,14 +60,30 @@ good.drive.search.Rightmenu = function(dom) {
         menu.hideItem(rightMenu, array);
       } else {
         var array = new Array(0, 4, 7, 9);
+        if (data.contentType ==
+        'application/x-print') {
+        array.push(11);
+        array.push(12);
+       }
         menu.hideItem(rightMenu, array);
       }
       break;
     case good.constants.PUBLICRESDOCID:
       if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-        menu.hideItem(rightMenu, [0, 4, 9, 10, 11]);
+        var array = new Array(0, 4, 9, 10, 11);
+        if (data.contentType ==
+        'application/x-print') {
+        array.push(12);
+       }
+        menu.hideItem(rightMenu, array);
       } else {
-        menu.hideItem(rightMenu, [0, 4, 10]);
+        var array = new Array(0, 4, 10);
+        if (data.contentType ==
+        'application/x-print') {
+          array.push(11);
+        array.push(12);
+       }
+        menu.hideItem(rightMenu, array);
       }
       break;
     default :
@@ -73,7 +96,7 @@ good.drive.search.Rightmenu = function(dom) {
       good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
-      if (json['items'] != undefined) {        
+      if (json['items'] != undefined) {
         var items = json['items'];
         good.drive.search.Rightmenu.SUBMENUDATA = items;
         var names = new Array();
