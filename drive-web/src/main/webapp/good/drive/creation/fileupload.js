@@ -2,7 +2,6 @@
 goog.provide('good.drive.creation.fileupload');
 
 goog.require('good.constants');
-goog.require('good.drive.nav.folders.Model');
 goog.require('good.drive.search');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
