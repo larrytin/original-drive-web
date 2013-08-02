@@ -147,7 +147,7 @@ good.drive.nav.grid.Cell.prototype.handleKeyEvent = function(e) {
  * @param {goog.events.BrowserEvent} e
  */
 good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
-  if (!this.isFolder()) {
+  if (!(this.data instanceof good.realtime.CollaborativeMap)) {
     return;
   }
   var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;

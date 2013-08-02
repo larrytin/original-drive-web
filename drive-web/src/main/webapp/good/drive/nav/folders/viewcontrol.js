@@ -333,6 +333,33 @@ good.drive.nav.folders.ViewControl.prototype.renameLeaf =
 };
 
 /**
+ * @param {good.realtime.CollaborativeMap} targetData
+ * @param {Object} sourceData
+ */
+good.drive.nav.folders.ViewControl.prototype.moveToNode =
+  function(targetData, sourceData) {
+  var target;
+  if (sourceData instanceof good.realtime.CollaborativeMap) {
+    target = targetData.get(this.getKeyType().FOLDERS[0]);
+  } else {
+    target = targetData.get(this.getKeyType().FILES[0]);
+  }
+  for (var i = 0; i < target.length(); i++) {
+    var data = target.get(i);
+    if (data instanceof good.realtime.CollaborativeMap) {
+      if (data.getId() == sourceData.getId()) {
+        return;
+      }
+    } else {
+      if (data.id == sourceData.id) {
+        return;
+      }
+    }
+  }
+  target.push(sourceData);
+};
+
+/**
  * @param {goog.ui.tree.TreeControl} node
  * @param {number} idx
  */

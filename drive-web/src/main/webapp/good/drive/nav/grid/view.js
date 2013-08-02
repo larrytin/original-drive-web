@@ -19,6 +19,7 @@ good.drive.nav.grid.View = function(data, docid, opt_domHelper) {
   this.data = data;
   this.docid = docid;
   this._selectedItem = undefined;
+  this.menu = undefined;
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
@@ -37,6 +38,7 @@ good.drive.nav.grid.View.currentGrid = undefined;
 good.drive.nav.grid.View.initGrid = function() {
   var path = good.drive.nav.folders.Path.getINSTANCE().path;
   var pathlist = good.drive.nav.folders.Path.getINSTANCE().pathlist;
+  var menuView = new good.drive.nav.menu.View();
   pathlist.addValuesAddedListener(function(evt) {
     var id = pathlist.get(pathlist.length() - 1);
     var docid = path.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
@@ -86,6 +88,7 @@ good.drive.nav.grid.View.prototype.renderCell = function(data) {
     return;
   }
   if (goog.isObject(data)) {
+    this.bindDataEvent(data);
     this.renderCellByObject(data);
   }
 };
@@ -121,6 +124,42 @@ good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
     this.insertCell(data, true);
   }
 };
+
+good.drive.nav.grid.View.prototype.bindDataEvent = function(data) {
+  var files = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
+  var folders = data.get(
+      good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS);
+  var that = this;
+  var addHandle = function(evt) {
+    var vals = evt.getValues();
+    for (var i in vals) {
+      var val = vals[i];
+      that.insertCell(val);
+    }
+  };
+  folders.addValuesAddedListener(addHandle);
+  files.addValuesAddedListener(addHandle);
+  
+  var removeHandle = function(evt) {
+    var vals = evt.getValues();
+    var idx = evt.getIndex();
+    for (var i in vals) {
+      var val = vals[i];
+      that.removeCell(val);
+      if (that.docid == undefined) {
+        continue;
+      }
+      var cells = goog.object.get(good.drive.nav.grid.View.grids, that.docid);
+      var id = val.getId();
+      if (goog.object.containsKey(cells, id)) {
+        var grid = goog.object.get(cells, id);
+        grid.removeFromParent();
+      }
+    }
+  };
+  folders.addValuesRemovedListener(removeHandle);
+  files.addValuesRemovedListener(removeHandle);
+}
 
 /**
  */
@@ -224,10 +263,55 @@ good.drive.nav.grid.View.prototype.insertCell = function(data, isFolder) {
 good.drive.nav.grid.View.prototype.removeCell = function(data) {
   for (var i = 0; i < this.getChildCount(); i++) {
     var cell = this.getChildAt(i);
-    if (cell.data.getId() == data.getId()) {
-      this.removeChildAt(i);
-      break;
+    if (data instanceof good.realtime.CollaborativeMap) {
+      if (cell.data.getId() == data.getId()) {
+        this.removeChildAt(i);
+        return;
+      }
+    } else {
+      if (cell.data.id = data.id) {
+        this.removeChildAt(i);
+        return;
+      }
     }
+  }
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ */
+good.drive.nav.grid.View.prototype.removeCurrentData = function() {
+  var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
+  var data = item.data;
+  if (data instanceof good.realtime.CollaborativeMap) {
+    var folders = this.data.get('folders');
+    folders.removeValue(data);
+  } else {
+    var files = this.data.get('files');
+    files.removeValue(data);
+  }
+};
+
+good.drive.nav.grid.View.prototype.getCurrentTitle = function() {
+  var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
+  var data = item.data;
+  if (data instanceof good.realtime.CollaborativeMap) {
+    return data.get('title');
+  } else {
+    return data.
+  }
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ */
+good.drive.nav.grid.View.prototype.renameChildData = function(title) {
+  var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
+  var data = item.data;
+  if (data instanceof good.realtime.CollaborativeMap) {
+    data.set('label', title);
+  } else {
+    return;
   }
 };
 
@@ -530,6 +614,10 @@ good.drive.nav.grid.View.prototype.getGridContainerClassName = function() {
 
 good.drive.nav.grid.View.prototype.getKeyType = function() {
   return {LABEL: ['label', 'string']};
+}
+
+good.drive.nav.grid.View.prototype.setMenu = function(menu) {
+  this.menu = menu;
 }
 
 /**

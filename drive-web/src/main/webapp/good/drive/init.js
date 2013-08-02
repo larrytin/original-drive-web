@@ -149,8 +149,31 @@ good.drive.init.init = function() {
   var advancedMenu = new good.drive.search.AdvancedMenu();
   advancedMenu.init();
   var rightmenu = new good.drive.search.
-  Rightmenu(goog.dom.getElement('viewmanager'),
-      good.drive.search.AdvancedMenu.SEARCHGRID);
+  Rightmenu(goog.dom.getElement('viewmanager'));
+//      function(e, data, index) {
+//    if (moToresTree == undefined) {
+//      var data = myResTree.control().model().getData();
+//      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
+//      moToresTree.setData(data);
+//    }
+//    switch (index) {
+//      case 2:
+//        moToDialog.setVisible(true);
+//        if (moToClassTree == undefined) {
+//          var data = myclass.control().model().getData();
+//          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
+//              undefined,
+//              goog.dom.getElement('moveTo'));
+//          moToClassTree.setData(data);
+//        }
+//        break;
+//      case 3:
+//        break;
+//      default:
+//        break;
+//    }
+//  });
+>>>>>>> branch 'master' of https://github.com/goodow/drive.git
   goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
     var caption = e.target.getCaption();
     var grid = good.drive.nav.grid.View.currentGrid;

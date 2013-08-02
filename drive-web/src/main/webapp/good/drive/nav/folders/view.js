@@ -208,6 +208,15 @@ good.drive.nav.folders.Tree.prototype.removeNode = function(parent, idx) {
 };
 
 /**
+ * @param {Object} data
+ * @return {goog.ui.tree.TreeControl}
+ */
+good.drive.nav.folders.Tree.prototype.moveToNode = function(data) {
+  var item = this.getCurrentItem();
+  this.control().moveToNode(item.map, data);
+}
+
+/**
  * @param {Object} param
  */
 good.drive.nav.folders.Tree.prototype.addLeaf = function(param) {
