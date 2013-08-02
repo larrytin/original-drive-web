@@ -189,16 +189,6 @@ good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
     for (var i in vals) {
       var val = vals[i];
       var removeNode = that.view().removeNode(node, idx);
-//      var parentGrid = that.getGridById(node.getId());
-//      if (parentGrid == null) {
-//        continue;
-//      }
-//      var id = removeNode.getId();
-//      var grid = that.getGridById(id);
-//      if (that.removeGridById(id)) {
-//        grid.removeFromParent();
-//        parentGrid.removeCell(val);
-//      }
     }
   });
 };

@@ -296,9 +296,9 @@ good.drive.nav.grid.View.prototype.getCurrentTitle = function() {
   var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
   var data = item.data;
   if (data instanceof good.realtime.CollaborativeMap) {
-    return data.get('title');
+    return data.get('label');
   } else {
-    return data.
+    return data.filename;
   }
 };
 
@@ -328,7 +328,6 @@ good.drive.nav.grid.View.prototype.removeChild =
   contentElm.removeChild(childNode.getElement());
 
 };
-
 
 /** @override */
 good.drive.nav.grid.View.prototype.createDom = function() {

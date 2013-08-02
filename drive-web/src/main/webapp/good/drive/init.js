@@ -51,6 +51,7 @@ good.drive.init.init = function() {
   var modifeInput;
   var navFolderslist = goog.dom.getElement('navfolderslist');
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
+  var isGridEvent = false;
   var baseDocid = '@tmp/' + good.auth.Auth.current.userId + '/';
   good.constants.MYRESDOCID = baseDocid +
     good.constants.MYRESDOCID;
@@ -118,7 +119,12 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        view.renameLeaf(modifeInput.value);
+        if (isGridEvent) {
+          var grid = good.drive.nav.grid.View.currentGrid;
+          grid.renameChildData(modifeInput.value);
+        } else {
+          view.renameLeaf(modifeInput.value);
+        }
         break;
       case 'c':
         break;
@@ -150,38 +156,9 @@ good.drive.init.init = function() {
   advancedMenu.init();
   var rightmenu = new good.drive.search.
   Rightmenu(goog.dom.getElement('viewmanager'));
-//      function(e, data, index) {
-//    if (moToresTree == undefined) {
-//      var data = myResTree.control().model().getData();
-//      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
-//      moToresTree.setData(data);
-//    }
-//    switch (index) {
-//      case 2:
-//        moToDialog.setVisible(true);
-//        if (moToClassTree == undefined) {
-//          var data = myclass.control().model().getData();
-//          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
-//              undefined,
-//              goog.dom.getElement('moveTo'));
-//          moToClassTree.setData(data);
-//        }
-//        break;
-//      case 3:
-//        break;
-//      default:
-//        break;
-//    }
-//  });
->>>>>>> branch 'master' of https://github.com/goodow/drive.git
   goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
     var caption = e.target.getCaption();
     var grid = good.drive.nav.grid.View.currentGrid;
-    if (moToresTree == undefined) {
-      var data = myResTree.control().model().getData();
-      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
-      moToresTree.setData(data);
-    }
     switch (caption) {
       case '安排课程':
         moToDialog.setVisible(true);
@@ -194,15 +171,23 @@ good.drive.init.init = function() {
         }
         break;
       case '收藏':
+        if (moToresTree == undefined) {
+          var data = myResTree.control().model().getData();
+          moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
+          moToresTree.setData(data);
+        }
         break;
       case '打开':
+        var cell = grid.getSelectedItem();
+        cell.openCell();
         break;
       case '重命名':
+        isGridEvent = true;
         modifydialog.setVisible(true);
         if (modifeInput == undefined) {
           modifeInput = goog.dom.getElement('modifyFolder');
         }
-        modifeInput.value = view.getCurrentItem().title;
+        modifeInput.value = grid.getCurrentTitle();
         break;
       case '删除':
         grid.removeCurrentData();
@@ -268,6 +253,7 @@ good.drive.init.init = function() {
           createdialog.setVisible(true);
           break;
         case 3:
+          isGridEvent = true;
           modifydialog.setVisible(true);
           if (modifeInput == undefined) {
             modifeInput = goog.dom.getElement('modifyFolder');
@@ -303,7 +289,9 @@ good.drive.init.init = function() {
   var bindPopup = false;
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
-  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '修改'], ['s', ''], ['i', '删除']];
+  var submenu = new goog.ui.SubMenu('发送');
+  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '修改'], ['s', ''],
+              ['i', '删除'], ['m', submenu]];
   var myClassMenuChildIds = undefined;
   var myClassMenu = menu.genPopupMenu(
       myclass.tree.getChildrenElement(), type, function(e) {
@@ -320,6 +308,7 @@ good.drive.init.init = function() {
           createdialog.setVisible(true);
           break;
         case 2:
+          isGridEvent = false;
           modifydialog.setVisible(true);
           if (modifeInput == undefined) {
             modifeInput = goog.dom.getElement('modifyFolder');
@@ -333,9 +322,18 @@ good.drive.init.init = function() {
           break;
       }
   }, corner);
+  var initSubMenu = false;
   myClassMenu.getHandler().listen(myClassMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW,
       function(e) {
+    var submenu = e.target.getChildAt(5);
+    var subdata = good.drive.search.Rightmenu.SUBMENUDATA;
+    if (!initSubMenu) {
+      initSubMenu = true;
+      goog.array.forEach(subdata, function(data) {
+        submenu.addItem(new goog.ui.MenuItem(data.name));
+      });
+    }
     var data = good.drive.nav.folders.Path.INSTANCE.getCurrentData();
     var target = e.target;
     var isClass = data.get('isclass');
@@ -347,10 +345,12 @@ good.drive.init.init = function() {
     if(isClass) {
       item1.setEnabled(false);
       item2.setEnabled(false);
+      submenu.setEnabled(true);
       return;
     }
     item1.setEnabled(true);
     item2.setEnabled(true);
+    submenu.setEnabled(false);
   });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
