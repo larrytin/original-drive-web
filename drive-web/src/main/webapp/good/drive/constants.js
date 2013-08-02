@@ -60,7 +60,7 @@ good.constants.GRADEARRAY = new Array('大班', '中班', '小班');
 good.constants.TYPE = {'动画': 'application/x-shockwave-flash',
     '视频': 'video/mpeg',
     '音频': 'audio/mp3',
-    '图片': 'image/jpeg',
+    '图片': 'image/',
     '文本': 'text/plain'};
 
 /** @type {string} */

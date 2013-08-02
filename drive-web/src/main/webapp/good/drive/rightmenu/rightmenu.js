@@ -70,24 +70,30 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
   uri = uri.toString() + '=' + fileId;
 
   if (goog.userAgent.IE) {
-  this.detailInfo(fileId, function(json) {
-    var contentType = json['contentType'];
-    if (contentType == 'audio/mp3' ||
-        contentType == 'application/x-shockwave-flash') {
-      var type = '';
-      if (contentType == 'audio/mp3') {
-          type = 'application/x-mplayer2';
-      } else if (contentType == 'application/x-shockwave-flash') {
-        type = contentType;
+    var rpc = new good.net.CrossDomainRpc('GET',
+        good.constants.NAME,
+        good.constants.VERSION, 'attachment/' + fileId,
+        good.constants.SERVERADRESS);
+    rpc.send(function(json) {
+      if (json && !json['error']) {
+        var contentType = json['contentType'];
+        if (contentType == 'audio/mp3' ||
+            contentType == 'application/x-shockwave-flash') {
+          var type = '';
+          if (contentType == 'audio/mp3') {
+              type = 'application/x-mplayer2';
+          } else if (contentType == 'application/x-shockwave-flash') {
+            type = contentType;
+          }
+          var uri2 = new goog.Uri('preview.html');
+          uri2.setParameterValue('SRC', uri);
+          uri2.setParameterValue('TYPE', type);
+          window.open(uri2);
+        } else {
+          window.open(uri);
+        } 
       }
-      var uri2 = new goog.Uri('preview.html');
-      uri2.setParameterValue('SRC', uri);
-      uri2.setParameterValue('TYPE', type);
-      window.open(uri2);
-    } else {
-      window.open(uri);
-    }
-  });
+    });
   } else {
     window.open(uri);
   }
@@ -144,7 +150,12 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
           gradecombo.value = item;
         }
       });
-      typecombo.value = json.contentType;
+      if (json.contentType != undefined &&
+          json.contentType.indexOf('image/') != -1) {
+        typecombo.value = 'image/';
+      } else {
+        typecombo.value = json.contentType;
+      }      
       previewpane.style.display = 'block';
     }
   });
