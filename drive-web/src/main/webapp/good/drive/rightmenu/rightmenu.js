@@ -78,9 +78,10 @@ good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
       if (json && !json['error']) {
         var contentType = json['contentType'];
         if (contentType == 'audio/mp3' ||
-            contentType == 'application/x-shockwave-flash') {
+            contentType == 'application/x-shockwave-flash' ||
+            contentType == 'video/mp4') {
           var type = '';
-          if (contentType == 'audio/mp3') {
+          if (contentType == 'audio/mp3' || contentType == 'video/mp4') {
               type = 'application/x-mplayer2';
           } else if (contentType == 'application/x-shockwave-flash') {
             type = contentType;
