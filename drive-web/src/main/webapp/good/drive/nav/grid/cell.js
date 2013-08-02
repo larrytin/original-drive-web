@@ -33,20 +33,37 @@ good.drive.nav.grid.Cell.prototype.renderCell = function() {
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
-  var labelElm1 = goog.dom.createDom('a', {'href': '#', 'class': 'gridview-thumbnail-link'},
-      goog.dom.createDom('div', {'class': 'doclist-gv-thumb-container' +
-        ' doclist-gv-thumb-folder'}));
+  var labelElm1 = goog.dom.createDom('a', {'class': 'gridview-thumbnail-link', 'target': '_blank', 'rel': 'noreferrer'});
+  var checkImage = goog.dom.createDom('div', {'class': 'gv-checkbox goog-inline-block'},
+      goog.dom.createDom('span', {'class': 'jfk-checkbox-checked jfk-checkbox goog-inline-block',
+      'role': 'checkbox', 'aria-checked': 'true', 'tabindex': '0', 'dir': 'ltr'},
+      goog.dom.createDom('div', {'class': 'jfk-checkbox-checkmark'})));
   goog.dom.appendChild(this.getImageContainerElement(), labelElm1);
+  goog.dom.appendChild(labelElm1, checkImage);
   goog.dom.appendChild(labelElm1, imageData);
+  
 };
 
 good.drive.nav.grid.Cell.prototype.getImageData = function(data) {
+  var imageFolder = null;
   if (data instanceof good.realtime.CollaborativeMap) {
   } else {
-    if (data.thumbnail != null)
+    if (data.thumbnail != null) {
       return  goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  data.thumbnail});
+    } else if (data.contentType == 'audio/mp3') {
+      return goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  './good/images/audio.png'});
+    } else {
+      return goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  './good/images/generic.png'});
+    }
   }
-  return goog.dom.createDom('div', {'class': 'gv-image-el drive-sprite-folder-grid-icon'});
+  if (data.get('isclass') == true) {
+     imageFolder = goog.dom.createDom('div', {'class': 'gv-image-el drive-sprite-folder-grid-shared-icon'});
+  } else {
+     imageFolder = goog.dom.createDom('div',
+         {'class': 'gv-image-el drive-sprite-folder-grid-icon'});
+  }
+  return goog.dom.createDom('div', {'class': 'doclist-gv-thumb-container' +
+  ' doclist-gv-thumb-folder'}, imageFolder);
 };
 
 good.drive.nav.grid.Cell.prototype.getLabelData = function(data) {
