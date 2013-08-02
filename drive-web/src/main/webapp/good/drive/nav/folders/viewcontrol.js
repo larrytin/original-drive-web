@@ -112,7 +112,7 @@ good.drive.nav.folders.ViewControl.prototype.buildPath =
   });
   if (pathsLength == pathlist.length()) {
     while (true) {
-      if (i > pathlist.length()) {
+      if (i >= pathlist.length()) {
         return; 
       }
       if (pathlist.get(i) != paths[i]) {
