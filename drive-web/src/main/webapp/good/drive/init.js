@@ -61,27 +61,7 @@ good.drive.init.init = function() {
 
   good.config.start();
   var auth = good.auth.Auth.current;
-  good.realtime.authorize(auth.userId, auth.access_token);
-  
-//  var role = new good.drive.role.Role(auth.userId, function(username) {
-//    if (username == good.constants.ADMIN) {
-//      var leftUpdateBtn = leftButton.updateBtn();
-////    var moverEvent = good.drive.creation.Mouserevent(
-////        leftUpdateBtn.getElement());
-//      if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
-//        var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
-//        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
-//        });
-//      } else {
-//        var menulst = '文件...';
-//        var fileupload = new good.drive.creation.Fileupload();
-//        fileupload.fileChange();
-//        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
-//          fileupload.fileClick('new', '');
-//        });
-//      }
-//    }
-//  });
+  good.realtime.authorize(auth.userId, auth.access_token); 
   
   var myclassLabel = '我的课程';
   var myClassViewControl = 
@@ -204,6 +184,27 @@ good.drive.init.init = function() {
   });
   
   var menu = new good.drive.nav.menu.View();
+  
+  var role = new good.drive.role.Role(auth.userId, function(username) {
+    if (username == good.constants.ADMIN) {
+      var leftUpdateBtn = leftButton.updateBtn();
+//    var moverEvent = good.drive.creation.Mouserevent(
+//        leftUpdateBtn.getElement());
+      if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
+        var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
+        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+        });
+      } else {
+        var menulst = '文件...';
+        var fileupload = new good.drive.creation.Fileupload();
+        fileupload.fileChange();
+        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+          fileupload.fileClick('new', '');
+        });
+      }
+    }
+  });
+  
   var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
     var docid = pathControl.currentDocId;
     var view = pathControl.getViewBydocId(docid);
