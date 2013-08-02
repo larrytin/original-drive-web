@@ -35,25 +35,38 @@ good.drive.search.Rightmenu = function(dom, grid) {
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.currentDocId;
     var target = e.target;
+    var grid = good.drive.nav.grid.View.currentGrid;
     switch (docId){
-    case good.constants.MYCLASSRESDOCID :
-      var grid = good.drive.nav.grid.View.currentGrid;
+    case good.constants.MYCLASSRESDOCID :      
       var cell = grid.getSelectedItem();
       if (cell.data instanceof good.realtime.CollaborativeMap) {
-        var array = new Array(1,3,7,8,9,11,12);
+        var array = new Array(1,3,6,7,8,9,11,12);
         menu.hideItem(rightMenu, array);
       } else {
-        
+        var array = new Array(0,4,9);
+        menu.hideItem(rightMenu, array);
       }
-    } 
-   
-//    if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-//      var itemupdate = target.getItemAt(4);
-//      itemupdate.setEnabled(false);
-//    } else {
-//      var item = target.getItemAt(5);
-//      item.setEnabled(false);
-//    }
+      break;
+    case good.constants.MYRESDOCID :
+      var cell = grid.getSelectedItem();
+      if (cell.data instanceof good.realtime.CollaborativeMap) {
+        var array = new Array(1,3,6,7,8,9,11,12);
+        menu.hideItem(rightMenu, array);
+      } else {
+        var array = new Array(0,4,9);
+        menu.hideItem(rightMenu, array);
+      }
+      break;
+    case good.constants.PUBLICRESDOCID :
+      if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
+        menu.hideItem(rightMenu, [0,4,9,10,11]);
+      } else {
+        menu.hideItem(rightMenu, [0,4,10]);
+      }
+      break;
+    default :
+      break;
+    };
   });
   
   var rpc = new good.net.CrossDomainRpc('GET', good.constants.DEVICE,
