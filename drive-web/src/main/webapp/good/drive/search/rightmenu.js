@@ -73,8 +73,9 @@ good.drive.search.Rightmenu = function(dom) {
       good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
-      if (json['items'] != undefined) {
+      if (json['items'] != undefined) {        
         var items = json['items'];
+        good.drive.search.Rightmenu.SUBMENUDATA = items;
         var names = new Array();
         goog.array.forEach(items, function(item) {
           submenu.addItem(new goog.ui.MenuItem(item.name));
@@ -132,6 +133,8 @@ good.drive.search.Rightmenu.prototype.getsubMenu = function() {
   return this._subMenu;
 };
 
+/** @type {JSON} */
+good.drive.search.Rightmenu.SUBMENUDATA = null;
 
 
 
