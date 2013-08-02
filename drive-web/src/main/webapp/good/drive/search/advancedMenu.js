@@ -156,6 +156,7 @@ good.drive.search.AdvancedMenu.prototype.clearAction = function() {
     goog.dom.removeChildren(that._search_input);
     that._input_text.value = '';
     that.inputstyle();
+    that.search();
   });
 };
 
@@ -247,6 +248,14 @@ good.drive.search.AdvancedMenu.prototype.trim = function(str) {
  * @param {string} search_type
  */
 good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
+  var path = good.drive.nav.folders.Path.getINSTANCE();
+  var docId = path.currentDocId;
+  if (docId != good.constants.PUBLICRESDOCID) {
+    path.initCallBack(good.constants.PUBLICRESDOCID);
+//    var pathlist = good.drive.nav.folders.Path.getINSTANCE().pathlist;
+//    pathlist.push('root');
+  } 
+
   var that = this;
 
   var contentType = undefined;
@@ -304,6 +313,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
   
     if (search_type == undefined && path == 'search?limit=10') {
+      grid.clear();
       return;
     } else {
     //连接服务器查询
@@ -314,8 +324,8 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
       rpc.send(function(json) {
         //填充网格数据
         if (json && !json['error']) {
-          if (json['items'] != undefined) {
-            grid.clear();
+          grid.clear();
+          if (json['items'] != undefined) {            
             goog.array.forEach(json['items'], function(item) {
 
               if (item['thumbnail'] != undefined) {
