@@ -262,6 +262,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json) {
    if (json && !json['error']) {
      goog.dom.getElement(json['filename']).innerText = '上传结束';
      that._menu.search('click');
+     that._file.value = '';
    }
   });
 };
@@ -289,6 +290,7 @@ good.drive.creation.Fileupload.prototype.updateAgain =
        rpc.send(function(json) {
          goog.dom.getElement(json['filename']).innerText = '更新成功';
          that._menu.search('click');
+         that._file.value = '';
       });
        }
      });
