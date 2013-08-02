@@ -7,14 +7,15 @@ goog.require('goog.ui.Component');
 
 /**
  * @param {good.realtime.CollaborativeMap} data
+ * @param {Object} keytype
  * @param {Object} defaultConfig
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
  * @extends {goog.ui.Component}
  */
-good.drive.nav.grid.Cell = function(data, keytype, defaultConfig, opt_domHelper) {
+good.drive.nav.grid.Cell =
+  function(data, keytype, defaultConfig, opt_domHelper) {
   goog.ui.Component.call(this, opt_domHelper);
-
   this.data = data;
   this.defaultConfig = defaultConfig;
   this.keytype = keytype;
@@ -33,39 +34,58 @@ good.drive.nav.grid.Cell.prototype.renderCell = function() {
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
-  var labelElm1 = goog.dom.createDom('a', {'class': 'gridview-thumbnail-link', 'target': '_blank', 'rel': 'noreferrer'});
-  var checkImage = goog.dom.createDom('div', {'class': 'gv-checkbox goog-inline-block'},
-      goog.dom.createDom('span', {'class': 'jfk-checkbox-checked jfk-checkbox goog-inline-block',
-      'role': 'checkbox', 'aria-checked': 'true', 'tabindex': '0', 'dir': 'ltr'},
-      goog.dom.createDom('div', {'class': 'jfk-checkbox-checkmark'})));
+  var labelElm1 = goog.dom.createDom('a',
+      {'class': 'gridview-thumbnail-link',
+    'target': '_blank', 'rel': 'noreferrer'});
+  var checkImage = goog.dom.createDom('div',
+      {'class': 'gv-checkbox goog-inline-block'},
+      goog.dom.createDom('span',
+          {'class': 'jfk-checkbox-checked jfk-checkbox goog-inline-block',
+      'role': 'checkbox', 'aria-checked':
+        'true', 'tabindex': '0', 'dir': 'ltr'},
+      goog.dom.createDom('div',
+          {'class': 'jfk-checkbox-checkmark'})));
   goog.dom.appendChild(this.getImageContainerElement(), labelElm1);
   goog.dom.appendChild(labelElm1, checkImage);
   goog.dom.appendChild(labelElm1, imageData);
-  
 };
 
-good.drive.nav.grid.Cell.prototype.getImageData = function(data) {
+/**
+ * @param {Object} data
+ * @return {Element}
+ */
+good.drive.nav.grid.Cell.prototype.getImageData =
+  function(data) {
   var imageFolder = null;
   if (data instanceof good.realtime.CollaborativeMap) {
   } else {
     if (data.thumbnail != null) {
-      return  goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  data.thumbnail});
+      return goog.dom.createDom('img',
+          {'class' : 'gv-image-el', 'src' : data.thumbnail});
     } else if (data.contentType == 'audio/mp3') {
-      return goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  './good/images/audio.png'});
+      return goog.dom.createDom('img',
+          {'class': 'gv-image-el', 'src': './good/images/audio.png'});
     } else {
-      return goog.dom.createDom('img', {'class': 'gv-image-el', 'src':  './good/images/generic.png'});
+      return goog.dom.createDom('img',
+          {'class': 'gv-image-el', 'src': './good/images/generic.png'});
     }
   }
   if (data.get('isclass') == true) {
-     imageFolder = goog.dom.createDom('div', {'class': 'gv-image-el drive-sprite-folder-grid-shared-icon'});
+     imageFolder = goog.dom.createDom('div',
+         {'class': 'gv-image-el drive-sprite-folder-grid-shared-icon'});
   } else {
      imageFolder = goog.dom.createDom('div',
          {'class': 'gv-image-el drive-sprite-folder-grid-icon'});
   }
-  return goog.dom.createDom('div', {'class': 'doclist-gv-thumb-container' +
+  return goog.dom.createDom('div',
+      {'class': 'doclist-gv-thumb-container' +
   ' doclist-gv-thumb-folder'}, imageFolder);
 };
 
+/**
+ * @param {Object} data
+ * @return {string}
+ */
 good.drive.nav.grid.Cell.prototype.getLabelData = function(data) {
   if (data instanceof good.realtime.CollaborativeMap) {
     return data.get(this.keytype.LABEL[0]);
@@ -86,7 +106,9 @@ good.drive.nav.grid.Cell.prototype.exitDocument = function() {
   this.detachEvents_();
 };
 
-
+/**
+ * @param {Object} data
+ */
 good.drive.nav.grid.Cell.prototype.bindHandle = function(data) {
   var that = this;
   if (data instanceof good.realtime.CollaborativeMap) {
@@ -133,20 +155,25 @@ good.drive.nav.grid.Cell.prototype.attachEvents_ = function() {
       listen(el, goog.events.EventType.CLICK, this.clickHandle);
 };
 
+/**
+ */
 good.drive.nav.grid.Cell.prototype.select = function() {
   var view = this.getParent();
   view.setSelectedItem(this);
-}
+};
 
-good.drive.nav.grid.Cell.prototype.setSelectedInternal = function(selected) {
-  if(this.selected_ == selected) {
+/**
+ * @param {good.drive.nav.grid.Cell} selected
+ */
+good.drive.nav.grid.Cell.prototype.setSelectedInternal =
+  function(selected) {
+  if (this.selected_ == selected) {
     return;
   }
   this.selected_ == selected;
-  
   var cellElm = this.getContentElement();
   cellElm.className = this.defaultConfig.cssCellRoot;
-}
+};
 
 /**
  * @private
@@ -186,14 +213,15 @@ good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
   this.openCell();
 };
 
+/**
+ */
 good.drive.nav.grid.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;
     path.push(this.data.getId());
   } else {
-    
   }
-}
+};
 
 /** @override */
 good.drive.nav.grid.Cell.prototype.createDom = function() {
@@ -240,8 +268,10 @@ good.drive.nav.grid.Cell.prototype.getImageBottonElement = function() {
  */
 good.drive.nav.grid.Cell.prototype.getImageHtml = function() {
   var sb = new goog.string.StringBuffer();
-  sb.append('<div class="', this.getImageClassName(), '" style="width: 230px;height:213px;">',
-      '<div class="gv-view-bottom" style="width:230px;"><div class="gv-view-center">',
+  sb.append('<div class="', this.getImageClassName(),
+      '" style="width: 230px;height:213px;">',
+      '<div class="gv-view-bottom" style="width:230px;">' +
+      '<div class="gv-view-center">',
       '<div class="gv-selection">', this.getImageContainerHtml(),
       '</div></div></div></div>');
   return sb.toString();

@@ -93,16 +93,21 @@ good.drive.nav.grid.View.prototype.renderCell = function(data) {
   }
 };
 
+/**
+ */
 good.drive.nav.grid.View.prototype.clear = function() {
-  var length =  this.getChildCount();
+  var length = this.getChildCount();
   if (length == 0) {
     return;
   }
-  for (var i=0; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     this.removeChildAt(0);
   }
 };
 
+/**
+ * @param {Array.<Object>} data
+ */
 good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
   var that = this;
   goog.array.forEach(data, function(cell) {
@@ -110,6 +115,9 @@ good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
   });
 };
 
+/**
+ * @param {Object} data
+ */
 good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
   var file = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
   var folder = data.get(
@@ -118,15 +126,18 @@ good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
     var data = file.get(i);
     this.insertCell(data, false);
   }
-  
   for (var i = 0; i < folder.length(); i++) {
     var data = folder.get(i);
     this.insertCell(data, true);
   }
 };
 
+/**
+ * @param {Object} data
+ */
 good.drive.nav.grid.View.prototype.bindDataEvent = function(data) {
-  var files = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
+  var files = data.get(
+      good.drive.nav.folders.ViewControl.ViewControlType.FILES);
   var folders = data.get(
       good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS);
   var that = this;
@@ -139,7 +150,6 @@ good.drive.nav.grid.View.prototype.bindDataEvent = function(data) {
   };
   folders.addValuesAddedListener(addHandle);
   files.addValuesAddedListener(addHandle);
-  
   var removeHandle = function(evt) {
     var vals = evt.getValues();
     var idx = evt.getIndex();
@@ -160,7 +170,7 @@ good.drive.nav.grid.View.prototype.bindDataEvent = function(data) {
   };
   folders.addValuesRemovedListener(removeHandle);
   files.addValuesRemovedListener(removeHandle);
-}
+};
 
 /**
  */
@@ -206,11 +216,14 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
   }
 };
 
-good.drive.nav.grid.View.prototype.setSelectedItem = function(cell) {
+/**
+ * @param {good.drive.nav.grid.Cell} cell
+ */
+good.drive.nav.grid.View.prototype.setSelectedItem =
+  function(cell) {
   if (this._selectedItem == cell) {
     return;
   }
-  
   if (this._selectedItem) {
     this._selectedItem.setSelectedInternal(false);
   }
@@ -221,6 +234,9 @@ good.drive.nav.grid.View.prototype.setSelectedItem = function(cell) {
   }
 };
 
+/**
+ * @return {good.drive.nav.grid.Cell}
+ */
 good.drive.nav.grid.View.prototype.getSelectedItem = function() {
   return this._selectedItem;
 };
@@ -270,7 +286,7 @@ good.drive.nav.grid.View.prototype.removeCell = function(data) {
         return;
       }
     } else {
-      if (cell.data.id = data.id) {
+      if (cell.data.id == data.id) {
         this.removeChildAt(i);
         return;
       }
@@ -279,7 +295,6 @@ good.drive.nav.grid.View.prototype.removeCell = function(data) {
 };
 
 /**
- * @param {good.realtime.CollaborativeMap} data
  */
 good.drive.nav.grid.View.prototype.removeCurrentData = function() {
   var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
@@ -293,6 +308,9 @@ good.drive.nav.grid.View.prototype.removeCurrentData = function() {
   }
 };
 
+/**
+ * @return {string}
+ */
 good.drive.nav.grid.View.prototype.getCurrentTitle = function() {
   var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
   var data = item.data;
@@ -304,10 +322,12 @@ good.drive.nav.grid.View.prototype.getCurrentTitle = function() {
 };
 
 /**
- * @param {good.realtime.CollaborativeMap} data
+ * @param {string} title
  */
-good.drive.nav.grid.View.prototype.renameChildData = function(title) {
-  var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
+good.drive.nav.grid.View.prototype.renameChildData =
+  function(title) {
+  var item = good.drive.nav.grid.View.currentGrid.
+  getSelectedItem();
   var data = item.data;
   if (data instanceof good.realtime.CollaborativeMap) {
     data.set('label', title);
@@ -371,7 +391,8 @@ good.drive.nav.grid.View.prototype.enterDocument = function() {
  * @return {good.drive.nav.grid.Cell}
  */
 good.drive.nav.grid.View.prototype.createCell = function(data) {
-  return new good.drive.nav.grid.Cell(data, this.getKeyType(), this.getConfig());
+  return new good.drive.nav.grid.Cell(data,
+      this.getKeyType(), this.getConfig());
 };
 
 
@@ -612,13 +633,12 @@ good.drive.nav.grid.View.prototype.getGridContainerClassName = function() {
   return this.getConfig().cssGridContainer;
 };
 
+/**
+ * @return {Object}
+ */
 good.drive.nav.grid.View.prototype.getKeyType = function() {
   return {LABEL: ['label', 'string']};
-}
-
-good.drive.nav.grid.View.prototype.setMenu = function(menu) {
-  this.menu = menu;
-}
+};
 
 /**
  * @return {Object.<string, string>}

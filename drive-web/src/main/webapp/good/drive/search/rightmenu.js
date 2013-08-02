@@ -1,9 +1,7 @@
 'use strict';
 goog.provide('good.drive.search.rigthmenu');
 
-goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.rightmenu');
-goog.require('good.drive.search');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.ui.SubMenu');
 

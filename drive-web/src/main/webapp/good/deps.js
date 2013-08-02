@@ -34,7 +34,7 @@ goog.addDependency('../../../../good/drive/rightmenu/preview.js', ['good.drive.r
 goog.addDependency('../../../../good/drive/rightmenu/rightmenu.js', ['good.drive.rightmenu'], ['good.constants', 'good.drive.creation.fileupload', 'good.drive.nav.menu.popupmenu', 'good.drive.rightmenu.preview', 'good.net.CrossDomainRpc', 'goog.Uri', 'goog.dom', 'goog.ui.ComboBox', 'goog.ui.Dialog']);
 goog.addDependency('../../../../good/drive/role/role.js', ['good.drive.role'], ['good.net.CrossDomainRpc']);
 goog.addDependency('../../../../good/drive/search/advancedMenu.js', ['good.drive.search'], ['good.constants', 'good.drive.nav.grid', 'good.drive.search.rigthmenu', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events', 'goog.ui.MenuItem', 'goog.ui.Popup', 'goog.ui.PopupMenu']);
-goog.addDependency('../../../../good/drive/search/rightmenu.js', ['good.drive.search.rigthmenu'], ['good.drive.nav.menu.popupmenu', 'good.drive.rightmenu', 'good.drive.search', 'good.net.CrossDomainRpc', 'goog.ui.SubMenu']);
+goog.addDependency('../../../../good/drive/search/rightmenu.js', ['good.drive.search.rigthmenu'], ['good.drive.nav.menu.popupmenu', 'good.drive.rightmenu', 'good.net.CrossDomainRpc', 'goog.ui.SubMenu']);
 goog.addDependency('../../../good/auth/login.js', ['good.auth', 'good.auth.login'], ['good.auth.signup', 'good.config', 'good.net.CrossDomainRpc', 'goog.Uri', 'goog.Uri.QueryData', 'goog.dom', 'goog.events', 'goog.events.FocusHandler']);
 goog.addDependency('../../../good/auth/signup.js', ['good.auth.signup'], ['good.config', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events', 'goog.events.FocusHandler', 'goog.events.InputHandler']);
 goog.addDependency('../../../good/config/config.js', ['good.config'], []);

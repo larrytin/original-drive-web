@@ -9,7 +9,7 @@ goog.require('good.drive.nav.folders.Model');
  */
 good.drive.nav.folders.AbstractControl = function(str) {
   var that = this;
-  if(str != undefined) {
+  if (str != undefined) {
     var model = new good.drive.nav.folders.Model(str);
     if (!goog.object.contains(
         good.drive.nav.folders.AbstractControl.docs, str)) {

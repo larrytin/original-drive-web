@@ -114,7 +114,7 @@ good.drive.nav.folders.ViewControl.prototype.buildPath =
     if (docid == this.model().docId()) {
       while (true) {
         if (i >= pathlist.length()) {
-          return; 
+          return;
         }
         if (pathlist.get(i) != paths[i]) {
           break;
@@ -315,7 +315,7 @@ good.drive.nav.folders.ViewControl.prototype.removeGridById =
 
 /**
  * @param {goog.ui.tree.TreeControl} node
- * @param {Object} param {type, value};
+ * @param {Object} param
  */
 good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, param) {
   var map = this.model().getLeaf(this.getKeyType());
@@ -413,18 +413,24 @@ good.drive.nav.folders.ViewControl.prototype.getLabel =
   return map.get(this.getLabelKey());
 };
 
+/**
+ * @return {string}
+ */
 good.drive.nav.folders.ViewControl.prototype.getChildKey =
   function() {
   return this.getKeyType().FOLDERS[0];
-}
+};
 
+/**
+ * @return {string}
+ */
 good.drive.nav.folders.ViewControl.prototype.getLabelKey =
   function() {
   return this.getKeyType().LABEL[0];
-}
+};
 
 /**
- * @return {Object} {key : [name, type, default]}
+ * @return {Object}
  */
 good.drive.nav.folders.ViewControl.prototype.getKeyType = function() {
   return {LABEL: ['label', 'string'], FOLDERS: ['folders', 'list'],
