@@ -111,14 +111,16 @@ good.drive.nav.folders.ViewControl.prototype.buildPath =
     return true;
   });
   if (pathsLength == pathlist.length()) {
-    while (true) {
-      if (i > pathlist.length()) {
-        return; 
+    if (docid == this.model().docId()) {
+      while (true) {
+        if (i >= pathlist.length()) {
+          return; 
+        }
+        if (pathlist.get(i) != paths[i]) {
+          break;
+        }
+        i++;
       }
-      if (pathlist.get(i) != paths[i]) {
-        break;
-      }
-      i++;
     }
   }
   pathlist.clear();

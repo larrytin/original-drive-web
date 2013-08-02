@@ -55,8 +55,9 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
   this.path = path;
   this.pathlist = path.get(this.pathNameType().CURRENTPATH);
   var that = this;
-  this.pathlist.addValuesAddedListener(function(evt) {
-    if (that.pathlist.length() == 0) {
+  path.addValueChangedListener(function(evt) {
+    var property = evt.getProperty();
+    if (property != that.pathNameType().CURRENTDOCID) {
       return;
     }
     var docid = that.path.get(that.pathNameType().CURRENTDOCID);
@@ -67,6 +68,13 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
       }
       value.recovery();
     });
+  });
+  this.pathlist.addValuesAddedListener(function(evt) {
+    if (that.pathlist.length() == 0) {
+      return;
+    }
+    var docid = that.path.get(that.pathNameType().CURRENTDOCID);
+    var view = that.getPathViewByDocId(docid);
     view.location(that.pathlist);
   });
   goog.object.forEach(this.pathHeap, function(value, key) {

@@ -67,7 +67,7 @@ good.drive.init.init = function() {
   var myclassLabel = '我的课程';
   var myClassViewControl = 
     new good.drive.nav.folders.MyClassViewControl(
-        good.constants.MYCLASSRESDOCID)
+        good.constants.MYCLASSRESDOCID);
   var myclass = new good.drive.nav.folders.Tree(myclassLabel,
       undefined, navFolderslist, myClassViewControl);
   
@@ -241,19 +241,6 @@ good.drive.init.init = function() {
     }
   });
   
-  var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
-    var docid = pathControl.currentDocId;
-    var view = pathControl.getViewBydocId(docid);
-    switch (goog.array.indexOf(
-      createPopup.getChildIds(), e.target.getId())) {
-        case 0:
-          createdialog.setVisible(true);
-          break;
-        default:
-          break;
-    }
-  });  
-  
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(myResTree.tree.getChildrenElement(),
       function(e) {
@@ -302,6 +289,40 @@ good.drive.init.init = function() {
         break;
     }
   }, 'newclassdialog');
+  
+  var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
+    var docid = pathControl.currentDocId;
+    var view = pathControl.getViewBydocId(docid);
+    switch (goog.array.indexOf(
+      createPopup.getChildIds(), e.target.getId())) {
+        case 0:
+          createdialog.setVisible(true);
+          break;
+        case 1:
+          newClassDialog.setVisible(true);
+          break;
+        default:
+          break;
+    }
+  });
+  createPopup.getHandler().listen(createPopup,
+      goog.ui.Menu.EventType.BEFORE_SHOW,
+      function(e) {
+    var docid = pathControl.currentDocId;
+    var view = pathControl.getViewBydocId(docid);
+    var node = view.getCurrentItem();
+    switch (docid) {
+    case good.constants.MYCLASSRESDOCID:
+      menu.hideItem(createPopup, []);
+      break;
+    case good.constants.MYRESDOCID:
+      menu.hideItem(createPopup, [1]);
+      break;
+    case good.constants.PUBLICRESDOCID:
+      menu.hideItem(createPopup, [1]);
+      break;
+    }
+  });
   
   var bindPopup = false;
   var corner = {targetCorner: undefined,
