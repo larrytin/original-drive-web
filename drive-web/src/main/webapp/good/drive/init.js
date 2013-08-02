@@ -153,6 +153,7 @@ good.drive.init.init = function() {
       good.drive.search.AdvancedMenu.SEARCHGRID);
   goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
     var caption = e.target.getCaption();
+    var grid = good.drive.nav.grid.View.currentGrid;
     if (moToresTree == undefined) {
       var data = myResTree.control().model().getData();
       moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
@@ -171,12 +172,17 @@ good.drive.init.init = function() {
         break;
       case '收藏':
         break;
+      case '打开':
+        break;
       case '重命名':
+        modifydialog.setVisible(true);
+        if (modifeInput == undefined) {
+          modifeInput = goog.dom.getElement('modifyFolder');
+        }
+        modifeInput.value = view.getCurrentItem().title;
         break;
       case '删除':
-        var curGrid = good.drive.nav.grid.View.currentGrid;
-        var cell = curGrid.getSelectedItem();
-        curGrid.removeCell(cell.data);
+        grid.removeCurrentData();
         break;
       default:
         break;
