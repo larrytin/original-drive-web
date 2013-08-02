@@ -254,7 +254,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     path.initCallBack(good.constants.PUBLICRESDOCID);
 //    var pathlist = good.drive.nav.folders.Path.getINSTANCE().pathlist;
 //    pathlist.push('root');
-  } 
+  }
 
   var that = this;
 
@@ -311,7 +311,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     }
 
     var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
-  
+
     if (search_type == undefined && path == 'search?limit=10') {
       grid.clear();
       return;
@@ -325,7 +325,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
         //填充网格数据
         if (json && !json['error']) {
           grid.clear();
-          if (json['items'] != undefined) {            
+          if (json['items'] != undefined) {
             goog.array.forEach(json['items'], function(item) {
 
               if (item['thumbnail'] != undefined) {

@@ -48,7 +48,7 @@ good.constants.CONTENTTYPE = 'contentType';
 good.constants.QUERY = 'query';
 
 /** @type {Array.<string>} */
-good.constants.TYPEARRAY = new Array('动画', '视频', '音频', '图片', '文本', '电子书');
+good.constants.TYPEARRAY = new Array('动画', '视频', '音频', '图片', '文本', '手偶', '电子书');
 
 /** @type {Array.<string>} */
 good.constants.FIELDARRAY = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
@@ -61,7 +61,8 @@ good.constants.TYPE = {'动画': 'application/x-shockwave-flash',
     '视频': 'video/mpeg',
     '音频': 'audio/mp3',
     '图片': 'image/',
-    '文本': 'text/plain'};
+    '文本': 'text/plain',
+    '手偶': 'application/x-print'};
 
 /** @type {string} */
 good.constants.ADMIN = 'admin';
