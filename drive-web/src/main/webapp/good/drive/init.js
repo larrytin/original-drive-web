@@ -149,8 +149,7 @@ good.drive.init.init = function() {
   var advancedMenu = new good.drive.search.AdvancedMenu();
   advancedMenu.init();
   var rightmenu = new good.drive.search.
-  Rightmenu(goog.dom.getElement('viewmanager'),
-      good.drive.search.AdvancedMenu.SEARCHGRID);
+  Rightmenu(goog.dom.getElement('viewmanager'));
 //      function(e, data, index) {
 //    if (moToresTree == undefined) {
 //      var data = myResTree.control().model().getData();

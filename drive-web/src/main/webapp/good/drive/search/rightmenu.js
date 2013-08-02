@@ -14,7 +14,7 @@ goog.require('goog.ui.SubMenu');
  * @param {good.drive.nav.grid} grid
  * @param {Function} handle
  */
-good.drive.search.Rightmenu = function(dom, grid) {
+good.drive.search.Rightmenu = function(dom) {
   this._rightMenu = undefined;
   var submenu = new goog.ui.SubMenu('发送');
   var menu = new good.drive.nav.menu.View();
@@ -82,6 +82,7 @@ good.drive.search.Rightmenu = function(dom, grid) {
           names.push(item.name);
         });
         goog.events.listen(rightMenu, 'action', function(e) {
+          var grid = good.drive.nav.grid.View.currentGrid;
           var selectedElemnet = grid.getSelectedItem();
           var data = selectedElemnet.data;         
           var rightmenusource = new good.drive.rightmenu.Rightmenu();
