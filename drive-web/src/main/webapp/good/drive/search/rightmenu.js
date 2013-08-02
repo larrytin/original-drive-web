@@ -43,7 +43,7 @@ good.drive.search.Rightmenu = function(dom, grid) {
         var array = new Array(1,3,6,7,8,9,11,12);
         menu.hideItem(rightMenu, array);
       } else {
-        var array = new Array(0,4,9);
+        var array = new Array(0,4,6,9);
         menu.hideItem(rightMenu, array);
       }
       break;
