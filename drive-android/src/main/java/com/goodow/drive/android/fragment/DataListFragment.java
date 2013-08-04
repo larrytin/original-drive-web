@@ -5,6 +5,7 @@ import android.app.ListFragment;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -14,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IRemoteControl;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.activity.play.AudioPlayActivity;
@@ -29,18 +31,17 @@ import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
 import com.goodow.realtime.DocumentLoadedHandler;
 import com.goodow.realtime.EventHandler;
-import com.goodow.realtime.EventType;
 import com.goodow.realtime.Model;
 import com.goodow.realtime.ModelInitializerHandler;
+import com.goodow.realtime.ObjectChangedEvent;
 import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValueChangedEvent;
-import com.goodow.realtime.ValuesAddedEvent;
-import com.goodow.realtime.ValuesRemovedEvent;
-import com.goodow.realtime.ValuesSetEvent;
+import elemental.json.JsonArray;
 
 public class DataListFragment extends ListFragment implements
 		IRemoteDataFragment {
-	private CollaborativeList currentPathList;
+	private IRemoteControl path;
+	private JsonArray currentPathList;
 	private CollaborativeMap currentFolder;
 
 	private CollaborativeAdapter adapter;
@@ -54,69 +55,51 @@ public class DataListFragment extends ListFragment implements
 	private static final String FILE_KEY = GlobalConstant.DocumentIdAndDataKey.FILESKEY
 			.getValue();
 
-	private EventHandler<ValuesAddedEvent> pathValuesAddedEventHandler;
-	private EventHandler<ValuesRemovedEvent> pathValuesRemovedEventHandler;
-	// private EventHandler<ValuesSetEvent> pathValuesSetEventHandler;
+	private EventHandler<ValueChangedEvent> pathChangeEventHandler;
 
 	private EventHandler<?> listEventHandler;
 
-	private EventHandler<ValueChangedEvent> valuesChangeEventHandler;
+	private EventHandler<ObjectChangedEvent> valuesChangeEventHandler;
 
 	public void backFragment() {
-		if (1 < currentPathList.length()) {
-			String mapId = currentPathList.get(currentPathList.length() - 1);
+		if (null != currentPathList && 1 < currentPathList.length()) {
+			String mapId = path.getMapId(currentPathList.length() - 1);
 			CollaborativeMap currentmap = model.getObject(mapId);
 			if (null != currentmap) {
-				CollaborativeList chilFolders = (CollaborativeList) currentmap
-						.get(FOLDER_KEY);
-
 				// 删除监听
-				if (null != chilFolders) {
-					CollaborativeList chilFiles = (CollaborativeList) currentmap
-							.get(FILE_KEY);
-
-					for (int i = 0; i < chilFolders.length(); i++) {
-						CollaborativeMap map = chilFolders.get(i);
-						removeMapListener(map);
-					}
-
-					for (int i = 0; i < chilFiles.length(); i++) {
-						CollaborativeMap map = chilFiles.get(i);
-						removeMapListener(map);
-					}
-
-					removeListListener(chilFolders);
-					removeListListener(chilFiles);
-				}
+				currentmap
+						.removeObjectChangedListener(valuesChangeEventHandler);
 			}
 
-			currentPathList.remove(currentPathList.length() - 1);
-
+			path.removeLastPath();
 		} else {
-			Toast.makeText(getActivity(), R.string.backFolderErro,
-					Toast.LENGTH_SHORT).show();
+			if (null != getActivity()) {
+				Toast.makeText(getActivity(), R.string.backFolderErro,
+						Toast.LENGTH_SHORT).show();
+			}
 		}
 	}
 
 	public void connectUi() {
-		if (null != currentPathList) {
+		Log.i("", "");
+		if (null != path) {
 
-			currentPathList.addValuesAddedListener(pathValuesAddedEventHandler);
-			currentPathList
-					.addValuesRemovedListener(pathValuesRemovedEventHandler);
+			path.addListener(pathChangeEventHandler);
 
+			currentPathList = path.getCurrentPath();
 			if (0 == currentPathList.length()) {
-				currentPathList.push(root.getId());
+				path.addPath(root.getId());
+
+				currentFolder = root;
 			}
 
-			if (null != currentFolder) {
-				initData();
-			}
+			initData();
 		}
 	}
 
 	public void initData() {
 		if (null != currentFolder) {
+			currentFolder.addObjectChangedListener(valuesChangeEventHandler);
 			CollaborativeList folderList = (CollaborativeList) currentFolder
 					.get(FOLDER_KEY);
 			CollaborativeList fileList = (CollaborativeList) currentFolder
@@ -125,14 +108,6 @@ public class DataListFragment extends ListFragment implements
 			adapter.setFolderList(folderList);
 			adapter.setFileList(fileList);
 			adapter.notifyDataSetChanged();
-
-			if (null != folderList) {
-				setListListener(folderList);
-			}
-
-			if (null != fileList) {
-				setListListener(fileList);
-			}
 
 			// 设置action bar的显示
 			MainActivity activity = (MainActivity) getActivity();
@@ -143,8 +118,8 @@ public class DataListFragment extends ListFragment implements
 				} else {
 					StringBuffer title = new StringBuffer();
 					for (int i = 0; i < currentPathList.length(); i++) {
-						CollaborativeMap currentMap = model
-								.getObject((String) currentPathList.get(i));
+						CollaborativeMap currentMap = model.getObject(path
+								.getMapId(i));
 
 						String label = currentMap.get("label");
 						if (null != label) {
@@ -156,7 +131,6 @@ public class DataListFragment extends ListFragment implements
 							.toString());
 				}
 			}
-
 		}
 	}
 
@@ -165,17 +139,14 @@ public class DataListFragment extends ListFragment implements
 		super.onPause();
 
 		((MainActivity) getActivity()).restActionBarTitle();
-
-		currentPathList = null;
 	}
 
 	@Override
 	public void onResume() {
 		super.onResume();
 
-		if (null == currentPathList) {
-			currentPathList = ((MainActivity) getActivity())
-					.getRemoteControlObserver().getList();
+		if (null == path) {
+			path = ((MainActivity) getActivity()).getRemoteControlObserver();
 
 			if (null != root) {
 				connectUi();
@@ -212,16 +183,16 @@ public class DataListFragment extends ListFragment implements
 			};
 		}
 
-		if (pathValuesAddedEventHandler == null) {
-			pathValuesAddedEventHandler = new EventHandler<ValuesAddedEvent>() {
+		if (pathChangeEventHandler == null) {
+			pathChangeEventHandler = new EventHandler<ValueChangedEvent>() {
 				@Override
-				public void handleEvent(ValuesAddedEvent event) {
+				public void handleEvent(ValueChangedEvent event) {
+					currentPathList = path.getCurrentPath();
 
 					if (null != currentPathList
 							&& 0 != currentPathList.length()) {
-						CollaborativeMap map = model
-								.getObject((String) currentPathList
-										.get(currentPathList.length() - 1));
+						CollaborativeMap map = model.getObject(path
+								.getMapId(currentPathList.length() - 1));
 						if (null != map) {
 							// 判断若为文件,则触发播放功能,并且pathList自动-1(即执行一遍backfragment()方法)
 							if (null == map.get(FOLDER_KEY)) {
@@ -295,8 +266,9 @@ public class DataListFragment extends ListFragment implements
 							} else {
 								// 判断若为文件夹,则展现数据
 								currentFolder = model
-										.getObject((String) currentPathList
-												.get(currentPathList.length() - 1));
+										.getObject(path
+												.getMapId(currentPathList
+														.length() - 1));
 
 								initData();
 
@@ -310,42 +282,11 @@ public class DataListFragment extends ListFragment implements
 			};
 		}
 
-		if (pathValuesRemovedEventHandler == null) {
-			pathValuesRemovedEventHandler = new EventHandler<ValuesRemovedEvent>() {
-				@Override
-				public void handleEvent(ValuesRemovedEvent event) {
-					if (null != currentPathList) {
-						if (0 != currentPathList.length()) {
-							CollaborativeMap currentMap = model
-									.getObject((String) currentPathList
-											.get(currentPathList.length() - 1));
-
-							if (null != currentMap) {
-								currentFolder = currentMap;
-							} else {
-								backFragment();
-								return;
-							}
-						} else {
-							currentPathList.push(root.getId());
-						}
-
-						initData();
-
-						openState();
-					}
-				}
-			};
-		}
-
 		if (valuesChangeEventHandler == null) {
-			valuesChangeEventHandler = new EventHandler<ValueChangedEvent>() {
+			valuesChangeEventHandler = new EventHandler<ObjectChangedEvent>() {
 				@Override
-				public void handleEvent(ValueChangedEvent event) {
-					String eventProperty = event.getProperty();
-					if (eventProperty.equals("label")) {
-						adapter.notifyDataSetChanged();
-					}
+				public void handleEvent(ObjectChangedEvent event) {
+					adapter.notifyDataSetChanged();
 				}
 			};
 		}
@@ -374,7 +315,6 @@ public class DataListFragment extends ListFragment implements
 		super.onCreate(savedInstanceState);
 		adapter = new CollaborativeAdapter(this.getActivity(), this, null,
 				null, new OnItemClickListener() {
-
 					@Override
 					public void onItemClick(CollaborativeMap file) {
 						MainActivity activity = (MainActivity) DataListFragment.this
@@ -450,10 +390,6 @@ public class DataListFragment extends ListFragment implements
 			}
 		};
 
-		// String docId = "@tmp/"
-		// + GlobalDataCacheForMemorySingleton.getInstance().getUserId()
-		// + "/favorites";
-
 		String docId = "@tmp/"
 				+ GlobalDataCacheForMemorySingleton.getInstance().getUserId()
 				+ "/"
@@ -473,30 +409,6 @@ public class DataListFragment extends ListFragment implements
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
 
-		currentPathList.push(clickItem.getId());
+		path.addPath(clickItem.getId());
 	}
-
-	@SuppressWarnings("unchecked")
-	private void setListListener(CollaborativeList listenerList) {
-		listenerList
-				.addValuesSetListener((EventHandler<ValuesSetEvent>) listEventHandler);
-		listenerList
-				.addValuesRemovedListener((EventHandler<ValuesRemovedEvent>) listEventHandler);
-		listenerList
-				.addValuesAddedListener((EventHandler<ValuesAddedEvent>) listEventHandler);
-	}
-
-	private void removeListListener(CollaborativeList listenerList) {
-		listenerList.removeListListener(listEventHandler);
-	}
-
-	public void setMapListener(CollaborativeMap listenerMap) {
-		listenerMap.addValueChangedListener(valuesChangeEventHandler);
-	}
-
-	public void removeMapListener(CollaborativeMap listenerMap) {
-		listenerMap.removeEventListener(EventType.VALUE_CHANGED,
-				valuesChangeEventHandler, false);
-	}
-
 }

@@ -68,9 +68,4 @@ public class DataDetailFragment extends Fragment implements IRemoteDataFragment 
 		}
 	};
 
-	@Override
-	public void setMapListener(CollaborativeMap map) {
-		// TODO Auto-generated method stub
-
-	}
 }

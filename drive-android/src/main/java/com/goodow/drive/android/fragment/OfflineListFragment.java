@@ -16,10 +16,6 @@ import com.goodow.drive.android.adapter.OfflineAdapter;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
-import com.goodow.realtime.EventHandler;
-import com.goodow.realtime.ObjectChangedEvent;
-import com.goodow.realtime.ValuesAddedEvent;
-import com.goodow.realtime.ValuesRemovedEvent;
 
 public class OfflineListFragment extends ListFragment implements
 		IRemoteDataFragment {
@@ -65,11 +61,6 @@ public class OfflineListFragment extends ListFragment implements
 		((MainActivity) getActivity()).registerReceiver(broadcastReceiver,
 				intentFilter);
 
-	}
-
-	@Override
-	public void setMapListener(CollaborativeMap map) {
-		// TODO Auto-generated method stub
 	}
 
 	@Override
