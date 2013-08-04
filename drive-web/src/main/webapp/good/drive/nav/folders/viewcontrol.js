@@ -55,7 +55,10 @@ good.drive.nav.folders.ViewControl.prototype.mappingView =
  */
 good.drive.nav.folders.ViewControl.prototype.locationNode =
   function(root, path) {
-  this.locationNode_(root, path, parseInt(0), path.length());
+  var pathjsonLength = goog.array.count(path, function() {
+    return true;
+  });
+  this.locationNode_(root, path, parseInt(0), pathjsonLength);
 };
 
 /**
@@ -77,7 +80,7 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
   if (length == 0) {
     return;
   }
-  var pathId = path.get(idx);
+  var pathId = path[idx];
   for (var i = 0; i < length; i++) {
     var child = parentNode.getChildAt(i);
     var childId = child.mapid;
@@ -99,32 +102,39 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
 good.drive.nav.folders.ViewControl.prototype.buildPath =
   function(pathlist, pathmap) {
   var parentNode = this.view().getCurrentItem();
-  var docid = pathmap.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
-  if (docid != this.model().docId() &&
-      (parentNode == null || this.isCurrentPath(pathlist, parentNode.mapid))) {
+  if (parentNode == null) {
+    return;
+  }
+  var path = pathmap.get(good.drive.nav.folders.Path.NameType.PATH);
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  var pathjson = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (docid == this.model().docId() &&
+      this.isCurrentPath(pathjson,
+          parentNode.mapid, pathjson.length)) {
     return;
   }
   var paths = [];
   this.buildPath_(parentNode, paths);
   var i = 0;
-  var pathsLength = goog.array.count(paths, function() {
-    return true;
-  });
-  if (pathsLength == pathlist.length()) {
+  if (paths.length == pathjson.length) {
     if (docid == this.model().docId()) {
       while (true) {
-        if (i >= pathlist.length()) {
+        if (i >= pathjson.length) {
           return;
         }
-        if (pathlist.get(i) != paths[i]) {
+        if (pathjson[i] != paths[i]) {
           break;
         }
         i++;
       }
     }
   }
-  pathlist.clear();
-  pathlist.pushAll(paths);
+  var curPath = {};
+  curPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] =
+    this.model().docId();
+  curPath[good.drive.nav.folders.Path.NameType.CURRENTPATH] = paths;
+  pathmap.set(good.drive.nav.folders.Path.NameType.PATH,
+      curPath);
 };
 
 /**
@@ -144,17 +154,18 @@ good.drive.nav.folders.ViewControl.prototype.buildPath_ =
 /**
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {string} mapid
+ * @param {number} pathCount
  * @return {boolean}
  */
 good.drive.nav.folders.ViewControl.prototype.isCurrentPath =
-  function(pathlist, mapid) {
-  if (pathlist.length() == 0) {
+  function(pathlist, mapid, pathCount) {
+  if (pathlist.length == 0) {
     return false;
   }
   if (mapid == undefined) {
     return true;
   }
-  var mapid_ = pathlist.get(pathlist.length() - 1);
+  var mapid_ = pathlist[pathCount - 1];
   if (mapid_ == mapid) {
     return true;
   }
@@ -346,24 +357,53 @@ good.drive.nav.folders.ViewControl.prototype.renameLeaf =
 good.drive.nav.folders.ViewControl.prototype.moveToNode =
   function(targetData, sourceData) {
   var target;
+  var source;
+  var model = goog.object.get(good.drive.nav.folders.AbstractControl.docs,
+      this.model().docId());
   if (sourceData instanceof good.realtime.CollaborativeMap) {
-    target = targetData.get(this.getKeyType().FOLDERS[0]);
+    var map = model.mod().createMap();
+    var keys = sourceData.keys();
+    for (var i in keys) {
+      var key = keys[i];
+      var value = sourceData.get(key);
+      map.set(key, value);
+    }
+    if (sourceData.get('isfile')) {
+      target = targetData.get(this.getKeyType().FILES[0]);
+    } else {
+      target = targetData.get(this.getKeyType().FOLDERS[0]);
+    }
+    source = map;
   } else {
+    var map = model.mod().createMap();
+    goog.object.forEach(sourceData, function(value, key) {
+      if (key == 'filename') {
+        map.set('label', value);
+        return;
+      }
+      if (key == 'contentType') {
+        map.set('type', value);
+        return;
+      }
+      map.set(key, value);
+    });
+    map.set('isfile', true);
+    source = map;
     target = targetData.get(this.getKeyType().FILES[0]);
   }
   for (var i = 0; i < target.length(); i++) {
     var data = target.get(i);
     if (data instanceof good.realtime.CollaborativeMap) {
-      if (data.getId() == sourceData.getId()) {
+      if (data.get('id') == source.get('id')) {
         return;
       }
     } else {
-      if (data.id == sourceData.id) {
+      if (data.get('id') == sourceData.id) {
         return;
       }
     }
   }
-  target.push(sourceData);
+  target.push(source);
 };
 
 /**

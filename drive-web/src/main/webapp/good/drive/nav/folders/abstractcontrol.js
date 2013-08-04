@@ -11,8 +11,8 @@ good.drive.nav.folders.AbstractControl = function(str) {
   var that = this;
   if (str != undefined) {
     var model = new good.drive.nav.folders.Model(str);
-    if (!goog.object.contains(
-        good.drive.nav.folders.AbstractControl.docs, str)) {
+    if (goog.object.get(good.drive.nav.folders.AbstractControl.docs,
+        str) == undefined) {
       goog.object.add(good.drive.nav.folders.AbstractControl.docs, str, model);
     }
     model.connect = function(doc) {

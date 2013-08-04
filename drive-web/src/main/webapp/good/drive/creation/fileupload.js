@@ -169,7 +169,7 @@ good.drive.creation.Fileupload.prototype.uploadFiles =
   var formData = new FormData();
 
   for (var i = 0, file; file = files[i]; ++i) {
-    formData.append(file.name, file);
+    formData.append(encodeURI(file.name), file);
   }
 
   var xhr = new XMLHttpRequest();
@@ -224,7 +224,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
         if (json && !json['error']) {
           for (var i = 0; i < files.length; i++) {
             var filename = files[i].name;
-            var insertJson = json[filename]['members'];
+            var insertJson = json[encodeURI(filename)]['members'];
             var blobKey = insertJson['blobKey']['blobKey'];
             delete insertJson.blobKey;
             delete insertJson.size;

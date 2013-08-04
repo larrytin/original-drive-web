@@ -58,17 +58,42 @@ good.drive.nav.grid.Cell.prototype.getImageData =
   function(data) {
   var imageFolder = null;
   if (data instanceof good.realtime.CollaborativeMap) {
+    if (data.get('isfile') != undefined) {
+      if (data.get('thumbnail') != null) {
+        return goog.dom.createDom('img', {
+          'class' : 'gv-image-el',
+          'src' : data.get('thumbnail')
+        });
+      } else if (data.get('type') == 'audio/mp3') {
+        return goog.dom.createDom('img', {
+          'class' : 'gv-image-el',
+          'src' : './good/images/audio.png'
+        });
+      } else {
+        return goog.dom.createDom('img', {
+          'class' : 'gv-image-el',
+          'src' : './good/images/generic.png'
+        });
+      }
+    }
   } else {
     if (data.thumbnail != null) {
-      return goog.dom.createDom('img',
-          {'class' : 'gv-image-el', 'src' : data.thumbnail});
+      return goog.dom.createDom('img', {
+        'class' : 'gv-image-el',
+        'src' : data.thumbnail
+      });
     } else if (data.contentType == 'audio/mp3') {
-      return goog.dom.createDom('img',
-          {'class': 'gv-image-el', 'src': './good/images/audio.png'});
+      return goog.dom.createDom('img', {
+        'class' : 'gv-image-el',
+        'src' : './good/images/audio.png'
+      });
     } else {
-      return goog.dom.createDom('img',
-          {'class': 'gv-image-el', 'src': './good/images/generic.png'});
+      return goog.dom.createDom('img', {
+        'class' : 'gv-image-el',
+        'src' : './good/images/generic.png'
+      });
     }
+
   }
   if (data.get('isclass') == true) {
      imageFolder = goog.dom.createDom('div',
@@ -217,8 +242,18 @@ good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
  */
 good.drive.nav.grid.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
-    var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;
-    path.push(this.data.getId());
+    if (this.data.get('isfile') != undefined) {
+      return;
+    }
+    var path = good.drive.nav.folders.Path.getINSTANCE().path;
+//    var paths = [];
+    var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+    var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+//    for (var i in pathlist) {
+//      paths.push(pathlist[i]);
+//    }
+    pathlist.push(this.data.getId());
+    good.drive.nav.folders.Path.getINSTANCE().putNewPath(path);
   } else {
   }
 };

@@ -14,7 +14,6 @@ good.drive.nav.folders.Path = function(str) {
   this.currentView = undefined;
   this.currentDocId = undefined;
   this.path = undefined;
-  this.pathlist = undefined;
   this.root = undefined;
 };
 goog.inherits(good.drive.nav.folders.Path,
@@ -53,35 +52,28 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
   var path = root.get(this.pathNameType().PATH);
   this.root = root;
   this.path = path;
-  this.pathlist = path.get(this.pathNameType().CURRENTPATH);
   var that = this;
-  path.addValueChangedListener(function(evt) {
+  root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
-    if (property != that.pathNameType().CURRENTDOCID) {
+    if (property != that.pathNameType().PATH) {
       return;
     }
-    var docid = that.path.get(that.pathNameType().CURRENTDOCID);
-    var view = that.getPathViewByDocId(docid);
-    goog.object.forEach(that.pathHeap, function(value, key) {
-      if (view == value) {
-        return;
-      }
-      value.recovery();
-    });
-  });
-  this.pathlist.addValuesAddedListener(function(evt) {
-    if (that.pathlist.length() == 0) {
+    var newValue = evt.getNewValue();
+    that.path = newValue;
+    var docids = goog.object.getKeys(
+        good.drive.nav.folders.AbstractControl.docs);
+    if (docids.indexOf(newValue[that.pathNameType().CURRENTDOCID]) == -1) {
       return;
     }
-    var docid = that.path.get(that.pathNameType().CURRENTDOCID);
-    var view = that.getPathViewByDocId(docid);
-    view.location(that.pathlist);
+    that.locationPath(newValue);
   });
   goog.object.forEach(this.pathHeap, function(value, key) {
-    var docid = path.get(that.pathNameType().CURRENTDOCID);
-    value.initPath(that.pathlist, that.path, that.initCallBack);
+    var docid = path[that.pathNameType().CURRENTDOCID];
+    value.initPath(that.path, that.root, that.initCallBack);
   });
+  this.hasPathProperty_();
   this.pathload();
+  this.locationPath(path);
 };
 
 /**
@@ -90,14 +82,57 @@ good.drive.nav.folders.Path.prototype.pathload = function() {
 };
 
 /**
+ * @param {Object} path
+ */
+good.drive.nav.folders.Path.prototype.locationPath = function(path) {
+  if (goog.array.isEmpty(
+      path[this.pathNameType().CURRENTPATH])) {
+    return;
+  }
+  var docid = path[this.pathNameType().CURRENTDOCID];
+  var view = this.getPathViewByDocId(docid);
+  goog.object.forEach(this.pathHeap, function(value, key) {
+    if (view == value) {
+      return;
+    }
+    value.recovery();
+  });
+  view.location(path[this.pathNameType().CURRENTPATH]);
+};
+
+/**
+ * @private
+ */
+good.drive.nav.folders.Path.prototype.hasPathProperty_ = function() {
+  var pathlist = this.path[this.pathNameType().CURRENTPATH];
+  var docid = this.path[this.pathNameType().CURRENTDOCID];
+  if (pathlist == undefined) {
+    this.path[this.pathNameType().CURRENTPATH] = [];
+  }
+  if (docid == undefined) {
+    this.path[this.pathNameType().CURRENTDOCID] = '';
+  }
+};
+
+/**
+ * @return {string}
+ */
+good.drive.nav.folders.Path.prototype.getCurrentDocid = function() {
+  return this.root.get(
+      this.pathNameType().PATH)[this.pathNameType().CURRENTDOCID];
+};
+
+/**
  * @return {Object}
  */
 good.drive.nav.folders.Path.prototype.getCurrentData = function() {
-  if (this.pathlist.length() == 0) {
+  var path = this.root.get(this.pathNameType().PATH);
+  var pathlist = path[this.pathNameType().CURRENTPATH];
+  if (pathlist.length == 0) {
     return null;
   }
-  var dataid = this.pathlist.get(this.pathlist.length() - 1);
-  var docid = this.path.get(this.pathNameType().CURRENTDOCID);
+  var dataid = pathlist[pathlist.length - 1];
+  var docid = path[this.pathNameType().CURRENTDOCID];
   var model = goog.object.get(
       good.drive.nav.folders.AbstractControl.docs, docid);
   return model.getObject(dataid);
@@ -130,9 +165,11 @@ good.drive.nav.folders.Path.prototype.getViewBydocId = function(docId) {
  */
 good.drive.nav.folders.Path.prototype.initCallBack = function(docId) {
   var pathcontrol = good.drive.nav.folders.Path.getINSTANCE();
-  pathcontrol.path.set(
-      good.drive.nav.folders.Path.NameType.CURRENTDOCID, docId);
+//  pathcontrol.path.set(
+//      good.drive.nav.folders.Path.NameType.CURRENTDOCID, docId);
   pathcontrol.currentDocId = docId;
+//  pathcontrol.
+//  path[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docId;
 };
 
 /**
@@ -158,13 +195,35 @@ good.drive.nav.folders.Path.prototype.getPathViewByDocId = function(docId) {
 };
 
 /**
+ * @param {Object} newPath
+ */
+good.drive.nav.folders.Path.prototype.putNewPath =
+  function(newPath) {
+  this.root.set(this.pathNameType().PATH, newPath);
+};
+
+/**
+ * @param {string} docid
+ * @param {Object} pathlist
+ */
+good.drive.nav.folders.Path.prototype.putDocidAndPathList =
+  function(docid, pathlist) {
+  var newPath = {};
+  newPath[this.pathNameType().CURRENTDOCID] = docid;
+  newPath[this.pathNameType().CURRENTPATH] = pathlist;
+  this.root.set(this.pathNameType().PATH, newPath);
+};
+
+/**
  * @override
  */
 good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   var root = mod.getRoot();
-  var path = mod.createMap();
-  path.set(this.pathNameType().CURRENTPATH, mod.createList());
-  path.set(this.pathNameType().CURRENTDOCID, '');
+//  var path = mod.createMap();
+//  path.set(this.pathNameType().CURRENTPATH, mod.createList());
+//  path.set(this.pathNameType().CURRENTDOCID, '');
+  var path = {'currentpath': [],
+      'currentdocid': ''};
   root.set(this.pathNameType().PATH, path);
 };
 

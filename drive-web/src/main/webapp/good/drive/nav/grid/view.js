@@ -36,34 +36,53 @@ good.drive.nav.grid.View.currentGrid = undefined;
 /**
  */
 good.drive.nav.grid.View.initGrid = function() {
-  var path = good.drive.nav.folders.Path.getINSTANCE().path;
-  var pathlist = good.drive.nav.folders.Path.getINSTANCE().pathlist;
-  var menuView = new good.drive.nav.menu.View();
-  pathlist.addValuesAddedListener(function(evt) {
-    var id = pathlist.get(pathlist.length() - 1);
-    var docid = path.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
-    if (docid == good.constants.PUBLICRESDOCID) {
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  root.addValueChangedListener(function(evt) {
+    var property = evt.getProperty();
+    if (property != good.drive.nav.folders.Path.NameType.PATH) {
       return;
     }
-    if (!goog.object.containsKey(good.drive.nav.grid.View.grids, docid)) {
-      var cells = {};
-      goog.object.add(good.drive.nav.grid.View.grids, docid, cells);
-    }
-    var cells = goog.object.get(good.drive.nav.grid.View.grids, docid);
-    if (goog.object.containsKey(cells, id)) {
-      good.drive.nav.grid.View.visiable(goog.object.get(cells, id));
-      return;
-    }
-    var model = goog.object.get(
-        good.drive.nav.folders.AbstractControl.docs, docid);
-    var data = model.getObject(id);
-    var grid = new good.drive.nav.grid.View(data, docid);
-    grid.render(goog.dom.getElement('viewmanager'));
-    grid.renderCell(data);
-    grid.renderFolderPath();
-    goog.object.add(cells, id, grid);
-    good.drive.nav.grid.View.visiable(grid);
+    var newValue = evt.getNewValue();
+    good.drive.nav.grid.View.initCallback(newValue);
   });
+  good.drive.nav.grid.View.initCallback(
+      good.drive.nav.folders.Path.getINSTANCE().path);
+};
+
+/**
+ * @param {Object} path
+ */
+good.drive.nav.grid.View.initCallback = function(path) {
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (goog.array.isEmpty(pathlist)) {
+    return;
+  }
+  var pathlistLength = goog.array.count(pathlist, function() {
+    return true;
+  });
+  var id = pathlist[pathlistLength - 1];
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  if (docid == good.constants.PUBLICRESDOCID) {
+    return;
+  }
+  if (!goog.object.containsKey(good.drive.nav.grid.View.grids, docid)) {
+    var cells = {};
+    goog.object.add(good.drive.nav.grid.View.grids, docid, cells);
+  }
+  var cells = goog.object.get(good.drive.nav.grid.View.grids, docid);
+  if (goog.object.containsKey(cells, id)) {
+    good.drive.nav.grid.View.visiable(goog.object.get(cells, id));
+    return;
+  }
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, docid);
+  var data = model.getObject(id);
+  var grid = new good.drive.nav.grid.View(data, docid);
+  grid.render(goog.dom.getElement('viewmanager'));
+  grid.renderCell(data);
+  grid.renderFolderPath();
+  goog.object.add(cells, id, grid);
+  good.drive.nav.grid.View.visiable(grid);
 };
 
 /**
@@ -188,19 +207,21 @@ good.drive.nav.grid.View.prototype.renderFolderPath = function() {
 /**
  */
 good.drive.nav.grid.View.prototype.insertFolderPath = function() {
+  var that = this;
   var pathElm = this.getFolderPathElement();
   goog.dom.removeChildren(pathElm);
-  var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  var path = root.get(good.drive.nav.folders.Path.NameType.PATH);
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
   var model = goog.object.get(
       good.drive.nav.folders.AbstractControl.docs, this.docid);
-  for (var i = 0; i < path.length(); i++) {
-    var id = path.get(i);
+  goog.array.forEach(pathlist, function(id, i) {
     var value = model.getObject(id);
-    var label = value.get(this.getKeyType().LABEL[0]);
-    if (i == (path.length() - 1)) {
+    var label = value.get(that.getKeyType().LABEL[0]);
+    if (i == (pathlist.length - 1)) {
       var cruuentElm = goog.dom.createDom('div',
           {'class': 'goog-inline-block folder-path-' +
-        'folder folder-current-element'});
+          'folder folder-current-element'});
       goog.dom.setTextContent(cruuentElm, label);
       goog.dom.appendChild(pathElm, cruuentElm);
       return;
@@ -212,8 +233,8 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
     goog.dom.setTextContent(contentElm, label);
     goog.dom.appendChild(pathElm, contentElm);
     goog.dom.appendChild(pathElm, separatorElm);
-    this.pathHandle(contentElm, path, id);
-  }
+    that.pathHandle(contentElm, pathlist, id);
+  });
 };
 
 /**
@@ -243,16 +264,17 @@ good.drive.nav.grid.View.prototype.getSelectedItem = function() {
 
 /**
  * @param {Element} elm
- * @param {good.realtime.CollaborativeList} path
+ * @param {good.realtime.CollaborativeList} pathlist
  * @param {string} currentid
  */
-good.drive.nav.grid.View.prototype.pathHandle = function(elm, path, currentid) {
-  var array = path.asArray();
-  var idx = goog.array.indexOf(array, currentid);
-  var newArray = goog.array.slice(array, 0, idx + 1);
+good.drive.nav.grid.View.prototype.pathHandle =
+  function(elm, pathlist, currentid) {
+  var docid = good.drive.nav.folders.Path.getINSTANCE().getCurrentDocid();
+  var idx = goog.array.indexOf(pathlist, currentid);
+  var newArray = goog.array.slice(pathlist, 0, idx + 1);
   goog.events.listen(elm, goog.events.EventType.CLICK, function(e) {
-    path.clear();
-    path.pushAll(newArray);
+    good.drive.nav.folders.Path.getINSTANCE().
+    putDocidAndPathList(docid, newArray);
   });
 };
 
@@ -299,7 +321,7 @@ good.drive.nav.grid.View.prototype.removeCell = function(data) {
 good.drive.nav.grid.View.prototype.removeCurrentData = function() {
   var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
   var data = item.data;
-  if (data instanceof good.realtime.CollaborativeMap) {
+  if (data.get('isfile') == undefined) {
     var folders = this.data.get('folders');
     folders.removeValue(data);
   } else {

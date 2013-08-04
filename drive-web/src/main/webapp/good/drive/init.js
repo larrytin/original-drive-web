@@ -175,7 +175,7 @@ good.drive.init.init = function() {
         if (moToClassTree == undefined) {
           var data = myclass.control().model().getData();
           moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
-              undefined,
+              good.constants.MYCLASSRESDOCID,
               goog.dom.getElement('moveTo'));
           moToClassTree.setData(data);
         }
@@ -185,7 +185,7 @@ good.drive.init.init = function() {
         if (moToresTree == undefined) {
           var data = myResTree.control().model().getData();
           moToresTree = new good.drive.nav.folders.Tree(data.get('label'),
-              undefined,
+              good.constants.MYRESDOCID,
               goog.dom.getElement('favoritesTo'));
           moToresTree.setData(data);
         }

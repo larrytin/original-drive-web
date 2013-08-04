@@ -38,7 +38,7 @@ good.drive.search.Rightmenu = function(dom) {
     switch (docId) {
     case good.constants.MYCLASSRESDOCID:
       var cell = grid.getSelectedItem();
-      if (cell.data instanceof good.realtime.CollaborativeMap) {
+      if (cell.data.get('isfile') == undefined) {
         var array = new Array(1, 3, 6, 7, 8, 9, 11, 12);
         menu.hideItem(rightMenu, array);
       } else {
@@ -53,7 +53,7 @@ good.drive.search.Rightmenu = function(dom) {
       break;
     case good.constants.MYRESDOCID:
       var cell = grid.getSelectedItem();
-      if (cell.data instanceof good.realtime.CollaborativeMap) {
+      if (cell.data.get('isfile') == undefined) {
         var array = new Array(1, 3, 6, 7, 8, 9, 11, 12);
         menu.hideItem(rightMenu, array);
       } else {
@@ -111,15 +111,29 @@ good.drive.search.Rightmenu = function(dom) {
           var action = e.target.getCaption();
           switch (action) {
             case '预览':
-              rightmenusource.preview(data.id);
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.preview(data.get('id'));
+              } else {
+                rightmenusource.preview(data.id);
+              }
               break;
             case '详细信息':
-              rightmenusource.detailInfo(data.id, function() {
-              });
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.detailInfo(data.get('id'), function() {
+                });
+              } else {
+                rightmenusource.detailInfo(data.id, function() {
+                });
+              }
               break;
             case '重新上传':
-              rightmenusource.uploadAgain(data.id, function() {
-              });
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.uploadAgain(data.get('id'), function() {
+                });
+              } else {
+                rightmenusource.uploadAgain(data.id, function() {
+                });
+              }
               break;
             default:
               break;

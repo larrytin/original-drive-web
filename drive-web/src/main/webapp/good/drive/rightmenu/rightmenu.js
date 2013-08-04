@@ -2,7 +2,7 @@
 goog.provide('good.drive.rightmenu');
 
 goog.require('good.constants');
-goog.require('good.drive.creation.fileupload');
+//goog.require('good.drive.creation.fileupload');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.rightmenu.preview');
 goog.require('good.net.CrossDomainRpc');
