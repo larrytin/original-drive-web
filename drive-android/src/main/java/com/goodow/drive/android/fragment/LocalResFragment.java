@@ -162,10 +162,4 @@ public class LocalResFragment extends ListFragment implements
 
 		localResAdapter.notifyDataSetChanged();
 	}
-
-	@Override
-	public void setMapListener(CollaborativeMap map) {
-		// TODO Auto-generated method stub
-
-	}
 }

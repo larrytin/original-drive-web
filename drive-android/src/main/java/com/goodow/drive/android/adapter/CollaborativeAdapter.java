@@ -146,7 +146,6 @@ public class CollaborativeAdapter extends BaseAdapter {
 
 			textViewContentString = (String) item.get("label");
 
-			fragment.setMapListener(item);
 		}
 
 		TextView listItem = (TextView) row.findViewById(R.id.listItem);

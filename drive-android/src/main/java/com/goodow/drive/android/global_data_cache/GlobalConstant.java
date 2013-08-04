@@ -45,15 +45,25 @@ public final class GlobalConstant {
 	}
 
 	public static enum DocumentIdAndDataKey {
-		//
+		// 协调文件id
 		FAVORITESDOCID("favorites01"),
 		//
 		LESSONDOCID("lesson01"),
 		//
-		REMOTECONTROLDOCID("remotecontrol01"),
+		REMOTECONTROLDOCID("remotecontrol02"),
 		//
 		OFFLINEDOCID("offlinedoc01"),
-		//
+
+		// // 内调文件id
+		// FAVORITESDOCID("favorites41"),
+		// //
+		// LESSONDOCID("lesson41"),
+		// //
+		// REMOTECONTROLDOCID("remotecontrol41"),
+		// //
+		// OFFLINEDOCID("offlinedoc41"),
+
+		// 属性key
 		FOLDERSKEY("folders"),
 		//
 		FILESKEY("files"),

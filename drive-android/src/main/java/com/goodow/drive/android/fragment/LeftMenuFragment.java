@@ -3,7 +3,6 @@ package com.goodow.drive.android.fragment;
 import java.util.ArrayList;
 import java.util.List;
 import android.app.Activity;
-import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.content.Context;
 import android.os.Bundle;
@@ -129,7 +128,7 @@ public class LeftMenuFragment extends ListFragment {
 					+ "/"
 					+ GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID
 							.getValue();
-			mainActivity.getRemoteControlObserver().changeMapItem(
+			mainActivity.getRemoteControlObserver().changeDoc(
 					favoritesDocId);
 
 			// FragmentTransaction fragmentTransaction1;
@@ -147,7 +146,7 @@ public class LeftMenuFragment extends ListFragment {
 					+ "/"
 					+ GlobalConstant.DocumentIdAndDataKey.LESSONDOCID
 							.getValue();
-			mainActivity.getRemoteControlObserver().changeMapItem(lessonDocId);
+			mainActivity.getRemoteControlObserver().changeDoc(lessonDocId);
 
 			// FragmentTransaction fragmentTransaction2;
 			// fragmentTransaction2 = mainActivity.getFragmentManager()
@@ -164,7 +163,7 @@ public class LeftMenuFragment extends ListFragment {
 					+ "/"
 					+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
 							.getValue();
-			mainActivity.getRemoteControlObserver().changeMapItem(offlineDocId);
+			mainActivity.getRemoteControlObserver().changeDoc(offlineDocId);
 
 			// FragmentTransaction fragmentTransaction3;
 			// fragmentTransaction3 = mainActivity.getFragmentManager()

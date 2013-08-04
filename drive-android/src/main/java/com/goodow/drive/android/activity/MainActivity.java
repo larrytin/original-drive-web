@@ -3,15 +3,13 @@ package com.goodow.drive.android.activity;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
+import android.R.integer;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
 import android.app.FragmentTransaction;
-import android.content.BroadcastReceiver;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -27,6 +25,7 @@ import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IRemoteControl;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
@@ -37,8 +36,6 @@ import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDataKey;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
-import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
 import com.goodow.realtime.DocumentLoadedHandler;
@@ -47,6 +44,11 @@ import com.goodow.realtime.Model;
 import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValueChangedEvent;
+
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
+import elemental.json.impl.JreJsonString;
 
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
@@ -265,37 +267,37 @@ public class MainActivity extends RoboActivity {
 
 	@Override
 	protected void onRestart() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "onRestart");
 		super.onRestart();
 	}
 
 	@Override
 	protected void onStart() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "onStart");
 		super.onStart();
 	}
 
 	@Override
 	protected void onResume() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "onResume");
 		super.onResume();
 	}
 
 	@Override
 	protected void onPause() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "onPause");
 		super.onPause();
 	}
 
 	@Override
 	protected void onStop() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "onStop");
 		super.onStop();
 	}
 
 	@Override
 	protected void onDestroy() {
-		// TODO Auto-generated method stub
+		Log.i(TAG, "onDestroy");
 		super.onDestroy();
 	}
 
@@ -363,36 +365,139 @@ public class MainActivity extends RoboActivity {
 		}
 	}
 
-	public RemoteControlObserver getRemoteControlObserver() {
+	public IRemoteControl getRemoteControlObserver() {
 
 		return remoteControlObserver;
 	}
 
-	public class RemoteControlObserver {
+	public class RemoteControlObserver implements IRemoteControl {
 		private Document doc;
 		private Model model;
 		private CollaborativeMap root;
-		private CollaborativeMap map;
-		private CollaborativeList list;
+		private JsonObject map;
 
-		public CollaborativeList getList() {
+		private EventHandler<ValueChangedEvent> lastHandler;
 
-			return list;
-		}
-
-		public void changeMapItem(String docId) {
+		@Override
+		public JsonArray getCurrentPath() {
 			if (null != map) {
-				map.set(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
-						.getValue(), docId);
+				return map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+			}
+			return null;
+		}
 
+		@Override
+		public void changeDoc(String docId) {
+			root.removeValueChangedListener(lastHandler);
+
+			JsonObject map = Json.createObject();
+			JsonArray jsonArray = Json.createArray();
+
+			map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+					.getValue(), jsonArray);
+			map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+					.getValue(), docId);
+
+			root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
+					map);
+
+			freshMap();
+		}
+
+		@Override
+		public void addPath(String mapId) {
+			if (null != map) {
+				JsonArray jsonArray = map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+				jsonArray.set(jsonArray.length(), mapId);
+				JsonArray newJsonArray = Json.createArray();
+				for (int i = 0; i < jsonArray.length(); i++) {
+					String toString = jsonArray.get(i).asString();
+					newJsonArray.set(newJsonArray.length(), toString);
+				}
+
+				String newString = map.get(
+						GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+								.getValue()).asString();
+
+				JsonObject newMap = Json.createObject();
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+						.getValue(), newJsonArray);
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+						.getValue(), newString);
+
+				root.set(
+						GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
+						newMap);
+
+				freshMap();
 			}
 		}
 
-		public void clearList() {
-			if (null != list && 0 < list.length()) {
-				list.clear();
+		@Override
+		public void removeLastPath() {
+			if (null != map) {
+				JsonArray jsonArray = map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+				jsonArray.remove(jsonArray.length() - 1);
+				JsonArray newJsonArray = Json.createArray();
+				for (int i = 0; i < jsonArray.length(); i++) {
+					String newString = jsonArray.get(i).asString();
+					newJsonArray.set(newJsonArray.length(), newString);
+				}
 
+				String newString = map.get(
+						GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+								.getValue()).asString();
+
+				JsonObject newMap = Json.createObject();
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+						.getValue(), newJsonArray);
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+						.getValue(), newString);
+
+				root.set(
+						GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
+						newMap);
+				
+				freshMap();
 			}
+		}
+
+		@Override
+		public void freshMap() {
+			if (null != root) {
+				map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY
+						.getValue());
+			}
+		}
+
+		@Override
+		public void addListener(
+				EventHandler<ValueChangedEvent> pathChangeEventHandler) {
+			if (null != root) {
+				lastHandler = pathChangeEventHandler;
+				root.addValueChangedListener(lastHandler);
+			}
+		}
+
+		@Override
+		public String getMapId(int index) {
+			String toString = "";
+			if (null != map) {
+				JsonArray jsonArray = map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+
+				if (null != jsonArray && jsonArray.length() > 0) {
+					toString = jsonArray.get(index).asString();
+				}
+			}
+			return toString;
 		}
 
 		private void startObservation(String docId) {
@@ -402,41 +507,46 @@ public class MainActivity extends RoboActivity {
 					doc = document;
 					model = doc.getModel();
 					root = model.getRoot();
-					map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY
-							.getValue());
-					list = map
-							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
-									.getValue());
+					freshMap();
 
-					String currentDocId = map
+					JreJsonString jreJsonString = (JreJsonString) (map
 							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
-									.getValue());
+									.getValue()));
 
-					currentDocId = currentDocId.substring(currentDocId
-							.lastIndexOf("/") + 1);
+					if (null != jreJsonString) {
+						String lastDocId = jreJsonString.asString();
 
-					DocumentIdAndDataKey doc = DocumentIdAndDataKey
-							.getEnumWithValue(currentDocId);
+						lastDocId = lastDocId.substring(
+								lastDocId.lastIndexOf("/") + 1,
+								lastDocId.length());
 
-					switchFragment(doc);
+						DocumentIdAndDataKey doc = DocumentIdAndDataKey
+								.getEnumWithValue(lastDocId);
 
-					map.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
+						switchFragment(doc);
+					}
+
+					root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
 						@Override
 						public void handleEvent(ValueChangedEvent event) {
 							String property = event.getProperty();
-							if (GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+							if (GlobalConstant.DocumentIdAndDataKey.PATHKEY
 									.getValue().equals(property)) {
-								String newValue = (String) event.getNewValue();
+								JsonObject newJson = (JsonObject) event
+										.getNewValue();
 
-								newValue = newValue.substring(newValue
-										.lastIndexOf("/") + 1);
+								String newDocId = ((JreJsonString) (newJson
+										.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+												.getValue()))).asString();
+
+								newDocId = newDocId.substring(
+										newDocId.lastIndexOf("/") + 1,
+										newDocId.length());
 
 								DocumentIdAndDataKey doc = DocumentIdAndDataKey
-										.getEnumWithValue(newValue);
+										.getEnumWithValue(newDocId);
 
 								switchFragment(doc);
-
-								clearList();
 
 							}
 						}
@@ -450,13 +560,9 @@ public class MainActivity extends RoboActivity {
 					model = model_;
 					root = model.getRoot();
 
-					CollaborativeMap newMap = model.createMap(null);
-					CollaborativeList newList = model.createList();
-					newMap.set(
-							GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
-									.getValue(), newList);
+					JsonObject jsonObject = Json.createObject();
 					root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY
-							.getValue(), newMap);
+							.getValue(), jsonObject);
 				}
 			};
 

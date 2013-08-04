@@ -7,10 +7,6 @@
     <TextView
         android:id="@+id/listItem"
         android:textSize="@dimen/listItemTextSize"
-        android:paddingTop="@dimen/listItemPadding"
-        android:paddingBottom="@dimen/listItemPadding"
-        android:paddingLeft="@dimen/listItemPadding"
-        android:paddingRight="@dimen/listItemPadding"
         android:layout_width="wrap_content"
         android:layout_height="@dimen/listGroupHeigh"
         android:gravity="center_vertical" />
