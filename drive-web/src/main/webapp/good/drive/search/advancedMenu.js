@@ -340,11 +340,11 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
                 } else {
                   item['thumbnail'] = item['thumbnail'] + '=s218';
                 }
-              }              
+              }
               var cell = grid.createCell(item);
               cell.getLabelData = function(data) {
                 return data.filename;
-              };              
+              };
               grid.add(cell);
               cell.renderCell();
             });

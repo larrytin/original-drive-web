@@ -26,6 +26,7 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   root_.set(good.constants.FOLDERS, rootFolders);
   var query = mod.createMap();
   var tags = mod.createList();
+  tags.push('语言');
   query.set(good.constants.TAGS, tags);
   query.set(good.constants.CONTENTTYPE, '');
   root_.set('query', query);
