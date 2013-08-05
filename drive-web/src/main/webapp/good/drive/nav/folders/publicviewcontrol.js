@@ -26,7 +26,7 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   root_.set(good.constants.FOLDERS, rootFolders);
   var query = mod.createMap();
   var tags = mod.createList();
-  tags.push('语言');
+  tags.push('默认');
   query.set(good.constants.TAGS, tags);
   query.set(good.constants.CONTENTTYPE, '');
   root_.set('query', query);
@@ -35,8 +35,8 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var subFolders;
   var subFolder;
 
-  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
-  var gradeArray = new Array('大班', '中班', '小班');
+  var fieldArray = good.constants.FIELDARRAY;
+  var gradeArray = good.constants.GRADEARRAY;
   var folders = [];
   goog.array.forEach(fieldArray, function(e) {
     folder = mod.createMap();

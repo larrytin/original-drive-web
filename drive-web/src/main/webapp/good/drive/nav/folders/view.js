@@ -41,7 +41,6 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   var that = this;
   goog.events.listen(this.dragDropGroup, 'dragstart', dragStart);
   function dropList1(event) {
-    event.dropTargetItem;
   }
 
   function dragStart(event) {

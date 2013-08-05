@@ -27,7 +27,7 @@ good.constants.MYCLASSRESDOCID = 'lesson01';
 /** @type {string} */
 good.constants.MYRESDOCID = 'favorites01';
 /** @type {string} */
-good.constants.PUBLICRESDOCID = '@tmp/publicRes01';
+good.constants.PUBLICRESDOCID = '@tmp/publicRes05';
 /** @type {string} */
 good.constants.PATHDOCID = 'remotecontrol01';
 
@@ -51,7 +51,7 @@ good.constants.QUERY = 'query';
 good.constants.TYPEARRAY = new Array('动画', '视频', '音频', '图片', '文本', '手偶', '电子书');
 
 /** @type {Array.<string>} */
-good.constants.FIELDARRAY = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
+good.constants.FIELDARRAY = new Array('语言', '数学', '科学', '社会', '健康', '艺术', '默认');
 
 /** @type {Array.<string>} */
 good.constants.GRADEARRAY = new Array('大班', '中班', '小班');
