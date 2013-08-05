@@ -2,12 +2,12 @@
 goog.provide('good.constants');
 
 /**@type {string} */
-good.constants.DRIVE_SERVER = 'http://192.168.1.15:8880';
-//good.constants.DRIVE_SERVER = 'http://server.drive.goodow.com';
+//good.constants.DRIVE_SERVER = 'http://192.168.1.15:8880';
+good.constants.DRIVE_SERVER = 'http://server.drive.goodow.com';
 
 /**@type {string} */
 good.constants.SERVERADRESS =
-              good.constants.DRIVE_SERVER + '/_ah/api/';
+              good.constants.DRIVE_SERVER + '/ah/api/';
 
 /**@type {string} */
 good.constants.NAME = 'attachment';
@@ -27,7 +27,7 @@ good.constants.MYCLASSRESDOCID = 'lesson01';
 /** @type {string} */
 good.constants.MYRESDOCID = 'favorites01';
 /** @type {string} */
-good.constants.PUBLICRESDOCID = '@tmp/publicRes16';
+good.constants.PUBLICRESDOCID = '@tmp/publicRes01';
 /** @type {string} */
 good.constants.PATHDOCID = 'remotecontrol01';
 
