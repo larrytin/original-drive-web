@@ -74,7 +74,9 @@ public final class GlobalConstant {
 		//
 		CURRENTDOCIDKEY("currentdocid"),
 		//
-		PATHKEY("path");
+		PATHKEY("path"),
+		//
+		PLAYFILE("playfile");
 
 		private final String value;
 

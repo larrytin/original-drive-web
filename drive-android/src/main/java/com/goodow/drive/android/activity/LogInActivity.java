@@ -94,11 +94,13 @@ public class LogInActivity extends RoboActivity {
 						+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
 								.getValue();
 
-				new OfflineFileObserver().startObservation(docId, true);
+				new OfflineFileObserver().startObservation(docId, null);
 
 				Intent intent = new Intent(LogInActivity.this,
 						MainActivity.class);
 				LogInActivity.this.startActivity(intent);
+
+				finish();
 
 			} while (false);
 
@@ -124,8 +126,8 @@ public class LogInActivity extends RoboActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
-		
+		// GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
+
 		Button loginButton = (Button) findViewById(R.id.login_Button);
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -155,7 +157,7 @@ public class LogInActivity extends RoboActivity {
 								@Override
 								public void onCancel(DialogInterface dialog) {
 									loginNetRequestTask.cancel(true);
-									
+
 								}
 							});
 					loginNetRequestTask.execute(params);

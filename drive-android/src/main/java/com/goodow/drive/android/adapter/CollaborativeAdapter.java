@@ -10,7 +10,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.toolutils.Tools;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -23,15 +23,12 @@ public class CollaborativeAdapter extends BaseAdapter {
 	private CollaborativeList folderList;
 	private CollaborativeList fileList;
 	private LayoutInflater layoutInflater;
-	private IRemoteDataFragment fragment;
 	private OnItemClickListener onItemClickListener;
 
-	public CollaborativeAdapter(Context context, IRemoteDataFragment fragment,
-			CollaborativeList folderList, CollaborativeList fileList,
-			OnItemClickListener onItemClickListener) {
+	public CollaborativeAdapter(Context context, CollaborativeList folderList,
+			CollaborativeList fileList, OnItemClickListener onItemClickListener) {
 		this.folderList = folderList;
 		this.fileList = fileList;
-		this.fragment = fragment;
 		this.layoutInflater = LayoutInflater.from(context);
 		this.onItemClickListener = onItemClickListener;
 	}
@@ -71,27 +68,31 @@ public class CollaborativeAdapter extends BaseAdapter {
 	public Object getItem(int position) {
 		Object object = null;
 		do {
-			if (null == folderList) {
+			if (null == folderList && null == fileList) {
 				break;
 			}
 
 			if (position == 0) {
-				break;// 分组标题-文件夹
+				break;// 分组标题("文件夹"or"文件")
 			}
 
 			position = position - 1;
 
-			if (null != folderList && position < folderList.length()) {
-				object = folderList.get(position);// 子元素-文件夹
-				break;
-			}
+			if (null != folderList && folderList.length() != 0) {
+				if (position < folderList.length()) {
+					object = folderList.get(position);// 子元素-文件夹
+					break;
+				}
 
-			if (position == folderList.length()) {
-				break;// 分组标题-文件
+				if (position == folderList.length()) {
+					break;// 分组标题("文件夹"or"文件")
+				}
+
+				position = position - 1 - folderList.length();
 			}
 
 			if (null != fileList) {
-				object = fileList.get(position - 1 - folderList.length());// 子元素-文件
+				object = fileList.get(position);// 子元素-文件
 				break;
 			}
 
@@ -111,11 +112,12 @@ public class CollaborativeAdapter extends BaseAdapter {
 		String textViewContentString = "";
 		View row = convertView;
 
-		if (0 == position) {
+		if (0 == position && null != folderList && folderList.length() != 0) {
 			row = layoutInflater.inflate(R.layout.row_foldergroup, parent,
 					false);
 			textViewContentString = "文件夹";
-		} else if (0 != position && null == item) {
+		} else if ((0 == position && (null == folderList || folderList.length() == 0))
+				|| (0 != position && null == item)) {
 			row = layoutInflater.inflate(R.layout.row_foldergroup, parent,
 					false);
 			textViewContentString = "文件";
@@ -134,7 +136,9 @@ public class CollaborativeAdapter extends BaseAdapter {
 
 			} else {
 				img_left.setImageResource(ToolsFunctionForThisProgect
-						.getFileIconByFileFullName("." + item.get("type")));
+						.getFileIconByFileFullName("."
+								+ Tools.getTypeByMimeType((String) item
+										.get("type"))));
 
 				button.setOnClickListener(new OnClickListener() {
 					@Override

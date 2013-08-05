@@ -14,17 +14,16 @@ import android.view.ViewGroup;
 import android.widget.ListView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.activity.play.VideoPlayActivity;
 import com.goodow.drive.android.adapter.LocalResAdapter;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.Tools;
-import com.goodow.realtime.CollaborativeMap;
 
 public class LocalResFragment extends ListFragment implements
-		IRemoteDataFragment {
+		ILocalFragment {
 	private LocalResAdapter localResAdapter;
 
 	private ArrayList<File> folderList = new ArrayList<File>();
@@ -84,7 +83,7 @@ public class LocalResFragment extends ListFragment implements
 
 					intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 					intent.setAction(Intent.ACTION_VIEW);
-					String type = Tools.getMIMEType((String) map
+					String type = Tools.getMIMETypeByType((String) map
 							.get("type"));
 					intent.setDataAndType(Uri.fromFile(file), type);
 				}

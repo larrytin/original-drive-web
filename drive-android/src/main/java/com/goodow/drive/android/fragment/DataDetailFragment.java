@@ -9,13 +9,13 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.realtime.CollaborativeMap;
 
-public class DataDetailFragment extends Fragment implements IRemoteDataFragment {
+public class DataDetailFragment extends Fragment implements ILocalFragment {
 	private CollaborativeMap file;
 	private TextView fileName;
 	private Button downloButton;
@@ -62,9 +62,8 @@ public class DataDetailFragment extends Fragment implements IRemoteDataFragment 
 		@Override
 		public void onClick(View v) {
 			file.set("status", DownloadStatusEnum.WAITING.getStatus());
-
-			OfflineFileObserver.addFile(file, null);
-			
+			final String attachmentId = file.get("id");
+			OfflineFileObserver.addFile(attachmentId, true);
 		}
 	};
 
