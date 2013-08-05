@@ -40,8 +40,8 @@ good.drive.nav.editpwd.start = function() {
             good.config.VERSION, 'updateAccountInfo',
             good.config.SERVERADRESS);
         json['token'] = pwd;
-        delete json.kind;
-        delete json.etag;
+        delete json['kind'];
+        delete json['etag'];
         rpc.body = json;
         rpc.send(function(json) {
           if (json && !json['error']) {

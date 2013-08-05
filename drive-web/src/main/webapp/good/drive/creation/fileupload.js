@@ -226,10 +226,10 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
             var filename = files[i].name;
             var insertJson = json[encodeURI(filename)]['members'];
             var blobKey = insertJson['blobKey']['blobKey'];
-            delete insertJson.blobKey;
-            delete insertJson.size;
-            delete insertJson.md5Hash;
-            delete insertJson.creation;
+            delete insertJson['blobKey'];
+            delete insertJson['size'];
+            delete insertJson['md5Hash'];
+            delete insertJson['creation'];
             insertJson['blobKey'] = blobKey;
             if (good.drive.creation.Fileupload.TYPE == 'new') {
               var tags = that.getTags();
@@ -262,7 +262,10 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json) {
      goog.dom.getElement(json['filename']).innerText = '上传结束';
      that._menu.search('click');
      that._file.value = '';
-   }
+   } else {
+     goog.dom.getElement(json['filename']).innerText = '上传失败';
+     that._file.value = '';
+   } 
   });
 };
 
@@ -291,6 +294,9 @@ good.drive.creation.Fileupload.prototype.updateAgain =
          that._menu.search('click');
          that._file.value = '';
       });
+     } else {
+         goog.dom.getElement(json['filename']).innerText = '更新失败';
+         that._file.value = '';
        }
      });
 };
