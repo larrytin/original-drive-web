@@ -20,7 +20,7 @@ goog.addDependency('../../../../good/drive/nav/folders/model.js', ['good.drive.n
 goog.addDependency('../../../../good/drive/nav/folders/myclassviewcontrol.js', ['good.drive.nav.folders.MyClassViewControl'], ['good.drive.nav.folders.ViewControl']);
 goog.addDependency('../../../../good/drive/nav/folders/path.js', ['good.drive.nav.folders.Path'], ['good.drive.nav.folders.AbstractControl']);
 goog.addDependency('../../../../good/drive/nav/folders/publicviewcontrol.js', ['good.drive.nav.folders.PublicViewControl'], ['good.drive.nav.folders.ViewControl']);
-goog.addDependency('../../../../good/drive/nav/folders/view.js', ['good.drive.nav.folders'], ['good.drive.nav.folders.ViewControl', 'goog.events.KeyHandler', 'goog.fx.DragDrop', 'goog.fx.DragDropGroup', 'goog.string.StringBuffer', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
+goog.addDependency('../../../../good/drive/nav/folders/view.js', ['good.drive.nav.folders'], ['good.drive.nav.folders.ViewControl', 'goog.events.KeyHandler', 'goog.fx.DragDropGroup', 'goog.fx.DragDropItem', 'goog.string.StringBuffer', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
 goog.addDependency('../../../../good/drive/nav/folders/viewcontrol.js', ['good.drive.nav.folders.ViewControl'], ['good.drive.nav.folders.AbstractControl', 'good.drive.nav.grid', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
 goog.addDependency('../../../../good/drive/nav/grid/cell.js', ['good.drive.nav.grid.Cell'], ['goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../../good/drive/nav/grid/view.js', ['good.drive.nav.grid'], ['good.drive.nav.grid.Cell', 'goog.asserts', 'goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);

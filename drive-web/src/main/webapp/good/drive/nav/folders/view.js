@@ -1,27 +1,13 @@
 'use strict';
 goog.provide('good.drive.nav.folders');
 
-goog.require('goog.fx.DragDrop');
-goog.require('goog.fx.DragDropGroup');
 goog.require('good.drive.nav.folders.ViewControl');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.fx.DragDropGroup');
+goog.require('goog.fx.DragDropItem');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
-
-/**
- * @constructor
- * @param {Element} element
- */
-good.drive.nav.folders.FooDrag = function(element) {
-  goog.fx.DragDrop.call(this, element);
-};
-goog.inherits(good.drive.nav.folders.FooDrag, goog.fx.DragDrop);
-
-/** @override */
-good.drive.nav.folders.FooDrag.prototype.createDragElement = function(sourceEl) {
-  return goog.dom.createDom('div', 'foo', 'Custom drag element');
-};
 
 /**
  * @constructor
@@ -43,38 +29,26 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   root.setShowRootLines(false);
   root.setShowRootNode(false);
   root.setShowLines(false);
-  
   var dragDropGroup = new goog.fx.DragDropGroup();
+  dragDropGroup.createDragElement =
+    function(sourceEl) {
+    return goog.dom.createDom('div', 'foo', 'Custom drag element');
+  };
   this.dragDropGroup = dragDropGroup;
-
   this.dragDropGroup.init();
+  this.dragDropGroup.addTarget(this.dragDropGroup);
   goog.events.listen(this.dragDropGroup, 'drop', dropList1);
-  goog.events.listen(this.dragDropGroup, 'drag', dragList1);
+  var that = this;
   goog.events.listen(this.dragDropGroup, 'dragstart', dragStart);
-  goog.events.listen(this.dragDropGroup, 'dragend', dragEnd);
-  function drop(event) {
-    var str = [ event.dragSourceItem.data, ' dropped onto ',
-        event.dropTargetItem.data, ' at ', event.viewportX, 'x',
-        event.viewportY ];
-    alert(str.join(''));
-  }
-
   function dropList1(event) {
-    var str = [ event.dragSourceItem.data, ' dropped onto ',
-        event.dropTargetItem.data, ' in list 1.' ];
-    alert(str.join(''));
+    event.dropTargetItem;
   }
 
-  function dragList1(event) {
-    var str = [ event.dragSourceItem.data, ' dragged from list 1' ];
-    alert(str.join(''));
-  }
   function dragStart(event) {
     goog.style.setOpacity(event.dragSourceItem.element, 1);
-  }
-
-  function dragEnd(event) {
-    goog.style.setOpacity(event.dragSourceItem.element, 1);
+    var path = good.drive.nav.folders.Path.getINSTANCE();
+    var dragdrop = path.root.get(path.pathNameType().DRAGDROP);
+    var dragData = event.dragSourceItem.data;
   }
 
   var tree_ = root.getTree().createNode(
@@ -226,13 +200,8 @@ good.drive.nav.folders.Tree.prototype.customNode =
   tree.setAfterLabelHtml('<div class="selection-highlighter"></div>');
   var rowElement = tree.getRowElement();
   var that = this;
-  
-//  var fooDrag = new good.drive.nav.folders.FooDrag(rowElement);
-//  fooDrag.addTarget(fooDrag);
-//  fooDrag.init();
-//  this.dragDropGroup.addTarget(fooDrag);
-//  this.dragDropGroup.addItem(rowElement);
-  
+  var item = new goog.fx.DragDropItem(rowElement, tree.map);
+  this.dragDropGroup.addDragDropItem(item);
   goog.events.
       listen(rowElement, goog.events.EventType.MOUSEOVER, function(e) {
     if (!goog.dom.classes.has(rowElement,
