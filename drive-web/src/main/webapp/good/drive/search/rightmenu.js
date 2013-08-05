@@ -112,9 +112,9 @@ good.drive.search.Rightmenu = function(dom) {
           switch (action) {
             case '预览':
               if (data instanceof good.realtime.CollaborativeMap) {
-                rightmenusource.preview(data.get('id'));
+                good.drive.rightmenu.Rightmenu.PREVIEW(data.get('id'));
               } else {
-                rightmenusource.preview(data.id);
+                good.drive.rightmenu.Rightmenu.PREVIEW(data.id);
               }
               break;
             case '详细信息':
