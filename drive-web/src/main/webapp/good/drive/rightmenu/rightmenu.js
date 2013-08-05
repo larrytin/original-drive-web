@@ -150,7 +150,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
           thumbnail.src = './good/images/audio.png';
         } else {
           thumbnail.src = './good/images/generic.png';
-        }        
+        }
       }
 
       var tags = json['tags'];

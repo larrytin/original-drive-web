@@ -12,7 +12,7 @@ good.drive.resourcemap.Resourcemap = function() {
 /**
  *
  */
-good.drive.resourcemap.Resourcemap.init = function() { 
+good.drive.resourcemap.Resourcemap.init = function() {
   var root = good.drive.nav.folders.Path.getINSTANCE().root;
   root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
