@@ -265,7 +265,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json) {
    } else {
      goog.dom.getElement(json['filename']).innerText = '上传失败';
      that._file.value = '';
-   } 
+   }
   });
 };
 
