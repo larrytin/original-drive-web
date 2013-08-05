@@ -1,9 +1,7 @@
 'use strict';
 goog.provide('good.drive.search.rigthmenu');
 
-goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.rightmenu');
-goog.require('good.drive.search');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.ui.SubMenu');
 
@@ -31,36 +29,59 @@ good.drive.search.Rightmenu = function(dom) {
 
   rightMenu.getHandler().listen(rightMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
+    var grid = good.drive.nav.grid.View.currentGrid;
+    var selectedElemnet = grid.getSelectedItem();
+    var data = selectedElemnet.data;
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.currentDocId;
-    var target = e.target;
     var grid = good.drive.nav.grid.View.currentGrid;
     switch (docId) {
     case good.constants.MYCLASSRESDOCID:
       var cell = grid.getSelectedItem();
-      if (cell.data instanceof good.realtime.CollaborativeMap) {
+      if (cell.data.get('isfile') == undefined) {
         var array = new Array(1, 3, 6, 7, 8, 9, 11, 12);
         menu.hideItem(rightMenu, array);
       } else {
         var array = new Array(0, 4, 6, 9);
+        if (data.contentType ==
+          'application/x-print') {
+          array.push(11);
+          array.push(12);
+         }
         menu.hideItem(rightMenu, array);
       }
       break;
     case good.constants.MYRESDOCID:
       var cell = grid.getSelectedItem();
-      if (cell.data instanceof good.realtime.CollaborativeMap) {
+      if (cell.data.get('isfile') == undefined) {
         var array = new Array(1, 3, 6, 7, 8, 9, 11, 12);
         menu.hideItem(rightMenu, array);
       } else {
-        var array = new Array(0, 4, 9);
+        var array = new Array(0, 4, 7, 9);
+        if (data.contentType ==
+        'application/x-print') {
+        array.push(11);
+        array.push(12);
+       }
         menu.hideItem(rightMenu, array);
       }
       break;
     case good.constants.PUBLICRESDOCID:
       if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-        menu.hideItem(rightMenu, [0, 4, 9, 10, 11]);
+        var array = new Array(0, 4, 9, 10, 11);
+        if (data.contentType ==
+        'application/x-print') {
+        array.push(12);
+       }
+        menu.hideItem(rightMenu, array);
       } else {
-        menu.hideItem(rightMenu, [0, 4, 10]);
+        var array = new Array(0, 4, 10);
+        if (data.contentType ==
+        'application/x-print') {
+          array.push(11);
+        array.push(12);
+       }
+        menu.hideItem(rightMenu, array);
       }
       break;
     default :
@@ -73,7 +94,7 @@ good.drive.search.Rightmenu = function(dom) {
       good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
-      if (json['items'] != undefined) {        
+      if (json['items'] != undefined) {
         var items = json['items'];
         good.drive.search.Rightmenu.SUBMENUDATA = items;
         var names = new Array();
@@ -90,15 +111,29 @@ good.drive.search.Rightmenu = function(dom) {
           var action = e.target.getCaption();
           switch (action) {
             case '预览':
-              rightmenusource.preview(data.id);
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.preview(data.get('id'));
+              } else {
+                rightmenusource.preview(data.id);
+              }
               break;
             case '详细信息':
-              rightmenusource.detailInfo(data.id, function() {
-              });
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.detailInfo(data.get('id'), function() {
+                });
+              } else {
+                rightmenusource.detailInfo(data.id, function() {
+                });
+              }
               break;
             case '重新上传':
-              rightmenusource.uploadAgain(data.id, function() {
-              });
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.uploadAgain(data.get('id'), function() {
+                });
+              } else {
+                rightmenusource.uploadAgain(data.id, function() {
+                });
+              }
               break;
             default:
               break;

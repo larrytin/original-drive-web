@@ -1,6 +1,10 @@
 package com.goodow.drive.android.global_data_cache;
 
 import java.io.File;
+import java.util.ArrayList;
+import java.util.List;
+
+import android.app.Activity;
 
 /**
  * 需要全局缓存的数据
@@ -37,6 +41,27 @@ public enum GlobalDataCacheForMemorySingleton {
 	private String userName;
 
 	private String storagePaht;
+
+	private List<Activity> activities = new ArrayList<Activity>();
+
+	public void addActivity(Activity activity) {
+		for (int i = 0; i < activities.size(); i++) {
+			if (activity.getClass().getSimpleName()
+					.equals(activities.get(i).getClass().getSimpleName())) {
+				activities.remove(i);
+			}
+		}
+
+		activities.add(activity);
+	}
+
+	public void exit() {
+		for (Activity activity : activities) {
+			activity.finish();
+		}
+
+		System.exit(0);
+	}
 
 	/**
 	 * @return the access_token

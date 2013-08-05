@@ -111,7 +111,7 @@ public class OfflineFileObserver {
 					newFile = model_unlogin.createMap(null);
 					newFile.set("title", execute.getFilename());
 
-					for (SomeEnums.MIME_TYPE_Table mimeType : SomeEnums.MIME_TYPE_Table
+					for (Tools.MIME_TYPE_Table mimeType : Tools.MIME_TYPE_Table
 							.values()) {
 						if (execute.getContentType().equals(
 								mimeType.getMimeType())) {

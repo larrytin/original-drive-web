@@ -19,6 +19,7 @@ good.drive.nav.grid.View = function(data, docid, opt_domHelper) {
   this.data = data;
   this.docid = docid;
   this._selectedItem = undefined;
+  this.menu = undefined;
 };
 goog.inherits(good.drive.nav.grid.View, goog.ui.Component);
 
@@ -35,33 +36,53 @@ good.drive.nav.grid.View.currentGrid = undefined;
 /**
  */
 good.drive.nav.grid.View.initGrid = function() {
-  var path = good.drive.nav.folders.Path.getINSTANCE().path;
-  var pathlist = good.drive.nav.folders.Path.getINSTANCE().pathlist;
-  pathlist.addValuesAddedListener(function(evt) {
-    var id = pathlist.get(pathlist.length() - 1);
-    var docid = path.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
-    if (docid == good.constants.PUBLICRESDOCID) {
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  root.addValueChangedListener(function(evt) {
+    var property = evt.getProperty();
+    if (property != good.drive.nav.folders.Path.NameType.PATH) {
       return;
     }
-    if (!goog.object.containsKey(good.drive.nav.grid.View.grids, docid)) {
-      var cells = {};
-      goog.object.add(good.drive.nav.grid.View.grids, docid, cells);
-    }
-    var cells = goog.object.get(good.drive.nav.grid.View.grids, docid);
-    if (goog.object.containsKey(cells, id)) {
-      good.drive.nav.grid.View.visiable(goog.object.get(cells, id));
-      return;
-    }
-    var model = goog.object.get(
-        good.drive.nav.folders.AbstractControl.docs, docid);
-    var data = model.getObject(id);
-    var grid = new good.drive.nav.grid.View(data, docid);
-    grid.render(goog.dom.getElement('viewmanager'));
-    grid.renderCell(data);
-    grid.renderFolderPath();
-    goog.object.add(cells, id, grid);
-    good.drive.nav.grid.View.visiable(grid);
+    var newValue = evt.getNewValue();
+    good.drive.nav.grid.View.initCallback(newValue);
   });
+  good.drive.nav.grid.View.initCallback(
+      good.drive.nav.folders.Path.getINSTANCE().path);
+};
+
+/**
+ * @param {Object} path
+ */
+good.drive.nav.grid.View.initCallback = function(path) {
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (goog.array.isEmpty(pathlist)) {
+    return;
+  }
+  var pathlistLength = goog.array.count(pathlist, function() {
+    return true;
+  });
+  var id = pathlist[pathlistLength - 1];
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  if (docid == good.constants.PUBLICRESDOCID) {
+    return;
+  }
+  if (!goog.object.containsKey(good.drive.nav.grid.View.grids, docid)) {
+    var cells = {};
+    goog.object.add(good.drive.nav.grid.View.grids, docid, cells);
+  }
+  var cells = goog.object.get(good.drive.nav.grid.View.grids, docid);
+  if (goog.object.containsKey(cells, id)) {
+    good.drive.nav.grid.View.visiable(goog.object.get(cells, id));
+    return;
+  }
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, docid);
+  var data = model.getObject(id);
+  var grid = new good.drive.nav.grid.View(data, docid);
+  grid.render(goog.dom.getElement('viewmanager'));
+  grid.renderCell(data);
+  grid.renderFolderPath();
+  goog.object.add(cells, id, grid);
+  good.drive.nav.grid.View.visiable(grid);
 };
 
 /**
@@ -86,20 +107,26 @@ good.drive.nav.grid.View.prototype.renderCell = function(data) {
     return;
   }
   if (goog.isObject(data)) {
+    this.bindDataEvent(data);
     this.renderCellByObject(data);
   }
 };
 
+/**
+ */
 good.drive.nav.grid.View.prototype.clear = function() {
-  var length =  this.getChildCount();
+  var length = this.getChildCount();
   if (length == 0) {
     return;
   }
-  for (var i=0; i < length; i++) {
+  for (var i = 0; i < length; i++) {
     this.removeChildAt(0);
   }
 };
 
+/**
+ * @param {Array.<Object>} data
+ */
 good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
   var that = this;
   goog.array.forEach(data, function(cell) {
@@ -107,6 +134,9 @@ good.drive.nav.grid.View.prototype.renderCellByArray = function(data) {
   });
 };
 
+/**
+ * @param {Object} data
+ */
 good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
   var file = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
   var folder = data.get(
@@ -115,11 +145,50 @@ good.drive.nav.grid.View.prototype.renderCellByObject = function(data) {
     var data = file.get(i);
     this.insertCell(data, false);
   }
-  
   for (var i = 0; i < folder.length(); i++) {
     var data = folder.get(i);
     this.insertCell(data, true);
   }
+};
+
+/**
+ * @param {Object} data
+ */
+good.drive.nav.grid.View.prototype.bindDataEvent = function(data) {
+  var files = data.get(
+      good.drive.nav.folders.ViewControl.ViewControlType.FILES);
+  var folders = data.get(
+      good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS);
+  var that = this;
+  var addHandle = function(evt) {
+    var vals = evt.getValues();
+    for (var i in vals) {
+      var val = vals[i];
+      that.insertCell(val);
+    }
+  };
+  folders.addValuesAddedListener(addHandle);
+  files.addValuesAddedListener(addHandle);
+  var removeHandle = function(evt) {
+    var vals = evt.getValues();
+    var idx = evt.getIndex();
+    for (var i in vals) {
+      var val = vals[i];
+      that.removeCell(val);
+      if (that.docid == undefined ||
+          !(val instanceof good.realtime.CollaborativeMap)) {
+        continue;
+      }
+      var cells = goog.object.get(good.drive.nav.grid.View.grids, that.docid);
+      var id = val.getId();
+      if (goog.object.containsKey(cells, id)) {
+        var grid = goog.object.get(cells, id);
+        grid.removeFromParent();
+      }
+    }
+  };
+  folders.addValuesRemovedListener(removeHandle);
+  files.addValuesRemovedListener(removeHandle);
 };
 
 /**
@@ -138,19 +207,21 @@ good.drive.nav.grid.View.prototype.renderFolderPath = function() {
 /**
  */
 good.drive.nav.grid.View.prototype.insertFolderPath = function() {
+  var that = this;
   var pathElm = this.getFolderPathElement();
   goog.dom.removeChildren(pathElm);
-  var path = good.drive.nav.folders.Path.getINSTANCE().pathlist;
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  var path = root.get(good.drive.nav.folders.Path.NameType.PATH);
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
   var model = goog.object.get(
       good.drive.nav.folders.AbstractControl.docs, this.docid);
-  for (var i = 0; i < path.length(); i++) {
-    var id = path.get(i);
+  goog.array.forEach(pathlist, function(id, i) {
     var value = model.getObject(id);
-    var label = value.get(this.getKeyType().LABEL[0]);
-    if (i == (path.length() - 1)) {
+    var label = value.get(that.getKeyType().LABEL[0]);
+    if (i == (pathlist.length - 1)) {
       var cruuentElm = goog.dom.createDom('div',
           {'class': 'goog-inline-block folder-path-' +
-        'folder folder-current-element'});
+          'folder folder-current-element'});
       goog.dom.setTextContent(cruuentElm, label);
       goog.dom.appendChild(pathElm, cruuentElm);
       return;
@@ -162,15 +233,18 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
     goog.dom.setTextContent(contentElm, label);
     goog.dom.appendChild(pathElm, contentElm);
     goog.dom.appendChild(pathElm, separatorElm);
-    this.pathHandle(contentElm, path, id);
-  }
+    that.pathHandle(contentElm, pathlist, id);
+  });
 };
 
-good.drive.nav.grid.View.prototype.setSelectedItem = function(cell) {
+/**
+ * @param {good.drive.nav.grid.Cell} cell
+ */
+good.drive.nav.grid.View.prototype.setSelectedItem =
+  function(cell) {
   if (this._selectedItem == cell) {
     return;
   }
-  
   if (this._selectedItem) {
     this._selectedItem.setSelectedInternal(false);
   }
@@ -181,22 +255,26 @@ good.drive.nav.grid.View.prototype.setSelectedItem = function(cell) {
   }
 };
 
+/**
+ * @return {good.drive.nav.grid.Cell}
+ */
 good.drive.nav.grid.View.prototype.getSelectedItem = function() {
   return this._selectedItem;
 };
 
 /**
  * @param {Element} elm
- * @param {good.realtime.CollaborativeList} path
+ * @param {good.realtime.CollaborativeList} pathlist
  * @param {string} currentid
  */
-good.drive.nav.grid.View.prototype.pathHandle = function(elm, path, currentid) {
-  var array = path.asArray();
-  var idx = goog.array.indexOf(array, currentid);
-  var newArray = goog.array.slice(array, 0, idx + 1);
+good.drive.nav.grid.View.prototype.pathHandle =
+  function(elm, pathlist, currentid) {
+  var docid = good.drive.nav.folders.Path.getINSTANCE().getCurrentDocid();
+  var idx = goog.array.indexOf(pathlist, currentid);
+  var newArray = goog.array.slice(pathlist, 0, idx + 1);
   goog.events.listen(elm, goog.events.EventType.CLICK, function(e) {
-    path.clear();
-    path.pushAll(newArray);
+    good.drive.nav.folders.Path.getINSTANCE().
+    putDocidAndPathList(docid, newArray);
   });
 };
 
@@ -224,10 +302,59 @@ good.drive.nav.grid.View.prototype.insertCell = function(data, isFolder) {
 good.drive.nav.grid.View.prototype.removeCell = function(data) {
   for (var i = 0; i < this.getChildCount(); i++) {
     var cell = this.getChildAt(i);
-    if (cell.data.getId() == data.getId()) {
-      this.removeChildAt(i);
-      break;
+    if (data instanceof good.realtime.CollaborativeMap) {
+      if (cell.data.getId() == data.getId()) {
+        this.removeChildAt(i);
+        return;
+      }
+    } else {
+      if (cell.data.id == data.id) {
+        this.removeChildAt(i);
+        return;
+      }
     }
+  }
+};
+
+/**
+ */
+good.drive.nav.grid.View.prototype.removeCurrentData = function() {
+  var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
+  var data = item.data;
+  if (data.get('isfile') == undefined) {
+    var folders = this.data.get('folders');
+    folders.removeValue(data);
+  } else {
+    var files = this.data.get('files');
+    files.removeValue(data);
+  }
+};
+
+/**
+ * @return {string}
+ */
+good.drive.nav.grid.View.prototype.getCurrentTitle = function() {
+  var item = good.drive.nav.grid.View.currentGrid.getSelectedItem();
+  var data = item.data;
+  if (data instanceof good.realtime.CollaborativeMap) {
+    return data.get('label');
+  } else {
+    return data.filename;
+  }
+};
+
+/**
+ * @param {string} title
+ */
+good.drive.nav.grid.View.prototype.renameChildData =
+  function(title) {
+  var item = good.drive.nav.grid.View.currentGrid.
+  getSelectedItem();
+  var data = item.data;
+  if (data instanceof good.realtime.CollaborativeMap) {
+    data.set('label', title);
+  } else {
+    return;
   }
 };
 
@@ -244,7 +371,6 @@ good.drive.nav.grid.View.prototype.removeChild =
   contentElm.removeChild(childNode.getElement());
 
 };
-
 
 /** @override */
 good.drive.nav.grid.View.prototype.createDom = function() {
@@ -287,7 +413,8 @@ good.drive.nav.grid.View.prototype.enterDocument = function() {
  * @return {good.drive.nav.grid.Cell}
  */
 good.drive.nav.grid.View.prototype.createCell = function(data) {
-  return new good.drive.nav.grid.Cell(data, this.getKeyType(), this.getConfig());
+  return new good.drive.nav.grid.Cell(data,
+      this.getKeyType(), this.getConfig());
 };
 
 
@@ -528,9 +655,12 @@ good.drive.nav.grid.View.prototype.getGridContainerClassName = function() {
   return this.getConfig().cssGridContainer;
 };
 
+/**
+ * @return {Object}
+ */
 good.drive.nav.grid.View.prototype.getKeyType = function() {
   return {LABEL: ['label', 'string']};
-}
+};
 
 /**
  * @return {Object.<string, string>}

@@ -11,6 +11,7 @@ goog.require('goog.ui.tree.TreeControl');
  * @constructor
  * @param {string} title
  * @param {string} docid
+ * @param {Element} targetElm
  * @param {good.drive.nav.folders.ViewControl} control
  */
 good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
@@ -45,7 +46,7 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
 
 /**
  * @param {goog.ui.tree.TreeControl} parent
- * @param {number} idx
+ * @param {good.realtime.CollaborativeMap} data
  * @param {string} title
  * @return {goog.ui.tree.TreeNode}
  */
@@ -124,6 +125,7 @@ good.drive.nav.folders.Tree.prototype.getCurrentItem = function() {
 
 /**
  * @param {goog.ui.tree.TreeControl} node
+ * @param {good.realtime.CollaborativeMap} data
  * @param {string} title
  */
 good.drive.nav.folders.Tree.prototype.setNodeTitle =
@@ -147,17 +149,25 @@ good.drive.nav.folders.Tree.prototype.setNodeTitle =
   node.title = title;
 };
 
-good.drive.nav.folders.Tree.prototype.getFolderIcon = function(data) {
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ * @return {string}
+ */
+good.drive.nav.folders.Tree.prototype.getFolderIcon =
+  function(data) {
   var isclass = data.get('isclass');
-  if(isclass == undefined) {
+  if (isclass == undefined) {
     return 'icon-color-1';
   }
   return isclass ? 'icon-color-6' : 'icon-color-1';
 };
 
+/**
+ * @param {good.realtime.CollaborativeMap} data
+ */
 good.drive.nav.folders.Tree.prototype.setData = function(data) {
   this.control().mappingView(this, data);
-}
+};
 
 /**
  * @param {goog.ui.tree.TreeControl} tree
@@ -205,6 +215,14 @@ good.drive.nav.folders.Tree.prototype.customNode =
  */
 good.drive.nav.folders.Tree.prototype.removeNode = function(parent, idx) {
   return parent.removeChildAt(idx);
+};
+
+/**
+ * @param {Object} data
+ */
+good.drive.nav.folders.Tree.prototype.moveToNode = function(data) {
+  var item = this.getCurrentItem();
+  this.control().moveToNode(item.map, data);
 };
 
 /**

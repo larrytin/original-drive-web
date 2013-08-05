@@ -3,10 +3,13 @@ package com.goodow.drive.android.activity;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
+import android.R.integer;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Fragment;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -20,7 +23,9 @@ import android.view.animation.AnimationUtils;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.IRemoteControl;
 import com.goodow.drive.android.Interface.IRemoteDataFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
@@ -29,8 +34,8 @@ import com.goodow.drive.android.fragment.LessonListFragment;
 import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
+import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDataKey;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
 import com.goodow.realtime.DocumentLoadedHandler;
@@ -40,8 +45,15 @@ import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValueChangedEvent;
 
+import elemental.json.Json;
+import elemental.json.JsonArray;
+import elemental.json.JsonObject;
+import elemental.json.impl.JreJsonString;
+
 @ContentView(R.layout.activity_main)
 public class MainActivity extends RoboActivity {
+	private final String TAG = this.getClass().getSimpleName();
+
 	private IRemoteDataFragment iRemoteDataFragment;
 	private IRemoteDataFragment lastiRemoteDataFragment;
 
@@ -58,12 +70,12 @@ public class MainActivity extends RoboActivity {
 	private TextView openFailure_text;
 	private ImageView openFailure_img;
 
-	private LeftMenuFragment leftMenuFragment;
-	private DataListFragment dataListFragment;
-	private LocalResFragment localResFragment;
-	private OfflineListFragment offlineListFragment;
-	private DataDetailFragment dataDetailFragment;
-	private LessonListFragment lessonListFragment;
+	private LeftMenuFragment leftMenuFragment = new LeftMenuFragment();
+	private DataListFragment dataListFragment = new DataListFragment();
+	private LocalResFragment localResFragment = new LocalResFragment();
+	private OfflineListFragment offlineListFragment = new OfflineListFragment();
+	private DataDetailFragment dataDetailFragment = new DataDetailFragment();
+	private LessonListFragment lessonListFragment = new LessonListFragment();
 
 	public LocalResFragment getLocalResFragment() {
 
@@ -71,23 +83,7 @@ public class MainActivity extends RoboActivity {
 	}
 
 	public DataDetailFragment getDataDetailFragment() {
-
 		return dataDetailFragment;
-	}
-
-	public DataListFragment getDataListFragment() {
-
-		return dataListFragment;
-	}
-
-	public OfflineListFragment getOfflineListFragment() {
-
-		return offlineListFragment;
-	}
-
-	public LessonListFragment getLessonListFragment() {
-
-		return lessonListFragment;
 	}
 
 	public void hideLeftMenuLayout() {
@@ -98,22 +94,19 @@ public class MainActivity extends RoboActivity {
 			out.setAnimationListener(new AnimationListener() {
 				@Override
 				public void onAnimationStart(Animation animation) {
-					// TODO Auto-generated method stub
 				}
 
 				@Override
 				public void onAnimationRepeat(Animation animation) {
-					// TODO Auto-generated method stub
 				}
 
 				@Override
 				public void onAnimationEnd(Animation animation) {
 					leftMenu.setVisibility(LinearLayout.INVISIBLE);
 					middleLayout.setVisibility(LinearLayout.INVISIBLE);
-					setLeftMenuLayoutX(0);// 重置其位置,放置负数循环叠加
+					setLeftMenuLayoutX(0);// 重置其位置,防止负数循环叠加
 					setLeftMenuLayoutX(-leftMenu.getWidth());
 
-					Log.i("Scorll", leftMenu.getLeft() + "");
 				}
 			});
 
@@ -133,7 +126,7 @@ public class MainActivity extends RoboActivity {
 	private void setLeftMenuLayoutX(int x) {
 		leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(),
 				leftMenu.getBottom());
-
+		Log.i("Scorll", "set:" + leftMenu.getLeft());
 	}
 
 	public void setDataDetailLayoutState(int state) {
@@ -203,7 +196,10 @@ public class MainActivity extends RoboActivity {
 									GlobalDataCacheForMemorySingleton.getInstance
 											.setAccess_token(null);
 
-									finish();
+									Intent intent = new Intent(
+											MainActivity.this,
+											LogInActivity.class);
+									startActivity(intent);
 								}
 							})
 					.setNegativeButton(R.string.dailogCancel,
@@ -236,24 +232,19 @@ public class MainActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
+
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
-
-		lessonListFragment = new LessonListFragment();
-		dataListFragment = new DataListFragment();
-		offlineListFragment = new OfflineListFragment();
-		localResFragment = new LocalResFragment();
 
 		FragmentTransaction fragmentTransaction = getFragmentManager()
 				.beginTransaction();
 
-		dataDetailFragment = new DataDetailFragment();
 		fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
 
-		leftMenuFragment = new LeftMenuFragment();
 		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
 
-		fragmentTransaction.commit();
+		fragmentTransaction.commitAllowingStateLoss();
 
 		middleLayout.setOnClickListener(new View.OnClickListener() {
 			@Override
@@ -272,6 +263,42 @@ public class MainActivity extends RoboActivity {
 		remoteControlObserver = new RemoteControlObserver();
 		remoteControlObserver.startObservation(docId);
 
+	}
+
+	@Override
+	protected void onRestart() {
+		Log.i(TAG, "onRestart");
+		super.onRestart();
+	}
+
+	@Override
+	protected void onStart() {
+		Log.i(TAG, "onStart");
+		super.onStart();
+	}
+
+	@Override
+	protected void onResume() {
+		Log.i(TAG, "onResume");
+		super.onResume();
+	}
+
+	@Override
+	protected void onPause() {
+		Log.i(TAG, "onPause");
+		super.onPause();
+	}
+
+	@Override
+	protected void onStop() {
+		Log.i(TAG, "onStop");
+		super.onStop();
+	}
+
+	@Override
+	protected void onDestroy() {
+		Log.i(TAG, "onDestroy");
+		super.onDestroy();
 	}
 
 	public void setIRemoteFrament(IRemoteDataFragment iRemoteDataFragment) {
@@ -308,59 +335,169 @@ public class MainActivity extends RoboActivity {
 
 	}
 
-	private void initFragment(String fragmentName) {
-		FragmentTransaction fragmentTransaction = getFragmentManager()
-				.beginTransaction();
+	private void switchFragment(DocumentIdAndDataKey doc) {
+		if (null != doc) {
+			Fragment newFragment = null;
 
-		if (GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue().equals(
-				fragmentName)) {
-			fragmentTransaction.replace(R.id.contentLayout, lessonListFragment);
+			switch (doc) {
+			case LESSONDOCID:
+				newFragment = lessonListFragment;
 
-		} else if (GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID
-				.getValue().equals(fragmentName)) {
-			fragmentTransaction.replace(R.id.contentLayout, dataListFragment);
+				break;
+			case FAVORITESDOCID:
+				newFragment = dataListFragment;
 
-		} else if (GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID.getValue()
-				.equals(fragmentName)) {
-			fragmentTransaction
-					.replace(R.id.contentLayout, offlineListFragment);
+				break;
+			case OFFLINEDOCID:
+				newFragment = offlineListFragment;
 
+				break;
+			default:
+				break;
+			}
+
+			if (newFragment != null) {
+				FragmentTransaction fragmentTransaction = getFragmentManager()
+						.beginTransaction();
+				fragmentTransaction.replace(R.id.contentLayout, newFragment);
+				fragmentTransaction.commitAllowingStateLoss();
+			}
 		}
-
-		fragmentTransaction.commit();
-
 	}
 
-	public RemoteControlObserver getRemoteControlObserver() {
+	public IRemoteControl getRemoteControlObserver() {
 
 		return remoteControlObserver;
 	}
 
-	public class RemoteControlObserver {
+	public class RemoteControlObserver implements IRemoteControl {
 		private Document doc;
 		private Model model;
 		private CollaborativeMap root;
-		private CollaborativeMap map;
-		private CollaborativeList list;
+		private JsonObject map;
 
-		public CollaborativeList getList() {
+		private EventHandler<ValueChangedEvent> lastHandler;
 
-			return list;
-		}
-
-		public void changeMapItem(String docId) {
+		@Override
+		public JsonArray getCurrentPath() {
 			if (null != map) {
-				map.set(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
-						.getValue(), docId);
+				return map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+			}
+			return null;
+		}
 
+		@Override
+		public void changeDoc(String docId) {
+			root.removeValueChangedListener(lastHandler);
+
+			JsonObject map = Json.createObject();
+			JsonArray jsonArray = Json.createArray();
+
+			map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+					.getValue(), jsonArray);
+			map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+					.getValue(), docId);
+
+			root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
+					map);
+
+			freshMap();
+		}
+
+		@Override
+		public void addPath(String mapId) {
+			if (null != map) {
+				JsonArray jsonArray = map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+				jsonArray.set(jsonArray.length(), mapId);
+				JsonArray newJsonArray = Json.createArray();
+				for (int i = 0; i < jsonArray.length(); i++) {
+					String toString = jsonArray.get(i).asString();
+					newJsonArray.set(newJsonArray.length(), toString);
+				}
+
+				String newString = map.get(
+						GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+								.getValue()).asString();
+
+				JsonObject newMap = Json.createObject();
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+						.getValue(), newJsonArray);
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+						.getValue(), newString);
+
+				root.set(
+						GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
+						newMap);
+
+				freshMap();
 			}
 		}
 
-		public void clearList() {
-			if (null != list && 0 < list.length()) {
-				list.clear();
+		@Override
+		public void removeLastPath() {
+			if (null != map) {
+				JsonArray jsonArray = map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+				jsonArray.remove(jsonArray.length() - 1);
+				JsonArray newJsonArray = Json.createArray();
+				for (int i = 0; i < jsonArray.length(); i++) {
+					String newString = jsonArray.get(i).asString();
+					newJsonArray.set(newJsonArray.length(), newString);
+				}
 
+				String newString = map.get(
+						GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+								.getValue()).asString();
+
+				JsonObject newMap = Json.createObject();
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+						.getValue(), newJsonArray);
+				newMap.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+						.getValue(), newString);
+
+				root.set(
+						GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
+						newMap);
+				
+				freshMap();
 			}
+		}
+
+		@Override
+		public void freshMap() {
+			if (null != root) {
+				map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY
+						.getValue());
+			}
+		}
+
+		@Override
+		public void addListener(
+				EventHandler<ValueChangedEvent> pathChangeEventHandler) {
+			if (null != root) {
+				lastHandler = pathChangeEventHandler;
+				root.addValueChangedListener(lastHandler);
+			}
+		}
+
+		@Override
+		public String getMapId(int index) {
+			String toString = "";
+			if (null != map) {
+				JsonArray jsonArray = map
+						.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
+								.getValue());
+
+				if (null != jsonArray && jsonArray.length() > 0) {
+					toString = jsonArray.get(index).asString();
+				}
+			}
+			return toString;
 		}
 
 		private void startObservation(String docId) {
@@ -370,26 +507,46 @@ public class MainActivity extends RoboActivity {
 					doc = document;
 					model = doc.getModel();
 					root = model.getRoot();
-					map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY
-							.getValue());
-					list = map
-							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
-									.getValue());
+					freshMap();
 
-					map.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
+					JreJsonString jreJsonString = (JreJsonString) (map
+							.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+									.getValue()));
+
+					if (null != jreJsonString) {
+						String lastDocId = jreJsonString.asString();
+
+						lastDocId = lastDocId.substring(
+								lastDocId.lastIndexOf("/") + 1,
+								lastDocId.length());
+
+						DocumentIdAndDataKey doc = DocumentIdAndDataKey
+								.getEnumWithValue(lastDocId);
+
+						switchFragment(doc);
+					}
+
+					root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
 						@Override
 						public void handleEvent(ValueChangedEvent event) {
 							String property = event.getProperty();
-							if (GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+							if (GlobalConstant.DocumentIdAndDataKey.PATHKEY
 									.getValue().equals(property)) {
-								String newValue = (String) event.getNewValue();
+								JsonObject newJson = (JsonObject) event
+										.getNewValue();
 
-								newValue = newValue.substring(newValue
-										.lastIndexOf("/") + 1);
+								String newDocId = ((JreJsonString) (newJson
+										.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY
+												.getValue()))).asString();
 
-								MainActivity.this.initFragment(newValue);
+								newDocId = newDocId.substring(
+										newDocId.lastIndexOf("/") + 1,
+										newDocId.length());
 
-								clearList();
+								DocumentIdAndDataKey doc = DocumentIdAndDataKey
+										.getEnumWithValue(newDocId);
+
+								switchFragment(doc);
 
 							}
 						}
@@ -403,13 +560,9 @@ public class MainActivity extends RoboActivity {
 					model = model_;
 					root = model.getRoot();
 
-					CollaborativeMap newMap = model.createMap(null);
-					CollaborativeList newList = model.createList();
-					newMap.set(
-							GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY
-									.getValue(), newList);
+					JsonObject jsonObject = Json.createObject();
 					root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY
-							.getValue(), newMap);
+							.getValue(), jsonObject);
 				}
 			};
 
@@ -427,12 +580,13 @@ public class MainActivity extends RoboActivity {
 			if (leftMenu.getVisibility() == View.INVISIBLE) {
 				showLeftMenuLayout();
 			}
-
+			Log.i("Scorll", "DOWN:" + leftMenu.getLeft());
 			startPoint = event.getX();
 
 			break;
 		case MotionEvent.ACTION_UP:
-			if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 3) {
+			Log.i("Scorll", "UP:" + leftMenu.getLeft());
+			if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 4) {
 				hideLeftMenuLayout();
 
 			} else {

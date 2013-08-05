@@ -19,9 +19,9 @@ good.drive.nav.menu.View = function() {
 };
 /**
  * @param {Element} dom
- * @param {Array.<Array>} items [['i', ''], ['s', '']]
+ * @param {Array.<Array>} items
  * @param {Function} handle
- * @param {Object} corner {targetCorner: ,menuCorner: contextMenu:}
+ * @param {Object} corner
  * @param {Element} target
  * @return {goog.ui.PopupMenu}
  */
@@ -45,12 +45,12 @@ good.drive.nav.menu.View.prototype.genPopupMenu =
 };
 
 /**
- * @param {goog.ui.PopupMenu} popup
- * @param {Array.<Array>} items [['i', ''], ['s', '']]
+ * @param {goog.ui.PopupMenu} popupMenu
+ * @param {Array.<Array>} items
  * @param {Function} handle
- * @return {goog.ui.PopupMenu}
  */
-good.drive.nav.menu.View.prototype.reload = function(popupMenu, items, handle) {
+good.drive.nav.menu.View.prototype.reload =
+  function(popupMenu, items, handle) {
   this.clearItem(popupMenu);
   this.genItems_(popupMenu, items);
   if (handel == undefined) {
@@ -61,7 +61,13 @@ good.drive.nav.menu.View.prototype.reload = function(popupMenu, items, handle) {
   }
 };
 
-good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
+/**
+ * @param {goog.ui.PopupMenu} popupMenu
+ * @param {Array.<Array>} items
+ * @private
+ */
+good.drive.nav.menu.View.prototype.genItems_ =
+  function(popupMenu, items) {
   if (goog.array.isEmpty(items)) {
     return;
   }
@@ -80,8 +86,12 @@ good.drive.nav.menu.View.prototype.genItems_ = function(popupMenu, items) {
       break;
     }
   });
-}
+};
 
+/**
+ * @param {goog.ui.PopupMenu} popupMenu
+ * @param {Array.<number>} hides
+ */
 good.drive.nav.menu.View.prototype.hideItem = function(popupMenu, hides) {
   var items = popupMenu.getItems();
   goog.array.forEach(items, function(value) {
@@ -94,10 +104,14 @@ good.drive.nav.menu.View.prototype.hideItem = function(popupMenu, hides) {
   var s = '';
 };
 
-good.drive.nav.menu.View.prototype.clearItem = function(popupMenu) {
+/**
+ * @param {goog.ui.PopupMenu} popupMenu
+ */
+good.drive.nav.menu.View.prototype.clearItem =
+  function(popupMenu) {
   for (var i = 0; i < popupMenu.getChildCount(); i++) {
     popupMenu.removeChildAt(0);
-  } 
+  }
 };
 
 /**

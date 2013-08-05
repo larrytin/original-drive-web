@@ -13,17 +13,17 @@ goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
+goog.require('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.folders.PublicViewControl');
-goog.require('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
+goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
 goog.require('good.drive.role');
-goog.require('good.drive.resourcemap');
 goog.require('good.drive.search');
 goog.require('goog.dom');
 
@@ -51,6 +51,7 @@ good.drive.init.init = function() {
   var modifeInput;
   var navFolderslist = goog.dom.getElement('navfolderslist');
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
+  var isGridEvent = false;
   var baseDocid = '@tmp/' + good.auth.Auth.current.userId + '/';
   good.constants.MYRESDOCID = baseDocid +
     good.constants.MYRESDOCID;
@@ -61,35 +62,33 @@ good.drive.init.init = function() {
 
   good.config.start();
   var auth = good.auth.Auth.current;
-  good.realtime.authorize(auth.userId, auth.access_token); 
-  
+  good.realtime.authorize(auth.userId, auth.access_token);
   var myclassLabel = '我的课程';
-  var myClassViewControl = 
+  var myClassViewControl =
     new good.drive.nav.folders.MyClassViewControl(
-        good.constants.MYCLASSRESDOCID)
+        good.constants.MYCLASSRESDOCID);
   var myclass = new good.drive.nav.folders.Tree(myclassLabel,
       undefined, navFolderslist, myClassViewControl);
-  
-  var myResTree = new good.drive.nav.folders.Tree('我的收藏夹',
+  var myResLabel = '我的收藏夹';
+  var myResTree = new good.drive.nav.folders.Tree(myResLabel,
       good.constants.MYRESDOCID, navFolderslist);
-  
   var puclicViewControl = new good.drive.nav.folders.PublicViewControl(
       good.constants.PUBLICRESDOCID);
   var publicResTree = new good.drive.nav.folders.Tree('公共资料库',
       undefined, navFolderslist, puclicViewControl);
-  
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   pathControl.addPath(good.constants.MYRESDOCID, myResTree);
-  pathControl.addPath(good.constants.MYCLASSRESDOCID, myclass);
-  pathControl.addPath(good.constants.PUBLICRESDOCID, publicResTree);
+  pathControl.addPath(good.constants.MYCLASSRESDOCID,
+      myclass);
+  pathControl.addPath(good.constants.PUBLICRESDOCID,
+      publicResTree);
   pathControl.pathload = function() {
     good.drive.nav.grid.View.initGrid();
     good.drive.resourcemap.Resourcemap.init();
   };
-  
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
-  var leftCreateBtn = leftButton.createBtn(); 
+  var leftCreateBtn = leftButton.createBtn();
 
   var toolBarButton = new good.drive.nav.button.ToolBarButton();
   var toolBarCreate = toolBarButton.createTolBtn();
@@ -118,7 +117,12 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        view.renameLeaf(modifeInput.value);
+        if (isGridEvent) {
+          var grid = good.drive.nav.grid.View.currentGrid;
+          grid.renameChildData(modifeInput.value);
+        } else {
+          view.renameLeaf(modifeInput.value);
+        }
         break;
       case 'c':
         break;
@@ -126,7 +130,6 @@ good.drive.init.init = function() {
         break;
     }
   });
-  
   var moToClassTree = undefined;
   var moToresTree = undefined;
   var moToDialog = dialog.moveToDialog(myclassLabel, function(e) {
@@ -136,13 +139,26 @@ good.drive.init.init = function() {
         if (node == moToClassTree.tree) {
           return;
         }
-        var cellData = good.drive.search.AdvancedMenu.SEARCHGRID.
+        var cellData = good.drive.nav.grid.View.currentGrid.
         getSelectedItem().data;
         moToClassTree.moveToNode(cellData);
         break;
       case 'c':
         break;
-      default:
+    }
+  });
+  var faToDialog = dialog.favoritesToDialog(myResLabel, function(e) {
+    switch (e.key) {
+      case 'fv':
+        var node = moToresTree.getCurrentItem();
+        if (node == moToresTree.tree) {
+          return;
+        }
+        var cellData = good.drive.nav.grid.View.currentGrid.
+        getSelectedItem().data;
+        moToresTree.moveToNode(cellData);
+        break;
+      case 'c':
         break;
     }
   });
@@ -150,73 +166,76 @@ good.drive.init.init = function() {
   advancedMenu.init();
   var rightmenu = new good.drive.search.
   Rightmenu(goog.dom.getElement('viewmanager'));
-//      function(e, data, index) {
-//    if (moToresTree == undefined) {
-//      var data = myResTree.control().model().getData();
-//      moToresTree = new good.drive.nav.folders.Tree(data.get('label'));
-//      moToresTree.setData(data);
-//    }
-//    switch (index) {
-//      case 2:
-//        moToDialog.setVisible(true);
-//        if (moToClassTree == undefined) {
-//          var data = myclass.control().model().getData();
-//          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
-//              undefined,
-//              goog.dom.getElement('moveTo'));
-//          moToClassTree.setData(data);
-//        }
-//        break;
-//      case 3:
-//        break;
-//      default:
-//        break;
-//    }
-//  });
   goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
-    var s = '';
+    var caption = e.target.getCaption();
+    var grid = good.drive.nav.grid.View.currentGrid;
+    switch (caption) {
+      case '安排课程':
+        moToDialog.setVisible(true);
+        if (moToClassTree == undefined) {
+          var data = myclass.control().model().getData();
+          moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
+              good.constants.MYCLASSRESDOCID,
+              goog.dom.getElement('moveTo'));
+          moToClassTree.setData(data);
+        }
+        break;
+      case '收藏':
+        faToDialog.setVisible(true);
+        if (moToresTree == undefined) {
+          var data = myResTree.control().model().getData();
+          moToresTree = new good.drive.nav.folders.Tree(data.get('label'),
+              good.constants.MYRESDOCID,
+              goog.dom.getElement('favoritesTo'));
+          moToresTree.setData(data);
+        }
+        break;
+      case '打开':
+        var cell = grid.getSelectedItem();
+        cell.openCell();
+        break;
+      case '重命名':
+        isGridEvent = true;
+        modifydialog.setVisible(true);
+        if (modifeInput == undefined) {
+          modifeInput = goog.dom.getElement('modifyFolder');
+        }
+        modifeInput.value = grid.getCurrentTitle();
+        break;
+      case '删除':
+        grid.removeCurrentData();
+        break;
+      default:
+        break;
+    }
   });
-  
   var detailinfo = new good.drive.rightmenu.
   DetailInfo(function() {
     advancedMenu.search('click');
   });
-  
   var menu = new good.drive.nav.menu.View();
-  
-  var role = new good.drive.role.Role(auth.userId, function(username) {
+  var role = new good.drive.role.Role(auth.userId,
+      function(username) {
     if (username == good.constants.ADMIN) {
       var leftUpdateBtn = leftButton.updateBtn();
 //    var moverEvent = good.drive.creation.Mouserevent(
 //        leftUpdateBtn.getElement());
       if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
         var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
-        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+        menu.genPopupMenu(leftUpdateBtn.getElement(),
+            [['i', menulst]], function(e) {
         });
       } else {
         var menulst = '文件...';
         var fileupload = new good.drive.creation.Fileupload();
         fileupload.fileChange();
-        menu.genPopupMenu(leftUpdateBtn.getElement(), [['i', menulst]], function(e) {
+        menu.genPopupMenu(leftUpdateBtn.getElement(),
+            [['i', menulst]], function(e) {
           fileupload.fileClick('new', '');
         });
       }
     }
   });
-  
-  var createPopup = menu.createPopup(leftCreateBtn.getElement(), function(e) {
-    var docid = pathControl.currentDocId;
-    var view = pathControl.getViewBydocId(docid);
-    switch (goog.array.indexOf(
-      createPopup.getChildIds(), e.target.getId())) {
-        case 0:
-          createdialog.setVisible(true);
-          break;
-        default:
-          break;
-    }
-  });  
-  
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(myResTree.tree.getChildrenElement(),
       function(e) {
@@ -233,6 +252,7 @@ good.drive.init.init = function() {
           createdialog.setVisible(true);
           break;
         case 3:
+          isGridEvent = true;
           modifydialog.setVisible(true);
           if (modifeInput == undefined) {
             modifeInput = goog.dom.getElement('modifyFolder');
@@ -246,7 +266,6 @@ good.drive.init.init = function() {
           break;
       }
     });
-  
   var newClassInput = undefined;
   var newClassDialog = dialog.genDialog('新建课程', function(evt) {
     if (newClassInput == undefined) {
@@ -264,11 +283,46 @@ good.drive.init.init = function() {
         break;
     }
   }, 'newclassdialog');
-  
+  var createPopup = menu.createPopup(leftCreateBtn.getElement(),
+      function(e) {
+    var docid = pathControl.currentDocId;
+    var view = pathControl.getViewBydocId(docid);
+    switch (goog.array.indexOf(
+      createPopup.getChildIds(), e.target.getId())) {
+        case 0:
+          createdialog.setVisible(true);
+          break;
+        case 1:
+          newClassDialog.setVisible(true);
+          break;
+        default:
+          break;
+    }
+  });
+  createPopup.getHandler().listen(createPopup,
+      goog.ui.Menu.EventType.BEFORE_SHOW,
+      function(e) {
+    var docid = pathControl.currentDocId;
+    var view = pathControl.getViewBydocId(docid);
+    var node = view.getCurrentItem();
+    switch (docid) {
+    case good.constants.MYCLASSRESDOCID:
+      menu.hideItem(createPopup, []);
+      break;
+    case good.constants.MYRESDOCID:
+      menu.hideItem(createPopup, [1]);
+      break;
+    case good.constants.PUBLICRESDOCID:
+      menu.hideItem(createPopup, [1]);
+      break;
+    }
+  });
   var bindPopup = false;
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
-  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '修改'], ['s', ''], ['i', '删除']];
+  var submenu = new goog.ui.SubMenu('发送');
+  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '修改'], ['s', ''],
+              ['i', '删除'], ['m', submenu]];
   var myClassMenuChildIds = undefined;
   var myClassMenu = menu.genPopupMenu(
       myclass.tree.getChildrenElement(), type, function(e) {
@@ -285,6 +339,7 @@ good.drive.init.init = function() {
           createdialog.setVisible(true);
           break;
         case 2:
+          isGridEvent = false;
           modifydialog.setVisible(true);
           if (modifeInput == undefined) {
             modifeInput = goog.dom.getElement('modifyFolder');
@@ -298,9 +353,18 @@ good.drive.init.init = function() {
           break;
       }
   }, corner);
+  var initSubMenu = false;
   myClassMenu.getHandler().listen(myClassMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW,
       function(e) {
+    var submenu = e.target.getChildAt(5);
+    var subdata = good.drive.search.Rightmenu.SUBMENUDATA;
+    if (!initSubMenu) {
+      initSubMenu = true;
+      goog.array.forEach(subdata, function(data) {
+        submenu.addItem(new goog.ui.MenuItem(data.name));
+      });
+    }
     var data = good.drive.nav.folders.Path.INSTANCE.getCurrentData();
     var target = e.target;
     var isClass = data.get('isclass');
@@ -309,18 +373,20 @@ good.drive.init.init = function() {
     }
     var item1 = target.getItemAt(0);
     var item2 = target.getItemAt(1);
-    if(isClass) {
+    if (isClass) {
       item1.setEnabled(false);
       item2.setEnabled(false);
+      submenu.setEnabled(true);
       return;
     }
     item1.setEnabled(true);
     item2.setEnabled(true);
+    submenu.setEnabled(false);
   });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
-  var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();  
+  var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
 };
 
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);

@@ -7,6 +7,7 @@ import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.Realtime;
 
 import com.google.inject.Inject;
@@ -22,6 +23,7 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.view.KeyEvent;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -33,7 +35,7 @@ import roboguice.inject.InjectView;
 @SuppressLint("SetJavaScriptEnabled")
 @ContentView(R.layout.activity_login)
 public class LogInActivity extends RoboActivity {
-	private String TAG = "LOGIN";
+	private final String TAG = this.getClass().getSimpleName();
 
 	private class LoginNetRequestTask extends
 			AsyncTask<String, String, AccountInfo> {
@@ -122,6 +124,8 @@ public class LogInActivity extends RoboActivity {
 	public void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
+		GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
+		
 		Button loginButton = (Button) findViewById(R.id.login_Button);
 		loginButton.setOnClickListener(new View.OnClickListener() {
 
@@ -148,10 +152,10 @@ public class LogInActivity extends RoboActivity {
 					final LoginNetRequestTask loginNetRequestTask = new LoginNetRequestTask();
 					SimpleProgressDialog.show(LogInActivity.this,
 							new OnCancelListener() {
-
 								@Override
 								public void onCancel(DialogInterface dialog) {
 									loginNetRequestTask.cancel(true);
+									
 								}
 							});
 					loginNetRequestTask.execute(params);
@@ -165,6 +169,17 @@ public class LogInActivity extends RoboActivity {
 						Toast.LENGTH_SHORT).show();
 			}
 		});
+	}
+
+	@Override
+	public boolean onKeyDown(int keyCode, KeyEvent event) {
+		if (keyCode == KeyEvent.KEYCODE_BACK) {
+			ToolsFunctionForThisProgect.quitApp(this);
+
+			return true;
+		}
+
+		return super.onKeyDown(keyCode, event);
 	}
 
 	@Override

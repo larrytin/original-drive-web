@@ -55,7 +55,10 @@ good.drive.nav.folders.ViewControl.prototype.mappingView =
  */
 good.drive.nav.folders.ViewControl.prototype.locationNode =
   function(root, path) {
-  this.locationNode_(root, path, parseInt(0), path.length());
+  var pathjsonLength = goog.array.count(path, function() {
+    return true;
+  });
+  this.locationNode_(root, path, parseInt(0), pathjsonLength);
 };
 
 /**
@@ -77,7 +80,7 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
   if (length == 0) {
     return;
   }
-  var pathId = path.get(idx);
+  var pathId = path[idx];
   for (var i = 0; i < length; i++) {
     var child = parentNode.getChildAt(i);
     var childId = child.mapid;
@@ -99,15 +102,39 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
 good.drive.nav.folders.ViewControl.prototype.buildPath =
   function(pathlist, pathmap) {
   var parentNode = this.view().getCurrentItem();
-  var docid = pathmap.get(good.drive.nav.folders.Path.NameType.CURRENTDOCID);
-  if (docid != this.model().docId() &&
-      (parentNode == null || this.isCurrentPath(pathlist, parentNode.mapid))) {
+  if (parentNode == null) {
+    return;
+  }
+  var path = pathmap.get(good.drive.nav.folders.Path.NameType.PATH);
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  var pathjson = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (docid == this.model().docId() &&
+      this.isCurrentPath(pathjson,
+          parentNode.mapid, pathjson.length)) {
     return;
   }
   var paths = [];
-  pathlist.clear();
   this.buildPath_(parentNode, paths);
-  pathlist.pushAll(paths);
+  var i = 0;
+  if (paths.length == pathjson.length) {
+    if (docid == this.model().docId()) {
+      while (true) {
+        if (i >= pathjson.length) {
+          return;
+        }
+        if (pathjson[i] != paths[i]) {
+          break;
+        }
+        i++;
+      }
+    }
+  }
+  var curPath = {};
+  curPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] =
+    this.model().docId();
+  curPath[good.drive.nav.folders.Path.NameType.CURRENTPATH] = paths;
+  pathmap.set(good.drive.nav.folders.Path.NameType.PATH,
+      curPath);
 };
 
 /**
@@ -127,17 +154,18 @@ good.drive.nav.folders.ViewControl.prototype.buildPath_ =
 /**
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {string} mapid
+ * @param {number} pathCount
  * @return {boolean}
  */
 good.drive.nav.folders.ViewControl.prototype.isCurrentPath =
-  function(pathlist, mapid) {
-  if (pathlist.length() == 0) {
+  function(pathlist, mapid, pathCount) {
+  if (pathlist.length == 0) {
     return false;
   }
   if (mapid == undefined) {
     return true;
   }
-  var mapid_ = pathlist.get(pathlist.length() - 1);
+  var mapid_ = pathlist[pathCount - 1];
   if (mapid_ == mapid) {
     return true;
   }
@@ -189,16 +217,6 @@ good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
     for (var i in vals) {
       var val = vals[i];
       var removeNode = that.view().removeNode(node, idx);
-//      var parentGrid = that.getGridById(node.getId());
-//      if (parentGrid == null) {
-//        continue;
-//      }
-//      var id = removeNode.getId();
-//      var grid = that.getGridById(id);
-//      if (that.removeGridById(id)) {
-//        grid.removeFromParent();
-//        parentGrid.removeCell(val);
-//      }
     }
   });
 };
@@ -308,7 +326,7 @@ good.drive.nav.folders.ViewControl.prototype.removeGridById =
 
 /**
  * @param {goog.ui.tree.TreeControl} node
- * @param {Object} param {type, value};
+ * @param {Object} param
  */
 good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, param) {
   var map = this.model().getLeaf(this.getKeyType());
@@ -330,6 +348,62 @@ good.drive.nav.folders.ViewControl.prototype.renameLeaf =
   function(node, idx, str) {
   this.model().renameLabel(
       this.model().getChildByIdx(this.getChildList(node.map), idx), str);
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} targetData
+ * @param {Object} sourceData
+ */
+good.drive.nav.folders.ViewControl.prototype.moveToNode =
+  function(targetData, sourceData) {
+  var target;
+  var source;
+  var model = goog.object.get(good.drive.nav.folders.AbstractControl.docs,
+      this.model().docId());
+  if (sourceData instanceof good.realtime.CollaborativeMap) {
+    var map = model.mod().createMap();
+    var keys = sourceData.keys();
+    for (var i in keys) {
+      var key = keys[i];
+      var value = sourceData.get(key);
+      map.set(key, value);
+    }
+    if (sourceData.get('isfile')) {
+      target = targetData.get(this.getKeyType().FILES[0]);
+    } else {
+      target = targetData.get(this.getKeyType().FOLDERS[0]);
+    }
+    source = map;
+  } else {
+    var map = model.mod().createMap();
+    goog.object.forEach(sourceData, function(value, key) {
+      if (key == 'filename') {
+        map.set('label', value);
+        return;
+      }
+      if (key == 'contentType') {
+        map.set('type', value);
+        return;
+      }
+      map.set(key, value);
+    });
+    map.set('isfile', true);
+    source = map;
+    target = targetData.get(this.getKeyType().FILES[0]);
+  }
+  for (var i = 0; i < target.length(); i++) {
+    var data = target.get(i);
+    if (data instanceof good.realtime.CollaborativeMap) {
+      if (data.get('id') == source.get('id')) {
+        return;
+      }
+    } else {
+      if (data.get('id') == sourceData.id) {
+        return;
+      }
+    }
+  }
+  target.push(source);
 };
 
 /**
@@ -379,18 +453,24 @@ good.drive.nav.folders.ViewControl.prototype.getLabel =
   return map.get(this.getLabelKey());
 };
 
+/**
+ * @return {string}
+ */
 good.drive.nav.folders.ViewControl.prototype.getChildKey =
   function() {
   return this.getKeyType().FOLDERS[0];
-}
+};
 
+/**
+ * @return {string}
+ */
 good.drive.nav.folders.ViewControl.prototype.getLabelKey =
   function() {
   return this.getKeyType().LABEL[0];
-}
+};
 
 /**
- * @return {Object} {key : [name, type, default]}
+ * @return {Object}
  */
 good.drive.nav.folders.ViewControl.prototype.getKeyType = function() {
   return {LABEL: ['label', 'string'], FOLDERS: ['folders', 'list'],
