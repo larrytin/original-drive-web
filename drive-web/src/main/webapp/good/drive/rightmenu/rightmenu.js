@@ -133,8 +133,8 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
     if (json && !json['error']) {
       filename.innerText = json['filename'];
       if (json['thumbnail'] != undefined) {
-        if (good.constants.DRIVE_SERVER.indexOf('.googow.com') != -1) {
-          thumbnail.src = json['thumbnail'];
+        if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') != -1) {
+          thumbnail.src = json['thumbnail'] + '=s300';
         } else {
           var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
           var uri = new goog.Uri(json['thumbnail']);

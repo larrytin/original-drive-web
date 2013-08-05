@@ -329,7 +329,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
             goog.array.forEach(json['items'], function(item) {
 
               if (item['thumbnail'] != undefined) {
-                if (good.constants.DRIVE_SERVER.indexOf('.googow.com') == -1) {
+                if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') == -1) {
                   var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
                   var uri = new goog.Uri(item['thumbnail']);
                   uri.setDomain(uri_server.getDomain());
@@ -337,15 +337,14 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
                   uri.setScheme(uri_server.getScheme());
                   uri.setPort(uri_server.getPort());
                   item['thumbnail'] = uri.toString() + '=s218';
+                } else {
+                  item['thumbnail'] = item['thumbnail'] + '=s218';
                 }
-              }
+              }              
               var cell = grid.createCell(item);
               cell.getLabelData = function(data) {
                 return data.filename;
-              };
-              /*cell.getImageData = function(data) {
-                return data.thumbnail;
-              };*/
+              };              
               grid.add(cell);
               cell.renderCell();
             });
