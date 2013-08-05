@@ -34,9 +34,6 @@ good.drive.nav.grid.Cell.prototype.renderCell = function() {
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
-  var labelElm1 = goog.dom.createDom('a',
-      {'class': 'gridview-thumbnail-link',
-    'target': '_blank', 'rel': 'noreferrer'});
   var checkImage = goog.dom.createDom('div',
       {'class': 'gv-checkbox goog-inline-block'},
       goog.dom.createDom('span',
@@ -45,9 +42,9 @@ good.drive.nav.grid.Cell.prototype.renderCell = function() {
         'true', 'tabindex': '0', 'dir': 'ltr'},
       goog.dom.createDom('div',
           {'class': 'jfk-checkbox-checkmark'})));
-  goog.dom.appendChild(this.getImageContainerElement(), labelElm1);
-  goog.dom.appendChild(labelElm1, checkImage);
-  goog.dom.appendChild(labelElm1, imageData);
+  goog.dom.appendChild(this.getImageCheckElement(), checkImage);
+  goog.dom.appendChild(this.getImageCheckElement(), imageData);
+  
 };
 
 /**
@@ -77,10 +74,10 @@ good.drive.nav.grid.Cell.prototype.getImageData =
       }
     }
   } else {
-    if (data.thumbnail != null) {
+    if (data['thumbnail'] != undefined) {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
-        'src' : data.thumbnail
+        'src' : data['thumbnail']
       });
     } else if (data.contentType == 'audio/mp3') {
       return goog.dom.createDom('img', {
@@ -236,6 +233,27 @@ good.drive.nav.grid.Cell.prototype.handleKeyEvent = function(e) {
  */
 good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
   this.openCell();
+  var imageCheck = this.getImageCheckElement();
+  var rootElement = this.getThumbnailElement();
+  goog.events.listen(rootElement, goog.events.EventType.CLICK, function(e) {
+    goog.dom.classes.add(rootElement, 'gv-active');
+  });
+  goog.events.listen(imageCheck, goog.events.EventType.CLICK, function(e) {
+    var path = good.drive.nav.folders.Path.getINSTANCE();
+    var docId = path.getCurrentDocid;
+    var grid = good.drive.nav.grid.View.currentGrid;
+    var selectedElemnet = grid.getSelectedItem();
+    var data = selectedElemnet.data;
+    if(docId !=  good.constants.MYRESDOCID) {
+      if (data instanceof good.realtime.CollaborativeMap) {
+        if(data.get('isfile') != undefined) {
+          good.drive.rightmenu.Rightmenu.PREVIEW(data.get('id'));
+        }
+      } else {
+        good.drive.rightmenu.Rightmenu.PREVIEW(data.id);
+      }
+    }
+  });
 };
 
 /**
@@ -337,7 +355,7 @@ good.drive.nav.grid.Cell.prototype.getImageContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
       this.getImageContainerClassName(),
-      '"></div>');
+      '">'+ this.getImageCheckHtml() +'</div>');
   return sb.toString();
 };
 
@@ -352,12 +370,30 @@ good.drive.nav.grid.Cell.prototype.getImageContainerElement = function() {
       null;
 };
 
-
 /**
  * @return {string}
  */
 good.drive.nav.grid.Cell.prototype.getImageContainerClassName = function() {
   return this.defaultConfig.cssCellImageContainer;
+};
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
+good.drive.nav.grid.Cell.prototype.getImageCheckHtml = function() {
+  var sb = new goog.string.StringBuffer();
+  sb.append('<a class="gridview-thumbnail-link" target="_blank" rel="noreferrer"></a>');
+  return sb.toString();
+};
+
+/**
+ * @return {Element}
+ */
+good.drive.nav.grid.Cell.prototype.getImageCheckElement = function() {
+  var el = this.getImageContainerElement();
+  return el ?
+      /** @type {Element} */ (el.firstChild) :
+        null;
 };
 
 
@@ -394,7 +430,7 @@ good.drive.nav.grid.Cell.prototype.getLabelClassName = function() {
  * @param {Element} dom
  */
 good.drive.nav.grid.Cell.prototype.setLabel = function(dom) {
-  goog.dom.removeChildren(this.getImageContainerElement());
+//  goog.dom.removeChildren(this.getImageContainerElement());
   goog.dom.removeChildren(this.getLabelElement());
   goog.dom.appendChild(this.getLabelElement(), dom);
 };
