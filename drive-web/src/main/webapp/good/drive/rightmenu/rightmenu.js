@@ -63,7 +63,7 @@ good.drive.rightmenu.Rightmenu.prototype.uploadAgain = function(fileId, fn) {
 /**
  * @param {string} fileId
  */
-good.drive.rightmenu.Rightmenu.prototype.preview = function(fileId) {
+good.drive.rightmenu.Rightmenu.PREVIEW = function(fileId) {
   var uri = new goog.Uri(good.constants.SERVERADRESS);
   uri.setPath('serve');
   uri.setQuery('id');
