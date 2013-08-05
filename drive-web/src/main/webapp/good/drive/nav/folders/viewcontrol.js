@@ -105,14 +105,16 @@ good.drive.nav.folders.ViewControl.prototype.buildPath =
   if (parentNode == null) {
     return;
   }
-  var path = pathmap.get(good.drive.nav.folders.Path.NameType.PATH);
+  var path = good.drive.nav.folders.Path.getINSTANCE().path;
   var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
   var pathjson = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
-  if (docid == this.model().docId() &&
-      this.isCurrentPath(pathjson,
-          parentNode.mapid, pathjson.length)) {
+  if (this.isCurrentPath(pathjson,
+      parentNode.mapid, pathjson.length)) {
     return;
   }
+//  if (docid == this.model().docId()) {
+//    return;
+//  }
   var paths = [];
   this.buildPath_(parentNode, paths);
   var i = 0;
@@ -166,7 +168,8 @@ good.drive.nav.folders.ViewControl.prototype.isCurrentPath =
     return true;
   }
   var mapid_ = pathlist[pathCount - 1];
-  if (mapid_ == mapid) {
+  var docid = good.drive.nav.folders.Path.getINSTANCE().getCurrentDocid();
+  if (mapid_ == mapid && docid == this.model().docId()) {
     return true;
   }
   return false;

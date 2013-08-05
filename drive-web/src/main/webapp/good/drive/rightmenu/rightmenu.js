@@ -144,6 +144,13 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
           uri.setPort(uri_server.getPort());
           thumbnail.src = uri.toString() + '=s300';
         }
+      } else {
+        var contentType = json['contentType'];
+        if (contentType == 'audio/mp3' || contentType == 'video/mp4') {
+          thumbnail.src = './good/images/audio.png';
+        } else {
+          thumbnail.src = './good/images/generic.png';
+        }
       }
 
       var tags = json['tags'];

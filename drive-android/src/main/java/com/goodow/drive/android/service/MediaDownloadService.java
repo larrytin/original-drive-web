@@ -5,14 +5,10 @@ import java.io.FileOutputStream;
 import java.lang.Thread.State;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
-import android.annotation.SuppressLint;
 import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
-import android.os.Handler;
 import android.os.IBinder;
-import android.os.Message;
-import com.goodow.drive.android.Interface.IDownloadProcess;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
@@ -38,28 +34,9 @@ public class MediaDownloadService extends Service {
 	private HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
 	private JsonFactory JSON_FACTORY = new JacksonFactory();
 	private CollaborativeMap downloadRes;
-	private IDownloadProcess downloadProcess;
 
 	public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
 	public static final String URL_6M = "http://mirror.bjtu.edu.cn/apache/maven/maven-3/3.1.0-alpha-1/binaries/apache-maven-3.1.0-alpha-1-bin.zip";
-
-	@SuppressLint("HandlerLeak")
-	private Handler handler = new Handler() {
-		@Override
-		public void handleMessage(Message msg) {
-			switch (msg.what) {
-			case 1:
-				int progress = msg.getData().getInt("progress");
-				downloadProcess.downLoadProgress(progress);
-
-				break;
-			case -1:
-				downloadProcess.downLoadFinish();
-
-				break;
-			}
-		}
-	};
 
 	private void startResDownloadTread(final CollaborativeMap res) {
 		// 广播通知离线文件夹界面刷新
@@ -134,10 +111,6 @@ public class MediaDownloadService extends Service {
 			return MediaDownloadService.this.downloadRes.get("blobKey");
 		}
 
-		public void setDownLoadProgress(IDownloadProcess downloadProcess) {
-			MediaDownloadService.this.downloadProcess = downloadProcess;
-		}
-
 		public void addResDownload(final CollaborativeMap res) {
 			startResDownloadTread(res);
 		}
@@ -168,28 +141,11 @@ public class MediaDownloadService extends Service {
 		public void progressChanged(final MediaHttpDownloader downloader) {
 			switch (downloader.getDownloadState()) {
 			case MEDIA_IN_PROGRESS:
-				if (downloadProcess != null) {
-
-					Message message = new Message();
-					message.what = 1;
-					message.getData().putInt("progress",
-							(int) (downloader.getProgress() * 100));
-
-					handler.sendMessage(message);
-				}
-
 				downloadRes.set("progress", Integer.toString((int) (downloader
 						.getProgress() * 100)));
 
 				break;
 			case MEDIA_COMPLETE:
-				if (downloadProcess != null) {
-					Message message = new Message();
-					message.what = -1;
-
-					handler.sendMessage(message);
-				}
-
 				downloadRes.set("progress", "100");
 				downloadRes.set("status",
 						DownloadStatusEnum.COMPLETE.getStatus());

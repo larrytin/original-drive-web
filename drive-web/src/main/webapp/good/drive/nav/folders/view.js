@@ -3,6 +3,8 @@ goog.provide('good.drive.nav.folders');
 
 goog.require('good.drive.nav.folders.ViewControl');
 goog.require('goog.events.KeyHandler');
+goog.require('goog.fx.DragDropGroup');
+goog.require('goog.fx.DragDropItem');
 goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
@@ -27,6 +29,27 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   root.setShowRootLines(false);
   root.setShowRootNode(false);
   root.setShowLines(false);
+  var dragDropGroup = new goog.fx.DragDropGroup();
+  dragDropGroup.createDragElement =
+    function(sourceEl) {
+    return goog.dom.createDom('div', 'foo', 'Custom drag element');
+  };
+  this.dragDropGroup = dragDropGroup;
+  this.dragDropGroup.init();
+  this.dragDropGroup.addTarget(this.dragDropGroup);
+  goog.events.listen(this.dragDropGroup, 'drop', dropList1);
+  var that = this;
+  goog.events.listen(this.dragDropGroup, 'dragstart', dragStart);
+  function dropList1(event) {
+    event.dropTargetItem;
+  }
+
+  function dragStart(event) {
+    goog.style.setOpacity(event.dragSourceItem.element, 1);
+    var path = good.drive.nav.folders.Path.getINSTANCE();
+    var dragdrop = path.root.get(path.pathNameType().DRAGDROP);
+    var dragData = event.dragSourceItem.data;
+  }
 
   var tree_ = root.getTree().createNode(
       '<span class="treedoclistview-root-node-name">' +
@@ -177,6 +200,8 @@ good.drive.nav.folders.Tree.prototype.customNode =
   tree.setAfterLabelHtml('<div class="selection-highlighter"></div>');
   var rowElement = tree.getRowElement();
   var that = this;
+  var item = new goog.fx.DragDropItem(rowElement, tree.map);
+  this.dragDropGroup.addDragDropItem(item);
   goog.events.
       listen(rowElement, goog.events.EventType.MOUSEOVER, function(e) {
     if (!goog.dom.classes.has(rowElement,
@@ -315,3 +340,4 @@ good.drive.nav.folders.Tree.defaultConfig = {
   cssHoverRow: goog.getCssName('goog-tree-row-hover'),
   cssAccessible: goog.getCssName('goog-tree-row-accessible-selected')
 };
+

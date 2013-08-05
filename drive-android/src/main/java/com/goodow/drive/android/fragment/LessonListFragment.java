@@ -16,7 +16,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteControl;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.activity.play.AudioPlayActivity;
 import com.goodow.drive.android.activity.play.VideoPlayActivity;
@@ -38,8 +38,9 @@ import com.goodow.realtime.Realtime;
 import com.goodow.realtime.ValueChangedEvent;
 import elemental.json.JsonArray;
 
-public class LessonListFragment extends ListFragment implements
-		IRemoteDataFragment {
+public class LessonListFragment extends ListFragment implements ILocalFragment {
+	private final String TAG = this.getClass().getSimpleName();
+
 	private IRemoteControl path;
 	private JsonArray currentPathList;
 	private CollaborativeMap currentFolder;
@@ -81,7 +82,8 @@ public class LessonListFragment extends ListFragment implements
 	}
 
 	public void connectUi() {
-		Log.i("", "");
+		Log.i(TAG, "connectUi()");
+
 		if (null != path) {
 
 			path.addListener(pathChangeEventHandler);
@@ -90,8 +92,10 @@ public class LessonListFragment extends ListFragment implements
 			if (0 == currentPathList.length()) {
 				path.addPath(root.getId());
 
-				currentFolder = root;
 			}
+
+			currentFolder = model.getObject(path.getMapId(currentPathList
+					.length() - 1));
 
 			initData();
 		}
@@ -209,8 +213,10 @@ public class LessonListFragment extends ListFragment implements
 											.getOfflineResDirPath() + "/";
 
 									if (GlobalConstant.SupportResTypeEnum.MP3
-											.getTypeName().equals(
-													map.get("type"))) {
+											.getTypeName()
+											.equals(Tools
+													.getTypeByMimeType((String) map
+															.get("type")))) {
 										intent = new Intent(getActivity(),
 												AudioPlayActivity.class);
 
@@ -225,8 +231,10 @@ public class LessonListFragment extends ListFragment implements
 														+ (String) map
 																.get("blobKey"));
 									} else if (GlobalConstant.SupportResTypeEnum.MP4
-											.getTypeName().equals(
-													map.get("type"))) {
+											.getTypeName()
+											.equals(Tools
+													.getTypeByMimeType((String) map
+															.get("type")))) {
 										intent = new Intent(getActivity(),
 												VideoPlayActivity.class);
 
@@ -241,17 +249,17 @@ public class LessonListFragment extends ListFragment implements
 														+ (String) map
 																.get("blobKey"));
 									} else if (GlobalConstant.SupportResTypeEnum.FLASH
-											.getTypeName().equals(
-													map.get("type"))) {
+											.getTypeName()
+											.equals(Tools
+													.getTypeByMimeType((String) map
+															.get("type")))) {
 										// TODO
 									} else {
 										intent = new Intent();
 
 										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
 										intent.setAction(Intent.ACTION_VIEW);
-										String type = Tools
-												.getMIMEType((String) map
-														.get("type"));
+										String type = map.get("type");
 										intent.setDataAndType(
 												Uri.fromFile(file), type);
 									}
@@ -299,8 +307,7 @@ public class LessonListFragment extends ListFragment implements
 
 			MainActivity activity = (MainActivity) getActivity();
 			if (null != activity) {
-				if ((null == folderList && null == fileList)
-						|| null != folderList && 0 == folderList.length()
+				if (null != folderList && 0 == folderList.length()
 						&& null != fileList && 0 == fileList.length()) {
 					activity.openState(LinearLayout.VISIBLE);
 				} else {
@@ -313,9 +320,11 @@ public class LessonListFragment extends ListFragment implements
 
 	@Override
 	public void onCreate(Bundle savedInstanceState) {
+		Log.i(TAG, "onCreate()");
+
 		super.onCreate(savedInstanceState);
-		adapter = new CollaborativeAdapter(this.getActivity(), this, null,
-				null, new OnItemClickListener() {
+		adapter = new CollaborativeAdapter(this.getActivity(), null, null,
+				new OnItemClickListener() {
 					@Override
 					public void onItemClick(CollaborativeMap file) {
 						MainActivity activity = (MainActivity) LessonListFragment.this
@@ -323,13 +332,10 @@ public class LessonListFragment extends ListFragment implements
 
 						DataDetailFragment dataDetailFragment = activity
 								.getDataDetailFragment();
-
 						dataDetailFragment.setFile(file);
-
 						dataDetailFragment.initView();
 
 						activity.setDataDetailLayoutState(View.VISIBLE);
-
 						activity.setIRemoteFrament(dataDetailFragment);
 
 					}
@@ -342,6 +348,8 @@ public class LessonListFragment extends ListFragment implements
 		DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
 			@Override
 			public void onLoaded(Document document) {
+				Log.i(TAG, "onLoaded()");
+
 				doc = document;
 				model = doc.getModel();
 				root = model.getRoot();

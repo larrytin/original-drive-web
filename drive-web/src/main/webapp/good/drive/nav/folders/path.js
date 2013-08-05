@@ -30,7 +30,10 @@ good.drive.nav.folders.Path.INSTANCE;
 good.drive.nav.folders.Path.NameType = {
     PATH: 'path',
     CURRENTPATH: 'currentpath',
-    CURRENTDOCID: 'currentdocid'
+    CURRENTDOCID: 'currentdocid',
+    DRAGDROP: 'dragdrop',
+    DRAG: 'drag',
+    DROP: 'drop'
 };
 
 /**
@@ -225,6 +228,10 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   var path = {'currentpath': [],
       'currentdocid': ''};
   root.set(this.pathNameType().PATH, path);
+  var map = mod.createMap();
+  map.set(this.pathNameType().DRAG, '');
+  map.set(this.pathNameType().DROP, '');
+  root.set(this.pathNameType().DRAGDROP, map);
 };
 
 /**

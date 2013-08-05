@@ -264,12 +264,8 @@ good.drive.nav.grid.Cell.prototype.openCell = function() {
       return;
     }
     var path = good.drive.nav.folders.Path.getINSTANCE().path;
-//    var paths = [];
     var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
     var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
-//    for (var i in pathlist) {
-//      paths.push(pathlist[i]);
-//    }
     pathlist.push(this.data.getId());
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(path);
   } else {

@@ -3,13 +3,12 @@ package com.goodow.drive.android.activity;
 import roboguice.activity.RoboActivity;
 import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
-import android.R.integer;
 import android.app.ActionBar;
 import android.app.AlertDialog;
 import android.app.Fragment;
+import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
-import android.content.Intent;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.KeyEvent;
@@ -26,7 +25,7 @@ import android.widget.TextView;
 
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.IRemoteControl;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
@@ -36,6 +35,7 @@ import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDataKey;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
 import com.goodow.realtime.DocumentLoadedHandler;
@@ -54,8 +54,8 @@ import elemental.json.impl.JreJsonString;
 public class MainActivity extends RoboActivity {
 	private final String TAG = this.getClass().getSimpleName();
 
-	private IRemoteDataFragment iRemoteDataFragment;
-	private IRemoteDataFragment lastiRemoteDataFragment;
+	private ILocalFragment iRemoteDataFragment;
+	private ILocalFragment lastiRemoteDataFragment;
 
 	private RemoteControlObserver remoteControlObserver;
 	private ActionBar actionBar;
@@ -196,10 +196,14 @@ public class MainActivity extends RoboActivity {
 									GlobalDataCacheForMemorySingleton.getInstance
 											.setAccess_token(null);
 
-									Intent intent = new Intent(
-											MainActivity.this,
-											LogInActivity.class);
-									startActivity(intent);
+									// Intent intent = new Intent(
+									// MainActivity.this,
+									// LogInActivity.class);
+									// startActivity(intent);
+
+									// finish();
+									ToolsFunctionForThisProgect
+											.quitApp(MainActivity.this);
 								}
 							})
 					.setNegativeButton(R.string.dailogCancel,
@@ -232,16 +236,17 @@ public class MainActivity extends RoboActivity {
 	protected void onCreate(Bundle savedInstanceState) {
 		super.onCreate(savedInstanceState);
 
-		GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
+		// GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
 
 		actionBar = getActionBar();
 		actionBar.setDisplayHomeAsUpEnabled(true);
 
-		FragmentTransaction fragmentTransaction = getFragmentManager()
+		FragmentManager fragmentManager = getFragmentManager();
+		fragmentManager.popBackStack();
+
+		FragmentTransaction fragmentTransaction = fragmentManager
 				.beginTransaction();
-
 		fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
-
 		fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
 
 		fragmentTransaction.commitAllowingStateLoss();
@@ -301,18 +306,18 @@ public class MainActivity extends RoboActivity {
 		super.onDestroy();
 	}
 
-	public void setIRemoteFrament(IRemoteDataFragment iRemoteDataFragment) {
+	public void setIRemoteFrament(ILocalFragment iRemoteDataFragment) {
 		this.iRemoteDataFragment = iRemoteDataFragment;
 
 	}
 
-	public IRemoteDataFragment getLastiRemoteDataFragment() {
+	public ILocalFragment getLastiRemoteDataFragment() {
 
 		return lastiRemoteDataFragment;
 	}
 
 	public void setLastiRemoteDataFragment(
-			IRemoteDataFragment lastiRemoteDataFragment) {
+			ILocalFragment lastiRemoteDataFragment) {
 		this.lastiRemoteDataFragment = lastiRemoteDataFragment;
 
 	}
@@ -357,7 +362,10 @@ public class MainActivity extends RoboActivity {
 			}
 
 			if (newFragment != null) {
-				FragmentTransaction fragmentTransaction = getFragmentManager()
+				FragmentManager fragmentManager = getFragmentManager();
+				fragmentManager.popBackStack();
+
+				FragmentTransaction fragmentTransaction = fragmentManager
 						.beginTransaction();
 				fragmentTransaction.replace(R.id.contentLayout, newFragment);
 				fragmentTransaction.commitAllowingStateLoss();
@@ -404,6 +412,8 @@ public class MainActivity extends RoboActivity {
 					map);
 
 			freshMap();
+
+			Log.i(TAG, "Change DocId: " + docId);
 		}
 
 		@Override
@@ -463,7 +473,7 @@ public class MainActivity extends RoboActivity {
 				root.set(
 						GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(),
 						newMap);
-				
+
 				freshMap();
 			}
 		}
