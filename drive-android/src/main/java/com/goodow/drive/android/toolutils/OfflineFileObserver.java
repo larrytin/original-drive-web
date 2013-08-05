@@ -5,6 +5,9 @@ import java.io.IOException;
 import java.lang.Thread.State;
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.LinkedBlockingDeque;
+
+import android.util.Log;
+
 import com.goodow.api.services.attachment.Attachment;
 import com.goodow.api.services.attachment.Attachment.Get;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
@@ -24,6 +27,8 @@ import com.goodow.realtime.ValuesRemovedEvent;
 import elemental.json.JsonObject;
 
 public class OfflineFileObserver {
+	// private final String TAG = this.getClass().getSimpleName();
+
 	private static BlockingQueue<JsonObject> unLoginDownloadQueue = new LinkedBlockingDeque<JsonObject>();
 
 	private Document doc;
@@ -33,8 +38,6 @@ public class OfflineFileObserver {
 
 	private static Model model_unlogin;
 	private static CollaborativeList list_unlogin;
-
-	private static final String OFFLINE = "offline";
 
 	private EventHandler<ValuesAddedEvent> listAddEventHandler;
 	private EventHandler<ValuesRemovedEvent> listRemoveEventHandler;
@@ -47,9 +50,16 @@ public class OfflineFileObserver {
 			try {
 				while (true) {
 					JsonObject json = unLoginDownloadQueue.take();
-					String attachmentId = json.getString("attachmentId");
 
-					addFile(null, attachmentId);
+					String attachmentId = json.getString("attachmentId");
+					String userId = json.getString("userId");
+					String docId = "@tmp/"
+							+ userId
+							+ "/"
+							+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
+									.getValue();
+
+					startObservation(docId, attachmentId);
 				}
 			} catch (Exception exception) {
 				exception.printStackTrace();
@@ -59,80 +69,102 @@ public class OfflineFileObserver {
 
 	public void addAttachment(JsonObject json) {
 		unLoginDownloadQueue.add(json);
+
+		State state = unloginDownloadThread.getState();
+		switch (state) {
+		case BLOCKED:
+			break;
+
+		case NEW:
+			unloginDownloadThread.start();
+
+			break;
+
+		case RUNNABLE:
+
+			break;
+
+		case TERMINATED:
+			unloginDownloadThread = new UnloginDownloadThread();
+			unloginDownloadThread.start();
+
+			break;
+
+		case TIMED_WAITING:
+
+			break;
+		default:
+			break;
+		}
 	}
 
 	public static CollaborativeList getList() {
 		return list;
 	}
 
-	public static void addFile(CollaborativeMap file, String attachmentId) {
-		CollaborativeMap newFile;
+	public static void addFile(final String attachmentId, boolean isLogin) {
+		final Model newModel;
+		final CollaborativeList newList;
+		if (isLogin) {
+			newModel = model;
+			newList = list;
+		} else {
+			newModel = model_unlogin;
+			newList = list_unlogin;
+		}
 
-		if (null != file) {
-			out: do {
-				for (int i = 0; i < list.length(); i++) {
-					CollaborativeMap map = list.get(i);
-					if (file.get("blobKey").equals(map.get("blobKey"))) {
-						break out;
+		if (null != attachmentId) {
+			new Thread() {
+				public void run() {
+					try {
+						Attachment attachment = MyApplication.getAttachment();
+						Get get = attachment.get(attachmentId);
+						com.goodow.api.services.attachment.model.Attachment execute = get
+								.execute();
+
+						out: do {
+							if (null == execute) {
+								break out;
+							}
+
+							for (int i = 0; i < newList.length(); i++) {
+								CollaborativeMap map = newList.get(i);
+								if (execute.getBlobKey().equals(
+										map.get("blobKey"))) {
+									break out;
+								}
+							}
+
+							CollaborativeMap newFile = newModel.createMap(null);
+							newFile.set("title", execute.getFilename());
+
+							for (Tools.MIME_TYPE_Table mimeType : Tools.MIME_TYPE_Table
+									.values()) {
+								if (execute.getContentType().equals(
+										mimeType.getMimeType())) {
+									newFile.set("type", mimeType.getType());
+
+								}
+							}
+
+							newFile.set("url", DriveModule.DRIVE_SERVER
+									+ "/serve?id=" + attachmentId);
+							newFile.set("progress", "0");
+							newFile.set("status",
+									GlobalConstant.DownloadStatusEnum.WAITING
+											.getStatus());
+							newFile.set("blobKey", execute.getBlobKey());
+
+							newList.push(newFile);
+
+							Log.i("Download", "add new download rescourse :"
+									+ newFile.toString());
+						} while (false);
+					} catch (IOException e) {
+						e.printStackTrace();
 					}
-				}
-
-				newFile = model.createMap(null);
-				newFile.set("title", file.get("label"));
-				newFile.set("type", file.get("type"));
-				newFile.set("url", file.get("url"));
-				newFile.set("progress", "0");
-				newFile.set("status",
-						GlobalConstant.DownloadStatusEnum.WAITING.getStatus());
-				newFile.set("blobKey", file.get("blobKey"));
-
-				list.push(newFile);
-			} while (false);
-
-		} else if (null != attachmentId) {
-			try {
-				Attachment attachment = MyApplication.getAttachment();
-				Get get = attachment.get(attachmentId);
-				com.goodow.api.services.attachment.model.Attachment execute = get
-						.execute();
-
-				out: do {
-					if (null == execute) {
-						break out;
-					}
-
-					for (int i = 0; i < list_unlogin.length(); i++) {
-						CollaborativeMap map = list_unlogin.get(i);
-						if (execute.getBlobKey().equals(map.get("blobKey"))) {
-							break out;
-						}
-					}
-
-					newFile = model_unlogin.createMap(null);
-					newFile.set("title", execute.getFilename());
-
-					for (Tools.MIME_TYPE_Table mimeType : Tools.MIME_TYPE_Table
-							.values()) {
-						if (execute.getContentType().equals(
-								mimeType.getMimeType())) {
-							newFile.set("type", mimeType.getType());
-
-						}
-					}
-
-					newFile.set("url", DriveModule.DRIVE_SERVER + "/serve?id="
-							+ attachmentId);
-					newFile.set("progress", "0");
-					newFile.set("status",
-							GlobalConstant.DownloadStatusEnum.WAITING
-									.getStatus());
-					newFile.set("blobKey", execute.getBlobKey());
-
-					list_unlogin.push(newFile);
-				} while (false);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
+				};
+			}.start();
 		}
 	}
 
@@ -140,9 +172,7 @@ public class OfflineFileObserver {
 		// TODO
 	}
 
-	public OfflineFileObserver startObservation(String docId,
-			final boolean isLogin) {
-
+	public void startObservation(String docId, final String attachmentId) {
 		initEventHandler();
 
 		DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
@@ -150,48 +180,31 @@ public class OfflineFileObserver {
 			public void onLoaded(Document document) {
 				doc = document;
 
-				if (isLogin) {
+				if (null == attachmentId) {
+					// 当前用户的离线文件夹
 					model = doc.getModel();
 					root = model.getRoot();
 
-					list = root.get(OFFLINE);
+					list = root
+							.get(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
+									.getValue());
 					list.addValuesAddedListener(listAddEventHandler);
 					list.addValuesRemovedListener(listRemoveEventHandler);
+
 				} else {
+					// 远程推送下载的离线文件夹
 					model_unlogin = doc.getModel();
 					root = model_unlogin.getRoot();
 
-					list_unlogin = root.get(OFFLINE);
+					list_unlogin = root
+							.get(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
+									.getValue());
 					list_unlogin.addValuesAddedListener(listAddEventHandler);
 					list_unlogin
 							.addValuesRemovedListener(listRemoveEventHandler);
 
-					State state = unloginDownloadThread.getState();
-					switch (state) {
-					case BLOCKED:
-						break;
+					addFile(attachmentId, false);
 
-					case NEW:
-						unloginDownloadThread.start();
-
-						break;
-
-					case RUNNABLE:
-
-						break;
-
-					case TERMINATED:
-						unloginDownloadThread = new UnloginDownloadThread();
-						unloginDownloadThread.start();
-
-						break;
-
-					case TIMED_WAITING:
-
-						break;
-					default:
-						break;
-					}
 				}
 			}
 		};
@@ -199,25 +212,26 @@ public class OfflineFileObserver {
 		ModelInitializerHandler initializer = new ModelInitializerHandler() {
 			@Override
 			public void onInitializer(Model model_) {
-				if (isLogin) {
+				if (null == attachmentId) {
 					model = model_;
 					root = model.getRoot();
 
-					root.set(OFFLINE, model.createList());
-					
+					root.set(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
+							.getValue(), model.createList());
+
 				} else {
 					model_unlogin = model_;
 					root = model_unlogin.getRoot();
 
-					root.set(OFFLINE, model_unlogin.createList());
-					
+					root.set(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
+							.getValue(), model_unlogin.createList());
+
 				}
 			}
 		};
 
 		Realtime.load(docId, onLoaded, initializer, null);
 
-		return this;
 	}
 
 	public void initEventHandler() {

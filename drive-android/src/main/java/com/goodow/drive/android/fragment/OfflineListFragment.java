@@ -10,15 +10,14 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import com.goodow.android.drive.R;
-import com.goodow.drive.android.Interface.IRemoteDataFragment;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.adapter.OfflineAdapter;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.realtime.CollaborativeList;
-import com.goodow.realtime.CollaborativeMap;
 
 public class OfflineListFragment extends ListFragment implements
-		IRemoteDataFragment {
+		ILocalFragment {
 	private OfflineAdapter adapter;
 
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {

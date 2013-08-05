@@ -6,7 +6,6 @@ import android.content.DialogInterface;
 import android.text.TextUtils;
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
-import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 
 /**
  * 这里只放置, 在当前项目中会被用到的方法
@@ -104,7 +103,7 @@ public final class ToolsFunctionForThisProgect {
 					@Override
 					public void onClick(DialogInterface dialog, int which) {
 
-						GlobalDataCacheForMemorySingleton.getInstance.exit();
+						// GlobalDataCacheForMemorySingleton.getInstance.exit();
 						activity.finish();
 						// 杀死当前app进程
 						int nPid = android.os.Process.myPid();
