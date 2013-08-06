@@ -94,7 +94,7 @@ public class LogInActivity extends RoboActivity {
 						+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
 								.getValue();
 
-				new OfflineFileObserver().startObservation(docId, null);
+				OfflineFileObserver.OFFLINEFILEOBSERVER.startObservation(docId, null);
 
 				Intent intent = new Intent(LogInActivity.this,
 						MainActivity.class);

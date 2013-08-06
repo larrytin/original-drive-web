@@ -23,7 +23,7 @@ public class DownloadBroadcastReceiver extends BroadcastReceiver {
 			
 		}
 
-		new OfflineFileObserver().addAttachment(json);
+		OfflineFileObserver.OFFLINEFILEOBSERVER.addAttachment(json);
 	}
 
 }

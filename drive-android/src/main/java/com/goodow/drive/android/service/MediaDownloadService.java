@@ -35,9 +35,6 @@ public class MediaDownloadService extends Service {
 	private JsonFactory JSON_FACTORY = new JacksonFactory();
 	private CollaborativeMap downloadRes;
 
-	public static final String URL_180M = "http://dzcnc.onlinedown.net/down/eclipse-SDK-4.2.2-win32.zip";
-	public static final String URL_6M = "http://mirror.bjtu.edu.cn/apache/maven/maven-3/3.1.0-alpha-1/binaries/apache-maven-3.1.0-alpha-1-bin.zip";
-
 	private void startResDownloadTread(final CollaborativeMap res) {
 		// 广播通知离线文件夹界面刷新
 		Intent intent = new Intent();
@@ -74,6 +71,7 @@ public class MediaDownloadService extends Service {
 
 			break;
 		default:
+			
 			break;
 		}
 	}
@@ -97,6 +95,7 @@ public class MediaDownloadService extends Service {
 
 						final String urlString = downloadRes.get("url");
 						doDownLoad(urlString);
+						
 					}
 				}
 			} catch (Exception e) {

@@ -63,8 +63,14 @@ public class DataDetailFragment extends Fragment implements ILocalFragment {
 		public void onClick(View v) {
 			file.set("status", DownloadStatusEnum.WAITING.getStatus());
 			final String attachmentId = file.get("id");
-			OfflineFileObserver.addFile(attachmentId, true);
+			OfflineFileObserver.OFFLINEFILEOBSERVER.addFile(attachmentId, true);
 		}
 	};
+
+	@Override
+	public void connectUi() {
+		// TODO Auto-generated method stub
+		
+	}
 
 }

@@ -5,10 +5,11 @@
 
     <ListView
         android:id="@id/android:list"
-        android:layout_gravity="left"
         android:layout_width="450dp"
-        android:layout_height="wrap_content"
-        android:background="@color/white" >
+        android:layout_gravity="left"
+        android:background="@color/gray"
+        android:divider="@color/white"
+        android:dividerHeight="1dp" >
     </ListView>
 
 </LinearLayout>

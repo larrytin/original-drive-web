@@ -15,6 +15,7 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.INotifyData;
 import com.goodow.drive.android.Interface.IRemoteControl;
 import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
@@ -72,7 +73,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 						.removeObjectChangedListener(valuesChangeEventHandler);
 			}
 
-			path.removeLastPath();
+			path.changePath(null);
 		} else {
 			if (null != getActivity()) {
 				Toast.makeText(getActivity(), R.string.backFolderErro,
@@ -85,13 +86,109 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 		Log.i(TAG, "connectUi()");
 
 		if (null != path) {
+			path.setNotifyData(new INotifyData() {
+				@Override
+				public void notifyData() {
+					currentPathList = path.getCurrentPath();
 
-			path.addListener(pathChangeEventHandler);
+					if (null != currentPathList
+							&& 0 != currentPathList.length()) {
+						CollaborativeMap map = model.getObject(path
+								.getMapId(currentPathList.length() - 1));
+						if (null != map) {
+							// 判断若为文件,则触发播放功能,并且pathList自动-1(即执行一遍backfragment()方法)
+							if (null == map.get(FOLDER_KEY)) {
+								File file = new File(
+										GlobalDataCacheForMemorySingleton.getInstance
+												.getOfflineResDirPath()
+												+ "/"
+												+ map.get("blobKey"));
+
+								if (file.exists()) {
+									Intent intent = null;
+
+									String resPath = GlobalDataCacheForMemorySingleton.getInstance
+											.getOfflineResDirPath() + "/";
+
+									if (GlobalConstant.SupportResTypeEnum.MP3
+											.getTypeName()
+											.equals(Tools
+													.getTypeByMimeType((String) map
+															.get("type")))) {
+										intent = new Intent(getActivity(),
+												AudioPlayActivity.class);
+
+										intent.putExtra(
+												AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
+														.name(), (String) map
+														.get("label"));
+										intent.putExtra(
+												AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
+														.name(),
+												resPath
+														+ (String) map
+																.get("blobKey"));
+									} else if (GlobalConstant.SupportResTypeEnum.MP4
+											.getTypeName()
+											.equals(Tools
+													.getTypeByMimeType((String) map
+															.get("type")))) {
+										intent = new Intent(getActivity(),
+												VideoPlayActivity.class);
+
+										intent.putExtra(
+												VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
+														.name(), (String) map
+														.get("label"));
+										intent.putExtra(
+												VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
+														.name(),
+												resPath
+														+ (String) map
+																.get("blobKey"));
+									} else if (GlobalConstant.SupportResTypeEnum.FLASH
+											.getTypeName()
+											.equals(Tools
+													.getTypeByMimeType((String) map
+															.get("type")))) {
+										// TODO
+									} else {
+										intent = new Intent();
+
+										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+										intent.setAction(Intent.ACTION_VIEW);
+										String type = map.get("type");
+										intent.setDataAndType(
+												Uri.fromFile(file), type);
+									}
+
+									getActivity().startActivity(intent);
+								} else {
+									Toast.makeText(getActivity(), "请先下载该文件.",
+											Toast.LENGTH_SHORT).show();
+								}
+
+								backFragment();
+							} else {
+								// 判断若为文件夹,则展现数据
+								currentFolder = model.getObject(path
+										.getMapId(currentPathList.length() - 1));
+
+								initData();
+
+								openState();
+							}
+						} else {
+							backFragment();
+						}
+					}
+				}
+			});
 
 			currentPathList = path.getCurrentPath();
 			if (0 == currentPathList.length()) {
-				path.addPath(root.getId());
-
+				path.changePath(root.getId());
+				currentPathList = path.getCurrentPath();
 			}
 
 			currentFolder = model.getObject(path.getMapId(currentPathList
@@ -191,101 +288,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 			pathChangeEventHandler = new EventHandler<ValueChangedEvent>() {
 				@Override
 				public void handleEvent(ValueChangedEvent event) {
-					currentPathList = path.getCurrentPath();
 
-					if (null != currentPathList
-							&& 0 != currentPathList.length()) {
-						CollaborativeMap map = model.getObject(path
-								.getMapId(currentPathList.length() - 1));
-						if (null != map) {
-							// 判断若为文件,则触发播放功能,并且pathList自动-1(即执行一遍backfragment()方法)
-							if (null == map.get(FOLDER_KEY)) {
-								File file = new File(
-										GlobalDataCacheForMemorySingleton.getInstance
-												.getOfflineResDirPath()
-												+ "/"
-												+ map.get("blobKey"));
-
-								if (file.exists()) {
-									Intent intent = null;
-
-									String resPath = GlobalDataCacheForMemorySingleton.getInstance
-											.getOfflineResDirPath() + "/";
-
-									if (GlobalConstant.SupportResTypeEnum.MP3
-											.getTypeName()
-											.equals(Tools
-													.getTypeByMimeType((String) map
-															.get("type")))) {
-										intent = new Intent(getActivity(),
-												AudioPlayActivity.class);
-
-										intent.putExtra(
-												AudioPlayActivity.IntentExtraTagEnum.MP3_NAME
-														.name(), (String) map
-														.get("label"));
-										intent.putExtra(
-												AudioPlayActivity.IntentExtraTagEnum.MP3_PATH
-														.name(),
-												resPath
-														+ (String) map
-																.get("blobKey"));
-									} else if (GlobalConstant.SupportResTypeEnum.MP4
-											.getTypeName()
-											.equals(Tools
-													.getTypeByMimeType((String) map
-															.get("type")))) {
-										intent = new Intent(getActivity(),
-												VideoPlayActivity.class);
-
-										intent.putExtra(
-												VideoPlayActivity.IntentExtraTagEnum.MP4_NAME
-														.name(), (String) map
-														.get("label"));
-										intent.putExtra(
-												VideoPlayActivity.IntentExtraTagEnum.MP4_PATH
-														.name(),
-												resPath
-														+ (String) map
-																.get("blobKey"));
-									} else if (GlobalConstant.SupportResTypeEnum.FLASH
-											.getTypeName()
-											.equals(Tools
-													.getTypeByMimeType((String) map
-															.get("type")))) {
-										// TODO
-									} else {
-										intent = new Intent();
-
-										intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-										intent.setAction(Intent.ACTION_VIEW);
-										String type = map.get("type");
-										intent.setDataAndType(
-												Uri.fromFile(file), type);
-									}
-
-									getActivity().startActivity(intent);
-								} else {
-									Toast.makeText(getActivity(), "请先下载该文件.",
-											Toast.LENGTH_SHORT).show();
-								}
-
-								backFragment();
-							} else {
-								// 判断若为文件夹,则展现数据
-								currentFolder = model
-										.getObject(path
-												.getMapId(currentPathList
-														.length() - 1));
-
-								initData();
-
-								openState();
-							}
-						} else {
-							backFragment();
-						}
-					}
 				}
 			};
 		}
@@ -371,7 +374,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 					CollaborativeMap map = model.createMap(null);
 					for (int i = 0; i < mapKey.length; i++) {
 						if ("label".equals(mapKey[i])) {
-							map.set(mapKey[i], "Lesson" + k);
+							map.set(mapKey[i], "Lesson " + k);
 						} else {
 							CollaborativeList subList = model.createList();
 
@@ -418,6 +421,6 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 	public void onListItemClick(ListView l, View v, int position, long id) {
 		CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
 
-		path.addPath(clickItem.getId());
+		path.changePath(clickItem.getId());
 	}
 }
