@@ -44,7 +44,6 @@ good.drive.nav.grid.Cell.prototype.renderCell = function() {
           {'class': 'jfk-checkbox-checkmark'})));
   goog.dom.appendChild(this.getImageCheckElement(), checkImage);
   goog.dom.appendChild(this.getImageCheckElement(), imageData);
-  
 };
 
 /**
@@ -244,9 +243,9 @@ good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
     var grid = good.drive.nav.grid.View.currentGrid;
     var selectedElemnet = grid.getSelectedItem();
     var data = selectedElemnet.data;
-    if(docId !=  good.constants.MYRESDOCID) {
+    if (docId != good.constants.MYRESDOCID) {
       if (data instanceof good.realtime.CollaborativeMap) {
-        if(data.get('isfile') != undefined) {
+        if (data.get('isfile') != undefined) {
           good.drive.rightmenu.Rightmenu.PREVIEW(data.get('id'));
         }
       } else {
@@ -351,7 +350,7 @@ good.drive.nav.grid.Cell.prototype.getImageContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
       this.getImageContainerClassName(),
-      '">'+ this.getImageCheckHtml() +'</div>');
+      '">' + this.getImageCheckHtml() + '</div>');
   return sb.toString();
 };
 
@@ -378,7 +377,8 @@ good.drive.nav.grid.Cell.prototype.getImageContainerClassName = function() {
  */
 good.drive.nav.grid.Cell.prototype.getImageCheckHtml = function() {
   var sb = new goog.string.StringBuffer();
-  sb.append('<a class="gridview-thumbnail-link" target="_blank" rel="noreferrer"></a>');
+  sb.append('<a class="gridview-thumbnail-link" ' +
+      'target="_blank" rel="noreferrer"></a>');
   return sb.toString();
 };
 
