@@ -128,11 +128,8 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
                 backFragment();
               } else {
                 // 判断若为文件夹,则展现数据
-                currentFolder = model.getObject(path.getMapId(currentPathList.length() - 1));
-
                 initData();
 
-                openState();
               }
             } else {
               backFragment();
@@ -147,13 +144,14 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
         currentPathList = path.getCurrentPath();
       }
 
-      currentFolder = model.getObject(path.getMapId(currentPathList.length() - 1));
-
       initData();
+
     }
   }
 
   public void initData() {
+    currentFolder = model.getObject(path.getMapId(currentPathList.length() - 1));
+
     if (null != currentFolder) {
       currentFolder.addObjectChangedListener(valuesChangeEventHandler);
       CollaborativeList folderList = (CollaborativeList) currentFolder.get(FOLDER_KEY);
@@ -184,6 +182,8 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
         }
       }
     }
+
+    openState();
   }
 
   @Override
@@ -319,7 +319,7 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
           CollaborativeMap map = model.createMap(null);
           for (int i = 0; i < mapKey.length; i++) {
             if ("label".equals(mapKey[i])) {
-              map.set(mapKey[i], "Folder" + k);
+              map.set(mapKey[i], "Folder " + k);
             } else {
               CollaborativeList subList = model.createList();
 

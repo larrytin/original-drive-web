@@ -21,9 +21,9 @@ import java.io.File;
 import android.os.Environment;
 
 public class DriveModule extends AbstractModule {
-  // public static final String DRIVE_SERVER = "http://192.168.1.15:8880";
+  public static final String DRIVE_SERVER = "http://192.168.1.15:8880";
 
-  public static final String DRIVE_SERVER = "http://server.drive.goodow.com";
+  // public static final String DRIVE_SERVER = "http://server.drive.goodow.com";
 
   @Override
   protected void configure() {
@@ -34,20 +34,24 @@ public class DriveModule extends AbstractModule {
     if (Environment.getExternalStorageState().equals(Environment.MEDIA_MOUNTED)) {
       storage = Environment.getExternalStorageDirectory();
       filePathString = "/retech";
+
     } else {
       storage = Environment.getDataDirectory();
       filePathString = "/data/com.goodow.drive.android/retech";
+
     }
 
     file = new File(storage, filePathString);
 
     if (!file.exists()) {
       file.mkdir();
+
     }
 
     bind(MyApplication.class).asEagerSingleton();
 
     GlobalDataCacheForMemorySingleton.getInstance().setStoragePaht(file.getAbsolutePath());
+
   }
 
   @Provides
@@ -56,6 +60,7 @@ public class DriveModule extends AbstractModule {
     Attachment.Builder endpointBuilder = new Attachment.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(), new HttpRequestInitializer() {
       @Override
       public void initialize(HttpRequest httpRequest) {
+
       }
     });
     endpointBuilder.setRootUrl(RealtimeModule.getEndpointRootUrl(DRIVE_SERVER));
@@ -68,6 +73,7 @@ public class DriveModule extends AbstractModule {
     Account.Builder endpointBuilder = new Account.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(), new HttpRequestInitializer() {
       @Override
       public void initialize(HttpRequest httpRequest) {
+        
       }
     });
     endpointBuilder.setRootUrl(RealtimeModule.getEndpointRootUrl(serverAddress));

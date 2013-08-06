@@ -16,7 +16,7 @@
             android:layout_height="wrap_content"
             android:gravity="center_horizontal"
             android:text="@string/openfailure"
-            android:textSize="@dimen/listItemTextSize"
+            android:textSize="@dimen/listItemTextSize_large"
             android:visibility="invisible" />
 
         <ImageView

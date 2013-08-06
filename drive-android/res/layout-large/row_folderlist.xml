@@ -18,7 +18,8 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/listItemHeigh_large"
         android:layout_toRightOf="@id/leftImage"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:textSize="@dimen/listItemTextSize_large" />
 
     <ImageButton
         android:id="@+id/delButton"
@@ -27,6 +28,6 @@
         android:layout_alignParentRight="true"
         android:layout_marginRight="40dp"
         android:background="@drawable/selector_delbutton_bg"
-        android:src="@drawable/ic_update_normal" />
+        android:src="@drawable/action_discussion_edit" />
 
 </RelativeLayout>

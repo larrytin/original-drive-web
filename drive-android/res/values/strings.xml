@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-
     <string name="contentDescription">description</string>
     <string name="app_name">科睿星平台</string>
     <string name="action_settings">Settings</string>
@@ -15,7 +14,6 @@
     <string name="dailogCancel">取消</string>
 
     <!-- 内网 -->
-    <!-- <string name="com.goodow.realtime.serverAddress">http://192.168.1.15:8080</string> -->
-
+    <string name="com.goodow.realtime.serverAddress">http://192.168.1.15:8080</string>
 
 </resources>

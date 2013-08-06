@@ -42,24 +42,17 @@ public final class GlobalConstant {
     }
   }
 
-  public static enum DocumentIdAndDataKey {
-    // // 协调文件id
-    // FAVORITESDOCID("favorites01"),
-    // //
-    // LESSONDOCID("lesson01"),
-    // //
-    // REMOTECONTROLDOCID("remotecontrol02"),
-    // //
-    // OFFLINEDOCID("offlinedoc01"),
+  private static String change = "61";
 
-    // 内调文件id
-    FAVORITESDOCID("favorites51"),
+  public static enum DocumentIdAndDataKey {
+    // 文件id
+    FAVORITESDOCID("favorites" + change),
     //
-    LESSONDOCID("lesson51"),
+    LESSONDOCID("lesson" + change),
     //
-    REMOTECONTROLDOCID("remotecontrol51"),
+    REMOTECONTROLDOCID("remotecontrol" + change),
     //
-    OFFLINEDOCID("offlinedoc51"),
+    OFFLINEDOCID("offlinedoc" + change),
 
     // 属性key
     FOLDERSKEY("folders"),

@@ -126,7 +126,7 @@ public class MainActivity extends RoboActivity {
 
   private void setLeftMenuLayoutX(int x) {
     leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(), leftMenu.getBottom());
-    Log.i("Scorll", "set:" + leftMenu.getLeft());
+
   }
 
   public void setDataDetailLayoutState(int state) {
@@ -184,7 +184,7 @@ public class MainActivity extends RoboActivity {
       }
 
     } else if (item.getItemId() == 0) {
-      AlertDialog alertDialog = new AlertDialog.Builder(this).setPositiveButton(R.string.dailogOK, new DialogInterface.OnClickListener() {
+      new AlertDialog.Builder(this).setPositiveButton(R.string.dailogOK, new DialogInterface.OnClickListener() {
 
         @Override
         public void onClick(DialogInterface dialog, int which) {
@@ -205,9 +205,8 @@ public class MainActivity extends RoboActivity {
         public void onClick(DialogInterface dialog, int which) {
 
         }
-      }).setMessage(R.string.back_DailogMessage).create();
+      }).setMessage(R.string.back_DailogMessage).create().show();
 
-      alertDialog.show();
     }
 
     return true;
@@ -311,12 +310,12 @@ public class MainActivity extends RoboActivity {
   public void openState(int visibility) {
     if (null != openFailure_text) {
       openFailure_text.setVisibility(visibility);
-
+      openFailure_text.invalidate();
     }
 
     if (null != openFailure_img) {
       openFailure_img.setVisibility(visibility);
-
+      openFailure_img.invalidate();
     }
   }
 
@@ -374,8 +373,10 @@ public class MainActivity extends RoboActivity {
     public JsonArray getCurrentPath() {
       if (null != root) {
         JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
+
         return map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
       }
+
       return null;
     }
 
@@ -383,15 +384,19 @@ public class MainActivity extends RoboActivity {
     public void changeDoc(String docId) {
       iNotifyData = null;
 
-      JsonObject map = Json.createObject();
-      JsonArray jsonArray = Json.createArray();
+      JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
+      JsonArray jsonArray = map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
+      for (int i = jsonArray.length() - 1; i > 0; i--) {
+        jsonArray.remove(i);
+
+      }
+      jsonArray.set(0, "root");
 
       map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue(), jsonArray);
       map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue(), docId);
 
       root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(), map);
 
-      Log.i(TAG, "Change DocId: " + docId);
     }
 
     @Override
@@ -403,8 +408,10 @@ public class MainActivity extends RoboActivity {
 
         if (null != mapId) {
           jsonArray.set(jsonArray.length(), mapId);
+
         } else {
           jsonArray.remove(jsonArray.length() - 1);
+
         }
 
         map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue(), jsonArray);
@@ -416,6 +423,7 @@ public class MainActivity extends RoboActivity {
     @Override
     public void setNotifyData(INotifyData iNotifyData) {
       this.iNotifyData = iNotifyData;
+
     }
 
     @Override
@@ -424,6 +432,7 @@ public class MainActivity extends RoboActivity {
 
       if (index < 0) {
         Log.e(TAG, "error index: " + index);
+
         return toString;
       }
 
@@ -432,12 +441,28 @@ public class MainActivity extends RoboActivity {
 
         JsonArray jsonArray = map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
 
-        if (null != jsonArray && jsonArray.length() > 0) {
+        if (null != jsonArray && jsonArray.length() > 0 && index < jsonArray.length()) {
           toString = jsonArray.get(index).asString();
 
         }
       }
+
       return toString;
+    }
+
+    private void updateUi(JsonObject map) {
+      JreJsonString jreJsonString = (JreJsonString) (map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue()));
+
+      if (null != jreJsonString) {
+        String lastDocId = jreJsonString.asString();
+
+        lastDocId = lastDocId.substring(lastDocId.lastIndexOf("/") + 1, lastDocId.length());
+
+        DocumentIdAndDataKey doc = DocumentIdAndDataKey.getEnumWithValue(lastDocId);
+
+        switchFragment(doc);
+
+      }
     }
 
     private void startObservation(String docId) {
@@ -449,17 +474,7 @@ public class MainActivity extends RoboActivity {
           root = model.getRoot();
           JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
 
-          JreJsonString jreJsonString = (JreJsonString) (map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue()));
-
-          if (null != jreJsonString) {
-            String lastDocId = jreJsonString.asString();
-
-            lastDocId = lastDocId.substring(lastDocId.lastIndexOf("/") + 1, lastDocId.length());
-
-            DocumentIdAndDataKey doc = DocumentIdAndDataKey.getEnumWithValue(lastDocId);
-
-            switchFragment(doc);
-          }
+          updateUi(map);
 
           root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
             @Override
@@ -468,16 +483,11 @@ public class MainActivity extends RoboActivity {
               if (GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue().equals(property)) {
                 JsonObject newJson = (JsonObject) event.getNewValue();
 
-                String newDocId = ((JreJsonString) (newJson.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue()))).asString();
-
-                newDocId = newDocId.substring(newDocId.lastIndexOf("/") + 1, newDocId.length());
-
-                DocumentIdAndDataKey doc = DocumentIdAndDataKey.getEnumWithValue(newDocId);
-
-                switchFragment(doc);
+                updateUi(newJson);
 
                 if (null != iNotifyData) {
                   iNotifyData.notifyData();
+
                 }
               }
             }
@@ -492,13 +502,20 @@ public class MainActivity extends RoboActivity {
           root = model.getRoot();
 
           JsonObject jsonObject = Json.createObject();
+          JsonArray jsonArray = Json.createArray();
+          jsonArray.set(0, "root");
+
+          jsonObject.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue(), jsonArray);
+          jsonObject.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue(), "");
+
           root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(), jsonObject);
+
         }
       };
 
       Realtime.load(docId, onLoaded, initializer, null);
-    }
 
+    }
   }
 
   private float startPoint = 0;
@@ -509,13 +526,13 @@ public class MainActivity extends RoboActivity {
     case MotionEvent.ACTION_DOWN:
       if (leftMenu.getVisibility() == View.INVISIBLE) {
         showLeftMenuLayout();
+
       }
-      Log.i("Scorll", "DOWN:" + leftMenu.getLeft());
+
       startPoint = event.getX();
 
       break;
     case MotionEvent.ACTION_UP:
-      Log.i("Scorll", "UP:" + leftMenu.getLeft());
       if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 4) {
         hideLeftMenuLayout();
 
@@ -531,10 +548,12 @@ public class MainActivity extends RoboActivity {
     case MotionEvent.ACTION_MOVE:
       do {
         if (startPoint >= event.getX()) {
+
           break;
         }
 
         if (leftMenu.getLeft() >= 0) {
+
           break;
         }
 
