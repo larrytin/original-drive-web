@@ -14,11 +14,10 @@ good.drive.search.Rightmenu = function(dom) {
   this._rightMenu = undefined;
   var submenu = new goog.ui.SubMenu('发送');
   var menu = new good.drive.nav.menu.View();
-  var type = [['i', '打开'], ['i', '预览'], ['s', ''],
-              ['i', '详细信息'], ['i', '重命名'], ['s', ''],
-              ['i', '安排课程'], ['i', '收藏'], ['s', ''],
-              ['i', '重新上传'], ['i', '删除'], ['s', ''],
-              ['m', submenu]];
+  var type = [['i', '打开'], ['s', ''], 
+              ['m', submenu], ['i', '安排课程'], ['i', '收藏'],
+              ['i', '详细信息'], ['i', '重命名'], ['s', ''],              
+              ['i', '重新上传'], ['i', '删除']];
 
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
@@ -39,14 +38,13 @@ good.drive.search.Rightmenu = function(dom) {
     case good.constants.MYCLASSRESDOCID:
       var cell = grid.getSelectedItem();
       if (cell.data.get('isfile') == undefined) {
-        var array = new Array(1, 3, 6, 7, 8, 9, 11, 12);
+        var array = new Array(2, 3, 4, 5, 8);
         menu.hideItem(rightMenu, array);
       } else {
-        var array = new Array(0, 4, 6, 9);
+        var array = new Array(3, 6, 8);
         if (data.contentType ==
           'application/x-print') {
-          array.push(11);
-          array.push(12);
+          array.push(2);          
          }
         menu.hideItem(rightMenu, array);
       }
@@ -54,32 +52,30 @@ good.drive.search.Rightmenu = function(dom) {
     case good.constants.MYRESDOCID:
       var cell = grid.getSelectedItem();
       if (cell.data.get('isfile') == undefined) {
-        var array = new Array(1, 3, 6, 7, 8, 9, 11, 12);
+        var array = new Array(2, 3, 4, 5, 8);
         menu.hideItem(rightMenu, array);
       } else {
-        var array = new Array(0, 4, 7, 9);
+        var array = new Array(4, 6, 8);
         if (data.contentType ==
         'application/x-print') {
-        array.push(11);
-        array.push(12);
+         array.push(2);
        }
         menu.hideItem(rightMenu, array);
       }
       break;
     case good.constants.PUBLICRESDOCID:
       if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-        var array = new Array(0, 4, 9, 10, 11);
+        var array = new Array(6, 7, 8, 9);
         if (data.contentType ==
         'application/x-print') {
-        array.push(12);
+        array.push(2);
        }
         menu.hideItem(rightMenu, array);
       } else {
-        var array = new Array(0, 4, 10);
+        var array = new Array(6, 9);
         if (data.contentType ==
         'application/x-print') {
-          array.push(11);
-        array.push(12);
+        array.push(2);
        }
         menu.hideItem(rightMenu, array);
       }
@@ -110,13 +106,13 @@ good.drive.search.Rightmenu = function(dom) {
 
           var action = e.target.getCaption();
           switch (action) {
-            case '预览':
+           /* case '预览':
               if (data instanceof good.realtime.CollaborativeMap) {
                 good.drive.rightmenu.Rightmenu.PREVIEW(data.get('id'));
               } else {
                 good.drive.rightmenu.Rightmenu.PREVIEW(data.id);
               }
-              break;
+              break;*/
             case '详细信息':
               if (data instanceof good.realtime.CollaborativeMap) {
                 rightmenusource.detailInfo(data.get('id'), function() {
