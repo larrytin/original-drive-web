@@ -17,6 +17,7 @@ goog.require('goog.ui.tree.TreeControl');
  * @param {good.drive.nav.folders.ViewControl} control
  */
 good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
+  var that = this;
   if (control == undefined) {
     control = new good.drive.nav.folders.ViewControl(docid);
   }
@@ -29,6 +30,13 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   root.setShowRootLines(false);
   root.setShowRootNode(false);
   root.setShowLines(false);
+  var tree_ = root.getTree().createNode(
+      '<span class="treedoclistview-root-node-name">' +
+      title + '&nbsp;</span>');
+  root.add(tree_);
+  tree_.setExpanded(false);
+  this.roottree = root;
+  this.tree = tree_;
   var dragDropGroup = new goog.fx.DragDropGroup();
   dragDropGroup.createDragElement =
     function(sourceEl) {
@@ -37,32 +45,33 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   this.dragDropGroup = dragDropGroup;
   this.dragDropGroup.init();
   this.dragDropGroup.addTarget(this.dragDropGroup);
-  goog.events.listen(this.dragDropGroup, 'drop', dropList1);
-  var that = this;
-  goog.events.listen(this.dragDropGroup, 'dragstart', dragStart);
-  function dropList1(event) {
-    event.dropTargetItem;
-  }
-
-  function dragStart(event) {
+  var dragdropHandle = function(event) {
     goog.style.setOpacity(event.dragSourceItem.element, 1);
+    var item = that.getCurrentItem();
+    if (item.getId() == that.tree.getId()) {
+      return;
+    }
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var dragdrop = path.root.get(path.pathNameType().DRAGDROP);
-    var dragData = event.dragSourceItem.data;
-  }
-
-  var tree_ = root.getTree().createNode(
-      '<span class="treedoclistview-root-node-name">' +
-      title + '&nbsp;</span>');
-  root.add(tree_);
-  tree_.setExpanded(false);
+    if (event.dropTargetItem == undefined) {
+      var dragData = event.dragSourceItem.data;
+      dragdrop.set(path.pathNameType().DRAGDATA, dragData.getId());
+      dragdrop.set(path.pathNameType().DRAGTARGET,
+          item.getParent().map.getId());
+      dragdrop.set(path.pathNameType().DRAGDOCID,
+          that.control().model().docId());
+    } else {
+      var dropData = event.dropTargetItem.data;
+      dragdrop.set(path.pathNameType().DROPDATA, dropData.getId());
+      dragdrop.set(path.pathNameType().DROPDOCID,
+          that.control().model().docId());
+      dragdrop.set(path.pathNameType().ISDRAGOVER,
+          1);
+    }
+  };
+  goog.events.listen(this.dragDropGroup, 'drop', dragdropHandle);
+  goog.events.listen(this.dragDropGroup, 'dragstart', dragdropHandle);
   this.customNode(tree_);
-
-  this.roottree = root;
-  this.tree = tree_;
-
-  window.treebak = this;
-
   this.currentItem_ = undefined;
 };
 
