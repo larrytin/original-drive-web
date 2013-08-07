@@ -302,11 +302,15 @@ good.drive.init.init = function() {
   createPopup.getHandler().listen(createPopup,
       goog.ui.Menu.EventType.BEFORE_SHOW,
       function(e) {
-    var docid = pathControl.currentDocId;
+    var docid = pathControl.getCurrentDocid();
     var view = pathControl.getViewBydocId(docid);
     var node = view.getCurrentItem();
     switch (docid) {
     case good.constants.MYCLASSRESDOCID:
+      if (node.map.get('isclass')) {
+        menu.hideItem(createPopup, [0]);
+        return;
+      }
       menu.hideItem(createPopup, []);
       break;
     case good.constants.MYRESDOCID:
@@ -359,11 +363,13 @@ good.drive.init.init = function() {
       function(e) {
     var submenu = e.target.getChildAt(5);
     var subdata = good.drive.search.Rightmenu.SUBMENUDATA;
-    if (!initSubMenu) {
-      initSubMenu = true;
-      goog.array.forEach(subdata, function(data) {
-        submenu.addItem(new goog.ui.MenuItem(data.name));
-      });
+    if (subdata != undefined) {
+      if (!initSubMenu) {
+        initSubMenu = true;
+        goog.array.forEach(subdata, function(data) {
+          submenu.addItem(new goog.ui.MenuItem(data.name));
+        });
+      }
     }
     var data = good.drive.nav.folders.Path.INSTANCE.getCurrentData();
     var target = e.target;

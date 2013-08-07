@@ -58,8 +58,9 @@ good.drive.nav.folders.Path.getINSTANCE = function() {
 good.drive.nav.folders.Path.prototype.connect = function(doc) {
   var root = doc.getModel().getRoot();
   var path = root.get(this.pathNameType().PATH);
+  var jsonParse = goog.json.serialize(path);
   this.root = root;
-  this.path = path;
+  this.path = goog.json.parse(jsonParse);
   var that = this;
   root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
@@ -99,9 +100,37 @@ good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
     if (isDragover != 1) {
       return;
     }
+    dragdrop.set(that.pathNameType().ISDRAGOVER, 0);
+    var dragData = dragdrop.get(that.pathNameType().DRAGDATA);
+    var dropData = dragdrop.get(that.pathNameType().DROPDATA);
+    if (dragData == 'root' || dragData == dropData) {
+      return;
+    }
     var dragDocid = dragdrop.get(that.pathNameType().DRAGDOCID);
     var dropDocid = dragdrop.get(that.pathNameType().DROPDOCID);
-    dragdrop.set(that.pathNameType().ISDRAGOVER, 0);
+    var dragTarget = dragdrop.get(that.pathNameType().DRAGTARGET);
+    var dragModel;
+    var dropModel;
+    if (dragDocid == dropDocid) {
+      dragModel = dropModel = goog.object.get(
+          good.drive.nav.folders.AbstractControl.docs, dragDocid);
+      var _dragData = dragModel.getObject(dragData);
+      var parents = dragModel.mod().getParents(dropData);
+      if (goog.array.contains(parents, _dragData.get('folders').getId())) {
+        return;
+      }
+      var _dropData = dragModel.getObject(dropData);
+      var _dragTarget = dragModel.getObject(dragTarget);
+      var copy = dropModel.copy(dropModel.mod(), _dragData);
+      dropModel.remove(_dragData);
+      _dragTarget.removeValue(_dragData);
+      _dropData.push(copy);
+    } else {
+      dragModel = goog.object.get(
+          good.drive.nav.folders.AbstractControl.docs, dragDocid);
+      dropModel = goog.object.get(
+          good.drive.nav.folders.AbstractControl.docs, dropDocid);
+    }
   });
 };
 
