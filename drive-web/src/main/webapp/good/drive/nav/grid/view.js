@@ -210,8 +210,7 @@ good.drive.nav.grid.View.prototype.insertFolderPath = function() {
   var that = this;
   var pathElm = this.getFolderPathElement();
   goog.dom.removeChildren(pathElm);
-  var root = good.drive.nav.folders.Path.getINSTANCE().root;
-  var path = root.get(good.drive.nav.folders.Path.NameType.PATH);
+  var path = good.drive.nav.folders.Path.getINSTANCE().path;
   var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
   var model = goog.object.get(
       good.drive.nav.folders.AbstractControl.docs, this.docid);

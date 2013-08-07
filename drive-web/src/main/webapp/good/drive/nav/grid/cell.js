@@ -262,6 +262,7 @@ good.drive.nav.grid.Cell.prototype.openCell = function() {
     if (this.data.get('isfile') != undefined) {
       return;
     }
+    var newPath = {};
     var path = good.drive.nav.folders.Path.getINSTANCE().path;
     var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
     var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];

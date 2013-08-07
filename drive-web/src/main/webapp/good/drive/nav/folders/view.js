@@ -17,6 +17,7 @@ goog.require('goog.ui.tree.TreeControl');
  * @param {good.drive.nav.folders.ViewControl} control
  */
 good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
+  var that = this;
   if (control == undefined) {
     control = new good.drive.nav.folders.ViewControl(docid);
   }
@@ -29,6 +30,13 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   root.setShowRootLines(false);
   root.setShowRootNode(false);
   root.setShowLines(false);
+  var tree_ = root.getTree().createNode(
+      '<span class="treedoclistview-root-node-name">' +
+      title + '&nbsp;</span>');
+  root.add(tree_);
+  tree_.setExpanded(false);
+  this.roottree = root;
+  this.tree = tree_;
   var dragDropGroup = new goog.fx.DragDropGroup();
   dragDropGroup.createDragElement =
     function(sourceEl) {
@@ -37,31 +45,45 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
   this.dragDropGroup = dragDropGroup;
   this.dragDropGroup.init();
   this.dragDropGroup.addTarget(this.dragDropGroup);
-  goog.events.listen(this.dragDropGroup, 'drop', dropList1);
-  var that = this;
-  goog.events.listen(this.dragDropGroup, 'dragstart', dragStart);
-  function dropList1(event) {
-  }
-
-  function dragStart(event) {
+  var dragdropHandle = function(event) {
     goog.style.setOpacity(event.dragSourceItem.element, 1);
+    var item = that.getCurrentItem();
+    if (item.getId() == that.tree.getId()) {
+      return;
+    }
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var dragdrop = path.root.get(path.pathNameType().DRAGDROP);
-    var dragData = event.dragSourceItem.data;
-  }
-
-  var tree_ = root.getTree().createNode(
-      '<span class="treedoclistview-root-node-name">' +
-      title + '&nbsp;</span>');
-  root.add(tree_);
-  tree_.setExpanded(false);
-  this.customNode(tree_);
-
-  this.roottree = root;
-  this.tree = tree_;
-
-  window.treebak = this;
-
+    if (event.dropTargetItem == undefined) {
+      var dragData = event.dragSourceItem.data;
+      dragdrop.set(path.pathNameType().DRAGDATA, dragData.getId());
+      dragdrop.set(path.pathNameType().DRAGTARGET,
+          item.getParent().map.get('folders').getId());
+      dragdrop.set(path.pathNameType().DRAGDOCID,
+          that.control().model().docId());
+    } else {
+      var dropData = event.dropTargetItem.data;
+      if (dropData == undefined) {
+        dropData = that.tree.map;
+      }
+      dragdrop.set(path.pathNameType().DROPDATA,
+          dropData.get('folders').getId());
+      dragdrop.set(path.pathNameType().DROPDOCID,
+          that.control().model().docId());
+      if ((event.dragSourceItem.data.get('isclass') &&
+          dropData.get('isclass')) ||
+          (!event.dragSourceItem.data.get('isclass') &&
+              dropData.get('isclass'))) {
+        return;
+      }
+      dragdrop.set(path.pathNameType().ISDRAGOVER,
+          1);
+      dragDropGroup.removeItem(
+          event.dropTargetItem.getDraggableElements());
+    }
+  };
+  goog.events.listen(this.dragDropGroup, 'drop', dragdropHandle);
+  goog.events.listen(this.dragDropGroup, 'dragstart', dragdropHandle);
+//  this.customNode(tree_);
   this.currentItem_ = undefined;
 };
 
@@ -76,9 +98,14 @@ good.drive.nav.folders.Tree.prototype.insertNode =
     function(parent, data, title) {
   var childNode = parent.getTree().createNode('');
   parent.addChild(childNode);
+  if (goog.dom.classes.has(parent.getExpandIconElement(),
+      'treedoclistview-expand-icon-hidden')) {
+    goog.dom.classes.remove(parent.getExpandIconElement(),
+    'treedoclistview-expand-icon-hidden');
+  }
   this.setNodeTitle(childNode, data, title);
   if (parent.getExpanded()) {
-    this.customNode(childNode);
+    this.customNode(childNode, data);
   }
   return childNode;
 };
@@ -195,11 +222,31 @@ good.drive.nav.folders.Tree.prototype.setData = function(data) {
  * @param {goog.ui.tree.TreeControl} tree
  */
 good.drive.nav.folders.Tree.prototype.customNode =
-    function(tree) {
+    function(tree, data) {
   tree.setAfterLabelHtml('<div class="selection-highlighter"></div>');
+  tree.onMouseDown = function(e) {
+    var el = e.target;
+    // expand icon
+    var type = el.getAttribute('type');
+    if (type == 'expand') {
+      if (this.isUserCollapsible_) {
+        this.toggle();
+      }
+      return;
+    }
+
+    this.select();
+    this.updateRow();
+  };
   var rowElement = tree.getRowElement();
+  var expandIconElement = tree.getExpandIconElement();
+  if (data.get('folders').length() > 0) {
+    goog.dom.classes.remove(expandIconElement,
+        'treedoclistview-expand-icon-hidden');
+  }
   var that = this;
-  var item = new goog.fx.DragDropItem(rowElement, tree.map);
+  var item = new goog.fx.DragDropItem(rowElement,
+      data != undefined ? data : undefined);
   this.dragDropGroup.addDragDropItem(item);
   goog.events.
       listen(rowElement, goog.events.EventType.MOUSEOVER, function(e) {
