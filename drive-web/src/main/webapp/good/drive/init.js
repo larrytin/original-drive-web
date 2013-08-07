@@ -16,7 +16,9 @@ goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.folders.PublicViewControl');
-goog.require('good.drive.nav.grid');
+goog.require('good.drive.view.baseview');
+goog.require('good.drive.view.grid');
+goog.require('good.drive.view.table');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
@@ -83,7 +85,8 @@ good.drive.init.init = function() {
   pathControl.addPath(good.constants.PUBLICRESDOCID,
       publicResTree);
   pathControl.pathload = function() {
-    good.drive.nav.grid.View.initGrid();
+//    good.drive.view.baseview.View.initGrid();
+    good.drive.init.initgrid();
     good.drive.resourcemap.Resourcemap.init();
   };
   good.drive.nav.folders.AbstractControl.linkload();
@@ -393,6 +396,56 @@ good.drive.init.init = function() {
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
+};
+
+/**
+ */
+good.drive.init.initgrid = function() {
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  root.addValueChangedListener(function(evt) {
+    var property = evt.getProperty();
+    if (property != good.drive.nav.folders.Path.NameType.PATH) {
+      return;
+    }
+    var newValue = evt.getNewValue();
+    good.drive.init.initCallback(newValue);
+  });
+  good.drive.init.initCallback(
+      good.drive.nav.folders.Path.getINSTANCE().path);
+};
+
+/**
+ * @param {Object} path
+ */
+good.drive.init.initCallback = function(path) {
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (goog.array.isEmpty(pathlist)) {
+    return;
+  }
+  var id = pathlist[pathlist.length - 1];
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  if (docid == good.constants.PUBLICRESDOCID) {
+    return;
+  }
+  if (!goog.object.containsKey(good.drive.view.baseview.View.grids, docid)) {
+    var cells = {};
+    goog.object.add(good.drive.view.baseview.View.grids, docid, cells);
+  }
+  var cells = goog.object.get(good.drive.view.baseview.View.grids, docid);
+  if (goog.object.containsKey(cells, id)) {
+    good.drive.view.baseview.View.visiable(goog.object.get(cells, id));
+    return;
+  }
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, docid);
+  var data = model.getObject(id);
+  var grid = new good.drive.view.table.View(
+      {'select': 'select', 'label': '名字', 'abc': 'adsdf'}, data, docid);
+  grid.render(goog.dom.getElement('viewmanager'));
+  grid.renderCell(data);
+  grid.renderFolderPath();
+  goog.object.add(cells, id, grid);
+  good.drive.view.baseview.View.visiable(grid);
 };
 
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);
