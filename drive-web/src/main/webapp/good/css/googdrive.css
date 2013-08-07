@@ -1506,6 +1506,9 @@ z-index: 2;
     border-top-color: #FFFFFF;
     margin: 3px 0 2px !important;
 }
+.treedoclistview-expand-icon-hidden {
+    visibility: hidden;
+}
 .nav-tree-folder-view .goog-list.density-normal {
     padding: 0 0 0 27px;
     transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
