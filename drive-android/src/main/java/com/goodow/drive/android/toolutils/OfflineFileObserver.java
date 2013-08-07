@@ -232,6 +232,15 @@ public enum OfflineFileObserver {
 	}
 
 	public void initEventHandler() {
+	  do{
+	    if(listAddEventHandler == null){
+	      
+	      break;
+	    }
+	    
+	    //TODO
+	  }while(false);
+	  
 		if (listAddEventHandler == null) {
 			listAddEventHandler = new EventHandler<ValuesAddedEvent>() {
 				@Override

@@ -73,7 +73,7 @@ public class DriveModule extends AbstractModule {
     Account.Builder endpointBuilder = new Account.Builder(AndroidHttp.newCompatibleTransport(), new JacksonFactory(), new HttpRequestInitializer() {
       @Override
       public void initialize(HttpRequest httpRequest) {
-        
+
       }
     });
     endpointBuilder.setRootUrl(RealtimeModule.getEndpointRootUrl(serverAddress));

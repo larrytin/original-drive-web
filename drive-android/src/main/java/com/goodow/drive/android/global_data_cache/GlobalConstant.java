@@ -42,7 +42,7 @@ public final class GlobalConstant {
     }
   }
 
-  private static String change = "61";
+  private static String change = "01";
 
   public static enum DocumentIdAndDataKey {
     // 文件id

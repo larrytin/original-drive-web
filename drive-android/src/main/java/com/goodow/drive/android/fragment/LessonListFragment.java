@@ -36,7 +36,6 @@ import com.goodow.realtime.Model;
 import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.ObjectChangedEvent;
 import com.goodow.realtime.Realtime;
-import com.goodow.realtime.ValueChangedEvent;
 import elemental.json.JsonArray;
 
 public class LessonListFragment extends ListFragment implements ILocalFragment {
@@ -55,10 +54,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   private static final String FOLDER_KEY = GlobalConstant.DocumentIdAndDataKey.FOLDERSKEY.getValue();
   private static final String FILE_KEY = GlobalConstant.DocumentIdAndDataKey.FILESKEY.getValue();
 
-  private EventHandler<ValueChangedEvent> pathChangeEventHandler;
-
   private EventHandler<?> listEventHandler;
-
   private EventHandler<ObjectChangedEvent> valuesChangeEventHandler;
 
   public void backFragment() {
@@ -145,13 +141,13 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
       }
 
       initData();
-      
+
     }
   }
 
   public void initData() {
     currentFolder = model.getObject(path.getMapId(currentPathList.length() - 1));
-    
+
     if (null != currentFolder) {
       currentFolder.addObjectChangedListener(valuesChangeEventHandler);
       CollaborativeList folderList = (CollaborativeList) currentFolder.get(FOLDER_KEY);
@@ -182,7 +178,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
         }
       }
     }
-    
+
     openState();
   }
 
@@ -191,18 +187,22 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
     super.onPause();
 
     ((MainActivity) getActivity()).restActionBarTitle();
+    
+    if (null != adapter) {
+      adapter.setFileList(null);
+      adapter.setFolderList(null);
+      adapter.notifyDataSetChanged();
+    }
   }
 
   @Override
   public void onResume() {
     super.onResume();
 
-    if (null == path) {
-      path = ((MainActivity) getActivity()).getRemoteControlObserver();
+    path = ((MainActivity) getActivity()).getRemoteControlObserver();
 
-      if (null != root) {
-        connectUi();
-      }
+    if (null != root) {
+      connectUi();
     }
   }
 
@@ -233,20 +233,13 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
       };
     }
 
-    if (pathChangeEventHandler == null) {
-      pathChangeEventHandler = new EventHandler<ValueChangedEvent>() {
-        @Override
-        public void handleEvent(ValueChangedEvent event) {
-
-        }
-      };
-    }
-
     if (valuesChangeEventHandler == null) {
       valuesChangeEventHandler = new EventHandler<ObjectChangedEvent>() {
         @Override
         public void handleEvent(ObjectChangedEvent event) {
           adapter.notifyDataSetChanged();
+
+          openState();
         }
       };
     }
