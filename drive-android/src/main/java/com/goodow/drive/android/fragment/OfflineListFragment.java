@@ -16,8 +16,7 @@ import com.goodow.drive.android.adapter.OfflineAdapter;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.realtime.CollaborativeList;
 
-public class OfflineListFragment extends ListFragment implements
-		ILocalFragment {
+public class OfflineListFragment extends ListFragment implements ILocalFragment {
 	private OfflineAdapter adapter;
 
 	private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
@@ -35,15 +34,9 @@ public class OfflineListFragment extends ListFragment implements
 	@Override
 	public View onCreateView(LayoutInflater inflater, ViewGroup container,
 			Bundle savedInstanceState) {
-		CollaborativeList list = OfflineFileObserver.getList();
+		CollaborativeList list = OfflineFileObserver.OFFLINEFILEOBSERVER
+				.getList();
 		adapter = new OfflineAdapter((MainActivity) this.getActivity(), list);
-		// list.addObjectChangedListener(new EventHandler<ObjectChangedEvent>()
-		// {
-		// @Override
-		// public void handleEvent(ObjectChangedEvent event) {
-		// adapter.notifyDataSetInvalidated();
-		// }
-		// });
 		setListAdapter(adapter);
 
 		return inflater.inflate(R.layout.fragment_folderlist, container, false);
@@ -67,5 +60,11 @@ public class OfflineListFragment extends ListFragment implements
 		super.onPause();
 
 		((MainActivity) getActivity()).unregisterReceiver(broadcastReceiver);
+	}
+
+	@Override
+	public void connectUi() {
+		// TODO Auto-generated method stub
+		
 	}
 }

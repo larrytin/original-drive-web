@@ -20,7 +20,8 @@
         android:layout_width="wrap_content"
         android:layout_height="@dimen/listItemHeigh"
         android:layout_toRightOf="@id/leftImage"
-        android:gravity="center_vertical" />
+        android:gravity="center_vertical"
+        android:textSize="@dimen/listItemTextSize" />
 
     <ImageButton
         android:id="@+id/delButton"
