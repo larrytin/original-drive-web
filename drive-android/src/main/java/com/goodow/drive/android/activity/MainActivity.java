@@ -5,28 +5,36 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.Interface.INotifyData;
 import com.goodow.drive.android.Interface.IRemoteControl;
-import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
@@ -36,6 +44,8 @@ import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDataKey;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.LoginNetRequestTask;
+import com.goodow.drive.android.toolutils.SimpleProgressDialog;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -84,6 +94,7 @@ public class MainActivity extends RoboActivity {
   }
 
   public DataDetailFragment getDataDetailFragment() {
+
     return dataDetailFragment;
   }
 
@@ -248,12 +259,7 @@ public class MainActivity extends RoboActivity {
       }
     });
 
-    String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
-        + GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID.getValue();
-
-    remoteControlObserver = new RemoteControlObserver();
-    remoteControlObserver.startObservation(docId);
-
+    goObservation();
   }
 
   @Override
@@ -474,6 +480,8 @@ public class MainActivity extends RoboActivity {
           root = model.getRoot();
           JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
 
+          Log.i(TAG, GlobalDataCacheForMemorySingleton.getInstance.getUserName() + "-root: " + root.toString());
+
           updateUi(map);
 
           root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
@@ -581,4 +589,80 @@ public class MainActivity extends RoboActivity {
     return true;
   }
 
+  public void goObservation() {
+    String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
+        + GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID.getValue();
+
+    remoteControlObserver = new RemoteControlObserver();
+    remoteControlObserver.startObservation(docId);
+  }
+
+  public void showChangeUserDialog() {
+    final View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_change_user_layout, null);
+    final Dialog dialog = new Dialog(this, R.style.AlertDialog);
+    dialog.show();
+    Window window = dialog.getWindow();
+    window.setContentView(dialogView);
+
+    final EditText userNameEditText = (EditText) dialogView.findViewById(R.id.username_editText);
+    final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.password_editText);
+
+    // 登录 按钮
+    final Button loginButton = (Button) dialogView.findViewById(R.id.login_button);
+    loginButton.setOnClickListener(new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        String errorMessageString = "";
+        String username = "";
+        String password = "";
+
+        do {
+          username = userNameEditText.getText().toString();
+          if (TextUtils.isEmpty(username)) {
+            errorMessageString = "用户名不能为空";
+            break;
+          }
+
+          password = passwordEditText.getText().toString();
+          if (TextUtils.isEmpty(password)) {
+            errorMessageString = "密码不能为空";
+            break;
+          }
+
+          // 一切OK
+          String[] params = { username, password };
+          final LoginNetRequestTask loginNetRequestTask = new LoginNetRequestTask(MainActivity.this, dialog);
+          SimpleProgressDialog.show(MainActivity.this, new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+              loginNetRequestTask.cancel(true);
+
+            }
+          });
+          loginNetRequestTask.execute(params);
+
+          return;
+        } while (false);
+
+        // 用户输入的信息错误
+        Toast.makeText(MainActivity.this, errorMessageString, Toast.LENGTH_LONG).show();
+      }
+    });
+
+    // 取消 按钮
+    final Button cancelButton = (Button) dialogView.findViewById(R.id.cancel_button);
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+  }
+
+  public void notifyLeftMenuFragment() {
+    leftMenuFragment.notifyData();
+
+  }
 }
