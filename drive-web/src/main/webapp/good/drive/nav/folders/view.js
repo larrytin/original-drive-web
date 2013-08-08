@@ -220,6 +220,7 @@ good.drive.nav.folders.Tree.prototype.setData = function(data) {
 
 /**
  * @param {goog.ui.tree.TreeControl} tree
+ * @param {Object} data
  */
 good.drive.nav.folders.Tree.prototype.customNode =
     function(tree, data) {

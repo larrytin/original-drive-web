@@ -32,8 +32,13 @@ good.drive.nav.folders.Path.NameType = {
     CURRENTPATH: 'currentpath',
     CURRENTDOCID: 'currentdocid',
     DRAGDROP: 'dragdrop',
-    DRAG: 'drag',
-    DROP: 'drop'
+    DRAGDATA: 'dragdata',
+    DROPDATA: 'dropdata',
+    DRAGTARGET: 'droptarget',
+    DROPTARGET: 'droptarget',
+    DRAGDOCID: 'dragdocid',
+    DROPDOCID: 'dropdocid',
+    ISDRAGOVER: 'isdragover'
 };
 
 /**
@@ -53,8 +58,9 @@ good.drive.nav.folders.Path.getINSTANCE = function() {
 good.drive.nav.folders.Path.prototype.connect = function(doc) {
   var root = doc.getModel().getRoot();
   var path = root.get(this.pathNameType().PATH);
+  var jsonParse = goog.json.serialize(path);
   this.root = root;
-  this.path = path;
+  this.path = goog.json.parse(jsonParse);
   var that = this;
   root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
@@ -63,11 +69,6 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
     }
     var newValue = evt.getNewValue();
     that.path = newValue;
-    var docids = goog.object.getKeys(
-        good.drive.nav.folders.AbstractControl.docs);
-    if (docids.indexOf(newValue[that.pathNameType().CURRENTDOCID]) == -1) {
-      return;
-    }
     that.locationPath(newValue);
   });
   goog.object.forEach(this.pathHeap, function(value, key) {
@@ -77,6 +78,7 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
   this.hasPathProperty_();
   this.pathload();
   this.locationPath(path);
+  this.dragdropEvent();
 };
 
 /**
@@ -85,9 +87,62 @@ good.drive.nav.folders.Path.prototype.pathload = function() {
 };
 
 /**
+ */
+good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
+  var that = this;
+  var dragdrop = this.root.get(this.pathNameType().DRAGDROP);
+  dragdrop.addValueChangedListener(function(evt) {
+    var property = evt.getProperty();
+    if (property != that.pathNameType().ISDRAGOVER) {
+      return;
+    }
+    var isDragover = evt.getNewValue();
+    if (isDragover != 1) {
+      return;
+    }
+    dragdrop.set(that.pathNameType().ISDRAGOVER, 0);
+    var dragData = dragdrop.get(that.pathNameType().DRAGDATA);
+    var dropData = dragdrop.get(that.pathNameType().DROPDATA);
+    if (dragData == 'root' || dragData == dropData) {
+      return;
+    }
+    var dragDocid = dragdrop.get(that.pathNameType().DRAGDOCID);
+    var dropDocid = dragdrop.get(that.pathNameType().DROPDOCID);
+    var dragTarget = dragdrop.get(that.pathNameType().DRAGTARGET);
+    var dragModel;
+    var dropModel;
+    if (dragDocid == dropDocid) {
+      dragModel = dropModel = goog.object.get(
+          good.drive.nav.folders.AbstractControl.docs, dragDocid);
+      var _dragData = dragModel.getObject(dragData);
+      var parents = dragModel.mod().getParents(dropData);
+      if (goog.array.contains(parents, _dragData.get('folders').getId())) {
+        return;
+      }
+      var _dropData = dragModel.getObject(dropData);
+      var _dragTarget = dragModel.getObject(dragTarget);
+      var copy = dropModel.copy(dropModel.mod(), _dragData);
+      dropModel.remove(_dragData);
+      _dragTarget.removeValue(_dragData);
+      _dropData.push(copy);
+    } else {
+      dragModel = goog.object.get(
+          good.drive.nav.folders.AbstractControl.docs, dragDocid);
+      dropModel = goog.object.get(
+          good.drive.nav.folders.AbstractControl.docs, dropDocid);
+    }
+  });
+};
+
+/**
  * @param {Object} path
  */
 good.drive.nav.folders.Path.prototype.locationPath = function(path) {
+  var docids = goog.object.getKeys(
+      good.drive.nav.folders.AbstractControl.docs);
+  if (docids.indexOf(path[this.pathNameType().CURRENTDOCID]) == -1) {
+    return;
+  }
   if (goog.array.isEmpty(
       path[this.pathNameType().CURRENTPATH])) {
     return;
@@ -229,8 +284,13 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
       'currentdocid': ''};
   root.set(this.pathNameType().PATH, path);
   var map = mod.createMap();
-  map.set(this.pathNameType().DRAG, '');
-  map.set(this.pathNameType().DROP, '');
+  map.set(this.pathNameType().DRAGDATA, '');
+  map.set(this.pathNameType().DROPDATA, '');
+  map.set(this.pathNameType().DRAGTARGET, '');
+  map.set(this.pathNameType().DROPTARGET, '');
+  map.set(this.pathNameType().DRAGDOCID, '');
+  map.set(this.pathNameType().DROPDOCID, '');
+  map.set(this.pathNameType().ISDRAGOVER, 0);
   root.set(this.pathNameType().DRAGDROP, map);
 };
 

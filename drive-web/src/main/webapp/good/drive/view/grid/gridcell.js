@@ -1,9 +1,7 @@
 'use strict';
-goog.provide('good.drive.nav.grid.Cell');
+goog.provide('good.drive.view.grid.GridCell');
 
-goog.require('goog.dom.classes');
-goog.require('goog.string.StringBuffer');
-goog.require('goog.ui.Component');
+goog.require('good.drive.view.baseview.Cell');
 
 /**
  * @param {good.realtime.CollaborativeMap} data
@@ -11,23 +9,19 @@ goog.require('goog.ui.Component');
  * @param {Object} defaultConfig
  * @param {goog.dom.DomHelper=} opt_domHelper
  * @constructor
- * @extends {goog.ui.Component}
+ * @extends {good.drive.view.baseview.Cell}
  */
-good.drive.nav.grid.Cell =
+good.drive.view.grid.GridCell =
   function(data, keytype, defaultConfig, opt_domHelper) {
-  goog.ui.Component.call(this, opt_domHelper);
-  this.data = data;
-  this.defaultConfig = defaultConfig;
-  this.keytype = keytype;
-  this.isFolder_ = undefined;
-  this.selected_ = false;
+  good.drive.view.baseview.Cell.call(this,
+      data, keytype, defaultConfig, opt_domHelper);
   this.bindHandle(data);
 };
-goog.inherits(good.drive.nav.grid.Cell, goog.ui.Component);
+goog.inherits(good.drive.view.grid.GridCell, good.drive.view.baseview.Cell);
 
 
-/** */
-good.drive.nav.grid.Cell.prototype.renderCell = function() {
+/** @override */
+good.drive.view.grid.GridCell.prototype.renderCell = function() {
   var label = this.getLabelData(this.data);
   var imageData = this.getImageData(this.data);
   var labelElm = goog.dom.createDom('div',
@@ -50,7 +44,7 @@ good.drive.nav.grid.Cell.prototype.renderCell = function() {
  * @param {Object} data
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getImageData =
+good.drive.view.grid.GridCell.prototype.getImageData =
   function(data) {
   var imageFolder = null;
   if (data instanceof good.realtime.CollaborativeMap) {
@@ -107,30 +101,18 @@ good.drive.nav.grid.Cell.prototype.getImageData =
  * @param {Object} data
  * @return {string}
  */
-good.drive.nav.grid.Cell.prototype.getLabelData = function(data) {
+good.drive.view.grid.GridCell.prototype.getLabelData = function(data) {
   if (data instanceof good.realtime.CollaborativeMap) {
     return data.get(this.keytype.LABEL[0]);
   }
   return data.filename;
 };
 
-/** @override */
-good.drive.nav.grid.Cell.prototype.enterDocument = function() {
-  good.drive.nav.grid.Cell.superClass_.enterDocument.call(this);
-  this.attachEvents_();
-};
-
-
-/** @override */
-good.drive.nav.grid.Cell.prototype.exitDocument = function() {
-  good.drive.nav.grid.Cell.superClass_.exitDocument.call(this);
-  this.detachEvents_();
-};
 
 /**
  * @param {Object} data
  */
-good.drive.nav.grid.Cell.prototype.bindHandle = function(data) {
+good.drive.view.grid.GridCell.prototype.bindHandle = function(data) {
   var that = this;
   if (data instanceof good.realtime.CollaborativeMap) {
     data.addValueChangedListener(function(evt) {
@@ -148,66 +130,8 @@ good.drive.nav.grid.Cell.prototype.bindHandle = function(data) {
   }
 };
 
-/**
- * @return {boolean}
- */
-good.drive.nav.grid.Cell.prototype.isFolder = function() {
-  return this.isFolder_;
-};
-
-/**
- * @param {boolean} isFolder
- */
-good.drive.nav.grid.Cell.prototype.setIsFolder = function(isFolder) {
-  this.isFolder_ = isFolder;
-};
-
-
-/**
- * @private
- */
-good.drive.nav.grid.Cell.prototype.attachEvents_ = function() {
-  var el = this.getElement();
-
-  this.getHandler().
-      listen(el, goog.events.EventType.MOUSEOVER, this.handleKeyEvent).
-      listen(el, goog.events.EventType.MOUSEOUT, this.handleKeyEvent).
-      listen(el, goog.events.EventType.MOUSEDOWN, this.handleKeyEvent).
-      listen(el, goog.events.EventType.CLICK, this.clickHandle);
-};
-
-/**
- */
-good.drive.nav.grid.Cell.prototype.select = function() {
-  var view = this.getParent();
-  view.setSelectedItem(this);
-};
-
-/**
- * @param {boolean} selected
- */
-good.drive.nav.grid.Cell.prototype.setSelectedInternal =
-  function(selected) {
-  if (this.selected_ == selected) {
-    return;
-  }
-  this.selected_ = selected;
-  var cellElm = this.getContentElement();
-  cellElm.className = this.defaultConfig.cssCellRoot;
-};
-
-/**
- * @private
- */
-good.drive.nav.grid.Cell.prototype.detachEvents_ = function() {
-
-};
-
-
-/**
- * @param {goog.events.BrowserEvent} e
- */
-good.drive.nav.grid.Cell.prototype.handleKeyEvent = function(e) {
+/** @override */
+good.drive.view.grid.GridCell.prototype.handleKeyEvent = function(e) {
   var el = this.getElement();
   switch (e.type) {
     case goog.events.EventType.MOUSEOVER:
@@ -227,10 +151,8 @@ good.drive.nav.grid.Cell.prototype.handleKeyEvent = function(e) {
   }
 };
 
-/**
- * @param {goog.events.BrowserEvent} e
- */
-good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
+/** @override */
+good.drive.view.grid.GridCell.prototype.clickHandle = function(e) {
   this.openCell();
   var imageCheck = this.getImageCheckElement();
   var rootElement = this.getThumbnailElement();
@@ -240,7 +162,7 @@ good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
   goog.events.listen(imageCheck, goog.events.EventType.CLICK, function(e) {
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.getCurrentDocid;
-    var grid = good.drive.nav.grid.View.currentGrid;
+    var grid = good.drive.view.baseview.View.currentGrid;
     var selectedElemnet = grid.getSelectedItem();
     var data = selectedElemnet.data;
     if (docId != good.constants.MYRESDOCID) {
@@ -257,7 +179,7 @@ good.drive.nav.grid.Cell.prototype.clickHandle = function(e) {
 
 /**
  */
-good.drive.nav.grid.Cell.prototype.openCell = function() {
+good.drive.view.grid.GridCell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     if (this.data.get('isfile') != undefined) {
       return;
@@ -272,19 +194,9 @@ good.drive.nav.grid.Cell.prototype.openCell = function() {
   }
 };
 
+
 /** @override */
-good.drive.nav.grid.Cell.prototype.createDom = function() {
-  var sb = new goog.string.StringBuffer();
-  this.toHtml(sb);
-  var element = this.getDomHelper().htmlToDocumentFragment(sb.toString());
-  this.setElementInternal(/** @type {Element} */ (element));
-};
-
-
-/**
- * @param {goog.string.StringBuffer} sb
- */
-good.drive.nav.grid.Cell.prototype.toHtml = function(sb) {
+good.drive.view.grid.GridCell.prototype.toHtml = function(sb) {
   sb.append('<div class="',
       this.defaultConfig.cssCellRoot, '" id="', this.getId(), '">',
       '<div><div class="gv-dynamic-thumbnail"',
@@ -297,7 +209,7 @@ good.drive.nav.grid.Cell.prototype.toHtml = function(sb) {
 /**
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getThumbnailElement = function() {
+good.drive.view.grid.GridCell.prototype.getThumbnailElement = function() {
   var el = this.getElement();
   return el ? /** @type {Element} */ (el.firstChild.firstChild) : null;
 };
@@ -306,7 +218,7 @@ good.drive.nav.grid.Cell.prototype.getThumbnailElement = function() {
 /**
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getImageBottonElement = function() {
+good.drive.view.grid.GridCell.prototype.getImageBottonElement = function() {
   var el = this.getImageElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
@@ -315,7 +227,7 @@ good.drive.nav.grid.Cell.prototype.getImageBottonElement = function() {
 /**
  * @return {goog.string.StringBuffer}
  */
-good.drive.nav.grid.Cell.prototype.getImageHtml = function() {
+good.drive.view.grid.GridCell.prototype.getImageHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="', this.getImageClassName(),
       '" style="width: 230px;height:213px;">',
@@ -330,7 +242,7 @@ good.drive.nav.grid.Cell.prototype.getImageHtml = function() {
 /**
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getImageElement = function() {
+good.drive.view.grid.GridCell.prototype.getImageElement = function() {
   var el = this.getThumbnailElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
 };
@@ -339,7 +251,7 @@ good.drive.nav.grid.Cell.prototype.getImageElement = function() {
 /**
  * @return {string}
  */
-good.drive.nav.grid.Cell.prototype.getImageClassName = function() {
+good.drive.view.grid.GridCell.prototype.getImageClassName = function() {
   return this.defaultConfig.cssCellImage;
 };
 
@@ -347,7 +259,7 @@ good.drive.nav.grid.Cell.prototype.getImageClassName = function() {
 /**
  * @return {goog.string.StringBuffer}
  */
-good.drive.nav.grid.Cell.prototype.getImageContainerHtml = function() {
+good.drive.view.grid.GridCell.prototype.getImageContainerHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
       this.getImageContainerClassName(),
@@ -359,7 +271,7 @@ good.drive.nav.grid.Cell.prototype.getImageContainerHtml = function() {
 /**
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getImageContainerElement = function() {
+good.drive.view.grid.GridCell.prototype.getImageContainerElement = function() {
   var el = this.getImageBottonElement();
   return el ?
       /** @type {Element} */ (el.firstChild.firstChild.firstChild) :
@@ -369,14 +281,15 @@ good.drive.nav.grid.Cell.prototype.getImageContainerElement = function() {
 /**
  * @return {string}
  */
-good.drive.nav.grid.Cell.prototype.getImageContainerClassName = function() {
+good.drive.view.grid.GridCell.prototype.getImageContainerClassName =
+  function() {
   return this.defaultConfig.cssCellImageContainer;
 };
 
 /**
  * @return {goog.string.StringBuffer}
  */
-good.drive.nav.grid.Cell.prototype.getImageCheckHtml = function() {
+good.drive.view.grid.GridCell.prototype.getImageCheckHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<a class="gridview-thumbnail-link" ' +
       'target="_blank" rel="noreferrer"></a>');
@@ -386,7 +299,7 @@ good.drive.nav.grid.Cell.prototype.getImageCheckHtml = function() {
 /**
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getImageCheckElement = function() {
+good.drive.view.grid.GridCell.prototype.getImageCheckElement = function() {
   var el = this.getImageContainerElement();
   return el ?
       /** @type {Element} */ (el.firstChild) :
@@ -397,7 +310,7 @@ good.drive.nav.grid.Cell.prototype.getImageCheckElement = function() {
 /**
  * @return {goog.string.StringBuffer}
  */
-good.drive.nav.grid.Cell.prototype.getLabelHtml = function() {
+good.drive.view.grid.GridCell.prototype.getLabelHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<div class="',
       this.getLabelClassName(),
@@ -409,7 +322,7 @@ good.drive.nav.grid.Cell.prototype.getLabelHtml = function() {
 /**
  * @return {Element}
  */
-good.drive.nav.grid.Cell.prototype.getLabelElement = function() {
+good.drive.view.grid.GridCell.prototype.getLabelElement = function() {
   var el = this.getThumbnailElement();
   return el ? /** @type {Element} */ (el.lastChild) : null;
 };
@@ -418,7 +331,7 @@ good.drive.nav.grid.Cell.prototype.getLabelElement = function() {
 /**
  * @return {string}
  */
-good.drive.nav.grid.Cell.prototype.getLabelClassName = function() {
+good.drive.view.grid.GridCell.prototype.getLabelClassName = function() {
   return this.defaultConfig.cssCellLabel;
 };
 
@@ -426,7 +339,7 @@ good.drive.nav.grid.Cell.prototype.getLabelClassName = function() {
 /**
  * @param {Element} dom
  */
-good.drive.nav.grid.Cell.prototype.setLabel = function(dom) {
+good.drive.view.grid.GridCell.prototype.setLabel = function(dom) {
 //  goog.dom.removeChildren(this.getImageContainerElement());
   goog.dom.removeChildren(this.getLabelElement());
   goog.dom.appendChild(this.getLabelElement(), dom);

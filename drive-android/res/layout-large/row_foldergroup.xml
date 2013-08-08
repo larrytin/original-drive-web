@@ -6,8 +6,8 @@
     android:paddingTop="@dimen/activity_vertical_margin" >
     <TextView
         android:id="@+id/listItem"
-        android:textSize="@dimen/listGroupTextSize"
+        android:textSize="@dimen/listGroupTextSize_large"
         android:layout_width="wrap_content"
-        android:layout_height="@dimen/listGroupHeigh"
+        android:layout_height="@dimen/listGroupHeigh_large"
         android:gravity="center_vertical" />
 </RelativeLayout>

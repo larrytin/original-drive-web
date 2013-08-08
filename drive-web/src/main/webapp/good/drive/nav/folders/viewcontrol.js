@@ -2,7 +2,7 @@
 goog.provide('good.drive.nav.folders.ViewControl');
 
 goog.require('good.drive.nav.folders.AbstractControl');
-goog.require('good.drive.nav.grid');
+goog.require('good.drive.view.baseview');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 
@@ -45,6 +45,7 @@ good.drive.nav.folders.ViewControl.prototype.connect = function(doc) {
 good.drive.nav.folders.ViewControl.prototype.mappingView =
   function(view, data) {
   var tree = view.tree;
+  this.view().customNode(tree, data);
   this.addEvent(tree, data);
   data.set(this.getLabelKey(), this._title);
 };
@@ -194,6 +195,9 @@ good.drive.nav.folders.ViewControl.prototype.addEvent = function(node, map) {
 good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
   var that = this;
   list.addValuesAddedListener(function(evt) {
+    if (node.getChildCount() == 0 && list.length() == 1) {
+      node.setExpanded(true);
+    }
     if (!node.getExpanded() || node.getChildCount() == list.length()) {
       return;
     }
@@ -260,7 +264,7 @@ good.drive.nav.folders.ViewControl.prototype.nodeHandle = function(node, list) {
           var children = node.getChildren();
           for (var i in children) {
             var child = children[i];
-            that.view().customNode(child);
+            that.view().customNode(child, child.map);
           }
         }
       });

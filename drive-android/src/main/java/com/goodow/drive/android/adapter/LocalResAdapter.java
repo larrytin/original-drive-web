@@ -18,102 +18,85 @@ import com.goodow.drive.android.fragment.LocalResFragment;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 
 public class LocalResAdapter extends BaseAdapter {
-	private ArrayList<File> dataSource;
-	private LocalResFragment localResFragment;
-	
-	public LocalResAdapter(ArrayList<File> dataSource,
-			LocalResFragment localResFragment) {
-		super();
-		this.dataSource = dataSource;
-		this.localResFragment = localResFragment;
-	}
+  private ArrayList<File> dataSource;
+  private LocalResFragment localResFragment;
 
-	@Override
-	public int getCount() {
-		if (dataSource != null) {
-			return dataSource.size();
-		} else {
-			return 0;
-		}
-	}
+  public LocalResAdapter(ArrayList<File> dataSource, LocalResFragment localResFragment) {
+    super();
+    this.dataSource = dataSource;
+    this.localResFragment = localResFragment;
+  }
 
-	@Override
-	public Object getItem(int position) {
-		return dataSource.get(position);
-	}
+  @Override
+  public int getCount() {
+    if (dataSource != null) {
+      return dataSource.size();
+    } else {
+      return 0;
+    }
+  }
 
-	@Override
-	public long getItemId(int position) {
-		return position;
-	}
+  @Override
+  public Object getItem(int position) {
+    return dataSource.get(position);
+  }
 
-	@Override
-	public View getView(int position, View convertView, ViewGroup parent) {
-		View row = convertView;
-		if (null == row) {
-			row = localResFragment.getActivity()
-					.getLayoutInflater()
-					.inflate(R.layout.row_folderlist, parent, false);
-		}
+  @Override
+  public long getItemId(int position) {
+    return position;
+  }
 
-		final File item = (File)getItem(position);
-		
-		ImageButton delButton = (ImageButton) row.findViewById(R.id.delButton);
-		delButton.setOnClickListener(new OnClickListener() {
-			@Override
-			public void onClick(View v) {
-				AlertDialog alertDialog = new AlertDialog.Builder(
-						localResFragment.getActivity())
-						.setPositiveButton(R.string.dailogOK,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(
-											DialogInterface dialog,
-											int which) {
-										if (null != item) {
-											String localPath = item
-													.getParentFile()
-													.getAbsolutePath();
+  @Override
+  public View getView(int position, View convertView, ViewGroup parent) {
+    View row = convertView;
+    if (null == row) {
+      row = localResFragment.getActivity().getLayoutInflater().inflate(R.layout.row_folderlist, parent, false);
+    }
 
-											localResFragment.delFile(item);
+    final File item = (File) getItem(position);
 
-											localResFragment.initDataSource(new File(localPath));
-										}
-									}
-								})
-						.setNegativeButton(R.string.dailogCancel,
-								new DialogInterface.OnClickListener() {
-									@Override
-									public void onClick(
-											DialogInterface dialog,
-											int which) {
+    ImageButton delButton = (ImageButton) row.findViewById(R.id.delButton);
+    delButton.setOnClickListener(new OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        AlertDialog alertDialog = new AlertDialog.Builder(localResFragment.getActivity())
+            .setPositiveButton(R.string.dailogOK, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
+                if (null != item) {
+                  String localPath = item.getParentFile().getAbsolutePath();
 
-									}
-								})
-						.setMessage(R.string.del_DailogMessage)
-						.create();
+                  localResFragment.delFile(item);
 
-				alertDialog.show();
+                  localResFragment.initDataSource(new File(localPath));
+                }
+              }
+            }).setNegativeButton(R.string.dailogCancel, new DialogInterface.OnClickListener() {
+              @Override
+              public void onClick(DialogInterface dialog, int which) {
 
-			}
-		});
+              }
+            }).setMessage(R.string.del_DailogMessage).create();
 
-		TextView listItem = (TextView) row.findViewById(R.id.listItem);
-		String fileNameString = item.getName();
+        alertDialog.show();
 
-		int index = fileNameString.lastIndexOf(".");
-		if (index > 0) {
-			listItem.setText(fileNameString.substring(0, index));
-		} else {
-			listItem.setText(fileNameString);
-		}
+      }
+    });
 
-		ImageView img_left = (ImageView) row
-				.findViewById(R.id.leftImage);
-		img_left.setImageResource(ToolsFunctionForThisProgect
-				.getFileIconByFileFullName(fileNameString));
+    TextView listItem = (TextView) row.findViewById(R.id.listItem);
+    String fileNameString = item.getName();
 
-		row.setTag(item.getAbsolutePath());
-		return row;
-	}
+    int index = fileNameString.lastIndexOf(".");
+    if (index > 0) {
+      listItem.setText(fileNameString.substring(0, index));
+    } else {
+      listItem.setText(fileNameString);
+    }
+
+    ImageView img_left = (ImageView) row.findViewById(R.id.leftImage);
+    img_left.setImageResource(ToolsFunctionForThisProgect.getFileIconByFileFullName(fileNameString));
+
+    row.setTag(item.getAbsolutePath());
+    return row;
+  }
 }

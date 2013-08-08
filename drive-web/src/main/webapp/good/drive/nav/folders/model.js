@@ -187,6 +187,59 @@ good.drive.nav.folders.Model.prototype.getfileMap =
 };
 
 /**
+ * @param {string} model
+ * @param {Object} data
+ * @return {Object}
+ */
+good.drive.nav.folders.Model.prototype.copy = function(model, data) {
+  var bakdata;
+  if (data instanceof good.realtime.CollaborativeMap) {
+    bakdata = model.createMap();
+    var keys = data.keys();
+    for (var i in keys) {
+      var key = keys[i];
+      var value = data.get(key);
+      bakdata.set(key, this.copy(model, value));
+    }
+    return bakdata;
+  } else if (data instanceof good.realtime.CollaborativeList) {
+    bakdata = model.createList();
+    for (var i = 0; i < data.length(); i++) {
+      var value = data.get(i);
+      bakdata.push(this.copy(model, value));
+    }
+    return bakdata;
+  } else {
+    bakdata = data;
+    return bakdata;
+  }
+};
+
+/**
+ * @param {Object} data
+ * @return {Object}
+ */
+good.drive.nav.folders.Model.prototype.remove = function(data) {
+  if (data instanceof good.realtime.CollaborativeMap) {
+    var keys = data.keys();
+    for (var i in keys) {
+      var key = keys[i];
+      var value = data.get(key);
+      this.remove(value);
+      data.remove(key);
+    }
+  } else if (data instanceof good.realtime.CollaborativeList) {
+    for (var i = 0; i < data.length(); i++) {
+      var value = data.get(i);
+      var _data = this.remove(value);
+      data.removeValue(_data);
+    }
+  } else {
+    return data;
+  }
+};
+
+/**
  * @return {string}
  */
 good.drive.nav.folders.Model.prototype.docId = function() {

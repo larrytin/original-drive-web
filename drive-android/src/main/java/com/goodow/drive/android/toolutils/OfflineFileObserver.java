@@ -26,18 +26,19 @@ import com.goodow.realtime.ValuesRemovedEvent;
 
 import elemental.json.JsonObject;
 
-public class OfflineFileObserver {
+public enum OfflineFileObserver {
 	// private final String TAG = this.getClass().getSimpleName();
+	OFFLINEFILEOBSERVER;
 
-	private static BlockingQueue<JsonObject> unLoginDownloadQueue = new LinkedBlockingDeque<JsonObject>();
+	private BlockingQueue<JsonObject> unLoginDownloadQueue = new LinkedBlockingDeque<JsonObject>();
 
 	private Document doc;
-	private static Model model;
+	private Model model;
 	private CollaborativeMap root;
-	private static CollaborativeList list;
+	private CollaborativeList list;
 
-	private static Model model_unlogin;
-	private static CollaborativeList list_unlogin;
+	private Model model_unlogin;
+	private CollaborativeList list_unlogin;
 
 	private EventHandler<ValuesAddedEvent> listAddEventHandler;
 	private EventHandler<ValuesRemovedEvent> listRemoveEventHandler;
@@ -73,36 +74,34 @@ public class OfflineFileObserver {
 		State state = unloginDownloadThread.getState();
 		switch (state) {
 		case BLOCKED:
-			break;
 
+			break;
 		case NEW:
 			unloginDownloadThread.start();
 
 			break;
-
 		case RUNNABLE:
 
 			break;
-
 		case TERMINATED:
 			unloginDownloadThread = new UnloginDownloadThread();
 			unloginDownloadThread.start();
 
 			break;
-
 		case TIMED_WAITING:
 
 			break;
 		default:
+
 			break;
 		}
 	}
 
-	public static CollaborativeList getList() {
+	public CollaborativeList getList() {
 		return list;
 	}
 
-	public static void addFile(final String attachmentId, boolean isLogin) {
+	public void addFile(final String attachmentId, boolean isLogin) {
 		final Model newModel;
 		final CollaborativeList newList;
 		if (isLogin) {
@@ -123,7 +122,8 @@ public class OfflineFileObserver {
 								.execute();
 
 						out: do {
-							if (null == execute) {
+							if (null == execute || execute.getId() == null) {
+
 								break out;
 							}
 
@@ -131,6 +131,7 @@ public class OfflineFileObserver {
 								CollaborativeMap map = newList.get(i);
 								if (execute.getBlobKey().equals(
 										map.get("blobKey"))) {
+
 									break out;
 								}
 							}
@@ -166,10 +167,6 @@ public class OfflineFileObserver {
 				};
 			}.start();
 		}
-	}
-
-	public static void removeFile(CollaborativeMap file) {
-		// TODO
 	}
 
 	public void startObservation(String docId, final String attachmentId) {
@@ -235,6 +232,15 @@ public class OfflineFileObserver {
 	}
 
 	public void initEventHandler() {
+	  do{
+	    if(listAddEventHandler == null){
+	      
+	      break;
+	    }
+	    
+	    //TODO
+	  }while(false);
+	  
 		if (listAddEventHandler == null) {
 			listAddEventHandler = new EventHandler<ValuesAddedEvent>() {
 				@Override
@@ -251,10 +257,13 @@ public class OfflineFileObserver {
 											+ resource.get("blobKey"));
 
 							if (!file.exists()) {
+								// 本地文件不存在,添加下载任务
 								DownloadResServiceBinder
 										.getDownloadResServiceBinder()
 										.addResDownload(resource);
+
 							} else {
+								// 本地文件已存在,直接显示下载成功
 								resource.set("progress", "100");
 								resource.set(
 										"status",

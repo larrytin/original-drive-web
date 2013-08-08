@@ -1,25 +1,11 @@
 package com.goodow.drive.android.activity;
 
-import com.goodow.android.drive.R;
-import com.goodow.api.services.account.Account;
-import com.goodow.api.services.account.model.AccountInfo;
-import com.goodow.drive.android.global_data_cache.GlobalConstant;
-import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
-import com.goodow.drive.android.toolutils.OfflineFileObserver;
-import com.goodow.drive.android.toolutils.SimpleProgressDialog;
-import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
-import com.goodow.realtime.Realtime;
-
-import com.google.inject.Inject;
-
-import java.io.File;
-import java.io.IOException;
-
+import roboguice.activity.RoboActivity;
+import roboguice.inject.ContentView;
+import roboguice.inject.InjectView;
 import android.annotation.SuppressLint;
 import android.content.DialogInterface;
 import android.content.DialogInterface.OnCancelListener;
-import android.content.Intent;
-import android.os.AsyncTask;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
@@ -28,166 +14,85 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
-import roboguice.activity.RoboActivity;
-import roboguice.inject.ContentView;
-import roboguice.inject.InjectView;
+import com.goodow.android.drive.R;
+import com.goodow.drive.android.toolutils.LoginNetRequestTask;
+import com.goodow.drive.android.toolutils.SimpleProgressDialog;
+import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 
 @SuppressLint("SetJavaScriptEnabled")
 @ContentView(R.layout.activity_login)
 public class LogInActivity extends RoboActivity {
-	private final String TAG = this.getClass().getSimpleName();
+  private final String TAG = this.getClass().getSimpleName();
 
-	private class LoginNetRequestTask extends
-			AsyncTask<String, String, AccountInfo> {
-		@Override
-		protected AccountInfo doInBackground(String... params) {
-			AccountInfo accountInfo = null;
-			try {
-				accountInfo = account.login(params[0], params[1]).execute();
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			return accountInfo;
-		}
+  @InjectView(R.id.username_EditText)
+  private EditText usernameEditText;
 
-		@Override
-		protected void onPostExecute(AccountInfo result) {
-			String errorMessage = "";
+  @InjectView(R.id.password_EditText)
+  private EditText passwordEditText;
 
-			do {
-				if (this.isCancelled()) {
-					break;
-				}
-				if (null == result || result.containsKey("error_message")) {
-					errorMessage = "用户名或者密码错误!";
-					break;
-				}
+  @Override
+  public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
 
-				String userId = result.getUserId();
-				String token = result.getToken();
-				if (TextUtils.isEmpty(userId) || TextUtils.isEmpty(token)) {
-					errorMessage = "服务器异常!";
-					break;
-				}
+    Button loginButton = (Button) findViewById(R.id.login_Button);
+    loginButton.setOnClickListener(new View.OnClickListener() {
 
-				GlobalDataCacheForMemorySingleton.getInstance.setUserId(userId);
-				GlobalDataCacheForMemorySingleton.getInstance
-						.setAccess_token(token);
-				GlobalDataCacheForMemorySingleton.getInstance
-						.setUserName(usernameEditText.getText().toString());
+      @Override
+      public void onClick(View v) {
+        String errorMessageString = "登录成功!";
+        String username = "";
+        String password = "";
 
-				File file = new File(
-						GlobalDataCacheForMemorySingleton.getInstance
-								.getUserResDirPath());
-				if (!file.exists()) {
-					file.mkdir();
-				}
+        do {
+          username = usernameEditText.getText().toString();
+          if (TextUtils.isEmpty(username)) {
+            errorMessageString = "用户名不能为空!";
+            break;
+          }
 
-				// 通知
-				Realtime.authorize(userId, token);
-				Log.i(TAG, "userId: " + userId + "\n token: " + token);
+          password = passwordEditText.getText().toString();
+          if (TextUtils.isEmpty(password)) {
+            errorMessageString = "密码不能为空!";
+            break;
+          }
 
-				String docId = "@tmp/"
-						+ GlobalDataCacheForMemorySingleton.getInstance()
-								.getUserId()
-						+ "/"
-						+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
-								.getValue();
+          String[] params = { username, password };
+          final LoginNetRequestTask loginNetRequestTask = new LoginNetRequestTask(LogInActivity.this, null);
+          SimpleProgressDialog.show(LogInActivity.this, new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+              loginNetRequestTask.cancel(true);
 
-				new OfflineFileObserver().startObservation(docId, null);
+            }
+          });
+          loginNetRequestTask.execute(params);
 
-				Intent intent = new Intent(LogInActivity.this,
-						MainActivity.class);
-				LogInActivity.this.startActivity(intent);
+          Log.i(TAG, "username: " + username + " password: " + password);
+          // 一切OK
+          return;
+        } while (false);
 
-				finish();
+        // 用户输入的信息错误
+        Toast.makeText(LogInActivity.this, errorMessageString, Toast.LENGTH_SHORT).show();
+      }
+    });
+  }
 
-			} while (false);
+  @Override
+  public boolean onKeyDown(int keyCode, KeyEvent event) {
+    if (keyCode == KeyEvent.KEYCODE_BACK) {
+      ToolsFunctionForThisProgect.quitApp(this);
 
-			SimpleProgressDialog.dismiss(LogInActivity.this);
+      return true;
+    }
 
-			if (!TextUtils.isEmpty(errorMessage)) {
-				Toast.makeText(LogInActivity.this, errorMessage,
-						Toast.LENGTH_SHORT).show();
-			}
-		}
-	}
+    return super.onKeyDown(keyCode, event);
+  }
 
-	@Inject
-	private Account account;
+  @Override
+  protected void onPause() {
+    super.onPause();
 
-	@InjectView(R.id.username_EditText)
-	private EditText usernameEditText;
-
-	@InjectView(R.id.password_EditText)
-	private EditText passwordEditText;
-
-	@Override
-	public void onCreate(Bundle savedInstanceState) {
-		super.onCreate(savedInstanceState);
-
-		// GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
-
-		Button loginButton = (Button) findViewById(R.id.login_Button);
-		loginButton.setOnClickListener(new View.OnClickListener() {
-
-			@Override
-			public void onClick(View v) {
-				String errorMessageString = "登录成功!";
-				String username = "";
-				String password = "";
-
-				do {
-					username = usernameEditText.getText().toString();
-					if (TextUtils.isEmpty(username)) {
-						errorMessageString = "用户名不能为空!";
-						break;
-					}
-
-					password = passwordEditText.getText().toString();
-					if (TextUtils.isEmpty(password)) {
-						errorMessageString = "密码不能为空!";
-						break;
-					}
-
-					String[] params = { username, password };
-					final LoginNetRequestTask loginNetRequestTask = new LoginNetRequestTask();
-					SimpleProgressDialog.show(LogInActivity.this,
-							new OnCancelListener() {
-								@Override
-								public void onCancel(DialogInterface dialog) {
-									loginNetRequestTask.cancel(true);
-
-								}
-							});
-					loginNetRequestTask.execute(params);
-
-					// 一切OK
-					return;
-				} while (false);
-
-				// 用户输入的信息错误
-				Toast.makeText(LogInActivity.this, errorMessageString,
-						Toast.LENGTH_SHORT).show();
-			}
-		});
-	}
-
-	@Override
-	public boolean onKeyDown(int keyCode, KeyEvent event) {
-		if (keyCode == KeyEvent.KEYCODE_BACK) {
-			ToolsFunctionForThisProgect.quitApp(this);
-
-			return true;
-		}
-
-		return super.onKeyDown(keyCode, event);
-	}
-
-	@Override
-	protected void onPause() {
-		super.onPause();
-
-		SimpleProgressDialog.resetByThisContext(this);
-	}
+    SimpleProgressDialog.resetByThisContext(this);
+  }
 }
