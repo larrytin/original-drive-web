@@ -34,8 +34,6 @@ public class LogInActivity extends RoboActivity {
   public void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
-
     Button loginButton = (Button) findViewById(R.id.login_Button);
     loginButton.setOnClickListener(new View.OnClickListener() {
 

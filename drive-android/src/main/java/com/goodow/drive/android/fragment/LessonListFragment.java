@@ -37,6 +37,7 @@ import com.goodow.realtime.ModelInitializerHandler;
 import com.goodow.realtime.ObjectChangedEvent;
 import com.goodow.realtime.Realtime;
 import elemental.json.JsonArray;
+import elemental.json.JsonObject;
 
 public class LessonListFragment extends ListFragment implements ILocalFragment {
   private final String TAG = this.getClass().getSimpleName();
@@ -51,6 +52,8 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   private Model model;
   private CollaborativeMap root;
 
+  public static final String DOCID = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
+      + GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue();
   private static final String FOLDER_KEY = GlobalConstant.DocumentIdAndDataKey.FOLDERSKEY.getValue();
   private static final String FILE_KEY = GlobalConstant.DocumentIdAndDataKey.FILESKEY.getValue();
 
@@ -59,14 +62,14 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 
   public void backFragment() {
     if (null != currentPathList && 1 < currentPathList.length()) {
-      String mapId = path.getMapId(currentPathList.length() - 1);
+      String mapId = currentPathList.get(currentPathList.length() - 1).asString();
       CollaborativeMap currentmap = model.getObject(mapId);
       if (null != currentmap) {
         // 删除监听
         currentmap.removeObjectChangedListener(valuesChangeEventHandler);
       }
 
-      path.changePath(null);
+      path.changePath(null, DOCID);
     } else {
       if (null != getActivity()) {
         Toast.makeText(getActivity(), R.string.backFolderErro, Toast.LENGTH_SHORT).show();
@@ -80,11 +83,11 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
     if (null != path) {
       path.setNotifyData(new INotifyData() {
         @Override
-        public void notifyData() {
-          currentPathList = path.getCurrentPath();
+        public void notifyData(JsonObject newJson) {
+          currentPathList = newJson.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
 
           if (null != currentPathList && 0 != currentPathList.length()) {
-            CollaborativeMap map = model.getObject(path.getMapId(currentPathList.length() - 1));
+            CollaborativeMap map = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
             if (null != map) {
               // 判断若为文件,则触发播放功能,并且pathList自动-1(即执行一遍backfragment()方法)
               if (null == map.get(FOLDER_KEY)) {
@@ -116,7 +119,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
                     intent.setDataAndType(Uri.fromFile(file), type);
                   }
 
-                  getActivity().startActivity(intent);
+                  getActivity().startActivity(Intent.createChooser(intent, "请选择打开程序…"));
                 } else {
                   Toast.makeText(getActivity(), "请先下载该文件.", Toast.LENGTH_SHORT).show();
                 }
@@ -136,7 +139,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 
       currentPathList = path.getCurrentPath();
       if (0 == currentPathList.length()) {
-        path.changePath(root.getId());
+        path.changePath(root.getId(), DOCID);
         currentPathList = path.getCurrentPath();
       }
 
@@ -146,7 +149,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   }
 
   public void initData() {
-    currentFolder = model.getObject(path.getMapId(currentPathList.length() - 1));
+    currentFolder = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
 
     if (null != currentFolder) {
       currentFolder.addObjectChangedListener(valuesChangeEventHandler);
@@ -166,7 +169,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
         } else {
           StringBuffer title = new StringBuffer();
           for (int i = 0; i < currentPathList.length(); i++) {
-            CollaborativeMap currentMap = model.getObject(path.getMapId(i));
+            CollaborativeMap currentMap = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
 
             String label = currentMap.get("label");
             if (null != label) {
@@ -187,7 +190,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
     super.onPause();
 
     ((MainActivity) getActivity()).restActionBarTitle();
-    
+
     if (null != adapter) {
       adapter.setFileList(null);
       adapter.setFolderList(null);
@@ -312,6 +315,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
           CollaborativeMap map = model.createMap(null);
           for (int i = 0; i < mapKey.length; i++) {
             if ("label".equals(mapKey[i])) {
+
               map.set(mapKey[i], "Lesson " + k);
             } else {
               CollaborativeList subList = model.createList();
@@ -339,14 +343,12 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
       }
     };
 
-    String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/" + GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue();
-
-    Realtime.load(docId, onLoaded, initializer, null);
-
+    Realtime.load(DOCID, onLoaded, initializer, null);
   }
 
   @Override
   public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
     return inflater.inflate(R.layout.fragment_folderlist, container, false);
   }
 
@@ -354,6 +356,6 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   public void onListItemClick(ListView l, View v, int position, long id) {
     CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
 
-    path.changePath(clickItem.getId());
+    path.changePath(clickItem.getId(), DOCID);
   }
 }

@@ -50,7 +50,7 @@
       services and handle them to the custom IntentService.
 
       The com.google.android.c2dm.permission.SEND permission is necessary
-      so only GCM services can send data messages for the app.
+      so only GCM services can send data messages for the app.
         -->
         <receiver
             android:name="com.goodow.realtime.android.gcm.GCMRedirectedBroadcastReceiver"
@@ -65,7 +65,9 @@
                 <category android:name="com.goodow.android.drive" />
             </intent-filter>
         </receiver>
-        <receiver android:name="com.goodow.drive.android.service.DownloadBroadcastReceiver" >
+        <receiver
+            android:name="com.goodow.drive.android.service.DownloadBroadcastReceiver"
+            android:exported="false" >
             <intent-filter>
                 <action android:name="com.goodow.realtime.android.action.DOWNLOAD" />
             </intent-filter>
@@ -75,9 +77,9 @@
       handle received messages.
 
       By default, it must be named .GCMIntentService, unless the
-      application uses a custom BroadcastReceiver that redefines its name.
-        -->
+      application uses a custom BroadcastReceiver that redefines its name.        -->
         <service android:name="com.goodow.realtime.android.gcm.GCMIntentService" />
+        <service android:name="com.goodow.drive.android.service.MediaDownloadService" />
 
         <activity
             android:name="com.goodow.drive.android.activity.LogInActivity"
@@ -93,8 +95,6 @@
         <activity android:name="com.goodow.drive.android.activity.DataListActivity" />
         <activity android:name="com.goodow.drive.android.activity.play.AudioPlayActivity" />
         <activity android:name="com.goodow.drive.android.activity.play.VideoPlayActivity" />
-
-        <service android:name="com.goodow.drive.android.service.MediaDownloadService" />
     </application>
 
 </manifest>

@@ -5,11 +5,9 @@ import elemental.json.JsonArray;
 public interface IRemoteControl {
   public void changeDoc(String docId);
 
-  public void changePath(String mapId);
+  public void changePath(String mapId, String docId);
 
   public JsonArray getCurrentPath();
-
-  public String getMapId(int index);
 
   public void setNotifyData(INotifyData iNotifyData);
 

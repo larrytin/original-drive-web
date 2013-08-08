@@ -202,12 +202,6 @@ public class MainActivity extends RoboActivity {
           GlobalDataCacheForMemorySingleton.getInstance.setUserId(null);
           GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(null);
 
-          // Intent intent = new Intent(
-          // MainActivity.this,
-          // LogInActivity.class);
-          // startActivity(intent);
-
-          // finish();
           ToolsFunctionForThisProgect.quitApp(MainActivity.this);
         }
       }).setNegativeButton(R.string.dailogCancel, new DialogInterface.OnClickListener() {
@@ -236,8 +230,6 @@ public class MainActivity extends RoboActivity {
   @Override
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
-
-    // GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
 
     actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
@@ -310,7 +302,6 @@ public class MainActivity extends RoboActivity {
 
   public void setLastiRemoteDataFragment(ILocalFragment lastiRemoteDataFragment) {
     this.lastiRemoteDataFragment = lastiRemoteDataFragment;
-
   }
 
   public void openState(int visibility) {
@@ -328,12 +319,12 @@ public class MainActivity extends RoboActivity {
   public void setOpenStateView(TextView textView, ImageView imageView) {
     openFailure_text = textView;
     openFailure_img = imageView;
-
   }
 
   private void switchFragment(DocumentIdAndDataKey doc) {
+    Fragment newFragment = null;
+
     if (null != doc) {
-      Fragment newFragment = null;
 
       switch (doc) {
       case LESSONDOCID:
@@ -349,17 +340,19 @@ public class MainActivity extends RoboActivity {
 
         break;
       default:
+        newFragment = dataListFragment;
+
         break;
       }
+    }
 
-      if (newFragment != null) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.popBackStack();
+    if (newFragment != null) {
+      FragmentManager fragmentManager = getFragmentManager();
+      fragmentManager.popBackStack();
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contentLayout, newFragment);
-        fragmentTransaction.commitAllowingStateLoss();
-      }
+      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+      fragmentTransaction.replace(R.id.contentLayout, newFragment);
+      fragmentTransaction.commitAllowingStateLoss();
     }
   }
 
@@ -406,7 +399,7 @@ public class MainActivity extends RoboActivity {
     }
 
     @Override
-    public void changePath(String mapId) {
+    public void changePath(String mapId, String docId) {
       if (null != root) {
         JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
 
@@ -421,8 +414,8 @@ public class MainActivity extends RoboActivity {
         }
 
         map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue(), jsonArray);
+        map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue(), docId);
         root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(), map);
-
       }
     }
 
@@ -430,30 +423,6 @@ public class MainActivity extends RoboActivity {
     public void setNotifyData(INotifyData iNotifyData) {
       this.iNotifyData = iNotifyData;
 
-    }
-
-    @Override
-    public String getMapId(int index) {
-      String toString = "";
-
-      if (index < 0) {
-        Log.e(TAG, "error index: " + index);
-
-        return toString;
-      }
-
-      if (null != root) {
-        JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
-
-        JsonArray jsonArray = map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
-
-        if (null != jsonArray && jsonArray.length() > 0 && index < jsonArray.length()) {
-          toString = jsonArray.get(index).asString();
-
-        }
-      }
-
-      return toString;
     }
 
     private void updateUi(JsonObject map) {
@@ -482,8 +451,6 @@ public class MainActivity extends RoboActivity {
 
           Log.i(TAG, GlobalDataCacheForMemorySingleton.getInstance.getUserName() + "-root: " + root.toString());
 
-          updateUi(map);
-
           root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
             @Override
             public void handleEvent(ValueChangedEvent event) {
@@ -494,12 +461,27 @@ public class MainActivity extends RoboActivity {
                 updateUi(newJson);
 
                 if (null != iNotifyData) {
-                  iNotifyData.notifyData();
+                  iNotifyData.notifyData(newJson);
 
                 }
               }
             }
           });
+
+          JreJsonString jreJsonString = (JreJsonString) (map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue()));
+          if (null != jreJsonString) {
+            String lastDocId = jreJsonString.asString();
+
+            lastDocId = lastDocId.substring(lastDocId.lastIndexOf("/") + 1, lastDocId.length());
+
+            DocumentIdAndDataKey doc = DocumentIdAndDataKey.getEnumWithValue(lastDocId);
+
+            if (null != doc) {
+              switchFragment(doc);
+            } else {
+              changeDoc(DataListFragment.DOCID);
+            }
+          }
         }
       };
 
