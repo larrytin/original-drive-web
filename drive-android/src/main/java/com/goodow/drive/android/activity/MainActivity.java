@@ -65,8 +65,8 @@ import elemental.json.impl.JreJsonString;
 public class MainActivity extends RoboActivity {
   private final String TAG = this.getClass().getSimpleName();
 
-  private ILocalFragment iRemoteDataFragment;
-  private ILocalFragment lastiRemoteDataFragment;
+  private ILocalFragment currentFragment;
+  private ILocalFragment lastFragment;
 
   private RemoteControlObserver remoteControlObserver;
   private ActionBar actionBar;
@@ -170,8 +170,8 @@ public class MainActivity extends RoboActivity {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && null != iRemoteDataFragment) {
-      iRemoteDataFragment.backFragment();
+    if (keyCode == KeyEvent.KEYCODE_BACK && null != currentFragment) {
+      currentFragment.backFragment();
 
       return true;
     }
@@ -251,6 +251,7 @@ public class MainActivity extends RoboActivity {
       }
     });
 
+    remoteControlObserver = new RemoteControlObserver();
     goObservation();
   }
 
@@ -290,18 +291,18 @@ public class MainActivity extends RoboActivity {
     super.onDestroy();
   }
 
-  public void setIRemoteFrament(ILocalFragment iRemoteDataFragment) {
-    this.iRemoteDataFragment = iRemoteDataFragment;
+  public void setLocalFragment(ILocalFragment iRemoteDataFragment) {
+    this.currentFragment = iRemoteDataFragment;
 
   }
 
   public ILocalFragment getLastiRemoteDataFragment() {
 
-    return lastiRemoteDataFragment;
+    return lastFragment;
   }
 
   public void setLastiRemoteDataFragment(ILocalFragment lastiRemoteDataFragment) {
-    this.lastiRemoteDataFragment = lastiRemoteDataFragment;
+    this.lastFragment = lastiRemoteDataFragment;
   }
 
   public void openState(int visibility) {
@@ -324,7 +325,11 @@ public class MainActivity extends RoboActivity {
   private void switchFragment(DocumentIdAndDataKey doc) {
     Fragment newFragment = null;
 
-    if (null != doc) {
+    do {
+      if (null == doc) {
+
+        break;
+      }
 
       switch (doc) {
       case LESSONDOCID:
@@ -344,16 +349,20 @@ public class MainActivity extends RoboActivity {
 
         break;
       }
-    }
 
-    if (newFragment != null) {
+      if (null == newFragment) {
+
+        break;
+      }
+
       FragmentManager fragmentManager = getFragmentManager();
       fragmentManager.popBackStack();
 
       FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
       fragmentTransaction.replace(R.id.contentLayout, newFragment);
       fragmentTransaction.commitAllowingStateLoss();
-    }
+    } while (false);
+
   }
 
   public IRemoteControl getRemoteControlObserver() {
@@ -367,6 +376,24 @@ public class MainActivity extends RoboActivity {
     private CollaborativeMap root;
 
     private INotifyData iNotifyData;
+
+    private EventHandler<ValueChangedEvent> handler = new EventHandler<ValueChangedEvent>() {
+      @Override
+      public void handleEvent(ValueChangedEvent event) {
+        String property = event.getProperty();
+        if (GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue().equals(property)) {
+          JsonObject newJson = (JsonObject) event.getNewValue();
+          Log.i(TAG, "new path: " + newJson.toString());
+
+          updateUi(newJson);
+
+          if (null != iNotifyData) {
+            iNotifyData.notifyData(newJson);
+
+          }
+        }
+      }
+    };
 
     @Override
     public JsonArray getCurrentPath() {
@@ -441,32 +468,21 @@ public class MainActivity extends RoboActivity {
     }
 
     private void startObservation(String docId) {
+      if (null != root) {
+        root.removeValueChangedListener(handler);
+      }
+
       DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
         @Override
         public void onLoaded(Document document) {
           doc = document;
           model = doc.getModel();
           root = model.getRoot();
-          JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
 
+          JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
           Log.i(TAG, GlobalDataCacheForMemorySingleton.getInstance.getUserName() + "-root: " + root.toString());
 
-          root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
-            @Override
-            public void handleEvent(ValueChangedEvent event) {
-              String property = event.getProperty();
-              if (GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue().equals(property)) {
-                JsonObject newJson = (JsonObject) event.getNewValue();
-
-                updateUi(newJson);
-
-                if (null != iNotifyData) {
-                  iNotifyData.notifyData(newJson);
-
-                }
-              }
-            }
-          });
+          root.addValueChangedListener(handler);
 
           JreJsonString jreJsonString = (JreJsonString) (map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue()));
           if (null != jreJsonString) {
@@ -479,7 +495,8 @@ public class MainActivity extends RoboActivity {
             if (null != doc) {
               switchFragment(doc);
             } else {
-              changeDoc(DataListFragment.DOCID);
+              changeDoc("@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
+                  + GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID.getValue());
             }
           }
         }
@@ -572,11 +589,12 @@ public class MainActivity extends RoboActivity {
   }
 
   public void goObservation() {
-    String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
-        + GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID.getValue();
+    if (null != remoteControlObserver) {
+      String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
+          + GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID.getValue();
 
-    remoteControlObserver = new RemoteControlObserver();
-    remoteControlObserver.startObservation(docId);
+      remoteControlObserver.startObservation(docId);
+    }
   }
 
   public void showChangeUserDialog() {
@@ -643,8 +661,10 @@ public class MainActivity extends RoboActivity {
     });
   }
 
-  public void notifyLeftMenuFragment() {
+  public void notifyFragment() {
     leftMenuFragment.notifyData();
+    dataListFragment.loadDocument();
+    lessonListFragment.loadDocument();
 
   }
 }

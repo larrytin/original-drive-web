@@ -98,7 +98,7 @@ public class LoginNetRequestTask extends AsyncTask<String, String, AccountInfo> 
         dialog.dismiss();
         MainActivity mainActivity = (MainActivity) activity;
         mainActivity.goObservation();
-        mainActivity.notifyLeftMenuFragment();
+        mainActivity.notifyFragment();
 
       }
 

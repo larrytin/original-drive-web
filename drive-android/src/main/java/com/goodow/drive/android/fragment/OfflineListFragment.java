@@ -49,7 +49,7 @@ public class OfflineListFragment extends ListFragment implements ILocalFragment 
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    ((MainActivity) getActivity()).setIRemoteFrament(this);
+    ((MainActivity) getActivity()).setLocalFragment(this);
 
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction("NEW_RES_DOWNLOADING");
@@ -68,5 +68,11 @@ public class OfflineListFragment extends ListFragment implements ILocalFragment 
   public void connectUi() {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public void loadDocument() {
+    // TODO Auto-generated method stub
+    
   }
 }

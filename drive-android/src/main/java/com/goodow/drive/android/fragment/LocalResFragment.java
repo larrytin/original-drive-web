@@ -38,7 +38,7 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    ((MainActivity) getActivity()).setIRemoteFrament(this);
+    ((MainActivity) getActivity()).setLocalFragment(this);
   }
 
   @Override
@@ -149,5 +149,11 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
   public void connectUi() {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public void loadDocument() {
+    // TODO Auto-generated method stub
+    
   }
 }

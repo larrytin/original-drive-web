@@ -25,7 +25,7 @@ public class DataDetailFragment extends Fragment implements ILocalFragment {
 
     activity.setDataDetailLayoutState(View.INVISIBLE);
 
-    activity.setIRemoteFrament(activity.getLastiRemoteDataFragment());
+    activity.setLocalFragment(activity.getLastiRemoteDataFragment());
   }
 
   public void setFile(CollaborativeMap file) {
@@ -68,6 +68,12 @@ public class DataDetailFragment extends Fragment implements ILocalFragment {
   public void connectUi() {
     // TODO Auto-generated method stub
 
+  }
+
+  @Override
+  public void loadDocument() {
+    // TODO Auto-generated method stub
+    
   }
 
 }

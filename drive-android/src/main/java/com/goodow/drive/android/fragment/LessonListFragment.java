@@ -52,13 +52,13 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   private Model model;
   private CollaborativeMap root;
 
-  public static final String DOCID = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
-      + GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue();
+  private String DOCID;
   private static final String FOLDER_KEY = GlobalConstant.DocumentIdAndDataKey.FOLDERSKEY.getValue();
   private static final String FILE_KEY = GlobalConstant.DocumentIdAndDataKey.FILESKEY.getValue();
 
   private EventHandler<?> listEventHandler;
   private EventHandler<ObjectChangedEvent> valuesChangeEventHandler;
+  private INotifyData iNotifyData;
 
   public void backFragment() {
     if (null != currentPathList && 1 < currentPathList.length()) {
@@ -80,10 +80,114 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   public void connectUi() {
     Log.i(TAG, "connectUi()");
 
+    MainActivity activity = (MainActivity) getActivity();
+    if (null != activity) {
+      path = activity.getRemoteControlObserver();
+    }
+
     if (null != path) {
-      path.setNotifyData(new INotifyData() {
+      path.setNotifyData(iNotifyData);
+
+      currentPathList = path.getCurrentPath();
+      if (0 == currentPathList.length()) {
+        path.changePath(root.getId(), DOCID);
+        currentPathList = path.getCurrentPath();
+      }
+
+      showData();
+    }
+  }
+
+  public void showData() {
+    currentFolder = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
+
+    if (null != currentFolder) {
+      currentFolder.addObjectChangedListener(valuesChangeEventHandler);
+      CollaborativeList folderList = (CollaborativeList) currentFolder.get(FOLDER_KEY);
+      CollaborativeList fileList = (CollaborativeList) currentFolder.get(FILE_KEY);
+
+      adapter.setFolderList(folderList);
+      adapter.setFileList(fileList);
+      adapter.notifyDataSetChanged();
+
+      // 设置action bar的显示
+      MainActivity activity = (MainActivity) getActivity();
+      if (null != activity) {
+        if (currentPathList.length() <= 1) {
+          ((MainActivity) getActivity()).restActionBarTitle();
+
+        } else {
+          StringBuffer title = new StringBuffer();
+          for (int i = 0; i < currentPathList.length(); i++) {
+            CollaborativeMap currentMap = model.getObject(currentPathList.get(i).asString());
+
+            String label = currentMap.get("label");
+            if (null != label) {
+              title.append("/" + label);
+            }
+          }
+
+          ((MainActivity) getActivity()).setActionBarTitle(title.toString());
+        }
+      }
+    }
+
+    openState();
+  }
+
+  @Override
+  public void onPause() {
+    super.onPause();
+
+    ((MainActivity) getActivity()).restActionBarTitle();
+  }
+
+  @Override
+  public void onActivityCreated(Bundle savedInstanceState) {
+    Log.i(TAG, "onActivityCreated()");
+    super.onActivityCreated(savedInstanceState);
+
+    MainActivity activity = (MainActivity) getActivity();
+
+    activity.setLocalFragment(this);
+    activity.setLastiRemoteDataFragment(this);
+
+    TextView textView = (TextView) ((MainActivity) getActivity()).findViewById(R.id.openfailure_text);
+    ImageView imageView = (ImageView) ((MainActivity) getActivity()).findViewById(R.id.openfailure_img);
+    activity.setOpenStateView(textView, imageView);
+
+    loadDocument();
+  }
+
+  private void initEventHandler() {
+    if (listEventHandler == null) {
+      listEventHandler = new EventHandler<BaseModelEvent>() {
+        @Override
+        public void handleEvent(BaseModelEvent event) {
+          adapter.notifyDataSetChanged();
+
+          openState();
+        }
+      };
+    }
+
+    if (valuesChangeEventHandler == null) {
+      valuesChangeEventHandler = new EventHandler<ObjectChangedEvent>() {
+        @Override
+        public void handleEvent(ObjectChangedEvent event) {
+          adapter.notifyDataSetChanged();
+
+          openState();
+        }
+      };
+    }
+    
+    if (iNotifyData == null) {
+      iNotifyData = new INotifyData() {
         @Override
         public void notifyData(JsonObject newJson) {
+          Log.i(TAG, "notifyData()");
+
           currentPathList = newJson.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
 
           if (null != currentPathList && 0 != currentPathList.length()) {
@@ -127,122 +231,13 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
                 backFragment();
               } else {
                 // 判断若为文件夹,则展现数据
-                initData();
-
+                showData();
               }
             } else {
+              
               backFragment();
             }
           }
-        }
-      });
-
-      currentPathList = path.getCurrentPath();
-      if (0 == currentPathList.length()) {
-        path.changePath(root.getId(), DOCID);
-        currentPathList = path.getCurrentPath();
-      }
-
-      initData();
-
-    }
-  }
-
-  public void initData() {
-    currentFolder = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
-
-    if (null != currentFolder) {
-      currentFolder.addObjectChangedListener(valuesChangeEventHandler);
-      CollaborativeList folderList = (CollaborativeList) currentFolder.get(FOLDER_KEY);
-      CollaborativeList fileList = (CollaborativeList) currentFolder.get(FILE_KEY);
-
-      adapter.setFolderList(folderList);
-      adapter.setFileList(fileList);
-      adapter.notifyDataSetChanged();
-
-      // 设置action bar的显示
-      MainActivity activity = (MainActivity) getActivity();
-      if (null != activity) {
-        if (currentPathList.length() <= 1) {
-          ((MainActivity) getActivity()).restActionBarTitle();
-
-        } else {
-          StringBuffer title = new StringBuffer();
-          for (int i = 0; i < currentPathList.length(); i++) {
-            CollaborativeMap currentMap = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
-
-            String label = currentMap.get("label");
-            if (null != label) {
-              title.append("/" + label);
-            }
-          }
-
-          ((MainActivity) getActivity()).setActionBarTitle(title.toString());
-        }
-      }
-    }
-
-    openState();
-  }
-
-  @Override
-  public void onPause() {
-    super.onPause();
-
-    ((MainActivity) getActivity()).restActionBarTitle();
-
-    if (null != adapter) {
-      adapter.setFileList(null);
-      adapter.setFolderList(null);
-      adapter.notifyDataSetChanged();
-    }
-  }
-
-  @Override
-  public void onResume() {
-    super.onResume();
-
-    path = ((MainActivity) getActivity()).getRemoteControlObserver();
-
-    if (null != root) {
-      connectUi();
-    }
-  }
-
-  @Override
-  public void onActivityCreated(Bundle savedInstanceState) {
-    super.onActivityCreated(savedInstanceState);
-
-    MainActivity activity = (MainActivity) getActivity();
-
-    activity.setIRemoteFrament(this);
-    activity.setLastiRemoteDataFragment(this);
-
-    TextView textView = (TextView) ((MainActivity) getActivity()).findViewById(R.id.openfailure_text);
-    ImageView imageView = (ImageView) ((MainActivity) getActivity()).findViewById(R.id.openfailure_img);
-    activity.setOpenStateView(textView, imageView);
-
-  }
-
-  private void initEventHandler() {
-    if (listEventHandler == null) {
-      listEventHandler = new EventHandler<BaseModelEvent>() {
-        @Override
-        public void handleEvent(BaseModelEvent event) {
-          adapter.notifyDataSetChanged();
-
-          openState();
-        }
-      };
-    }
-
-    if (valuesChangeEventHandler == null) {
-      valuesChangeEventHandler = new EventHandler<ObjectChangedEvent>() {
-        @Override
-        public void handleEvent(ObjectChangedEvent event) {
-          adapter.notifyDataSetChanged();
-
-          openState();
         }
       };
     }
@@ -262,7 +257,6 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
         }
       }
     }
-
   }
 
   @Override
@@ -280,13 +274,31 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
         dataDetailFragment.initView();
 
         activity.setDataDetailLayoutState(View.VISIBLE);
-        activity.setIRemoteFrament(dataDetailFragment);
-
+        activity.setLocalFragment(dataDetailFragment);
       }
     });
     setListAdapter(adapter);
 
     initEventHandler();
+  }
+
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+
+    return inflater.inflate(R.layout.fragment_folderlist, container, false);
+  }
+
+  @Override
+  public void onListItemClick(ListView l, View v, int position, long id) {
+    CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
+
+    path.changePath(clickItem.getId(), DOCID);
+  }
+
+  @Override
+  public void loadDocument() {
+    DOCID = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/" + GlobalConstant.DocumentIdAndDataKey.LESSONDOCID.getValue();
+    Log.i(TAG, "loadDocument() DOCID: " + DOCID);
 
     // 文件Document
     DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
@@ -339,23 +351,9 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
         list.pushAll((Object[]) values);
 
         root.set(GlobalConstant.DocumentIdAndDataKey.FOLDERSKEY.getValue(), list);
-
       }
     };
 
     Realtime.load(DOCID, onLoaded, initializer, null);
-  }
-
-  @Override
-  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-
-    return inflater.inflate(R.layout.fragment_folderlist, container, false);
-  }
-
-  @Override
-  public void onListItemClick(ListView l, View v, int position, long id) {
-    CollaborativeMap clickItem = (CollaborativeMap) v.getTag();
-
-    path.changePath(clickItem.getId(), DOCID);
   }
 }
