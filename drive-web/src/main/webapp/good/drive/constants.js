@@ -51,7 +51,7 @@ good.constants.QUERY = 'query';
 good.constants.TYPEARRAY = new Array('动画', '视频', '音频', '图片', '文本', '手偶', '电子书');
 
 /** @type {Array.<string>} */
-good.constants.FIELDARRAY = new Array('语言', '数学', '科学', '社会', '健康', '艺术', '默认');
+good.constants.FIELDARRAY = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
 
 /** @type {Array.<string>} */
 good.constants.GRADEARRAY = new Array('大班', '中班', '小班');
