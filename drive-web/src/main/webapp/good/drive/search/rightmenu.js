@@ -14,9 +14,9 @@ good.drive.search.Rightmenu = function(dom) {
   this._rightMenu = undefined;
   var submenu = new goog.ui.SubMenu('发送');
   var menu = new good.drive.nav.menu.View();
-  var type = [['i', '打开'], ['s', ''], 
+  var type = [['i', '打开'], ['s', ''],
               ['m', submenu], ['i', '安排课程'], ['i', '收藏'],
-              ['i', '详细信息'], ['i', '重命名'], ['s', ''],              
+              ['i', '详细信息'], ['i', '重命名'], ['s', ''],
               ['i', '重新上传'], ['i', '删除']];
 
   var corner = {targetCorner: undefined,
@@ -28,12 +28,12 @@ good.drive.search.Rightmenu = function(dom) {
 
   rightMenu.getHandler().listen(rightMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
-    var grid = good.drive.nav.grid.View.currentGrid;
+    var grid = good.drive.view.baseview.View.currentGrid;
     var selectedElemnet = grid.getSelectedItem();
     var data = selectedElemnet.data;
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.currentDocId;
-    var grid = good.drive.nav.grid.View.currentGrid;
+    var grid = good.drive.view.baseview.View.currentGrid;
     switch (docId) {
     case good.constants.MYCLASSRESDOCID:
       var cell = grid.getSelectedItem();
@@ -44,7 +44,7 @@ good.drive.search.Rightmenu = function(dom) {
         var array = new Array(3, 6, 8);
         if (data.contentType ==
           'application/x-print') {
-          array.push(2);          
+          array.push(2);
          }
         menu.hideItem(rightMenu, array);
       }
@@ -99,7 +99,7 @@ good.drive.search.Rightmenu = function(dom) {
           names.push(item.name);
         });
         goog.events.listen(rightMenu, 'action', function(e) {
-          var grid = good.drive.nav.grid.View.currentGrid;
+          var grid = good.drive.view.baseview.View.currentGrid;
           var selectedElemnet = grid.getSelectedItem();
           var data = selectedElemnet.data;
           var rightmenusource = new good.drive.rightmenu.Rightmenu();
