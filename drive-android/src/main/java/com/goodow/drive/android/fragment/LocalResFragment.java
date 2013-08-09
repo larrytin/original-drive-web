@@ -86,12 +86,14 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
       initDataSource(new File(parentDirectory));
 
       if (parentDirectory.equals(GlobalDataCacheForMemorySingleton.getInstance().getOfflineResDirPath())) {
+        
         parentDirectory = null;// 如果返回至用户文件夹,则置空父文件路径
       } else {
+        
         parentDirectory = new File(parentDirectory).getParentFile().getAbsolutePath();
       }
-
     } else {
+      
       Toast.makeText(this.getActivity(), R.string.backFolderErro, Toast.LENGTH_SHORT).show();
     }
   }
@@ -101,6 +103,7 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
     super.onResume();
 
     if (null == localResAdapter) {
+     
       localResAdapter = new LocalResAdapter(folderList, this);
     }
 
@@ -111,6 +114,7 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
 
   public void delFile(File file) {
     if (file == null) {
+     
       assert false : "入参file为空!";
       return;
     }
@@ -118,8 +122,10 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
     if (file.isDirectory()) {
       for (File item : file.listFiles()) {
         if (item.isDirectory()) {
+          
           delFile(item);
         } else {
+          
           item.delete();
         }
       }
@@ -130,6 +136,7 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
 
   public void initDataSource(File dir) {
     if (dir == null) {
+      
       assert false : "入参file为空!";
       return;
     }
@@ -138,6 +145,7 @@ public class LocalResFragment extends ListFragment implements ILocalFragment {
       folderList.clear();
 
       for (File file : dir.listFiles()) {
+        
         folderList.add(file);
       }
     }

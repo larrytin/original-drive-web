@@ -45,13 +45,12 @@ public class DataDetailFragment extends Fragment implements ILocalFragment {
 
     downloButton = (Button) ((MainActivity) getActivity()).findViewById(R.id.downloadButton);
     downloButton.setOnClickListener(addListener);
-
   }
 
   public void initView() {
     if (null != file) {
+      
       fileName.setText((String) file.get("label"));
-
     }
   }
 
@@ -75,5 +74,4 @@ public class DataDetailFragment extends Fragment implements ILocalFragment {
     // TODO Auto-generated method stub
     
   }
-
 }
