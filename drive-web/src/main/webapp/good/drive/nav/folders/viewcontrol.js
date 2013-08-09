@@ -337,13 +337,39 @@ good.drive.nav.folders.ViewControl.prototype.removeGridById =
  */
 good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, param) {
   var map = this.model().getLeaf(this.getKeyType());
+  map = this.addLeafValue(map, param);
+  this.model().push(this.getChildList(node.map), map);
+};
+
+/**
+ * @param {good.realtime.CollaborativeMap} map
+ * @param {Object} param
+ * @return {good.realtime.CollaborativeMap}
+ */
+good.drive.nav.folders.ViewControl.prototype.addLeafValue =
+  function(map, param) {
+  var that = this;
   goog.object.forEach(param, function(value, key) {
     if (map.get(key) == undefined) {
       return;
     }
-    map.set(key, value);
+    switch (typeof(map.get(key))) {
+    case 'string':
+        map.set(key, value);
+      break;
+    case 'boolean':
+      map.set(key, value);
+    break;
+    default:
+      if (map.get(key) instanceof good.realtime.CollaborativeMap) {
+        that.addLeafValue(map.get(key), value);
+      } else if (map.get(key) instanceof good.realtime.CollaborativeList) {
+        map.set(key, value);
+      }
+      break;
+    }
   });
-  this.model().push(this.getChildList(node.map), map);
+  return map;
 };
 
 /**
