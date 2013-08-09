@@ -16,61 +16,64 @@ import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.realtime.CollaborativeMap;
 
 public class DataDetailFragment extends Fragment implements ILocalFragment {
-	private CollaborativeMap file;
-	private TextView fileName;
-	private Button downloButton;
+  private CollaborativeMap file;
+  private TextView fileName;
+  private Button downloButton;
 
-	public void backFragment() {
-		MainActivity activity = (MainActivity) getActivity();
+  public void backFragment() {
+    MainActivity activity = (MainActivity) getActivity();
 
-		activity.setDataDetailLayoutState(View.INVISIBLE);
+    activity.setDataDetailLayoutState(View.INVISIBLE);
 
-		activity.setIRemoteFrament(activity.getLastiRemoteDataFragment());
-	}
+    activity.setLocalFragment(activity.getLastiRemoteDataFragment());
+  }
 
-	public void setFile(CollaborativeMap file) {
-		this.file = file;
-	}
+  public void setFile(CollaborativeMap file) {
+    this.file = file;
+  }
 
-	@Override
-	public View onCreateView(LayoutInflater inflater, ViewGroup container,
-			Bundle savedInstanceState) {
-		return inflater.inflate(R.layout.fragment_datadetail, container, false);
-	}
+  @Override
+  public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+    return inflater.inflate(R.layout.fragment_datadetail, container, false);
+  }
 
-	@Override
-	public void onResume() {
-		super.onResume();
+  @Override
+  public void onResume() {
+    super.onResume();
 
-		fileName = (TextView) ((MainActivity) getActivity())
-				.findViewById(R.id.fileName);
+    fileName = (TextView) ((MainActivity) getActivity()).findViewById(R.id.fileName);
 
-		downloButton = (Button) ((MainActivity) getActivity())
-				.findViewById(R.id.downloadButton);
-		downloButton.setOnClickListener(addListener);
+    downloButton = (Button) ((MainActivity) getActivity()).findViewById(R.id.downloadButton);
+    downloButton.setOnClickListener(addListener);
 
-	}
+  }
 
-	public void initView() {
-		if (null != file) {
-			fileName.setText((String) file.get("label"));
+  public void initView() {
+    if (null != file) {
+      fileName.setText((String) file.get("label"));
 
-		}
-	}
+    }
+  }
 
-	private OnClickListener addListener = new OnClickListener() {
-		@Override
-		public void onClick(View v) {
-			file.set("status", DownloadStatusEnum.WAITING.getStatus());
-			final String attachmentId = file.get("id");
-			OfflineFileObserver.OFFLINEFILEOBSERVER.addFile(attachmentId, true);
-		}
-	};
+  private OnClickListener addListener = new OnClickListener() {
+    @Override
+    public void onClick(View v) {
+      file.set("status", DownloadStatusEnum.WAITING.getStatus());
+      final String attachmentId = file.get("id");
+      OfflineFileObserver.OFFLINEFILEOBSERVER.addFile(attachmentId, true);
+    }
+  };
 
-	@Override
-	public void connectUi() {
-		// TODO Auto-generated method stub
-		
-	}
+  @Override
+  public void connectUi() {
+    // TODO Auto-generated method stub
+
+  }
+
+  @Override
+  public void loadDocument() {
+    // TODO Auto-generated method stub
+    
+  }
 
 }

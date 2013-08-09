@@ -2,7 +2,7 @@
 goog.provide('good.drive.nav.folders.ViewControl');
 
 goog.require('good.drive.nav.folders.AbstractControl');
-goog.require('good.drive.nav.grid');
+goog.require('good.drive.view.baseview');
 goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 

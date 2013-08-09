@@ -188,7 +188,7 @@ good.drive.nav.folders.Model.prototype.getfileMap =
 
 /**
  * @param {string} model
- * @param {Object.} data
+ * @param {Object} data
  * @return {Object}
  */
 good.drive.nav.folders.Model.prototype.copy = function(model, data) {
@@ -207,7 +207,7 @@ good.drive.nav.folders.Model.prototype.copy = function(model, data) {
     for (var i = 0; i < data.length(); i++) {
       var value = data.get(i);
       bakdata.push(this.copy(model, value));
-    } 
+    }
     return bakdata;
   } else {
     bakdata = data;
@@ -215,6 +215,10 @@ good.drive.nav.folders.Model.prototype.copy = function(model, data) {
   }
 };
 
+/**
+ * @param {Object} data
+ * @return {Object}
+ */
 good.drive.nav.folders.Model.prototype.remove = function(data) {
   if (data instanceof good.realtime.CollaborativeMap) {
     var keys = data.keys();

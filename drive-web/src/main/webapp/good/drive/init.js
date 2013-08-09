@@ -16,16 +16,18 @@ goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.folders.PublicViewControl');
-goog.require('good.drive.nav.grid');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
-goog.require('good.drive.person');
+//goog.require('good.drive.person');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
 goog.require('good.drive.role');
 goog.require('good.drive.search');
+goog.require('good.drive.view.baseview');
+goog.require('good.drive.view.grid');
+goog.require('good.drive.view.table');
 goog.require('goog.dom');
 
 /**
@@ -84,7 +86,8 @@ good.drive.init.init = function() {
   pathControl.addPath(good.constants.PUBLICRESDOCID,
       publicResTree);
   pathControl.pathload = function() {
-    good.drive.nav.grid.View.initGrid();
+//    good.drive.view.baseview.View.initGrid();
+    good.drive.init.initgrid();
     good.drive.resourcemap.Resourcemap.init();
   };
   good.drive.nav.folders.AbstractControl.linkload();
@@ -119,7 +122,7 @@ good.drive.init.init = function() {
     switch (evt.key) {
       case 'cr':
         if (isGridEvent) {
-          var grid = good.drive.nav.grid.View.currentGrid;
+          var grid = good.drive.view.baseview.View.currentGrid;
           grid.renameChildData(modifeInput.value);
         } else {
           view.renameLeaf(modifeInput.value);
@@ -140,7 +143,7 @@ good.drive.init.init = function() {
         if (node == moToClassTree.tree) {
           return;
         }
-        var cellData = good.drive.nav.grid.View.currentGrid.
+        var cellData = good.drive.view.baseview.View.currentGrid.
         getSelectedItem().data;
         moToClassTree.moveToNode(cellData);
         break;
@@ -155,7 +158,7 @@ good.drive.init.init = function() {
         if (node == moToresTree.tree) {
           return;
         }
-        var cellData = good.drive.nav.grid.View.currentGrid.
+        var cellData = good.drive.view.baseview.View.currentGrid.
         getSelectedItem().data;
         moToresTree.moveToNode(cellData);
         break;
@@ -169,7 +172,7 @@ good.drive.init.init = function() {
   Rightmenu(goog.dom.getElement('viewmanager'));
   goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
     var caption = e.target.getCaption();
-    var grid = good.drive.nav.grid.View.currentGrid;
+    var grid = good.drive.view.baseview.View.currentGrid;
     switch (caption) {
       case '安排课程':
         moToDialog.setVisible(true);
@@ -394,7 +397,58 @@ good.drive.init.init = function() {
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-  var addperson = new good.drive.person.AddPerson();
+//  var addperson = new good.drive.person.AddPerson();
+};
+
+/**
+ */
+good.drive.init.initgrid = function() {
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  root.addValueChangedListener(function(evt) {
+    var property = evt.getProperty();
+    if (property != good.drive.nav.folders.Path.NameType.PATH) {
+      return;
+    }
+    var newValue = evt.getNewValue();
+    good.drive.init.initCallback(newValue);
+  });
+  good.drive.init.initCallback(
+      good.drive.nav.folders.Path.getINSTANCE().path);
+};
+
+/**
+ * @param {Object} path
+ */
+good.drive.init.initCallback = function(path) {
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (goog.array.isEmpty(pathlist)) {
+    return;
+  }
+  var id = pathlist[pathlist.length - 1];
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  if (docid == good.constants.PUBLICRESDOCID) {
+    return;
+  }
+  if (!goog.object.containsKey(good.drive.view.baseview.View.grids, docid)) {
+    var cells = {};
+    goog.object.add(good.drive.view.baseview.View.grids, docid, cells);
+  }
+  var cells = goog.object.get(good.drive.view.baseview.View.grids, docid);
+  if (goog.object.containsKey(cells, id)) {
+    good.drive.view.baseview.View.visiable(goog.object.get(cells, id));
+    return;
+  }
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, docid);
+  var data = model.getObject(id);
+  var grid = new good.drive.view.grid.View(data, docid);
+//  var grid = new good.drive.view.table.View(
+//      {'select': 'select', 'label': '名字', 'abc': 'adsdf'}, data, docid);
+  grid.render(goog.dom.getElement('viewmanager'));
+  grid.renderCell(data);
+  grid.renderFolderPath();
+  goog.object.add(cells, id, grid);
+  good.drive.view.baseview.View.visiable(grid);
 };
 
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);

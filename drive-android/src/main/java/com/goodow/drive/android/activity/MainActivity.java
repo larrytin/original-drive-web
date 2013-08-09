@@ -5,28 +5,36 @@ import roboguice.inject.ContentView;
 import roboguice.inject.InjectView;
 import android.app.ActionBar;
 import android.app.AlertDialog;
+import android.app.Dialog;
 import android.app.Fragment;
 import android.app.FragmentManager;
 import android.app.FragmentTransaction;
 import android.content.DialogInterface;
+import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.KeyEvent;
+import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
 import android.view.animation.Animation;
 import android.view.animation.Animation.AnimationListener;
 import android.view.animation.AnimationUtils;
+import android.widget.Button;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.goodow.android.drive.R;
+import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.Interface.INotifyData;
 import com.goodow.drive.android.Interface.IRemoteControl;
-import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.fragment.DataDetailFragment;
 import com.goodow.drive.android.fragment.DataListFragment;
 import com.goodow.drive.android.fragment.LeftMenuFragment;
@@ -36,6 +44,8 @@ import com.goodow.drive.android.fragment.OfflineListFragment;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDataKey;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.LoginNetRequestTask;
+import com.goodow.drive.android.toolutils.SimpleProgressDialog;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -55,8 +65,8 @@ import elemental.json.impl.JreJsonString;
 public class MainActivity extends RoboActivity {
   private final String TAG = this.getClass().getSimpleName();
 
-  private ILocalFragment iRemoteDataFragment;
-  private ILocalFragment lastiRemoteDataFragment;
+  private ILocalFragment currentFragment;
+  private ILocalFragment lastFragment;
 
   private RemoteControlObserver remoteControlObserver;
   private ActionBar actionBar;
@@ -84,6 +94,7 @@ public class MainActivity extends RoboActivity {
   }
 
   public DataDetailFragment getDataDetailFragment() {
+
     return dataDetailFragment;
   }
 
@@ -159,8 +170,8 @@ public class MainActivity extends RoboActivity {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && null != iRemoteDataFragment) {
-      iRemoteDataFragment.backFragment();
+    if (keyCode == KeyEvent.KEYCODE_BACK && null != currentFragment) {
+      currentFragment.backFragment();
 
       return true;
     }
@@ -191,12 +202,6 @@ public class MainActivity extends RoboActivity {
           GlobalDataCacheForMemorySingleton.getInstance.setUserId(null);
           GlobalDataCacheForMemorySingleton.getInstance.setAccess_token(null);
 
-          // Intent intent = new Intent(
-          // MainActivity.this,
-          // LogInActivity.class);
-          // startActivity(intent);
-
-          // finish();
           ToolsFunctionForThisProgect.quitApp(MainActivity.this);
         }
       }).setNegativeButton(R.string.dailogCancel, new DialogInterface.OnClickListener() {
@@ -226,8 +231,6 @@ public class MainActivity extends RoboActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
-    // GlobalDataCacheForMemorySingleton.getInstance.addActivity(this);
-
     actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
@@ -248,12 +251,8 @@ public class MainActivity extends RoboActivity {
       }
     });
 
-    String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
-        + GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID.getValue();
-
     remoteControlObserver = new RemoteControlObserver();
-    remoteControlObserver.startObservation(docId);
-
+    goObservation();
   }
 
   @Override
@@ -292,19 +291,18 @@ public class MainActivity extends RoboActivity {
     super.onDestroy();
   }
 
-  public void setIRemoteFrament(ILocalFragment iRemoteDataFragment) {
-    this.iRemoteDataFragment = iRemoteDataFragment;
+  public void setLocalFragment(ILocalFragment iRemoteDataFragment) {
+    this.currentFragment = iRemoteDataFragment;
 
   }
 
   public ILocalFragment getLastiRemoteDataFragment() {
 
-    return lastiRemoteDataFragment;
+    return lastFragment;
   }
 
   public void setLastiRemoteDataFragment(ILocalFragment lastiRemoteDataFragment) {
-    this.lastiRemoteDataFragment = lastiRemoteDataFragment;
-
+    this.lastFragment = lastiRemoteDataFragment;
   }
 
   public void openState(int visibility) {
@@ -322,12 +320,16 @@ public class MainActivity extends RoboActivity {
   public void setOpenStateView(TextView textView, ImageView imageView) {
     openFailure_text = textView;
     openFailure_img = imageView;
-
   }
 
   private void switchFragment(DocumentIdAndDataKey doc) {
-    if (null != doc) {
-      Fragment newFragment = null;
+    Fragment newFragment = null;
+
+    do {
+      if (null == doc) {
+
+        break;
+      }
 
       switch (doc) {
       case LESSONDOCID:
@@ -343,18 +345,24 @@ public class MainActivity extends RoboActivity {
 
         break;
       default:
+        newFragment = dataListFragment;
+
         break;
       }
 
-      if (newFragment != null) {
-        FragmentManager fragmentManager = getFragmentManager();
-        fragmentManager.popBackStack();
+      if (null == newFragment) {
 
-        FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(R.id.contentLayout, newFragment);
-        fragmentTransaction.commitAllowingStateLoss();
+        break;
       }
-    }
+
+      FragmentManager fragmentManager = getFragmentManager();
+      fragmentManager.popBackStack();
+
+      FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+      fragmentTransaction.replace(R.id.contentLayout, newFragment);
+      fragmentTransaction.commitAllowingStateLoss();
+    } while (false);
+
   }
 
   public IRemoteControl getRemoteControlObserver() {
@@ -368,6 +376,24 @@ public class MainActivity extends RoboActivity {
     private CollaborativeMap root;
 
     private INotifyData iNotifyData;
+
+    private EventHandler<ValueChangedEvent> handler = new EventHandler<ValueChangedEvent>() {
+      @Override
+      public void handleEvent(ValueChangedEvent event) {
+        String property = event.getProperty();
+        if (GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue().equals(property)) {
+          JsonObject newJson = (JsonObject) event.getNewValue();
+          Log.i(TAG, "new path: " + newJson.toString());
+
+          updateUi(newJson);
+
+          if (null != iNotifyData) {
+            iNotifyData.notifyData(newJson);
+
+          }
+        }
+      }
+    };
 
     @Override
     public JsonArray getCurrentPath() {
@@ -400,7 +426,7 @@ public class MainActivity extends RoboActivity {
     }
 
     @Override
-    public void changePath(String mapId) {
+    public void changePath(String mapId, String docId) {
       if (null != root) {
         JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
 
@@ -415,8 +441,8 @@ public class MainActivity extends RoboActivity {
         }
 
         map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue(), jsonArray);
+        map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue(), docId);
         root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(), map);
-
       }
     }
 
@@ -424,30 +450,6 @@ public class MainActivity extends RoboActivity {
     public void setNotifyData(INotifyData iNotifyData) {
       this.iNotifyData = iNotifyData;
 
-    }
-
-    @Override
-    public String getMapId(int index) {
-      String toString = "";
-
-      if (index < 0) {
-        Log.e(TAG, "error index: " + index);
-
-        return toString;
-      }
-
-      if (null != root) {
-        JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
-
-        JsonArray jsonArray = map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
-
-        if (null != jsonArray && jsonArray.length() > 0 && index < jsonArray.length()) {
-          toString = jsonArray.get(index).asString();
-
-        }
-      }
-
-      return toString;
     }
 
     private void updateUi(JsonObject map) {
@@ -466,32 +468,37 @@ public class MainActivity extends RoboActivity {
     }
 
     private void startObservation(String docId) {
+      if (null != root) {
+        root.removeValueChangedListener(handler);
+      }
+
       DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
         @Override
         public void onLoaded(Document document) {
           doc = document;
           model = doc.getModel();
           root = model.getRoot();
+
           JsonObject map = root.get(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue());
+          Log.i(TAG, GlobalDataCacheForMemorySingleton.getInstance.getUserName() + "-root: " + root.toString());
 
-          updateUi(map);
+          root.addValueChangedListener(handler);
 
-          root.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
-            @Override
-            public void handleEvent(ValueChangedEvent event) {
-              String property = event.getProperty();
-              if (GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue().equals(property)) {
-                JsonObject newJson = (JsonObject) event.getNewValue();
+          JreJsonString jreJsonString = (JreJsonString) (map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue()));
+          if (null != jreJsonString) {
+            String lastDocId = jreJsonString.asString();
 
-                updateUi(newJson);
+            lastDocId = lastDocId.substring(lastDocId.lastIndexOf("/") + 1, lastDocId.length());
 
-                if (null != iNotifyData) {
-                  iNotifyData.notifyData();
+            DocumentIdAndDataKey doc = DocumentIdAndDataKey.getEnumWithValue(lastDocId);
 
-                }
-              }
+            if (null != doc) {
+              switchFragment(doc);
+            } else {
+              changeDoc("@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
+                  + GlobalConstant.DocumentIdAndDataKey.FAVORITESDOCID.getValue());
             }
-          });
+          }
         }
       };
 
@@ -581,4 +588,83 @@ public class MainActivity extends RoboActivity {
     return true;
   }
 
+  public void goObservation() {
+    if (null != remoteControlObserver) {
+      String docId = "@tmp/" + GlobalDataCacheForMemorySingleton.getInstance().getUserId() + "/"
+          + GlobalConstant.DocumentIdAndDataKey.REMOTECONTROLDOCID.getValue();
+
+      remoteControlObserver.startObservation(docId);
+    }
+  }
+
+  public void showChangeUserDialog() {
+    final View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_change_user_layout, null);
+    final Dialog dialog = new Dialog(this, R.style.AlertDialog);
+    dialog.show();
+    Window window = dialog.getWindow();
+    window.setContentView(dialogView);
+
+    final EditText userNameEditText = (EditText) dialogView.findViewById(R.id.username_editText);
+    final EditText passwordEditText = (EditText) dialogView.findViewById(R.id.password_editText);
+
+    // 登录 按钮
+    final Button loginButton = (Button) dialogView.findViewById(R.id.login_button);
+    loginButton.setOnClickListener(new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        String errorMessageString = "";
+        String username = "";
+        String password = "";
+
+        do {
+          username = userNameEditText.getText().toString();
+          if (TextUtils.isEmpty(username)) {
+            errorMessageString = "用户名不能为空";
+            break;
+          }
+
+          password = passwordEditText.getText().toString();
+          if (TextUtils.isEmpty(password)) {
+            errorMessageString = "密码不能为空";
+            break;
+          }
+
+          // 一切OK
+          String[] params = { username, password };
+          final LoginNetRequestTask loginNetRequestTask = new LoginNetRequestTask(MainActivity.this, dialog);
+          SimpleProgressDialog.show(MainActivity.this, new OnCancelListener() {
+            @Override
+            public void onCancel(DialogInterface dialog) {
+              loginNetRequestTask.cancel(true);
+
+            }
+          });
+          loginNetRequestTask.execute(params);
+
+          return;
+        } while (false);
+
+        // 用户输入的信息错误
+        Toast.makeText(MainActivity.this, errorMessageString, Toast.LENGTH_LONG).show();
+      }
+    });
+
+    // 取消 按钮
+    final Button cancelButton = (Button) dialogView.findViewById(R.id.cancel_button);
+    cancelButton.setOnClickListener(new View.OnClickListener() {
+
+      @Override
+      public void onClick(View v) {
+        dialog.dismiss();
+      }
+    });
+  }
+
+  public void notifyFragment() {
+    leftMenuFragment.notifyData();
+    dataListFragment.loadDocument();
+    lessonListFragment.loadDocument();
+
+  }
 }
