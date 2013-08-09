@@ -22,10 +22,12 @@ goog.addDependency('../../../../good/drive/nav/folders/path.js', ['good.drive.na
 goog.addDependency('../../../../good/drive/nav/folders/publicviewcontrol.js', ['good.drive.nav.folders.PublicViewControl'], ['good.drive.nav.folders.ViewControl']);
 goog.addDependency('../../../../good/drive/nav/folders/view.js', ['good.drive.nav.folders'], ['good.drive.nav.folders.ViewControl', 'goog.events.KeyHandler', 'goog.fx.DragDropGroup', 'goog.fx.DragDropItem', 'goog.string.StringBuffer', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
 goog.addDependency('../../../../good/drive/nav/folders/viewcontrol.js', ['good.drive.nav.folders.ViewControl'], ['good.drive.nav.folders.AbstractControl', 'good.drive.view.baseview', 'goog.ui.tree.BaseNode', 'goog.ui.tree.TreeControl']);
+goog.addDependency('../../../../good/drive/nav/grid/view.js', ['good.drive.nav.grid'], ['good.drive.nav.grid.Cell', 'goog.asserts', 'goog.dom.classes', 'goog.string.StringBuffer', 'goog.ui.Component']);
 goog.addDependency('../../../../good/drive/nav/menu/popupmenu.js', ['good.drive.nav.menu.popupmenu'], ['goog.object', 'goog.positioning.Corner', 'goog.ui.MenuItem', 'goog.ui.PopupMenu']);
 goog.addDependency('../../../../good/drive/nav/menu/renderer.js', ['good.drive.nav.menu.ViewRenderer'], ['goog.ui.MenuRenderer']);
 goog.addDependency('../../../../good/drive/nav/menu/view.js', ['good.drive.nav.menu'], ['good.drive.nav.menu.ViewRenderer', 'goog.dom', 'goog.positioning.Corner', 'goog.ui.ContainerRenderer', 'goog.ui.ControlRenderer', 'goog.ui.Menu', 'goog.ui.MenuItemRenderer', 'goog.ui.PopupMenu', 'goog.ui.SubMenu', 'goog.ui.registry']);
 goog.addDependency('../../../../good/drive/nav/userinfo/headuserinfo.js', ['good.drive.nav.userinfo'], ['good.config', 'good.net.CrossDomainRpc', 'goog.Uri', 'goog.Uri.QueryData', 'goog.dom', 'goog.events', 'goog.events.EventType', 'goog.ui.Popup']);
+goog.addDependency('../../../../good/drive/person/addperson.js', ['good.drive.person'], ['good.constants', 'good.drive.nav.menu', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events', 'goog.events.EventType', 'goog.ui.Dialog']);
 goog.addDependency('../../../../good/drive/resourcemap/resourcemap.js', ['good.drive.resourcemap'], ['good.drive.search']);
 goog.addDependency('../../../../good/drive/rightmenu/detailinfo.js', ['good.drive.rightmenu.detailinfo'], ['good.constants', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
 goog.addDependency('../../../../good/drive/rightmenu/preview.js', ['good.drive.rightmenu.preview'], ['goog.Uri', 'goog.dom']);

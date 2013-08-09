@@ -35,7 +35,7 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var subFolders;
   var subFolder;
 
-  var fieldArray = good.constants.FIELDARRAY;
+  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
   var gradeArray = good.constants.GRADEARRAY;
   var folders = [];
   goog.array.forEach(fieldArray, function(e) {

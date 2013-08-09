@@ -141,7 +141,11 @@ good.drive.search.Rightmenu = function(dom) {
                   deviceId = item.id;
                 }
              });
-              rightmenusource.send(data.id, deviceId);
+              if (data instanceof good.realtime.CollaborativeMap) {
+                rightmenusource.send(data.get('id'), deviceId);
+              } else {
+                rightmenusource.send(data.id, deviceId);
+              }
            }
         });
       }

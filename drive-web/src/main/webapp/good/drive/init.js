@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 goog.provide('good.drive.init');
 
 goog.require('good.auth');
@@ -19,7 +19,7 @@ goog.require('good.drive.nav.folders.PublicViewControl');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
-//goog.require('good.drive.person');
+goog.require('good.drive.person');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
@@ -397,7 +397,7 @@ good.drive.init.init = function() {
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-//  var addperson = new good.drive.person.AddPerson();
+  var addperson = new good.drive.person.AddPerson();
 };
 
 /**
