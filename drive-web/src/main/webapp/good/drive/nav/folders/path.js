@@ -139,7 +139,7 @@ good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
  */
 good.drive.nav.folders.Path.prototype.locationPath = function(path) {
   var docids = goog.object.getKeys(
-      good.drive.nav.folders.AbstractControl.docs);
+      this.pathHeap);
   if (docids.indexOf(path[this.pathNameType().CURRENTDOCID]) == -1) {
     return;
   }

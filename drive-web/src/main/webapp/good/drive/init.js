@@ -28,6 +28,7 @@ goog.require('good.drive.search');
 goog.require('good.drive.view.baseview');
 goog.require('good.drive.view.grid');
 goog.require('good.drive.view.table');
+goog.require('good.drive.nav.list');
 goog.require('goog.dom');
 
 /**
@@ -79,12 +80,15 @@ good.drive.init.init = function() {
       good.constants.PUBLICRESDOCID);
   var publicResTree = new good.drive.nav.folders.Tree('公共资料库',
       undefined, navFolderslist, puclicViewControl);
+  var list = new good.drive.nav.list.View(good.constants.OTHERDOCID);
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   pathControl.addPath(good.constants.MYRESDOCID, myResTree);
   pathControl.addPath(good.constants.MYCLASSRESDOCID,
       myclass);
   pathControl.addPath(good.constants.PUBLICRESDOCID,
       publicResTree);
+  pathControl.addPath(good.constants.OTHERDOCID,
+      list);
   pathControl.pathload = function() {
 //    good.drive.view.baseview.View.initGrid();
     good.drive.init.initgrid();
@@ -426,7 +430,8 @@ good.drive.init.initCallback = function(path) {
   }
   var id = pathlist[pathlist.length - 1];
   var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
-  if (docid == good.constants.PUBLICRESDOCID) {
+  if (docid == good.constants.PUBLICRESDOCID ||
+      docid == good.constants.OTHERDOCID) {
     return;
   }
   if (!goog.object.containsKey(good.drive.view.baseview.View.grids, docid)) {
