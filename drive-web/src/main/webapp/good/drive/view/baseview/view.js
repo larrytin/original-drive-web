@@ -633,5 +633,6 @@ good.drive.view.baseview.View.defaultConfig = {
   cssTableBody: goog.getCssName('doclist-tbody'),
   cssTableCellRoot: goog.getCssName('doclist-tr') + ' ' +
     goog.getCssName('doclist-tr-active') + ' ' +
-    goog.getCssName('doclist-tr-underlined')
+    goog.getCssName('doclist-tr-underlined'),
+  cssTablehover: goog.getCssName('doclist-tr-hover')
 };

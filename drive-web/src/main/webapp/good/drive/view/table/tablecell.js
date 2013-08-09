@@ -85,6 +85,28 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
   return el;
 };
 
+/** @override */
+good.drive.view.table.TableCell.prototype.handleKeyEvent = function(e) {
+  var el = this.getElement();
+  switch (e.type) {
+    case goog.events.EventType.MOUSEOVER:
+      if (!goog.dom.classes.has(el, this.defaultConfig.cssTablehover)) {
+        goog.dom.classes.add(el,
+            this.defaultConfig.cssTablehover);
+      }
+      break;
+    case goog.events.EventType.MOUSEOUT:
+      if (goog.dom.classes.has(el, this.defaultConfig.cssTablehover)) {
+        goog.dom.classes.remove(el,
+            this.defaultConfig.cssTablehover);
+      }
+      break;
+    case goog.events.EventType.MOUSEDOWN:
+//      this.select();
+      break;
+  }
+};
+
 /**
  * @param {string} key
  * @return {Object}
