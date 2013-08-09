@@ -19,6 +19,15 @@ goog.inherits(good.drive.nav.folders.PublicViewControl,
 /**
  * @override
  */
+good.drive.nav.folders.PublicViewControl.prototype.getKeyType = function() {
+  return {LABEL: ['label', 'string'], FOLDERS: ['folders', 'list'],
+    'query': ['query', {'tags': ['tags', 'list'],
+      'contentType': ['contentType', 'string']}]};
+};
+
+/**
+ * @override
+ */
 good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var root_ = mod.getRoot();
 

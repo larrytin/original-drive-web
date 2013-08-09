@@ -20,6 +20,7 @@ goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.person');
+goog.require('good.drive.person.listperson');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
@@ -108,7 +109,17 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        view.addLeaf({'label': createInput.value, 'isclass': false});
+        if (docid == good.constants.PUBLICRESDOCID) {
+          var model = view.getCurrentItem();
+          var data = model.map;
+          var query = data.get(good.constants.QUERY);
+          var tags = query.get(good.constants.TAGS).asArray();
+          tags.push(createInput.value);
+          view.addLeaf({'label': createInput.value,
+            'query': {'tags': tags}});
+        } else {
+          view.addLeaf({'label': createInput.value, 'isclass': false});
+        }
         break;
       case 'c':
         break;
@@ -393,11 +404,57 @@ good.drive.init.init = function() {
     item2.setEnabled(true);
     submenu.setEnabled(false);
   });
+
+  var submenu = new goog.ui.SubMenu('发送');
+  var type = [['i', '新建文件夹..'], ['i', '重命名'], ['i', '详细信息'],
+               ['s', ''], ['i', '删除']];
+  var publicResMenuChildIds = undefined;
+  var publicResMenu = menu.genPopupMenu(
+      publicResTree.tree.getChildrenElement(), type, function(e) {
+        if (publicResMenuChildIds == undefined) {
+          publicResMenuChildIds = publicResMenu.getChildIds();
+        }
+        var docid = pathControl.currentDocId;
+        var view = pathControl.getViewBydocId(docid);
+        switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
+        case 0:
+          var model = view.getCurrentItem();
+          var data = model.map;
+          var query = data.get(good.constants.QUERY);
+          var tags = query.get(good.constants.TAGS).asArray();
+          tags.push(createInput.value);
+          view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});
+          break;
+        case 1:
+          isGridEvent = false;
+          modifydialog.setVisible(true);
+          if (modifeInput == undefined) {
+            modifeInput = goog.dom.getElement('modifyFolder');
+          }
+          modifeInput.value = view.getCurrentItem().title;
+          break;
+        case 2:
+//          isGridEvent = false;
+//          modifydialog.setVisible(true);
+//          if (modifeInput == undefined) {
+//            modifeInput = goog.dom.getElement('modifyFolder');
+//          }
+//          modifeInput.value = view.getCurrentItem().title;
+          break;
+        case 4:
+          view.removeLeaf();
+          break;
+        default:
+          break;
+      }
+  }, corner);
+
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
+  var listperson = new good.drive.person.Listperson();
 };
 
 /**

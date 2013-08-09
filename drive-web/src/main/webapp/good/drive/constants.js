@@ -62,7 +62,8 @@ good.constants.TYPE = {'动画': 'application/x-shockwave-flash',
     '音频': 'audio/mp3',
     '图片': 'image/',
     '文本': 'text/plain',
-    '手偶': 'application/x-print'};
+    '手偶': 'application/x-print',
+    '电子书': 'text/plain'};
 
 /** @type {string} */
 good.constants.ADMIN = 'admin';
