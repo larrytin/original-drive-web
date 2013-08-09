@@ -14,6 +14,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +47,7 @@ import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDa
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.LoginNetRequestTask;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
+import com.goodow.drive.android.toolutils.Tools;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -242,6 +244,13 @@ public class MainActivity extends RoboActivity {
       public void onClick(View v) {
 
         hideLeftMenuLayout();
+      }
+    });
+
+    dataDetailLayout.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 拦截叠层之间的点击事件
       }
     });
 
@@ -545,7 +554,7 @@ public class MainActivity extends RoboActivity {
           break;
         }
 
-        int add = leftMenu.getLeft() + 4;
+        int add = leftMenu.getLeft() + (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 4);
         if (add < 0) {
           setLeftMenuLayoutX(add);
         } else {
@@ -599,14 +608,14 @@ public class MainActivity extends RoboActivity {
           username = userNameEditText.getText().toString();
           if (TextUtils.isEmpty(username)) {
             errorMessageString = "用户名不能为空";
-            
+
             break;
           }
 
           password = passwordEditText.getText().toString();
           if (TextUtils.isEmpty(password)) {
             errorMessageString = "密码不能为空";
-            
+
             break;
           }
 
