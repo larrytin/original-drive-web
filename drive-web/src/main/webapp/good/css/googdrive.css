@@ -1430,9 +1430,12 @@ z-index: 2;
     position: relative;
 }
 .navpane-top-list.density-normal {
-    line-height: 26px;
+    -webkit-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    -moz-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    -o-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    line-height: 16px;
     padding: 0 0 0 27px;
-    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
 }
 .navpane-top-list.density-small {
     line-height: 20px;
@@ -1440,9 +1443,12 @@ z-index: 2;
     transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
 }
 .navpane-top-list.density-tiny {
+    -webkit-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    -moz-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    -o-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+    transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
     line-height: 16px;
     padding: 0 0 0 3px;
-    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
 }
 .navpane-top-list .goog-menu {
     padding-bottom: 0;
@@ -1560,8 +1566,36 @@ z-index: 2;
 .navpane-top-list.density-normal .goog-listitem {
     line-height: 26px;
 }
-.navpane-top-list.density-small .goog-listitem {
-    line-height: 20px;
+.goog-listitem {
+    padding-left: 2px;
+    color: rgb(34, 34, 34);
+}
+.goog-listitem, .goog-listheaderitem {
+    line-height: 18px;
+    padding: 1px 2px;
+    cursor: pointer;
+    white-space: nowrap;
+    vertical-align: middle;
+    -moz-outline: none;
+}
+.goog-list .goog-option-selected {
+    background: rgb(255, 255, 255);
+    color: rgb(221, 75, 57);
+    font-weight: bold;
+}
+.goog-option-selected {
+  background-image: url(//ssl.gstatic.com/ui/v1/menu/checkmark.png);
+  background-repeat: no-repeat;
+  background-position: left center;
+}
+.goog-listitem-highlight, .goog-listheaderitem-highlight {
+    border-top: 1px dotted;
+    border-bottom: 1px dotted;
+    border-color: rgb(238, 238, 238);
+    background-color: rgb(238, 238, 238)!important;
+}
+.navpane .goog-option-selected .selection-highlighter {
+    border-left-color: rgb(221, 75, 57);
 }
 .navpane-top-list.density-tiny .goog-listitem {
     line-height: 16px;
@@ -2076,28 +2110,6 @@ z-index: 2;
 
 
 
-
-
-
-
-
-
-
-
-
-
-
-.navpane-top-list {
-    border-top: 0 none !important;
-    font-size: 13px;
-    overflow: hidden;
-    position: relative;
-}
-.navpane-top-list.density-normal {
-    line-height: 26px;
-    padding: 0 0 0 27px;
-    transition: font-size 0.218s ease 0s, height 0.218s ease 0s, line-height 0.218s ease 0s, margin 0.218s ease 0s, padding 0.218s ease 0s, width 0.218s ease 0s;
-}
 .navpane-top-list.density-small {
     line-height: 20px;
     padding: 0 0 0 11px;

@@ -18,6 +18,7 @@ import android.widget.TextView;
 
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
+import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
@@ -139,13 +140,11 @@ public class OfflineAdapter extends BaseAdapter {
           int newProgress = Integer.parseInt((String) event.getNewValue());
           progressBar.setProgress(newProgress);
           downloadText.setText(newProgress + " %");
-
         }
 
         if ("status".equals(newValue)) {
           String newStatus = (String) event.getNewValue();
           downloadStatus.setText(newStatus);
-
         }
       }
     });
@@ -166,7 +165,6 @@ public class OfflineAdapter extends BaseAdapter {
             }
 
             OfflineAdapter.this.notifyDataSetChanged();
-
           }
         }).setNegativeButton(R.string.dailogCancel, new DialogInterface.OnClickListener() {
 
@@ -179,6 +177,13 @@ public class OfflineAdapter extends BaseAdapter {
         alertDialog.show();
       }
     });
+
+    File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getOfflineResDirPath() + "/" + item.get("blobKey"));
+    if (!file.exists()) {
+      progressBar.setProgress(0);
+      downloadText.setText(0 + " %");
+      downloadStatus.setText(GlobalConstant.DownloadStatusEnum.UNDOWNLOADING.getStatus());
+    }
 
     return row;
   }

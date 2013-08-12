@@ -71,7 +71,7 @@ public class Tools {
   public static float getRawSize(int unit, float size) {
     Context c = MyApplication.getApplication();
     Resources r;
-
+    
     if (c == null)
       r = Resources.getSystem();
     else

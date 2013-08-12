@@ -1,4 +1,4 @@
-'use strict';
+ 'use strict';
 goog.provide('good.drive.init');
 
 goog.require('good.auth');
@@ -19,7 +19,8 @@ goog.require('good.drive.nav.folders.PublicViewControl');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
-//goog.require('good.drive.person');
+goog.require('good.drive.person');
+goog.require('good.drive.person.listperson');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
@@ -28,6 +29,7 @@ goog.require('good.drive.search');
 goog.require('good.drive.view.baseview');
 goog.require('good.drive.view.grid');
 goog.require('good.drive.view.table');
+goog.require('good.drive.nav.list');
 goog.require('goog.dom');
 
 /**
@@ -79,12 +81,15 @@ good.drive.init.init = function() {
       good.constants.PUBLICRESDOCID);
   var publicResTree = new good.drive.nav.folders.Tree('公共资料库',
       undefined, navFolderslist, puclicViewControl);
+  var list = new good.drive.nav.list.View(good.constants.OTHERDOCID);
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   pathControl.addPath(good.constants.MYRESDOCID, myResTree);
   pathControl.addPath(good.constants.MYCLASSRESDOCID,
       myclass);
   pathControl.addPath(good.constants.PUBLICRESDOCID,
       publicResTree);
+  pathControl.addPath(good.constants.OTHERDOCID,
+      list);
   pathControl.pathload = function() {
 //    good.drive.view.baseview.View.initGrid();
     good.drive.init.initgrid();
@@ -108,7 +113,17 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        view.addLeaf({'label': createInput.value, 'isclass': false});
+        if (docid == good.constants.PUBLICRESDOCID) {
+          var model = view.getCurrentItem();
+          var data = model.map;
+          var query = data.get(good.constants.QUERY);
+          var tags = query.get(good.constants.TAGS).asArray();
+          tags.push(createInput.value);
+          view.addLeaf({'label': createInput.value,
+            'query': {'tags': tags}});
+        } else {
+          view.addLeaf({'label': createInput.value, 'isclass': false});
+        }
         break;
       case 'c':
         break;
@@ -393,11 +408,57 @@ good.drive.init.init = function() {
     item2.setEnabled(true);
     submenu.setEnabled(false);
   });
+
+  var submenu = new goog.ui.SubMenu('发送');
+  var type = [['i', '新建文件夹..'], ['i', '重命名'], ['i', '详细信息'],
+               ['s', ''], ['i', '删除']];
+  var publicResMenuChildIds = undefined;
+  var publicResMenu = menu.genPopupMenu(
+      publicResTree.tree.getChildrenElement(), type, function(e) {
+        if (publicResMenuChildIds == undefined) {
+          publicResMenuChildIds = publicResMenu.getChildIds();
+        }
+        var docid = pathControl.currentDocId;
+        var view = pathControl.getViewBydocId(docid);
+        switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
+        case 0:
+          var model = view.getCurrentItem();
+          var data = model.map;
+          var query = data.get(good.constants.QUERY);
+          var tags = query.get(good.constants.TAGS).asArray();
+          tags.push(createInput.value);
+          view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});
+          break;
+        case 1:
+          isGridEvent = false;
+          modifydialog.setVisible(true);
+          if (modifeInput == undefined) {
+            modifeInput = goog.dom.getElement('modifyFolder');
+          }
+          modifeInput.value = view.getCurrentItem().title;
+          break;
+        case 2:
+//          isGridEvent = false;
+//          modifydialog.setVisible(true);
+//          if (modifeInput == undefined) {
+//            modifeInput = goog.dom.getElement('modifyFolder');
+//          }
+//          modifeInput.value = view.getCurrentItem().title;
+          break;
+        case 4:
+          view.removeLeaf();
+          break;
+        default:
+          break;
+      }
+  }, corner);
+
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-//  var addperson = new good.drive.person.AddPerson();
+  var addperson = new good.drive.person.AddPerson();
+  var listperson = new good.drive.person.Listperson();
 };
 
 /**
@@ -426,7 +487,8 @@ good.drive.init.initCallback = function(path) {
   }
   var id = pathlist[pathlist.length - 1];
   var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
-  if (docid == good.constants.PUBLICRESDOCID) {
+  if (docid == good.constants.PUBLICRESDOCID ||
+      docid == good.constants.OTHERDOCID) {
     return;
   }
   if (!goog.object.containsKey(good.drive.view.baseview.View.grids, docid)) {

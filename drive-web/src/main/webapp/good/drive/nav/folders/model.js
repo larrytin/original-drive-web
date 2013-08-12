@@ -162,6 +162,7 @@ good.drive.nav.folders.Model.prototype.getLeaf =
       map.set(value[0], value[2]);
       break;
     default:
+      map.set(value[0], that.getLeaf(value[1]));
       break;
     }
   });

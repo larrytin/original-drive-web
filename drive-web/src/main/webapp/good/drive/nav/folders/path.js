@@ -58,9 +58,8 @@ good.drive.nav.folders.Path.getINSTANCE = function() {
 good.drive.nav.folders.Path.prototype.connect = function(doc) {
   var root = doc.getModel().getRoot();
   var path = root.get(this.pathNameType().PATH);
-  var jsonParse = goog.json.serialize(path);
   this.root = root;
-  this.path = goog.json.parse(jsonParse);
+  this.path = path;
   var that = this;
   root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
@@ -139,7 +138,7 @@ good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
  */
 good.drive.nav.folders.Path.prototype.locationPath = function(path) {
   var docids = goog.object.getKeys(
-      good.drive.nav.folders.AbstractControl.docs);
+      this.pathHeap);
   if (docids.indexOf(path[this.pathNameType().CURRENTDOCID]) == -1) {
     return;
   }
@@ -150,9 +149,9 @@ good.drive.nav.folders.Path.prototype.locationPath = function(path) {
   var docid = path[this.pathNameType().CURRENTDOCID];
   var view = this.getPathViewByDocId(docid);
   goog.object.forEach(this.pathHeap, function(value, key) {
-    if (view == value) {
-      return;
-    }
+//    if (view == value) {
+//      return;
+//    }
     value.recovery();
   });
   view.location(path[this.pathNameType().CURRENTPATH]);

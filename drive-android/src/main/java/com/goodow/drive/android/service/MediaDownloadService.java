@@ -9,7 +9,6 @@ import android.app.Service;
 import android.content.Intent;
 import android.os.Binder;
 import android.os.IBinder;
-import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.module.DriveModule;
@@ -82,7 +81,9 @@ public class MediaDownloadService extends Service {
         while (true) {
           downloadRes = MediaDownloadService.this.downloadUrlQueue.take();
 
-          if (!GlobalConstant.DownloadStatusEnum.COMPLETE.getStatus().equals(downloadRes.get("status"))) {
+          File newFile = new File(GlobalDataCacheForMemorySingleton.getInstance.getOfflineResDirPath() + "/" + downloadRes.get("blobKey"));
+          // 本地文件不存在则开启下载
+          if (!newFile.exists()) {
 
             // 广播通知离线文件夹界面刷新
             Intent intent = new Intent();

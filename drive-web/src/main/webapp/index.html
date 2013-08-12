@@ -21,13 +21,46 @@
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.nocache.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<script src="good.js/closure-library/closure/goog/base.js"></script>
+<!-- <script src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script>
-<!-- <script src="drive-compiled.js"></script> -->
+</script> -->
+<script src="drive-compiled.js"></script>
 <style type="text/css">
+.navpane-top-list.density-tiny {
+-webkit-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+-moz-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+-o-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+line-height: 16px;
+padding: 0 0 0 3px;
+}
+.goog-list .goog-list-menu-container {
+overflow: hidden;
+}
+.goog-list .goog-menu {
+z-index: 0;
+position: static;
+-moz-outline: none;
+border: 0;
+overflow-y: visible;
+}
+.navpane-top-list.density-tiny .goog-listitem {
+line-height: 16px;
+}
+.navpane .goog-listitem-container, .navpane .goog-listitemheader-container {
+vertical-align: top;
+}
+.goog-listitem-caption, .goog-listitem-subcaption, .goog-listheaderitem-caption, .goog-listheaderitem-subcaption {
+white-space: nowrap;
+font-family: arial,sans-serif;
+}
+.goog-list .goog-option-selected {
+background: #fff;
+color: #dd4b39;
+font-weight: bold;
+}
 </style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
@@ -38,7 +71,7 @@
         <div id=gbz>
           <span class=gbtcb></span>
           <ol id=gbzc class=gbtc>
-            <li class=gbt><a class="gbzt gbz0l gbp1" id=gb_25 href="http://retech.goodow.com"><span class=gbtb2></span><span
+            <li class=gbt><a class="gbzt gbz0l gbp1" id=gb_25 href="http://drive.goodow.com"><span class=gbtb2></span><span
                 class=gbts>早教平台</span></a></li>
             <li class=gbt><a target=_blank class=gbzt id=gb_23 href="http://www.retechcorp.com/"><span class=gbtb2></span><span
                 class=gbts>睿泰科技</span></a></li>
@@ -172,10 +205,17 @@
                       <div>
                         <div class="goog-list-menu-container">
                           <div class="goog-menu goog-menu-vertical" aria-label="视图" id="">
+                            <div class="goog-listitem " id="personman">
+                              <div class="goog-listitem-content">
+                                <span class="goog-listitem-container goog-inline-block "><span
+                                  class="goog-listitem-caption goog-inline-block "><div>人员管理</div></span></span><span
+                                  class="selection-highlighter">&nbsp;</span>
+                              </div>
+                            </div>
                             <div class="goog-listitem ">
                               <div class="goog-listitem-content">
                                 <span class="goog-listitem-container goog-inline-block "><span
-                                  class="goog-listitem-caption goog-inline-block "><div>公共资料库</div></span></span><span
+                                  class="goog-listitem-caption goog-inline-block"><div>设备管理</div></span></span><span
                                   class="selection-highlighter">&nbsp;</span>
                               </div>
                             </div>

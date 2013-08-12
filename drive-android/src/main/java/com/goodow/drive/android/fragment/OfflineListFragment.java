@@ -22,22 +22,18 @@ public class OfflineListFragment extends ListFragment implements ILocalFragment 
   private BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
     @Override
     public void onReceive(Context context, Intent intent) {
+
       adapter.notifyDataSetChanged();
     }
-
   };
-
-  public void backFragment() {
-
-  }
 
   @Override
   public void onResume() {
     super.onResume();
+
     CollaborativeList list = OfflineFileObserver.OFFLINEFILEOBSERVER.getList();
     adapter = new OfflineAdapter((MainActivity) this.getActivity(), list);
     setListAdapter(adapter);
-
   }
 
   @Override
@@ -49,12 +45,12 @@ public class OfflineListFragment extends ListFragment implements ILocalFragment 
   public void onActivityCreated(Bundle savedInstanceState) {
     super.onActivityCreated(savedInstanceState);
 
-    ((MainActivity) getActivity()).setLocalFragment(this);
+    MainActivity activity = (MainActivity) getActivity();
+    activity.setLocalFragment(this);
 
     IntentFilter intentFilter = new IntentFilter();
     intentFilter.addAction("NEW_RES_DOWNLOADING");
-    ((MainActivity) getActivity()).registerReceiver(broadcastReceiver, intentFilter);
-
+    activity.registerReceiver(broadcastReceiver, intentFilter);
   }
 
   @Override
@@ -73,6 +69,12 @@ public class OfflineListFragment extends ListFragment implements ILocalFragment 
   @Override
   public void loadDocument() {
     // TODO Auto-generated method stub
-    
+
+  }
+
+  @Override
+  public void backFragment() {
+    // TODO Auto-generated method stub
+
   }
 }

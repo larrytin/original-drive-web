@@ -14,6 +14,7 @@ import android.content.DialogInterface.OnCancelListener;
 import android.os.Bundle;
 import android.text.TextUtils;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.KeyEvent;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -46,6 +47,7 @@ import com.goodow.drive.android.global_data_cache.GlobalConstant.DocumentIdAndDa
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
 import com.goodow.drive.android.toolutils.LoginNetRequestTask;
 import com.goodow.drive.android.toolutils.SimpleProgressDialog;
+import com.goodow.drive.android.toolutils.Tools;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeMap;
 import com.goodow.realtime.Document;
@@ -89,12 +91,10 @@ public class MainActivity extends RoboActivity {
   private LessonListFragment lessonListFragment = new LessonListFragment();
 
   public LocalResFragment getLocalResFragment() {
-
     return localResFragment;
   }
 
   public DataDetailFragment getDataDetailFragment() {
-
     return dataDetailFragment;
   }
 
@@ -118,12 +118,10 @@ public class MainActivity extends RoboActivity {
           middleLayout.setVisibility(LinearLayout.INVISIBLE);
           setLeftMenuLayoutX(0);// 重置其位置,防止负数循环叠加
           setLeftMenuLayoutX(-leftMenu.getWidth());
-
         }
       });
 
       leftMenu.startAnimation(out);
-
     }
   }
 
@@ -131,13 +129,13 @@ public class MainActivity extends RoboActivity {
     Animation in = AnimationUtils.makeInAnimation(this, true);
     leftMenu.startAnimation(in);
     leftMenu.setVisibility(LinearLayout.VISIBLE);
-    leftMenuFragment.showView();
 
+    leftMenuFragment.showView();
   }
 
   private void setLeftMenuLayoutX(int x) {
-    leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(), leftMenu.getBottom());
 
+    leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(), leftMenu.getBottom());
   }
 
   public void setDataDetailLayoutState(int state) {
@@ -145,11 +143,11 @@ public class MainActivity extends RoboActivity {
       Animation animation;
 
       if (state == View.VISIBLE) {
+
         animation = AnimationUtils.makeInAnimation(this, false);
-
       } else {
-        animation = AnimationUtils.makeOutAnimation(this, true);
 
+        animation = AnimationUtils.makeOutAnimation(this, true);
       }
 
       dataDetailLayout.startAnimation(animation);
@@ -185,15 +183,14 @@ public class MainActivity extends RoboActivity {
 
     if (item.getItemId() == android.R.id.home) {
       if (leftMenu.getVisibility() == LinearLayout.VISIBLE) {
-        hideLeftMenuLayout();
 
+        hideLeftMenuLayout();
       } else {
         setLeftMenuLayoutX(0);
         showLeftMenuLayout();
+
         middleLayout.setVisibility(LinearLayout.VISIBLE);
-
       }
-
     } else if (item.getItemId() == 0) {
       new AlertDialog.Builder(this).setPositiveButton(R.string.dailogOK, new DialogInterface.OnClickListener() {
 
@@ -211,20 +208,19 @@ public class MainActivity extends RoboActivity {
 
         }
       }).setMessage(R.string.back_DailogMessage).create().show();
-
     }
 
     return true;
   }
 
   public void setActionBarTitle(String title) {
-    actionBar.setTitle(title);
 
+    actionBar.setTitle(title);
   }
 
   public void restActionBarTitle() {
-    actionBar.setTitle(R.string.app_name);
 
+    actionBar.setTitle(R.string.app_name);
   }
 
   @Override
@@ -246,8 +242,15 @@ public class MainActivity extends RoboActivity {
     middleLayout.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-        hideLeftMenuLayout();
 
+        hideLeftMenuLayout();
+      }
+    });
+
+    dataDetailLayout.setOnClickListener(new View.OnClickListener() {
+      @Override
+      public void onClick(View v) {
+        // 拦截叠层之间的点击事件
       }
     });
 
@@ -293,11 +296,9 @@ public class MainActivity extends RoboActivity {
 
   public void setLocalFragment(ILocalFragment iRemoteDataFragment) {
     this.currentFragment = iRemoteDataFragment;
-
   }
 
   public ILocalFragment getLastiRemoteDataFragment() {
-
     return lastFragment;
   }
 
@@ -370,7 +371,7 @@ public class MainActivity extends RoboActivity {
     return remoteControlObserver;
   }
 
-  public class RemoteControlObserver implements IRemoteControl {
+  private class RemoteControlObserver implements IRemoteControl {
     private Document doc;
     private Model model;
     private CollaborativeMap root;
@@ -389,7 +390,6 @@ public class MainActivity extends RoboActivity {
 
           if (null != iNotifyData) {
             iNotifyData.notifyData(newJson);
-
           }
         }
       }
@@ -414,7 +414,6 @@ public class MainActivity extends RoboActivity {
       JsonArray jsonArray = map.get(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue());
       for (int i = jsonArray.length() - 1; i > 0; i--) {
         jsonArray.remove(i);
-
       }
       jsonArray.set(0, "root");
 
@@ -422,7 +421,6 @@ public class MainActivity extends RoboActivity {
       map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue(), docId);
 
       root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(), map);
-
     }
 
     @Override
@@ -434,10 +432,8 @@ public class MainActivity extends RoboActivity {
 
         if (null != mapId) {
           jsonArray.set(jsonArray.length(), mapId);
-
         } else {
           jsonArray.remove(jsonArray.length() - 1);
-
         }
 
         map.put(GlobalConstant.DocumentIdAndDataKey.CURRENTPATHKEY.getValue(), jsonArray);
@@ -463,7 +459,6 @@ public class MainActivity extends RoboActivity {
         DocumentIdAndDataKey doc = DocumentIdAndDataKey.getEnumWithValue(lastDocId);
 
         switchFragment(doc);
-
       }
     }
 
@@ -516,12 +511,10 @@ public class MainActivity extends RoboActivity {
           jsonObject.put(GlobalConstant.DocumentIdAndDataKey.CURRENTDOCIDKEY.getValue(), "");
 
           root.set(GlobalConstant.DocumentIdAndDataKey.PATHKEY.getValue(), jsonObject);
-
         }
       };
 
       Realtime.load(docId, onLoaded, initializer, null);
-
     }
   }
 
@@ -533,7 +526,6 @@ public class MainActivity extends RoboActivity {
     case MotionEvent.ACTION_DOWN:
       if (leftMenu.getVisibility() == View.INVISIBLE) {
         showLeftMenuLayout();
-
       }
 
       startPoint = event.getX();
@@ -542,11 +534,9 @@ public class MainActivity extends RoboActivity {
     case MotionEvent.ACTION_UP:
       if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 4) {
         hideLeftMenuLayout();
-
       } else {
         setLeftMenuLayoutX(0);
         middleLayout.setVisibility(View.VISIBLE);
-
       }
 
       startPoint = 0;
@@ -564,18 +554,15 @@ public class MainActivity extends RoboActivity {
           break;
         }
 
-        int add = leftMenu.getLeft() + 4;
+        int add = leftMenu.getLeft() + (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 4);
         if (add < 0) {
           setLeftMenuLayoutX(add);
-
         } else {
           setLeftMenuLayoutX(0);
-
         }
 
         if (leftMenu.getLeft() >= 0) {
           middleLayout.setVisibility(View.VISIBLE);
-
         }
       } while (false);
 
@@ -621,12 +608,14 @@ public class MainActivity extends RoboActivity {
           username = userNameEditText.getText().toString();
           if (TextUtils.isEmpty(username)) {
             errorMessageString = "用户名不能为空";
+
             break;
           }
 
           password = passwordEditText.getText().toString();
           if (TextUtils.isEmpty(password)) {
             errorMessageString = "密码不能为空";
+
             break;
           }
 
@@ -637,7 +626,6 @@ public class MainActivity extends RoboActivity {
             @Override
             public void onCancel(DialogInterface dialog) {
               loginNetRequestTask.cancel(true);
-
             }
           });
           loginNetRequestTask.execute(params);
@@ -665,6 +653,5 @@ public class MainActivity extends RoboActivity {
     leftMenuFragment.notifyData();
     dataListFragment.loadDocument();
     lessonListFragment.loadDocument();
-
   }
 }

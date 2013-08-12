@@ -27,271 +27,236 @@ import com.goodow.realtime.ValuesRemovedEvent;
 import elemental.json.JsonObject;
 
 public enum OfflineFileObserver {
-	// private final String TAG = this.getClass().getSimpleName();
-	OFFLINEFILEOBSERVER;
 
-	private BlockingQueue<JsonObject> unLoginDownloadQueue = new LinkedBlockingDeque<JsonObject>();
+  OFFLINEFILEOBSERVER;
 
-	private Document doc;
-	private Model model;
-	private CollaborativeMap root;
-	private CollaborativeList list;
+  private String TAG = this.getClass().getSimpleName();
 
-	private Model model_unlogin;
-	private CollaborativeList list_unlogin;
+  private BlockingQueue<JsonObject> unLoginDownloadQueue = new LinkedBlockingDeque<JsonObject>();
 
-	private EventHandler<ValuesAddedEvent> listAddEventHandler;
-	private EventHandler<ValuesRemovedEvent> listRemoveEventHandler;
+  private Document doc;
+  private Model model;
+  private CollaborativeMap root;
+  private CollaborativeList list;
 
-	private UnloginDownloadThread unloginDownloadThread = new UnloginDownloadThread();
+  private Model model_unlogin;
+  private CollaborativeList list_unlogin;
 
-	private class UnloginDownloadThread extends Thread {
-		@Override
-		public void run() {
-			try {
-				while (true) {
-					JsonObject json = unLoginDownloadQueue.take();
+  private EventHandler<ValuesAddedEvent> listAddEventHandler;
+  private EventHandler<ValuesRemovedEvent> listRemoveEventHandler;
 
-					String attachmentId = json.getString("attachmentId");
-					String userId = json.getString("userId");
-					String docId = "@tmp/"
-							+ userId
-							+ "/"
-							+ GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID
-									.getValue();
+  private UnloginDownloadThread unloginDownloadThread = new UnloginDownloadThread();
 
-					startObservation(docId, attachmentId);
-				}
-			} catch (Exception exception) {
-				exception.printStackTrace();
-			}
-		}
-	}
+  private class UnloginDownloadThread extends Thread {
+    @Override
+    public void run() {
+      try {
+        while (true) {
+          JsonObject json = unLoginDownloadQueue.take();
 
-	public void addAttachment(JsonObject json) {
-		unLoginDownloadQueue.add(json);
+          String attachmentId = json.getString("attachmentId");
+          String userId = json.getString("userId");
+          String docId = "@tmp/" + userId + "/" + GlobalConstant.DocumentIdAndDataKey.OFFLINEDOCID.getValue();
 
-		State state = unloginDownloadThread.getState();
-		switch (state) {
-		case BLOCKED:
+          startObservation(docId, attachmentId);
+        }
+      } catch (Exception exception) {
+        exception.printStackTrace();
+      }
+    }
+  }
 
-			break;
-		case NEW:
-			unloginDownloadThread.start();
+  public void addAttachment(JsonObject json) {
+    unLoginDownloadQueue.add(json);
 
-			break;
-		case RUNNABLE:
+    State state = unloginDownloadThread.getState();
+    switch (state) {
+    case BLOCKED:
 
-			break;
-		case TERMINATED:
-			unloginDownloadThread = new UnloginDownloadThread();
-			unloginDownloadThread.start();
+      break;
+    case NEW:
+      unloginDownloadThread.start();
 
-			break;
-		case TIMED_WAITING:
+      break;
+    case RUNNABLE:
 
-			break;
-		default:
+      break;
+    case TERMINATED:
+      unloginDownloadThread = new UnloginDownloadThread();
+      unloginDownloadThread.start();
 
-			break;
-		}
-	}
+      break;
+    case TIMED_WAITING:
 
-	public CollaborativeList getList() {
-		return list;
-	}
+      break;
+    default:
 
-	public void addFile(final String attachmentId, boolean isLogin) {
-		final Model newModel;
-		final CollaborativeList newList;
-		if (isLogin) {
-			newModel = model;
-			newList = list;
-		} else {
-			newModel = model_unlogin;
-			newList = list_unlogin;
-		}
+      break;
+    }
+  }
 
-		if (null != attachmentId) {
-			new Thread() {
-				public void run() {
-					try {
-						Attachment attachment = MyApplication.getAttachment();
-						Get get = attachment.get(attachmentId);
-						com.goodow.api.services.attachment.model.Attachment execute = get
-								.execute();
+  public CollaborativeList getList() {
+    return list;
+  }
 
-						out: do {
-							if (null == execute || execute.getId() == null) {
+  public void addFile(final String attachmentId, boolean isLogin) {
+    final Model newModel;
+    final CollaborativeList newList;
+    if (isLogin) {
+      newModel = model;
+      newList = list;
+    } else {
+      newModel = model_unlogin;
+      newList = list_unlogin;
+    }
 
-								break out;
-							}
+    if (null != attachmentId) {
+      new Thread() {
+        public void run() {
+          try {
+            Attachment attachment = MyApplication.getAttachment();
+            Get get = attachment.get(attachmentId);
+            com.goodow.api.services.attachment.model.Attachment execute = get.execute();
 
-							for (int i = 0; i < newList.length(); i++) {
-								CollaborativeMap map = newList.get(i);
-								if (execute.getBlobKey().equals(
-										map.get("blobKey"))) {
+            out: do {
+              if (null == execute || execute.getId() == null) {
 
-									break out;
-								}
-							}
+                break out;
+              }
 
-							CollaborativeMap newFile = newModel.createMap(null);
-							newFile.set("title", execute.getFilename());
+              for (int i = 0; i < newList.length(); i++) {
+                CollaborativeMap map = newList.get(i);
+                if (execute.getBlobKey().equals(map.get("blobKey"))) {
+                  newList.remove(i);
+                }
+              }
 
-							for (Tools.MIME_TYPE_Table mimeType : Tools.MIME_TYPE_Table
-									.values()) {
-								if (execute.getContentType().equals(
-										mimeType.getMimeType())) {
-									newFile.set("type", mimeType.getType());
+              CollaborativeMap newFile = newModel.createMap(null);
+              newFile.set("title", execute.getFilename());
 
-								}
-							}
+              for (Tools.MIME_TYPE_Table mimeType : Tools.MIME_TYPE_Table.values()) {
+                if (execute.getContentType().equals(mimeType.getMimeType())) {
+                  newFile.set("type", mimeType.getType());
+                }
+              }
 
-							newFile.set("url", DriveModule.DRIVE_SERVER
-									+ "/serve?id=" + attachmentId);
-							newFile.set("progress", "0");
-							newFile.set("status",
-									GlobalConstant.DownloadStatusEnum.WAITING
-											.getStatus());
-							newFile.set("blobKey", execute.getBlobKey());
+              newFile.set("url", DriveModule.DRIVE_SERVER + "/serve?id=" + attachmentId);
+              newFile.set("progress", "0");
+              newFile.set("status", GlobalConstant.DownloadStatusEnum.WAITING.getStatus());
+              newFile.set("blobKey", execute.getBlobKey());
 
-							newList.push(newFile);
+              newList.push(newFile);
 
-							Log.i("Download", "add new download rescourse :"
-									+ newFile.toString());
-						} while (false);
-					} catch (IOException e) {
-						e.printStackTrace();
-					}
-				};
-			}.start();
-		}
-	}
+              Log.i(TAG, "Add a new download rescourse :" + newFile.toString());
+            } while (false);
+          } catch (IOException e) {
+            e.printStackTrace();
+          }
+        };
+      }.start();
+    }
+  }
 
-	public void startObservation(String docId, final String attachmentId) {
-		initEventHandler();
+  public void startObservation(String docId, final String attachmentId) {
+    initEventHandler();
 
-		DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
-			@Override
-			public void onLoaded(Document document) {
-				doc = document;
+    DocumentLoadedHandler onLoaded = new DocumentLoadedHandler() {
+      @Override
+      public void onLoaded(Document document) {
+        doc = document;
 
-				if (null == attachmentId) {
-					// 当前用户的离线文件夹
-					model = doc.getModel();
-					root = model.getRoot();
+        if (null == attachmentId) {
+          // 当前用户的离线文件夹
+          model = doc.getModel();
+          root = model.getRoot();
 
-					list = root
-							.get(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
-									.getValue());
-					list.addValuesAddedListener(listAddEventHandler);
-					list.addValuesRemovedListener(listRemoveEventHandler);
+          list = root.get(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY.getValue());
+          list.addValuesAddedListener(listAddEventHandler);
+          list.addValuesRemovedListener(listRemoveEventHandler);
+        } else {
+          // 远程推送下载的离线文件夹
+          model_unlogin = doc.getModel();
+          root = model_unlogin.getRoot();
 
-				} else {
-					// 远程推送下载的离线文件夹
-					model_unlogin = doc.getModel();
-					root = model_unlogin.getRoot();
+          list_unlogin = root.get(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY.getValue());
+          list_unlogin.addValuesAddedListener(listAddEventHandler);
+          list_unlogin.addValuesRemovedListener(listRemoveEventHandler);
 
-					list_unlogin = root
-							.get(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
-									.getValue());
-					list_unlogin.addValuesAddedListener(listAddEventHandler);
-					list_unlogin
-							.addValuesRemovedListener(listRemoveEventHandler);
+          addFile(attachmentId, false);
+        }
+      }
+    };
 
-					addFile(attachmentId, false);
+    ModelInitializerHandler initializer = new ModelInitializerHandler() {
+      @Override
+      public void onInitializer(Model model_) {
+        if (null == attachmentId) {
+          model = model_;
+          root = model.getRoot();
 
-				}
-			}
-		};
+          root.set(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY.getValue(), model.createList());
+        } else {
+          model_unlogin = model_;
+          root = model_unlogin.getRoot();
 
-		ModelInitializerHandler initializer = new ModelInitializerHandler() {
-			@Override
-			public void onInitializer(Model model_) {
-				if (null == attachmentId) {
-					model = model_;
-					root = model.getRoot();
+          root.set(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY.getValue(), model_unlogin.createList());
+        }
+      }
+    };
 
-					root.set(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
-							.getValue(), model.createList());
+    Realtime.load(docId, onLoaded, initializer, null);
+  }
 
-				} else {
-					model_unlogin = model_;
-					root = model_unlogin.getRoot();
+  public void initEventHandler() {
+    do {
+      if (listAddEventHandler != null) {
 
-					root.set(GlobalConstant.DocumentIdAndDataKey.OFFLINEKEY
-							.getValue(), model_unlogin.createList());
+        break;
+      }
 
-				}
-			}
-		};
+      listAddEventHandler = new EventHandler<ValuesAddedEvent>() {
+        @Override
+        public void handleEvent(ValuesAddedEvent event) {
+          Object[] adds = event.getValues();
 
-		Realtime.load(docId, onLoaded, initializer, null);
+          if (null != adds) {
+            for (Object o : adds) {
+              CollaborativeMap resource = (CollaborativeMap) o;
+              File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getOfflineResDirPath() + "/" + resource.get("blobKey"));
 
-	}
+              if (!file.exists()) {
+                // 本地文件不存在,添加下载任务
+                DownloadResServiceBinder.getDownloadResServiceBinder().addResDownload(resource);
+              } else {
+                // 本地文件已存在,直接显示下载成功
+                resource.set("progress", "100");
+                resource.set("status", GlobalConstant.DownloadStatusEnum.COMPLETE.getStatus());
+              }
+            }
+          }
+        }
+      };
+    } while (false);
 
-	public void initEventHandler() {
-	  do{
-	    if(listAddEventHandler == null){
-	      
-	      break;
-	    }
-	    
-	    //TODO
-	  }while(false);
-	  
-		if (listAddEventHandler == null) {
-			listAddEventHandler = new EventHandler<ValuesAddedEvent>() {
-				@Override
-				public void handleEvent(ValuesAddedEvent event) {
-					Object[] adds = event.getValues();
+    do {
+      if (listRemoveEventHandler != null) {
 
-					if (null != adds) {
-						for (Object o : adds) {
-							CollaborativeMap resource = (CollaborativeMap) o;
-							File file = new File(
-									GlobalDataCacheForMemorySingleton.getInstance
-											.getOfflineResDirPath()
-											+ "/"
-											+ resource.get("blobKey"));
+        break;
+      }
 
-							if (!file.exists()) {
-								// 本地文件不存在,添加下载任务
-								DownloadResServiceBinder
-										.getDownloadResServiceBinder()
-										.addResDownload(resource);
+      listRemoveEventHandler = new EventHandler<ValuesRemovedEvent>() {
+        @Override
+        public void handleEvent(ValuesRemovedEvent event) {
+          Object[] adds = event.getValues();
 
-							} else {
-								// 本地文件已存在,直接显示下载成功
-								resource.set("progress", "100");
-								resource.set(
-										"status",
-										GlobalConstant.DownloadStatusEnum.COMPLETE
-												.getStatus());
-							}
-						}
-					}
-				}
-			};
-		}
-
-		if (listRemoveEventHandler == null) {
-			listRemoveEventHandler = new EventHandler<ValuesRemovedEvent>() {
-				@Override
-				public void handleEvent(ValuesRemovedEvent event) {
-					Object[] adds = event.getValues();
-
-					if (null != adds) {
-						for (Object o : adds) {
-							CollaborativeMap resource = (CollaborativeMap) o;
-							DownloadResServiceBinder
-									.getDownloadResServiceBinder()
-									.removeResDownload(resource);
-						}
-					}
-				}
-			};
-		}
-	}
+          if (null != adds) {
+            for (Object o : adds) {
+              CollaborativeMap resource = (CollaborativeMap) o;
+              DownloadResServiceBinder.getDownloadResServiceBinder().removeResDownload(resource);
+            }
+          }
+        }
+      };
+    } while (false);
+  }
 }

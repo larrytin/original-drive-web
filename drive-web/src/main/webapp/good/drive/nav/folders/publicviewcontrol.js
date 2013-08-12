@@ -19,6 +19,15 @@ goog.inherits(good.drive.nav.folders.PublicViewControl,
 /**
  * @override
  */
+good.drive.nav.folders.PublicViewControl.prototype.getKeyType = function() {
+  return {LABEL: ['label', 'string'], FOLDERS: ['folders', 'list'],
+    'query': ['query', {'tags': ['tags', 'list'],
+      'contentType': ['contentType', 'string']}]};
+};
+
+/**
+ * @override
+ */
 good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var root_ = mod.getRoot();
 
@@ -35,7 +44,7 @@ good.drive.nav.folders.PublicViewControl.prototype.initdata = function(mod) {
   var subFolders;
   var subFolder;
 
-  var fieldArray = good.constants.FIELDARRAY;
+  var fieldArray = new Array('语言', '数学', '科学', '社会', '健康', '艺术');
   var gradeArray = good.constants.GRADEARRAY;
   var folders = [];
   goog.array.forEach(fieldArray, function(e) {
