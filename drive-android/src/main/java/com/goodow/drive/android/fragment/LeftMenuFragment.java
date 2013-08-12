@@ -95,6 +95,11 @@ public class LeftMenuFragment extends ListFragment {
     view.setVisibility(View.INVISIBLE);
   }
 
+  public void setViewLayout(int x) {
+    View view = getView();
+    view.layout(x, view.getTop(), view.getRight(), view.getBottom());
+  }
+
   public void showView() {
     View view = getView();
     Animation in = AnimationUtils.makeInAnimation(getActivity(), true);

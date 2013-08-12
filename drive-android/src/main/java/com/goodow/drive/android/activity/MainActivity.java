@@ -67,9 +67,6 @@ import elemental.json.impl.JreJsonString;
 public class MainActivity extends RoboActivity {
   private final String TAG = this.getClass().getSimpleName();
 
-  private ILocalFragment currentFragment;
-  private ILocalFragment lastFragment;
-
   private RemoteControlObserver remoteControlObserver;
   private ActionBar actionBar;
 
@@ -82,6 +79,11 @@ public class MainActivity extends RoboActivity {
 
   private TextView openFailure_text;
   private ImageView openFailure_img;
+
+  private FragmentManager fragmentManager;
+
+  private ILocalFragment currentFragment;
+  private ILocalFragment lastFragment;
 
   private LeftMenuFragment leftMenuFragment = new LeftMenuFragment();
   private DataListFragment dataListFragment = new DataListFragment();
@@ -100,8 +102,6 @@ public class MainActivity extends RoboActivity {
 
   public void hideLeftMenuLayout() {
     if (null != leftMenu && null != middleLayout) {
-      leftMenuFragment.hiddenView();
-
       Animation out = AnimationUtils.makeOutAnimation(this, false);
       out.setAnimationListener(new AnimationListener() {
         @Override
@@ -114,6 +114,8 @@ public class MainActivity extends RoboActivity {
 
         @Override
         public void onAnimationEnd(Animation animation) {
+          leftMenuFragment.hiddenView();
+
           leftMenu.setVisibility(LinearLayout.INVISIBLE);
           middleLayout.setVisibility(LinearLayout.INVISIBLE);
           setLeftMenuLayoutX(0);// 重置其位置,防止负数循环叠加
@@ -134,7 +136,8 @@ public class MainActivity extends RoboActivity {
   }
 
   private void setLeftMenuLayoutX(int x) {
-
+    Log.i(TAG, "setLeftMenuLayoutX(): " + x);
+    leftMenuFragment.setViewLayout(x);
     leftMenu.layout(x, leftMenu.getTop(), leftMenu.getRight(), leftMenu.getBottom());
   }
 
@@ -183,7 +186,6 @@ public class MainActivity extends RoboActivity {
 
     if (item.getItemId() == android.R.id.home) {
       if (leftMenu.getVisibility() == LinearLayout.VISIBLE) {
-
         hideLeftMenuLayout();
       } else {
         setLeftMenuLayoutX(0);
@@ -230,8 +232,8 @@ public class MainActivity extends RoboActivity {
     actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
-    FragmentManager fragmentManager = getFragmentManager();
-    fragmentManager.popBackStack();
+    fragmentManager = getFragmentManager();
+    // fragmentManager.popBackStack();
 
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
@@ -292,6 +294,7 @@ public class MainActivity extends RoboActivity {
   protected void onDestroy() {
     Log.i(TAG, "onDestroy");
     super.onDestroy();
+    remoteControlObserver.removeHandler();
   }
 
   public void setLocalFragment(ILocalFragment iRemoteDataFragment) {
@@ -356,9 +359,7 @@ public class MainActivity extends RoboActivity {
         break;
       }
 
-      FragmentManager fragmentManager = getFragmentManager();
-      fragmentManager.popBackStack();
-
+      // fragmentManager.popBackStack();
       FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
       fragmentTransaction.replace(R.id.contentLayout, newFragment);
       fragmentTransaction.commitAllowingStateLoss();
@@ -516,6 +517,12 @@ public class MainActivity extends RoboActivity {
 
       Realtime.load(docId, onLoaded, initializer, null);
     }
+
+    public void removeHandler() {
+      if (null != root) {
+        root.removeValueChangedListener(handler);
+      }
+    }
   }
 
   private float startPoint = 0;
@@ -524,15 +531,13 @@ public class MainActivity extends RoboActivity {
   public boolean onTouchEvent(MotionEvent event) {
     switch (event.getAction()) {
     case MotionEvent.ACTION_DOWN:
-      if (leftMenu.getVisibility() == View.INVISIBLE) {
-        showLeftMenuLayout();
-      }
+      showLeftMenuLayout();
 
       startPoint = event.getX();
 
       break;
     case MotionEvent.ACTION_UP:
-      if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 4) {
+      if (Math.abs(leftMenu.getLeft()) > leftMenu.getWidth() / 3) {
         hideLeftMenuLayout();
       } else {
         setLeftMenuLayoutX(0);
@@ -544,7 +549,7 @@ public class MainActivity extends RoboActivity {
       break;
     case MotionEvent.ACTION_MOVE:
       do {
-        if (startPoint >= event.getX()) {
+        if (Math.abs(event.getX() - startPoint) < 4) {
 
           break;
         }
@@ -554,16 +559,21 @@ public class MainActivity extends RoboActivity {
           break;
         }
 
-        int add = leftMenu.getLeft() + (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 4);
-        if (add < 0) {
-          setLeftMenuLayoutX(add);
-        } else {
-          setLeftMenuLayoutX(0);
+        if (startPoint < event.getX()) {
+          int add = leftMenu.getLeft() + (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 5);
+          if (add < 0) {
+            setLeftMenuLayoutX(add);
+          } else {
+            setLeftMenuLayoutX(0);
+          }
+        } else if (startPoint > event.getX()) {
+          int reduce = leftMenu.getLeft() - (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 5);
+          if (Math.abs(reduce) < leftMenu.getWidth()) {
+            setLeftMenuLayoutX(reduce);
+          }
         }
 
-        if (leftMenu.getLeft() >= 0) {
-          middleLayout.setVisibility(View.VISIBLE);
-        }
+        startPoint = event.getX();
       } while (false);
 
       break;
@@ -653,5 +663,10 @@ public class MainActivity extends RoboActivity {
     leftMenuFragment.notifyData();
     dataListFragment.loadDocument();
     lessonListFragment.loadDocument();
+  }
+
+  @Override
+  protected void onSaveInstanceState(Bundle outState) {
+    // super.onSaveInstanceState(outState);
   }
 }
