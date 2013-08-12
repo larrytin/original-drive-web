@@ -30,6 +30,8 @@ good.constants.MYRESDOCID = 'favorites07';
 good.constants.PUBLICRESDOCID = '@tmp/publicRes07';
 /** @type {string} */
 good.constants.PATHDOCID = 'remotecontrol07';
+/** @type {string} */
+good.constants.OTHERDOCID = 'other01';
 
 
 /** @type {string} */
