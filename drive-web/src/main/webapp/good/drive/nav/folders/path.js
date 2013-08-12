@@ -58,9 +58,8 @@ good.drive.nav.folders.Path.getINSTANCE = function() {
 good.drive.nav.folders.Path.prototype.connect = function(doc) {
   var root = doc.getModel().getRoot();
   var path = root.get(this.pathNameType().PATH);
-  var jsonParse = goog.json.serialize(path);
   this.root = root;
-  this.path = goog.json.parse(jsonParse);
+  this.path = path;
   var that = this;
   root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();

@@ -222,8 +222,9 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
                     String type = map.get("type");
                     intent.setDataAndType(Uri.fromFile(file), type);
                   }
-
-                  getActivity().startActivity(Intent.createChooser(intent, "请选择打开程序…"));
+                  getActivity().startActivity(intent);
+                  // getActivity().startActivity(Intent.createChooser(intent,
+                  // "请选择打开程序…"));
                 } else {
                   Toast.makeText(getActivity(), "请先下载该文件.", Toast.LENGTH_SHORT).show();
                 }
@@ -234,7 +235,7 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
                 showData();
               }
             } else {
-              
+
               backFragment();
             }
           }
