@@ -150,9 +150,9 @@ good.drive.nav.folders.Path.prototype.locationPath = function(path) {
   var docid = path[this.pathNameType().CURRENTDOCID];
   var view = this.getPathViewByDocId(docid);
   goog.object.forEach(this.pathHeap, function(value, key) {
-    if (view == value) {
-      return;
-    }
+//    if (view == value) {
+//      return;
+//    }
     value.recovery();
   });
   view.location(path[this.pathNameType().CURRENTPATH]);

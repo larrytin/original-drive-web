@@ -23,15 +23,13 @@ good.constants.VERSION = 'v0.0.1';
 
 
 /** @type {string} */
-good.constants.MYCLASSRESDOCID = 'flesson01';
+good.constants.MYCLASSRESDOCID = 'lesson07';
 /** @type {string} */
-good.constants.MYRESDOCID = 'ffavorites01';
+good.constants.MYRESDOCID = 'favorites07';
 /** @type {string} */
-good.constants.PUBLICRESDOCID = '@tmp/fpublicRes05';
+good.constants.PUBLICRESDOCID = '@tmp/publicRes07';
 /** @type {string} */
-good.constants.PATHDOCID = 'fremotecontrol06';
-/** @type {string} */
-good.constants.OTHERDOCID = 'fother01';
+good.constants.PATHDOCID = 'remotecontrol07';
 
 
 /** @type {string} */
