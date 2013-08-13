@@ -21,6 +21,7 @@ goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.person');
 goog.require('good.drive.person.listperson');
+goog.require('good.drive.person.rigthmenu');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
@@ -459,6 +460,13 @@ good.drive.init.init = function() {
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
   var listperson = new good.drive.person.Listperson();
+  listperson.searchPerson();
+  goog.events.listen(list.listMenu(), 'action', function(e) {
+    listperson.searchPerson();
+  });
+  
+  var userMenu = new good.drive.person.rigthmenu.Menu(
+      goog.dom.getElement('tableviewmanager'));
 };
 
 /**
