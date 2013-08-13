@@ -23,6 +23,7 @@
             android:id="@+id/openfailure_img"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:contentDescription="@string/contentDescription"
             android:src="@drawable/ic_open_failure"
             android:visibility="invisible" />
     </LinearLayout>

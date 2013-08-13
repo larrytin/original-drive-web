@@ -171,10 +171,18 @@ public class MainActivity extends RoboActivity {
 
   @Override
   public boolean onKeyDown(int keyCode, KeyEvent event) {
-    if (keyCode == KeyEvent.KEYCODE_BACK && null != currentFragment) {
-      currentFragment.backFragment();
+    switch (keyCode) {
+    case KeyEvent.KEYCODE_BACK:
+      if (null != currentFragment) {
+        currentFragment.backFragment();
+
+        return true;
+      }
+    case KeyEvent.KEYCODE_HOME:
 
       return true;
+    default:
+      break;
     }
 
     return super.onKeyDown(keyCode, event);
@@ -216,12 +224,10 @@ public class MainActivity extends RoboActivity {
   }
 
   public void setActionBarTitle(String title) {
-
     actionBar.setTitle(title);
   }
 
   public void restActionBarTitle() {
-
     actionBar.setTitle(R.string.app_name);
   }
 
@@ -229,12 +235,12 @@ public class MainActivity extends RoboActivity {
   protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
 
+    this.getWindow().setFlags(0x80000000, 0x80000000);
+
     actionBar = getActionBar();
     actionBar.setDisplayHomeAsUpEnabled(true);
 
     fragmentManager = getFragmentManager();
-    // fragmentManager.popBackStack();
-
     FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
     fragmentTransaction.replace(R.id.dataDetailLayout, dataDetailFragment);
     fragmentTransaction.replace(R.id.leftMenuLayout, leftMenuFragment);
@@ -244,7 +250,6 @@ public class MainActivity extends RoboActivity {
     middleLayout.setOnClickListener(new View.OnClickListener() {
       @Override
       public void onClick(View v) {
-
         hideLeftMenuLayout();
       }
     });
@@ -255,9 +260,6 @@ public class MainActivity extends RoboActivity {
         // 拦截叠层之间的点击事件
       }
     });
-
-    remoteControlObserver = new RemoteControlObserver();
-    goObservation();
   }
 
   @Override
@@ -270,6 +272,9 @@ public class MainActivity extends RoboActivity {
   protected void onStart() {
     Log.i(TAG, "onStart");
     super.onStart();
+
+    remoteControlObserver = new RemoteControlObserver();
+    goObservation();
   }
 
   @Override
@@ -288,13 +293,14 @@ public class MainActivity extends RoboActivity {
   protected void onStop() {
     Log.i(TAG, "onStop");
     super.onStop();
+
+    remoteControlObserver.removeHandler();
   }
 
   @Override
   protected void onDestroy() {
     Log.i(TAG, "onDestroy");
     super.onDestroy();
-    remoteControlObserver.removeHandler();
   }
 
   public void setLocalFragment(ILocalFragment iRemoteDataFragment) {
@@ -359,7 +365,6 @@ public class MainActivity extends RoboActivity {
         break;
       }
 
-      // fragmentManager.popBackStack();
       FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
       fragmentTransaction.replace(R.id.contentLayout, newFragment);
       fragmentTransaction.commitAllowingStateLoss();
@@ -560,14 +565,14 @@ public class MainActivity extends RoboActivity {
         }
 
         if (startPoint < event.getX()) {
-          int add = leftMenu.getLeft() + (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 5);
+          int add = leftMenu.getLeft() + (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 6);
           if (add < 0) {
             setLeftMenuLayoutX(add);
           } else {
             setLeftMenuLayoutX(0);
           }
         } else if (startPoint > event.getX()) {
-          int reduce = leftMenu.getLeft() - (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 5);
+          int reduce = leftMenu.getLeft() - (int) Tools.getRawSize(TypedValue.COMPLEX_UNIT_DIP, 6);
           if (Math.abs(reduce) < leftMenu.getWidth()) {
             setLeftMenuLayoutX(reduce);
           }

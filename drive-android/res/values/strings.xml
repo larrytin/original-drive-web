@@ -14,6 +14,10 @@
     <string name="dailogOK">确定</string>
     <string name="dailogCancel">取消</string>
     <string name="webConnect">网络连接中…</string>
+    <string name="favorites">我的收藏夹</string>
+    <string name="offlinedoc">离线文件</string>
+    <string name="lesson">我的课程</string>
+    <string name="canOffline">可离线查看</string>
 
     <!-- 内网 -->
     <string name="com.goodow.realtime.serverAddress">http://192.168.1.15:8080</string>
