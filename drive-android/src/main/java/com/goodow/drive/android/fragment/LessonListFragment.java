@@ -100,8 +100,10 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
   }
 
   public void showData() {
-    RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.mainConnect);
-    relativeLayout.setVisibility(View.GONE);
+    if (null != getActivity()) {
+      RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.mainConnect);
+      relativeLayout.setVisibility(View.GONE);
+    }
 
     currentFolder = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
 
@@ -118,8 +120,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
       MainActivity activity = (MainActivity) getActivity();
       if (null != activity) {
         if (currentPathList.length() <= 1) {
-          ((MainActivity) getActivity()).restActionBarTitle();
-
+          activity.setActionBarTitle("我的课程");
         } else {
           StringBuffer title = new StringBuffer();
           for (int i = 0; i < currentPathList.length(); i++) {
@@ -127,7 +128,7 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 
             String label = currentMap.get("label");
             if (null != label) {
-              title.append("/" + label);
+              title.append(label + "/");
             }
           }
 
@@ -148,16 +149,17 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 
   @Override
   public void onActivityCreated(Bundle savedInstanceState) {
-    Log.i(TAG, "onActivityCreated()");
     super.onActivityCreated(savedInstanceState);
+    Log.i(TAG, "onActivityCreated()");
 
     MainActivity activity = (MainActivity) getActivity();
 
+    activity.setActionBarTitle("我的课程");
     activity.setLocalFragment(this);
     activity.setLastiRemoteDataFragment(this);
 
-    TextView textView = (TextView) ((MainActivity) getActivity()).findViewById(R.id.openfailure_text);
-    ImageView imageView = (ImageView) ((MainActivity) getActivity()).findViewById(R.id.openfailure_img);
+    TextView textView = (TextView) activity.findViewById(R.id.openfailure_text);
+    ImageView imageView = (ImageView) activity.findViewById(R.id.openfailure_img);
     activity.setOpenStateView(textView, imageView);
 
     loadDocument();
@@ -266,9 +268,9 @@ public class LessonListFragment extends ListFragment implements ILocalFragment {
 
   @Override
   public void onCreate(Bundle savedInstanceState) {
+    super.onCreate(savedInstanceState);
     Log.i(TAG, "onCreate()");
 
-    super.onCreate(savedInstanceState);
     RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.mainConnect);
     relativeLayout.setVisibility(View.VISIBLE);
 

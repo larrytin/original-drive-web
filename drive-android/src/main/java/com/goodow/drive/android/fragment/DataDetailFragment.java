@@ -3,6 +3,8 @@ package com.goodow.drive.android.fragment;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Comparator;
+
+import android.R.integer;
 import android.app.Fragment;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -22,6 +24,7 @@ import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalConstant.DownloadStatusEnum;
 import com.goodow.drive.android.toolutils.OfflineFileObserver;
+import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
 import com.google.api.client.extensions.android.http.AndroidHttp;
 import com.google.api.client.http.GenericUrl;
@@ -93,39 +96,51 @@ public class DataDetailFragment extends Fragment implements ILocalFragment {
       InitImageBitmapTask ibt = new InitImageBitmapTask();
       ibt.execute((String) file.get("thumbnail"));
 
-      Comparator<Object> comparator = new Comparator<Object>() {
-        @Override
-        public int compare(Object obj1, Object obj2) {
-          CollaborativeMap file1 = (CollaborativeMap) obj1;
-          CollaborativeMap file2 = (CollaborativeMap) obj2;
-          do {
-            if (null == file1 || null == file1.get("blobKey")) {
-
-              break;
-            }
-
-            if (null == file2 || null == file2.get("blobKey")) {
-
-              break;
-            }
-
-            String blobKey1 = file1.get("blobKey");
-            String blobKey2 = file2.get("blobKey");
-
-            if (blobKey1.equals(blobKey2)) {
-              return 0;
-            }
-          } while (false);
-
-          return 1;
+      boolean isOffline = false;
+      CollaborativeList list = OfflineFileObserver.OFFLINEFILEOBSERVER.getList();
+      for (int i = 0; i < list.length(); i++) {
+        CollaborativeMap map = list.get(i);
+        if (file.get("blobKey").equals(map.get("blobKey"))) {
+          isOffline = true;
         }
-      };
-
-      if (0 == OfflineFileObserver.OFFLINEFILEOBSERVER.getList().indexOf(file, comparator)) {
-        downloadSwitch.setChecked(true);
-      } else {
-        downloadSwitch.setChecked(false);
       }
+      downloadSwitch.setChecked(isOffline);
+
+      // Comparator<Object> comparator = new Comparator<Object>() {
+      // @Override
+      // public int compare(Object obj1, Object obj2) {
+      // CollaborativeMap file1 = (CollaborativeMap) obj1;
+      // CollaborativeMap file2 = (CollaborativeMap) obj2;
+      // do {
+      // if (null == file1 || null == file1.get("blobKey")) {
+      //
+      // break;
+      // }
+      //
+      // if (null == file2 || null == file2.get("blobKey")) {
+      //
+      // break;
+      // }
+      //
+      // String blobKey1 = file1.get("blobKey");
+      // String blobKey2 = file2.get("blobKey");
+      //
+      // if (blobKey1.equals(blobKey2)) {
+      // return 0;
+      // }
+      // } while (false);
+      //
+      // return 1;
+      // }
+      // };
+      //
+      // if (0 ==
+      // OfflineFileObserver.OFFLINEFILEOBSERVER.getList().indexOf(file,
+      // comparator)) {
+      // downloadSwitch.setChecked(true);
+      // } else {
+      // downloadSwitch.setChecked(false);
+      // }
     }
   }
 
