@@ -1,20 +1,69 @@
-<?xml version="1.0" encoding="UTF-8"?>
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <parent>
     <groupId>com.goodow.realtime</groupId>
     <artifactId>realtime-parent</artifactId>
     <version>0.0.1-SNAPSHOT</version>
   </parent>
-  <groupId>com.goodow.drive</groupId>
-  <artifactId>drive-parent</artifactId>
-  <packaging>pom</packaging>
+  <artifactId>drive-web</artifactId>
+  <packaging>war</packaging>
   <url>https://github.com/goodow/drive/</url>
   <inceptionYear>2013</inceptionYear>
   
-  <modules>
-    <module>drive-server</module>
-    <module>drive-android</module>
-    <module>drive-web</module>
-  </modules>
+  <properties>
+    <jsframework.version>1.16.1</jsframework.version>
+  </properties>
+  
+  <dependencies>
+    <dependency>
+      <groupId>com.goodow.javascript</groupId>
+      <artifactId>closure-compiler</artifactId>
+      <version>v20130603-SNAPSHOT</version>
+      <scope>provided</scope>
+    </dependency>
+  </dependencies>
+  
+  <build>
+    <plugins>
+      <plugin>
+        <groupId>org.eclipse.jetty</groupId>
+        <artifactId>jetty-maven-plugin</artifactId>
+        <version>9.0.3.v20130506</version>
+        <!-- <configuration>
+          <scanIntervalSeconds>3</scanIntervalSeconds>
+        </configuration> -->
+      </plugin>
+      <!-- Google App Engine maven plugin -->
+      <plugin>
+        <groupId>com.google.appengine</groupId>
+        <artifactId>appengine-maven-plugin</artifactId>
+        <version>${gae.version}</version>
+        <configuration>
+          <address>0.0.0.0</address>
+          <disableUpdateCheck>true</disableUpdateCheck>
+        </configuration>
+      </plugin>
+      <!-- <plugin>
+        <groupId>com.github.jlgrock.javascript-framework</groupId>
+        <artifactId>jsar-maven-plugin</artifactId>
+        <version>${jsframework.version}</version>
+        <extensions>true</extensions>
+      </plugin>
+      <plugin>
+        <groupId>com.github.jlgrock.javascript-framework</groupId>
+        <artifactId>closure-compiler-maven-plugin</artifactId>
+        <version>${jsframework.version}</version>
+        <dependencies>
+          <dependency>
+            <groupId>com.google.javascript</groupId>
+            <artifactId>closure-compiler</artifactId>
+          </dependency>
+        </dependencies>
+        <configuration>
+          <compileLevel>WHITESPACE_ONLY</compileLevel>
+        </configuration>
+      </plugin> -->
+    </plugins>
+  </build>
 </project>
