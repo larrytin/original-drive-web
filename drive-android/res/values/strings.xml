@@ -13,6 +13,7 @@
     <string name="del_DailogMessage">是否确定删除?</string>
     <string name="dailogOK">确定</string>
     <string name="dailogCancel">取消</string>
+    <string name="webConnect">网络连接中…</string>
 
     <!-- 内网 -->
     <string name="com.goodow.realtime.serverAddress">http://192.168.1.15:8080</string>

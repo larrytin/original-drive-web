@@ -126,7 +126,6 @@ public class CollaborativeAdapter extends BaseAdapter {
       if (null != folderList && position < folderList.length() + 1) {
         img_left.setImageResource(R.drawable.ic_type_folder);
         button.setVisibility(View.INVISIBLE);
-
       } else {
         img_left.setImageResource(ToolsFunctionForThisProgect.getFileIconByFileFullName("." + Tools.getTypeByMimeType((String) item.get("type"))));
 
@@ -139,7 +138,6 @@ public class CollaborativeAdapter extends BaseAdapter {
       }
 
       textViewContent = (String) item.get("label");
-
     }
 
     TextView listItem = (TextView) row.findViewById(R.id.listItem);

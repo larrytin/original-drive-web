@@ -46,7 +46,7 @@ public class DownloadActivity extends Activity {
         HttpResponse response = request.execute();
         InputStream is_Save = response.getContent();
         InputStream is_Bitmap = response.getContent();
-        bitmap = BitmapFactory.decodeStream(is_Bitmap);// 此方法会破坏输入流的数据,使其无法正常read,所以需要定义两个输入流
+        bitmap = BitmapFactory.decodeStream(is_Bitmap);// 此方法会破坏输入流的数据,使其无法正常read进行保存下载操作,所以需要定义两个输入流
 
         // 下载至本地start
         ByteArrayOutputStream bos = new ByteArrayOutputStream();
@@ -130,19 +130,20 @@ public class DownloadActivity extends Activity {
 
   public static final HttpTransport HTTP_TRANSPORT = AndroidHttp.newCompatibleTransport();
   public static final JsonFactory JSON_FACTORY = new JacksonFactory();
-  public static final String URL =
-      "http://imgsrc.baidu.com/forum/crop%3D144%2C0%2C278%2C236%3Bwh%3D200%2C170%3B/sign=16617bd69358d109d0acf3f2ec69f88b/5d2048fbfbedab64c87a5568f636afc379311e39.jpg";
+  public static final String URL = "http://imgsrc.baidu.com/forum/crop%3D144%2C0%2C278%2C236%3Bwh%3D200%2C170%3B/sign=16617bd69358d109d0acf3f2ec69f88b/5d2048fbfbedab64c87a5568f636afc379311e39.jpg";
   public static final String URL_2 = "http://tieba.baidu.com/tb/0618fangyuan-11.jpg";
-  public static final String URL_3 =
-      "http://imgsrc.baidu.com/forum/crop%3D0%2C23%2C272%2C231%3Bwh%3D200%2C170%3B/sign=a8033945d000baa1ae631dfb7a209520/d24133d12f2eb938ac6e8e5bd4628535e4dd6fba.jpg";
+  public static final String URL_3 = "http://imgsrc.baidu.com/forum/crop%3D0%2C23%2C272%2C231%3Bwh%3D200%2C170%3B/sign=a8033945d000baa1ae631dfb7a209520/d24133d12f2eb938ac6e8e5bd4628535e4dd6fba.jpg";
 
   private ImageView image;
 
   /**
    * Called when the activity is first created.
    * 
-   * @param savedInstanceState If the activity is being re-initialized after previously being shut down then this Bundle contains the data
-   *          it most recently supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is null.</b>
+   * @param savedInstanceState
+   *          If the activity is being re-initialized after previously being
+   *          shut down then this Bundle contains the data it most recently
+   *          supplied in onSaveInstanceState(Bundle). <b>Note: Otherwise it is
+   *          null.</b>
    */
   @Override
   public void onCreate(Bundle savedInstanceState) {

@@ -157,6 +157,26 @@ public enum OfflineFileObserver {
     }
   }
 
+  public void removeFile(CollaborativeMap removefile) {
+    if (null != removefile && null != removefile.get("blobKey")) {
+      String blobKey = removefile.get("blobKey");
+
+      // 删除offline下的map
+      for (int i = 0; i < list.length(); i++) {
+        CollaborativeMap map = list.get(i);
+        if (blobKey.equals(map.get("blobKey"))) {
+          list.remove(i);
+        }
+      }
+
+      // 删除本地文件
+      File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getOfflineResDirPath() + "/" + blobKey);
+      if (file.exists()) {
+        file.delete();
+      }
+    }
+  }
+
   public void startObservation(String docId, final String attachmentId) {
     initEventHandler();
 

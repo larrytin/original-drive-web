@@ -1,8 +1,6 @@
 package com.goodow.drive.android.fragment;
 
 import java.util.ArrayList;
-
-import android.app.FragmentTransaction;
 import android.app.ListFragment;
 import android.os.Bundle;
 import android.view.LayoutInflater;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.view.animation.Animation;
 import android.view.animation.AnimationUtils;
 import android.widget.ListView;
-
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.adapter.LeftMenuAdapter;
@@ -72,13 +69,15 @@ public class LeftMenuFragment extends ListFragment {
       mainActivity.getRemoteControlObserver().changeDoc(offlineDocId);
 
       break;
-    case LOCAL_RES:
-      FragmentTransaction fragmentTransaction;
-      fragmentTransaction = mainActivity.getFragmentManager().beginTransaction();
-      fragmentTransaction.replace(R.id.contentLayout, mainActivity.getLocalResFragment());
-      fragmentTransaction.commit();
-
-      break;
+    // case LOCAL_RES:
+    // FragmentTransaction fragmentTransaction;
+    // fragmentTransaction =
+    // mainActivity.getFragmentManager().beginTransaction();
+    // fragmentTransaction.replace(R.id.contentLayout,
+    // mainActivity.getLocalResFragment());
+    // fragmentTransaction.commit();
+    //
+    // break;
     default:
 
       break;
