@@ -67,7 +67,53 @@ good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
       listen(el, goog.events.EventType.MOUSEOVER, this.handleKeyEvent).
       listen(el, goog.events.EventType.MOUSEOUT, this.handleKeyEvent).
       listen(el, goog.events.EventType.MOUSEDOWN, this.handleKeyEvent).
-      listen(el, goog.events.EventType.CLICK, this.clickHandle);
+      listen(el, goog.events.EventType.CLICK, this.clickHandle).
+      listen(this.getCheckImageElement(), goog.events.EventType.CLICK, this.clickImageHandle).
+      listen(this.getCheckbox(), goog.events.EventType.CLICK, this.clickBoxHandle);
+};
+
+/**
+ * @param {goog.events.BrowserEvent} e
+ */
+good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
+  e.stopPropagation();
+  this.openCell();
+  var that = this;
+    var path = good.drive.nav.folders.Path.getINSTANCE();
+    var docId = path.getCurrentDocid;
+    if(docId !=  good.constants.MYRESDOCID) {
+      if (that.data instanceof good.realtime.CollaborativeMap) {
+        if(that.data.get('isfile') != undefined) {
+          good.drive.rightmenu.Rightmenu.PREVIEW(that.data.get('id'));
+        } 
+      } else {
+        good.drive.rightmenu.Rightmenu.PREVIEW(that.data.id);
+      }
+    }
+};
+
+/**
+ */
+good.drive.view.baseview.Cell.prototype.openCell = function() {
+  if (this.data instanceof good.realtime.CollaborativeMap) {
+    if (this.data.get('isfile') != undefined) {
+      return;
+    }
+    var path = good.drive.nav.folders.Path.getINSTANCE().path;
+    var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+    var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+    pathlist.push(this.data.getId());
+    good.drive.nav.folders.Path.getINSTANCE().putNewPath(path);
+  } else {
+  }
+};
+
+good.drive.view.baseview.Cell.prototype.getCheckbox = function() {
+  return this.getElement();
+};
+
+good.drive.view.baseview.Cell.prototype.getCheckImageElement = function() {
+  return this.getElement();
 };
 
 /**
@@ -75,6 +121,16 @@ good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
 good.drive.view.baseview.Cell.prototype.select = function() {
   var view = this.getParent();
   view.setSelectedItem(this);
+  this.getCheckStyle();
+};
+
+/**
+ * @param {good.drive.view.baseview.Cell} cell
+ */
+good.drive.view.baseview.Cell.prototype.deSelect = function(cell) {
+  var view = this.getParent();
+  view.setSelectedItem(cell);
+  cell.getCheckStyle();
 };
 
 /**
@@ -83,11 +139,8 @@ good.drive.view.baseview.Cell.prototype.select = function() {
 good.drive.view.baseview.Cell.prototype.setSelectedInternal =
   function(selected) {
   if (this.selected_ == selected) {
-    return;
   }
   this.selected_ = selected;
-  var cellElm = this.getContentElement();
-  cellElm.className = this.defaultConfig.cssCellRoot;
 };
 
 /**
@@ -101,12 +154,70 @@ good.drive.view.baseview.Cell.prototype.detachEvents_ = function() {
  * @param {goog.events.BrowserEvent} e
  */
 good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
+  var el = this.getElement();
+  switch (e.type) {
+    case goog.events.EventType.MOUSEOVER:
+      if (!goog.dom.classes.has(el, this.defaultConfig.cssCellHover)) {
+        goog.dom.classes.add(el,
+            this.defaultConfig.cssCellHover);
+      }
+      break;
+    case goog.events.EventType.MOUSEOUT:
+      if (goog.dom.classes.has(el, this.defaultConfig.cssCellHover)) {
+        goog.dom.classes.remove(el,
+            this.defaultConfig.cssCellHover);
+      }
+      break;
+//    case goog.events.EventType.MOUSEDOWN:
+//      break;
+    case goog.events.EventType.CONTEXTMENU:
+      this.clickHandle();
+      break;
+  }
 };
 
 /**
  * @param {goog.events.BrowserEvent} e
  */
 good.drive.view.baseview.Cell.prototype.clickHandle = function(e) {
+  e.stopPropagation();
+  var listClick = this.getParent().checkList;
+  if (listClick.length > 0) {
+    for(var i = 0; i < listClick.length; i++) {
+      var clickElement = listClick[i];
+      if (this === clickElement) {
+        break;
+      }
+      this.deSelect(clickElement); 
+      i--;
+    }
+  }
+  if (this.selected_ == false) {
+    this.select();
+  }
+};
+
+/**
+ * @param {goog.events.BrowserEvent} e
+ */
+good.drive.view.baseview.Cell.prototype.clickBoxHandle = function(e) {
+  e.stopPropagation();
+  if(this.selected_ != true) {
+    this.select();
+  } else {
+    this.deSelect(this);
+  }
+};
+
+good.drive.view.baseview.Cell.prototype.getCheckStyle = function() {
+  var checkElement = this.getCheckbox().firstChild;
+  if (!goog.dom.classes.has(checkElement, 'jfk-checkbox-checked')) {
+    goog.dom.classes.remove(checkElement, 'jfk-checkbox-unchecked');
+    goog.dom.classes.add(checkElement, 'jfk-checkbox-checked');
+  } else {
+    goog.dom.classes.remove(checkElement, 'jfk-checkbox-checked');
+    goog.dom.classes.add(checkElement, 'jfk-checkbox-unchecked');
+  }
 };
 
 /** @override */

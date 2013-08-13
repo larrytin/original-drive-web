@@ -20,6 +20,8 @@ good.drive.view.baseview.View = function(data, docid, opt_domHelper) {
   this.docid = docid;
   this._selectedItem = undefined;
   this.menu = undefined;
+  this.checkList = [];
+  this.selected = false;
 };
 goog.inherits(good.drive.view.baseview.View, goog.ui.Component);
 
@@ -189,16 +191,35 @@ good.drive.view.baseview.View.prototype.insertFolderPath = function() {
  */
 good.drive.view.baseview.View.prototype.setSelectedItem =
   function(cell) {
-  if (this._selectedItem == cell) {
-    return;
+  if(this._selectedItem == undefined) {
+    this._selectedItem = cell;
   }
-  if (this._selectedItem) {
-    this._selectedItem.setSelectedInternal(false);
+  if(this._selectedItem == cell) {
+    if(this.selected == false) {
+      cell.setSelectedInternal(this.selected = true);
+      this._selectedItem = cell;
+      goog.array.insert(this.checkList, this._selectedItem);
+      return;
+    }
   }
   this._selectedItem = cell;
-  if (cell) {
-    cell.setSelectedInternal(true);
-    cell.select();
+  if(cell.selected_ == true) {
+    cell.setSelectedInternal(this.selected = false);
+    goog.array.remove(this.checkList, this._selectedItem);
+  } else {
+    cell.setSelectedInternal(this.selected = true);
+    this._selectedItem = cell;
+    goog.array.insert(this.checkList, this._selectedItem);
+  }
+};
+
+/**
+ * @param {good.drive.view.baseview.Cell} cell
+ */
+good.drive.view.baseview.View.prototype.getCheckBox = 
+  function(cell) {
+  if(this.selected == undefined) {
+    this._selectedItem = cell;
   }
 };
 
@@ -206,6 +227,12 @@ good.drive.view.baseview.View.prototype.setSelectedItem =
  * @return {good.drive.view.baseview.Cell}
  */
 good.drive.view.baseview.View.prototype.getSelectedItem = function() {
+  return this._selectedItem;
+};
+/**
+ * @return {good.drive.view.baseview.Cell}
+ */
+good.drive.view.baseview.View.prototype.getSelectItem = function() {
   return this._selectedItem;
 };
 
@@ -617,7 +644,7 @@ good.drive.view.baseview.View.defaultConfig = {
   cssGridContainer: goog.getCssName('gv-grid-inner') + ' ' +
       goog.getCssName('doclist-container'),
   cssCellRoot: goog.getCssName('goog-inline-block') + ' ' +
-      goog.getCssName('gv-activegv-doc'),
+      goog.getCssName('gv-doc'),
   cssCellImage: goog.getCssName('gv-image') + ' ' +
       goog.getCssName('gv-no-border'),
   cssCellLabel: goog.getCssName('doclist-gv-name-container'),
