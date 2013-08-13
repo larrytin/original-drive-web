@@ -168,10 +168,10 @@ good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
             this.defaultConfig.cssCellHover);
       }
       break;
-//    case goog.events.EventType.MOUSEDOWN:
-//      break;
-    case goog.events.EventType.CONTEXTMENU:
-      this.clickHandle();
+    case goog.events.EventType.MOUSEDOWN:
+      if (e.button == 2) {
+        this.clickHandle(e);
+      }
       break;
   }
 };
