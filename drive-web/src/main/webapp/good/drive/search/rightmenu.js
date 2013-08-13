@@ -15,7 +15,7 @@ good.drive.search.Rightmenu = function(dom) {
   var submenu = new goog.ui.SubMenu('发送');
   var menu = new good.drive.nav.menu.View();
   var type = [['i', '打开'], ['s', ''],
-              ['m', submenu], ['i', '安排课程'], ['i', '收藏'],
+              ['m', submenu], ['i', '资源安排至'], ['i', '收藏'],
               ['i', '详细信息'], ['i', '重命名'], ['s', ''],
               ['i', '重新上传'], ['i', '删除']];
 

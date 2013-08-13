@@ -107,7 +107,7 @@ good.drive.nav.dialog.View.prototype.moveToDialog = function(title, handle) {
   var sb = new goog.string.StringBuffer();
   var dialog = new goog.ui.Dialog(null, true);
   dialog.setContent(this.getMoveToContent(title, 'moveTo'));
-  dialog.setTitle('移至');
+  dialog.setTitle('资源安排至');
   dialog.setButtonSet(this.genButtonSet([
                                          {key: 'mv',
                                            caption: '移动'},

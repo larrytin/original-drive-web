@@ -189,7 +189,7 @@ good.drive.init.init = function() {
     var caption = e.target.getCaption();
     var grid = good.drive.view.baseview.View.currentGrid;
     switch (caption) {
-      case '安排课程':
+      case '资源安排至':
         moToDialog.setVisible(true);
         if (moToClassTree == undefined) {
           var data = myclass.control().model().getData();
