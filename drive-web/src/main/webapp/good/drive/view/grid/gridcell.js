@@ -28,15 +28,6 @@ good.drive.view.grid.GridCell.prototype.renderCell = function() {
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
-  var checkImage = goog.dom.createDom('div',
-      {'class': 'gv-checkbox goog-inline-block'},
-      goog.dom.createDom('span',
-          {'class': 'jfk-checkbox-checked jfk-checkbox goog-inline-block',
-      'role': 'checkbox', 'aria-checked':
-        'true', 'tabindex': '0', 'dir': 'ltr'},
-      goog.dom.createDom('div',
-          {'class': 'jfk-checkbox-checkmark'})));
-  goog.dom.appendChild(this.getImageCheckElement(), checkImage);
   goog.dom.appendChild(this.getImageCheckElement(), imageData);
 };
 
@@ -130,71 +121,26 @@ good.drive.view.grid.GridCell.prototype.bindHandle = function(data) {
   }
 };
 
-/** @override */
-good.drive.view.grid.GridCell.prototype.handleKeyEvent = function(e) {
-  var el = this.getElement();
-  switch (e.type) {
-    case goog.events.EventType.MOUSEOVER:
-      if (!goog.dom.classes.has(el, this.defaultConfig.cssCellHover)) {
-        goog.dom.classes.add(el,
-            this.defaultConfig.cssCellHover);
-      }
-      break;
-    case goog.events.EventType.MOUSEOUT:
-      if (goog.dom.classes.has(el, this.defaultConfig.cssCellHover)) {
-        goog.dom.classes.remove(el,
-            this.defaultConfig.cssCellHover);
-      }
-    case goog.events.EventType.MOUSEDOWN:
-      this.select();
-      break;
-  }
-};
-
-/** @override */
-good.drive.view.grid.GridCell.prototype.clickHandle = function(e) {
-  this.openCell();
-  var imageCheck = this.getImageCheckElement();
-  var rootElement = this.getThumbnailElement();
-  goog.events.listen(rootElement, goog.events.EventType.CLICK, function(e) {
-    goog.dom.classes.add(rootElement, 'gv-active');
-  });
-  goog.events.listen(imageCheck, goog.events.EventType.CLICK, function(e) {
-    var path = good.drive.nav.folders.Path.getINSTANCE();
-    var docId = path.getCurrentDocid;
-    var grid = good.drive.view.baseview.View.currentGrid;
-    var selectedElemnet = grid.getSelectedItem();
-    var data = selectedElemnet.data;
-    if (docId != good.constants.MYRESDOCID) {
-      if (data instanceof good.realtime.CollaborativeMap) {
-        if (data.get('isfile') != undefined) {
-          good.drive.rightmenu.Rightmenu.PREVIEW(data.get('id'));
-        }
-      } else {
-        good.drive.rightmenu.Rightmenu.PREVIEW(data.id);
-      }
-    }
-  });
+good.drive.view.grid.GridCell.prototype.getCheckbox = function() {
+  return this.getCheckBoxElement();
 };
 
 /**
+ * @override
  */
-good.drive.view.grid.GridCell.prototype.openCell = function() {
-  if (this.data instanceof good.realtime.CollaborativeMap) {
-    if (this.data.get('isfile') != undefined) {
-      return;
-    }
-    var newPath = {};
-    var path = good.drive.nav.folders.Path.getINSTANCE().path;
-    var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
-    var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
-    pathlist.push(this.data.getId());
-    good.drive.nav.folders.Path.getINSTANCE().putNewPath(path);
+good.drive.view.grid.GridCell.prototype.getCheckStyle = function() {
+  good.drive.view.grid.GridCell.superClass_.getCheckStyle.call(this);
+  var rootElement = this.getElement();
+  if (!goog.dom.classes.has(rootElement, 'gv-active')) {
+    goog.dom.classes.remove(rootElement, 'gv-doc');
+    goog.dom.classes.add(rootElement, 'gv-active');
+    goog.dom.classes.add(rootElement, 'gv-doc-selected');
   } else {
+    goog.dom.classes.remove(rootElement, 'gv-doc-selected');
+    goog.dom.classes.remove(rootElement, 'gv-active');
+    goog.dom.classes.add(rootElement, 'gv-doc');
   }
 };
-
-
 /** @override */
 good.drive.view.grid.GridCell.prototype.toHtml = function(sb) {
   sb.append('<div class="',
@@ -204,8 +150,6 @@ good.drive.view.grid.GridCell.prototype.toHtml = function(sb) {
       this.getImageHtml(), this.getLabelHtml(), '</div></div></div>');
 };
 
-
-
 /**
  * @return {Element}
  */
@@ -213,7 +157,6 @@ good.drive.view.grid.GridCell.prototype.getThumbnailElement = function() {
   var el = this.getElement();
   return el ? /** @type {Element} */ (el.firstChild.firstChild) : null;
 };
-
 
 /**
  * @return {Element}
@@ -245,6 +188,12 @@ good.drive.view.grid.GridCell.prototype.getImageHtml = function() {
 good.drive.view.grid.GridCell.prototype.getImageElement = function() {
   var el = this.getThumbnailElement();
   return el ? /** @type {Element} */ (el.firstChild) : null;
+};
+/**
+ * @override
+ */
+good.drive.view.grid.GridCell.prototype.getCheckImageElement = function() {
+  return this.getImageCheckElement();
 };
 
 
@@ -292,7 +241,8 @@ good.drive.view.grid.GridCell.prototype.getImageContainerClassName =
 good.drive.view.grid.GridCell.prototype.getImageCheckHtml = function() {
   var sb = new goog.string.StringBuffer();
   sb.append('<a class="gridview-thumbnail-link" ' +
-      'target="_blank" rel="noreferrer"></a>');
+      'target="_blank" rel="noreferrer">' + this.getCheckBoxHtml(),
+      '</a>');
   return sb.toString();
 };
 
@@ -306,6 +256,55 @@ good.drive.view.grid.GridCell.prototype.getImageCheckElement = function() {
         null;
 };
 
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
+good.drive.view.grid.GridCell.prototype.getCheckBoxHtml = function() {
+  var sb = new goog.string.StringBuffer();
+  sb.append('<div class="gv-checkbox goog-inline-block" style="width: 18px; height: 19px;">' +
+  this.getCheckBoxSpanHtml(),
+  '</div>');
+  return sb.toString();
+};
+
+/**
+ * @return {Element}
+ */
+good.drive.view.grid.GridCell.prototype.getCheckBoxElement = function() {
+  var el = this.getImageCheckElement();
+  return el ?
+      /** @type {Element} */ (el.firstChild) : null;
+};
+/**
+ * @return {goog.string.StringBuffer}
+ */
+good.drive.view.grid.GridCell.prototype.getCheckBoxSpanHtml = function() {
+  var sb = new goog.string.StringBuffer();
+  sb.append('<span class="jfk-checkbox goog-inline-block ' +
+  'jfk-checkbox-unchecked" role="checkbox" aria-checked="false" ' +
+  ' tabindex="0" dir="ltr">' + this.getCheckBoxDivHtml(),
+  '</span>');
+  return sb.toString();
+};
+
+/**
+ * @return {Element}
+ */
+good.drive.view.grid.GridCell.prototype.getCheckBoxSpanElement = function() {
+  var el = this.getCheckBoxElement();
+  return el ?
+      /** @type {Element} */ (el.firstChild) : null;
+};
+
+/**
+ * @return {goog.string.StringBuffer}
+ */
+good.drive.view.grid.GridCell.prototype.getCheckBoxDivHtml = function() {
+  var sb = new goog.string.StringBuffer();
+  sb.append('<div class="jfk-checkbox-checkmark"></div>');
+  return sb.toString();
+};
 
 /**
  * @return {goog.string.StringBuffer}

@@ -17,7 +17,7 @@ good.drive.search.Rightmenu = function(dom) {
   var type = [['i', '打开'], ['s', ''],
               ['m', submenu], ['i', '资源安排至'], ['i', '收藏'],
               ['i', '详细信息'], ['i', '重命名'], ['s', ''],
-              ['i', '重新上传'], ['i', '删除'], ['i', '预览']];
+              ['i', '重新上传'], ['i', '删除']];
 
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
@@ -106,13 +106,13 @@ good.drive.search.Rightmenu = function(dom) {
 
           var action = e.target.getCaption();
           switch (action) {
-            case '预览':
+           /* case '预览':
               if (data instanceof good.realtime.CollaborativeMap) {
-                rightmenusource.preview2(data.get('id'));
+                good.drive.rightmenu.Rightmenu.PREVIEW(data.get('id'));
               } else {
-                rightmenusource.preview2(data.id);
+                good.drive.rightmenu.Rightmenu.PREVIEW(data.id);
               }
-              break;
+              break;*/
             case '详细信息':
               if (data instanceof good.realtime.CollaborativeMap) {
                 rightmenusource.detailInfo(data.get('id'), function() {
