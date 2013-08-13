@@ -28,39 +28,6 @@
 </script>
 <!-- <script src="drive-compiled.js"></script> -->
 <style type="text/css">
-.navpane-top-list.density-tiny {
--webkit-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
--moz-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
--o-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
-line-height: 16px;
-padding: 0 0 0 3px;
-}
-.goog-list .goog-list-menu-container {
-overflow: hidden;
-}
-.goog-list .goog-menu {
-z-index: 0;
-position: static;
--moz-outline: none;
-border: 0;
-overflow-y: visible;
-}
-.navpane-top-list.density-tiny .goog-listitem {
-line-height: 16px;
-}
-.navpane .goog-listitem-container, .navpane .goog-listitemheader-container {
-vertical-align: top;
-}
-.goog-listitem-caption, .goog-listitem-subcaption, .goog-listheaderitem-caption, .goog-listheaderitem-subcaption {
-white-space: nowrap;
-font-family: arial,sans-serif;
-}
-.goog-list .goog-option-selected {
-background: #fff;
-color: #dd4b39;
-font-weight: bold;
-}
 </style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
@@ -830,7 +797,46 @@ font-weight: bold;
       </tbody>
     </table>
   </div>
-
+<!-- 预览 -->
+  <div id="previewdiv" class="drive-viewer drive-viewer-focus-outlines-disabled" tabindex="0" style="opacity: 1; display: none;">
+    <div class="OVERLAY-DRIVE_VIEWER_SHADOW"></div>   
+    <div class="drive-viewer-close-button goog-inline-block drive-viewer-button" aria-label="关闭" role="button" tabindex="0"
+      style="-webkit-user-select: none; right: 12px;">
+      <div class="drive-viewer-nav-icon"></div>
+    </div>
+    <div class="drive-viewer-carousel" style="bottom: 67px;">
+      <div class="drive-viewer-carousel-slide drive-viewer-close-enabled">
+        <div id="imgplayer" class="drive-viewer-microscope-overlay" style="right: 52px; overflow: hidden; direction: ltr; display: none;">          
+          <div style="margin: 20px 0px 0px 249px;">
+            <div class="m2-tileLayer" style="z-index: 0; width: 851px; height: 638px;">
+              <img id="imgpreview" class="m2-tileLayerImg m2-noTransition" src=""
+                style="left: 0px; top: 0px; width: 851px; height: 638px;">
+            </div>           
+          </div>
+        </div>
+        <div id="flashplayer" class="drive-viewer-video drive-viewer-video-transition" tabindex="0"
+          style="width: 640px; height: 360px; left: 394px; top: 83px; display: none;"> 
+          <object id="flashpreview" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" class="drive-viewer-video-player"
+            wmode="opaque" data="" width="640px" height="360px"
+            id="drive-viewer-video-player-object-0" style="visibility: visible;">
+            <param name="allowFullScreen" value="true">
+            <param name="allowscriptaccess" value="always">
+            <param name="wmode" value="opaque">
+            <param id="paramsrc" name="src" value=""/>            
+          </object>
+        </div>
+        <!-- <div class="drive-viewer-minibar" style="display: none;">
+          <div class="drive-viewer-image-zoom-in drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="放大"
+            tabindex="0" style="display: none;">
+            <div class="drive-viewer-minibar-icon"></div>
+          </div>
+          <div class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="打印" tabindex="0">
+            <div class="drive-viewer-minibar-icon"></div>
+          </div>
+        </div>  -->       
+      </div>
+    </div>   
+  </div>
   <input type="file" id="file" multiple style="height: 0px; visibility: hidden; position: absolute; -webkit-user-select: none; width: 0px; font-size: inherit;">
 </body>
 </html>

@@ -5063,3 +5063,233 @@ text-overflow: ellipsis;
 white-space: nowrap;
 }
 /*****detail info end ****/
+.navpane-top-list.density-tiny {
+-webkit-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+-moz-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+-o-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+line-height: 16px;
+padding: 0 0 0 3px;
+}
+.goog-list .goog-list-menu-container {
+overflow: hidden;
+}
+.goog-list .goog-menu {
+z-index: 0;
+position: static;
+-moz-outline: none;
+border: 0;
+overflow-y: visible;
+}
+.navpane-top-list.density-tiny .goog-listitem {
+line-height: 16px;
+}
+.navpane .goog-listitem-container, .navpane .goog-listitemheader-container {
+vertical-align: top;
+}
+.goog-listitem-caption, .goog-listitem-subcaption, .goog-listheaderitem-caption, .goog-listheaderitem-subcaption {
+white-space: nowrap;
+font-family: arial,sans-serif;
+}
+.goog-list .goog-option-selected {
+background: #fff;
+color: #dd4b39;
+font-weight: bold;
+}
+.drive-viewer {
+font-family: arial,sans-serif;
+overflow: hidden;
+position: fixed;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+z-index: 1001;
+}
+.OVERLAY-DRIVE_VIEWER_SHADOW {
+background-color: #000;
+position: fixed;
+top: 0;
+bottom: 0;
+left: 0;
+right: 0;
+filter: alpha(opacity=80);
+opacity: .8;
+}
+drive-viewer-popout-button, .drive-viewer-close-button {
+top: 0;
+}
+.drive-viewer-popout-button, .drive-viewer-close-button, .drive-viewer-next-button, .drive-viewer-prev-button {
+position: absolute;
+outline: 0;
+z-index: 1;
+width: 40px;
+min-height: 40px;
+}
+.drive-viewer-carousel-slide {
+position: absolute;
+top: 0;
+bottom: 0;
+width: 100%;
+}
+.drive-viewer-microscope-overlay {
+position: absolute;
+left: 40px;
+right: 40px;
+top: 40px;
+bottom: 40px;
+}
+.m2-zoomWidget.m2-transition {
+-webkit-transition: opacity .5s;
+-moz-transition: opacity .5s;
+-o-transition: opacity .5s;
+transition: opacity .5s;
+}
+.m2-transition {
+-webkit-transition: all .5s;
+-moz-transition: all .5s;
+-o-transition: all .5s;
+transition: all .5s;
+}
+.m2-zoomWidget {
+position: absolute;
+z-index: 1003;
+width: 1px;
+height: 1px;
+-webkit-user-select: none;
+-moz-user-select: none;
+-ms-user-select: none;
+}
+.m2-zoomWidget .m2-wrapper {
+width: 100%;
+height: 100%;
+border: 1px solid #808080;
+background: #000;
+}
+.m2-zoomWidget .m2-thumbView {
+width: 100%;
+height: 100%;
+background-repeat: no-repeat;
+overflow: hidden;
+position: relative;
+}
+.m2-glassLayer {
+filter: alpha(opacity=0);
+opacity: 0;
+position: absolute;
+z-index: 1002;
+height: 100%;
+width: 100%;
+background-color: #008000;
+-webkit-tap-highlight-color: rgba(0,0,0,0);
+}
+.m2-tileLayer {
+position: absolute;
+overflow: hidden;
+}
+.m2-tileLayer img.m2-noTransition {
+-webkit-transition: none;
+-moz-transition: none;
+-o-transition: none;
+transition: none;
+}
+
+.m2-tileLayerImg, .m2-tileLayerCanvas {
+position: absolute;
+}
+.m2-tileLayer {
+position: absolute;
+overflow: hidden;
+}
+.drive-viewer-image-transition {
+-webkit-transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+-moz-transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+-o-transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+}
+.drive-viewer-image {
+position: absolute;
+background-color: white;
+background-image: -webkit-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef),-webkit-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef);
+background-image: -moz-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef),-moz-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef);
+background-image: -ms-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef),-ms-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef);
+background-image: -o-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef),-o-linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef);
+background-image: linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef),linear-gradient(45deg,#efefef 25%,transparent 25%,transparent 75%,#efefef 75%,#efefef);
+background-position: 0 0,10px 10px;
+-webkit-background-size: 21px 21px;
+-moz-background-size: 21px 21px;
+-o-background-size: 21px 21px;
+background-size: 21px 21px;
+}
+.drive-viewer-minibar {
+bottom: 16px;
+height: 28px;
+position: absolute;
+right: 50px;
+z-index: 3;
+}
+.drive-viewer-minibar .drive-viewer-dark-button {
+height: 28px;
+line-height: 28px;
+margin: 0;
+min-width: 28px;
+padding: 0;
+}
+.drive-viewer-dark-button.drive-viewer-button {
+background: #232323;
+border: 1px solid #000;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+-webkit-box-shadow: inset 0 1px 0 rgba(101,101,101,.1);
+-moz-box-shadow: inset 0 1px 0 rgba(101,101,101,.1);
+box-shadow: inset 0 1px 0 rgba(101,101,101,.1);
+color: rgba(255,255,255,0.9);
+cursor: default;
+font-size: 11px;
+font-weight: bold;
+text-align: center;
+text-shadow: 0 1px 0 rgba(0,0,0,.8);
+height: 24px;
+line-height: 24px;
+margin-right: 16px;
+min-width: 54px;
+outline: 0;
+padding: 0 8px;
+}
+.drive-viewer-print.drive-viewer-button {
+margin-left: 2px;
+}
+.drive-viewer-focus-outlines-disabled *:focus {
+outline: none;
+}
+.drive-viewer-video-transition {
+-webkit-transition: left .218s ease-out,top .218s ease-out;
+-moz-transition: left .218s ease-out,top .218s ease-out;
+-o-transition: left .218s ease-out,top .218s ease-out;
+transition: left .218s ease-out,top .218s ease-out;
+}
+.drive-viewer-video {
+display: table;
+position: absolute;
+z-index: 0;
+}
+.drive-viewer-video-player {
+display: table-cell;
+position: absolute;
+top: 0;
+left: 0;
+width: 100%;
+height: 100%;
+z-index: 1;
+}
+.drive-viewer-close-button .drive-viewer-nav-icon {
+background-position: 0 -40px;
+}
+.drive-viewer-nav-icon {
+background-image: url(./images/v-icons3.png);
+background-repeat: no-repeat;
+height: 40px;
+position: absolute;
+width: 40px;
+}

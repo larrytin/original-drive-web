@@ -195,3 +195,41 @@ good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
   });
 
 };
+
+
+/**
+ * @param {string} fileId
+ */
+good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
+  var previewdiv = goog.dom.getElement('previewdiv');
+  var imgplayer_div = goog.dom.getElement('imgplayer');
+  var imgpreview = goog.dom.getElement('imgpreview');
+  
+  var flashplayer_div = goog.dom.getElement('flashplayer');
+  var flashpreview = goog.dom.getElement('flashpreview');
+  var paramsrc = goog.dom.getElement('paramsrc');
+  var uri = new goog.Uri(good.constants.SERVERADRESS);
+  uri.setPath('serve');
+  uri.setQuery('id');
+  uri = uri.toString() + '=' + fileId;
+  var rpc = new good.net.CrossDomainRpc('GET',
+      good.constants.NAME,
+      good.constants.VERSION, 'attachment/' + fileId,
+      good.constants.SERVERADRESS);
+  rpc.send(function(json) {
+    if (json && !json['error']) {
+      var contentType = json['contentType'];
+      if (contentType == 'application/x-shockwave-flash') {
+        imgplayer_div.style.display = 'none';
+        flashplayer_div.style.display = 'block';
+        flashpreview.data = uri;
+        paramsrc.value = uri;
+      } else if (contentType.indexOf('image/') != -1){
+        imgplayer_div.style.display = 'block';
+        flashplayer_div.style.display = 'none';
+        imgpreview.src = uri;
+      }
+      previewdiv.style.display = 'block';
+    }
+  });
+};
