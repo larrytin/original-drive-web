@@ -12,6 +12,7 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.ListView;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 import com.goodow.android.drive.R;
@@ -99,6 +100,9 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
   }
 
   public void showData() {
+    RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.mainConnect);
+    relativeLayout.setVisibility(View.GONE);
+    
     currentFolder = model.getObject(currentPathList.get(currentPathList.length() - 1).asString());
 
     if (null != currentFolder) {
@@ -265,6 +269,9 @@ public class DataListFragment extends ListFragment implements ILocalFragment {
     Log.i(TAG, "onCreate()");
 
     super.onCreate(savedInstanceState);
+    RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.mainConnect);
+    relativeLayout.setVisibility(View.VISIBLE);
+
     adapter = new CollaborativeAdapter(this.getActivity(), null, null, new OnItemClickListener() {
       @Override
       public void onItemClick(CollaborativeMap file) {

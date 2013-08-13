@@ -20,6 +20,7 @@ import com.goodow.android.drive.R;
 import com.goodow.drive.android.activity.MainActivity;
 import com.goodow.drive.android.global_data_cache.GlobalConstant;
 import com.goodow.drive.android.global_data_cache.GlobalDataCacheForMemorySingleton;
+import com.goodow.drive.android.toolutils.OfflineFileObserver;
 import com.goodow.drive.android.toolutils.ToolsFunctionForThisProgect;
 import com.goodow.realtime.CollaborativeList;
 import com.goodow.realtime.CollaborativeMap;
@@ -110,27 +111,6 @@ public class OfflineAdapter extends BaseAdapter {
     final TextView downloadStatus = (TextView) row.findViewById(R.id.downloadStatus);
     downloadStatus.setText((String) item.get("status"));
 
-    // if (DownloadResServiceBinder.getDownloadResServiceBinder()
-    // .getDownloadResBlobKey().equals(item.get("blobKey"))) {
-    //
-    // // 使下载service能够更改UI界面,即修改进度条
-    // SimpleDownloadResources.getInstance
-    // .setDownloadProcess(new IDownloadProcess() {
-    // @Override
-    // public void downLoadProgress(int progress) {
-    // progressBar.setProgress(progress);
-    // downloadText.setText(progress + " %");
-    //
-    // }
-    //
-    // @Override
-    // public void downLoadFinish() {
-    // progressBar.setProgress(100);
-    // downloadText.setText(100 + " %");
-    // }
-    // });
-    // }
-
     item.addValueChangedListener(new EventHandler<ValueChangedEvent>() {
       @Override
       public void handleEvent(ValueChangedEvent event) {
@@ -157,12 +137,7 @@ public class OfflineAdapter extends BaseAdapter {
         AlertDialog alertDialog = new AlertDialog.Builder(activity).setPositiveButton(R.string.dailogOK, new DialogInterface.OnClickListener() {
           @Override
           public void onClick(DialogInterface dialog, int which) {
-            offlineList.remove(position);
-
-            File file = new File(GlobalDataCacheForMemorySingleton.getInstance.getOfflineResDirPath() + "/" + item.get("blobKey"));
-            if (file.exists()) {
-              file.delete();
-            }
+            OfflineFileObserver.OFFLINEFILEOBSERVER.removeFile(item);
 
             OfflineAdapter.this.notifyDataSetChanged();
           }
@@ -184,6 +159,30 @@ public class OfflineAdapter extends BaseAdapter {
       downloadText.setText(0 + " %");
       downloadStatus.setText(GlobalConstant.DownloadStatusEnum.UNDOWNLOADING.getStatus());
     }
+
+    /**
+     * 动态显示下载进度第二套方案
+     */
+    // if (DownloadResServiceBinder.getDownloadResServiceBinder()
+    // .getDownloadResBlobKey().equals(item.get("blobKey"))) {
+    //
+    // // 使下载service能够更改UI界面,即修改进度条
+    // SimpleDownloadResources.getInstance
+    // .setDownloadProcess(new IDownloadProcess() {
+    // @Override
+    // public void downLoadProgress(int progress) {
+    // progressBar.setProgress(progress);
+    // downloadText.setText(progress + " %");
+    //
+    // }
+    //
+    // @Override
+    // public void downLoadFinish() {
+    // progressBar.setProgress(100);
+    // downloadText.setText(100 + " %");
+    // }
+    // });
+    // }
 
     return row;
   }

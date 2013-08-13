@@ -7,12 +7,35 @@
         android:id="@+id/fileName"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginRight="10dp" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="20dp"
+        android:layout_marginTop="30dp" />
 
-    <Button
+    <RelativeLayout
+        android:layout_width="350dp"
+        android:layout_height="240dp"
+        android:layout_gravity="center"
+        android:layout_marginBottom="30dp"
+        android:orientation="vertical" >
+
+        <ProgressBar
+            android:id="@+id/thumbnailProgressBar"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true" />
+
+        <ImageView
+            android:id="@+id/thumbnail"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent" />
+    </RelativeLayout>
+
+    <Switch
         android:id="@+id/downloadButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="下载" />
+        android:layout_gravity="center"
+        android:layout_marginBottom="32dip"
+        android:text="可离线查看" />
 
 </LinearLayout>

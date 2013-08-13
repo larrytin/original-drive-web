@@ -94,7 +94,6 @@ public class MediaDownloadService extends Service {
 
             final String urlString = downloadRes.get("url");
             doDownLoad(urlString);
-
           }
         }
       } catch (Exception e) {
@@ -168,10 +167,8 @@ public class MediaDownloadService extends Service {
       if (DriveModule.DRIVE_SERVER.endsWith(".goodow.com")) {
         downloader.setDirectDownloadEnabled(false);// 设为多块下载
         downloader.setChunkSize(MediaHttpUploader.MINIMUM_CHUNK_SIZE);// 设置每一块的大小
-
       } else {
         downloader.setDirectDownloadEnabled(true); // 设为单块下载
-
       }
 
       downloader.setProgressListener(new CustomProgressListener());// 设置监听器

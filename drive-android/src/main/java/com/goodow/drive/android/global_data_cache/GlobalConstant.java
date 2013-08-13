@@ -9,10 +9,10 @@ public final class GlobalConstant {
     //
     USER_REMOTE_DATA("我的收藏夹"),
     //
-    LOCAL_RES("本地资源"),
+    // LOCAL_RES("本地资源"),
     //
     USER_OFFLINE_DATA("离线文件");
-    
+
     private final String menuName;
 
     private MenuTypeEnum(String menuName) {
@@ -38,7 +38,7 @@ public final class GlobalConstant {
   }
 
   public static enum DownloadStatusEnum {
-    WAITING("等待下载"), DOWNLOADING("正在下载"), COMPLETE("下载完成"),UNDOWNLOADING("未下载");
+    WAITING("等待下载"), DOWNLOADING("正在下载"), COMPLETE("下载完成"), UNDOWNLOADING("未下载");
 
     private final String status;
 
@@ -51,7 +51,7 @@ public final class GlobalConstant {
     }
   }
 
-  private static String change = "99";
+  private static String change = "07";
 
   public static enum DocumentIdAndDataKey {
     // 文件id
