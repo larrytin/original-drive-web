@@ -4,6 +4,6 @@
     <!-- 如果是true，当被点击时显示该图片，如果是false没被按下时显示默认。 -->
     <item android:drawable="@color/blue" android:state_pressed="true"/>
     <!-- 默认图片 -->
-    <item android:drawable="@color/white"/>
+    <item android:drawable="@color/transparent"/>
 
 </selector>

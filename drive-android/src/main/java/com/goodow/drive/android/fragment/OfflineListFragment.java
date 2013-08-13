@@ -9,6 +9,8 @@ import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.RelativeLayout;
+
 import com.goodow.android.drive.R;
 import com.goodow.drive.android.Interface.ILocalFragment;
 import com.goodow.drive.android.activity.MainActivity;
@@ -30,7 +32,9 @@ public class OfflineListFragment extends ListFragment implements ILocalFragment 
   @Override
   public void onResume() {
     super.onResume();
-
+    RelativeLayout relativeLayout = (RelativeLayout) getActivity().findViewById(R.id.mainConnect);
+    relativeLayout.setVisibility(View.GONE);
+    
     CollaborativeList list = OfflineFileObserver.OFFLINEFILEOBSERVER.getList();
     adapter = new OfflineAdapter((MainActivity) this.getActivity(), list);
     setListAdapter(adapter);
