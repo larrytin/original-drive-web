@@ -48,12 +48,12 @@ good.drive.view.grid.GridCell.prototype.getImageData =
       } else if (data.get('type') == 'audio/mp3') {
         return goog.dom.createDom('img', {
           'class' : 'gv-image-el',
-          'src' : './good/images/audio.png'
+          'src' : './good/images/icon_10_audio_xl128.png'
         });
       } else {
         return goog.dom.createDom('img', {
           'class' : 'gv-image-el',
-          'src' : './good/images/generic.png'
+          'src' : './good/images/icon_10_generic_xl128.png'
         });
       }
     }
@@ -66,12 +66,12 @@ good.drive.view.grid.GridCell.prototype.getImageData =
     } else if (data.contentType == 'audio/mp3') {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
-        'src' : './good/images/audio.png'
+        'src' : './good/images/icon_10_audio_xl128.png'
       });
     } else {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
-        'src' : './good/images/generic.png'
+        'src' : './good/images/icon_10_generic_xl128.png'
       });
     }
 
