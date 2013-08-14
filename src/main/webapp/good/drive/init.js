@@ -78,7 +78,6 @@ good.drive.init.init = function() {
     good.constants.MYCLASSRESDOCID;
   good.constants.PATHDOCID = baseDocid +
     good.constants.PATHDOCID;
-
   good.config.start();
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
@@ -114,11 +113,12 @@ good.drive.init.init = function() {
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
   var leftCreateBtn = leftButton.createBtn();
-
   var toolBarButton = new good.drive.nav.button.ToolBarButton();
   good.drive.init.toolBarCreate = toolBarButton.createTolBtn();
+  good.drive.init.toolBarCreate.setVisible(false);
   goog.events.listen(good.drive.init.toolBarCreate.getButton(),
       goog.events.EventType.CLICK, function(e) {
+    
   });
   good.drive.init.toolBarRename = toolBarButton.renameTolBtn();
   good.drive.init.toolBarRename.setVisible(false);
@@ -495,12 +495,15 @@ good.drive.init.initgrid = function() {
   var root = good.drive.nav.folders.Path.getINSTANCE().root;
   root.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
-    if (property != good.drive.nav.folders.Path.NameType.PATH) {
+    var newValue = evt.getNewValue();
+    if (property == good.drive.nav.folders.Path.NameType.PATH) {
+      good.drive.init.initCallback(newValue);
       return;
     }
-    var newValue = evt.getNewValue();
-    good.drive.init.initCallback(newValue);
-    good.drive.init.visiabletoolbar(newValue);
+    if (property == good.drive.nav.folders.Path.NameType.SELECT) {
+      good.drive.init.visiabletoolbar(newValue);
+      return;
+    }
   });
   good.drive.init.initCallback(
       good.drive.nav.folders.Path.getINSTANCE().path);
@@ -518,6 +521,17 @@ good.drive.init.initCallback = function(path) {
   }
   var id = pathlist[pathlist.length - 1];
   var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  switch (docid) {
+    case good.constants.MYCLASSRESDOCID:
+      good.drive.init.toolBarCreate.setVisible(true);
+      break;
+    case good.constants.MYRESDOCID:
+      good.drive.init.toolBarCreate.setVisible(true);
+      break;
+    default:
+      good.drive.init.toolBarCreate.setVisible(false);
+      break;
+  }
   if (docid == good.constants.PUBLICRESDOCID ||
       docid == good.constants.OTHERDOCID) {
     return;
@@ -545,10 +559,30 @@ good.drive.init.initCallback = function(path) {
 };
 
 /**
- * @param {Object} path
+ * @param {Object} selected
  */
-good.drive.init.visiabletoolbar = function(path) {
-  
+good.drive.init.visiabletoolbar = function(selected) {
+  var path = good.drive.nav.folders.Path.getINSTANCE().path;
+  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  if (goog.array.isEmpty(pathlist)) {
+    return;
+  }
+  var id = pathlist[pathlist.length - 1];
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  var model = goog.object.get(
+      good.drive.nav.folders.AbstractControl.docs, docid);
+  switch (docid) {
+    case good.constants.MYCLASSRESDOCID:
+      break;
+    case good.constants.MYRESDOCID:
+      break;
+    case good.constants.PUBLICRESDOCID:
+      break;
+    case good.constants.OTHERDOCID:
+      break;
+    default:
+      break;
+  }
 };
 
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);
