@@ -121,6 +121,9 @@ good.drive.view.grid.GridCell.prototype.bindHandle = function(data) {
   }
 };
 
+/**
+ * @return {Element}
+ */
 good.drive.view.grid.GridCell.prototype.getCheckbox = function() {
   return this.getCheckBoxElement();
 };
@@ -262,7 +265,8 @@ good.drive.view.grid.GridCell.prototype.getImageCheckElement = function() {
  */
 good.drive.view.grid.GridCell.prototype.getCheckBoxHtml = function() {
   var sb = new goog.string.StringBuffer();
-  sb.append('<div class="gv-checkbox goog-inline-block" style="width: 18px; height: 19px;">' +
+  sb.append('<div class="gv-checkbox goog-inline-block"',
+  'style="width: 18px; height: 19px;">' +
   this.getCheckBoxSpanHtml(),
   '</div>');
   return sb.toString();
