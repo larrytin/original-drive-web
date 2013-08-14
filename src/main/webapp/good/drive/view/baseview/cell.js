@@ -99,11 +99,14 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     if (this.data.get('isfile') != undefined) {
       return;
     }
+    var newPath = {};
     var path = good.drive.nav.folders.Path.getINSTANCE().path;
     var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
     var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
     pathlist.push(this.data.getId());
-    good.drive.nav.folders.Path.getINSTANCE().putNewPath(path);
+    newPath[good.drive.nav.folders.Path.NameType.CURRENTPATH] = pathlist;
+    newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
+    good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
   }
 };

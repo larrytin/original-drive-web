@@ -28,3 +28,17 @@ good.drive.nav.button.View = function(button, renderTarget, var_args) {
 good.drive.nav.button.View.prototype.getElement = function() {
   return this.button.getElement();
 };
+
+/**
+ * @return {goog.ui.Button}
+ */
+good.drive.nav.button.View.prototype.getButton = function() {
+  return this.button;
+};
+
+/**
+ * @param {boolean} visiable
+ */
+good.drive.nav.button.View.prototype.setVisible = function(visiable) {
+  this.button.setVisible(visiable);
+};

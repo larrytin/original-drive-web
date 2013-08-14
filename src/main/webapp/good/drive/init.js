@@ -51,6 +51,19 @@ good.drive.init.start = function() {
 /** */
 window.gdrOnLoad = good.drive.init.start;
 
+/**
+ * @type {good.drive.nav.button.ToolBarView}
+ */
+good.drive.init.toolBarCreate;
+/**
+ * @type {good.drive.nav.button.ToolBarView}
+ */
+good.drive.init.toolBarRename;
+/**
+ * @type {good.drive.nav.button.ToolBarView}
+ */
+good.drive.init.toolBarDelete;
+
 /** */
 good.drive.init.init = function() {
   var createInput;
@@ -103,9 +116,14 @@ good.drive.init.init = function() {
   var leftCreateBtn = leftButton.createBtn();
 
   var toolBarButton = new good.drive.nav.button.ToolBarButton();
-  var toolBarCreate = toolBarButton.createTolBtn();
-  var toolBarRename = toolBarButton.renameTolBtn();
-  var toolBarDelete = toolBarButton.deleteTolBtn();
+  good.drive.init.toolBarCreate = toolBarButton.createTolBtn();
+  goog.events.listen(good.drive.init.toolBarCreate.getButton(),
+      goog.events.EventType.CLICK, function(e) {
+  });
+  good.drive.init.toolBarRename = toolBarButton.renameTolBtn();
+  good.drive.init.toolBarRename.setVisible(false);
+  good.drive.init.toolBarDelete = toolBarButton.deleteTolBtn();
+  good.drive.init.toolBarDelete.setVisible(false);
 
   var dialog = new good.drive.nav.dialog.View();
   var createdialog = dialog.createFolderDialog(function(evt) {
@@ -482,8 +500,11 @@ good.drive.init.initgrid = function() {
     }
     var newValue = evt.getNewValue();
     good.drive.init.initCallback(newValue);
+    good.drive.init.visiabletoolbar(newValue);
   });
   good.drive.init.initCallback(
+      good.drive.nav.folders.Path.getINSTANCE().path);
+  good.drive.init.visiabletoolbar(
       good.drive.nav.folders.Path.getINSTANCE().path);
 };
 
@@ -521,6 +542,13 @@ good.drive.init.initCallback = function(path) {
   grid.renderFolderPath();
   goog.object.add(cells, id, grid);
   good.drive.view.baseview.View.visiable(grid);
+};
+
+/**
+ * @param {Object} path
+ */
+good.drive.init.visiabletoolbar = function(path) {
+  
 };
 
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);
