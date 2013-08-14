@@ -42,6 +42,7 @@ good.drive.view.baseview.View.visiable = function(grid) {
   if (good.drive.view.baseview.View.currentGrid != undefined) {
     goog.style.showElement(
         good.drive.view.baseview.View.currentGrid.getElement());
+    good.drive.view.baseview.View.currentGrid.clearSelect();
   }
   good.drive.view.baseview.View.currentGrid = grid;
   goog.style.showElement(grid.getElement(), 'none');
@@ -65,16 +66,17 @@ good.drive.view.baseview.View.prototype.renderCell = function(data) {
  * @return {Array.<good.drive.view.baseview.Cell>}
  */
 good.drive.view.baseview.View.prototype.getClickList = function() {
-  if (this.checkList != []) {
-    return this.checkList;
+  if (goog.array.isEmpty(this.checkList)) {
+    return null;
   }
+  return this.checkList;
 };
 
 /**
  * @return {boolean}
  */
-good.drive.view.baseview.View.prototype.getClickView = function() {
-  if (this.checkList != []) {
+good.drive.view.baseview.View.prototype.hasSeleted = function() {
+  if (goog.array.isEmpty(this.checkList)) {
     return true;
   } else {
     return false;
@@ -83,13 +85,14 @@ good.drive.view.baseview.View.prototype.getClickView = function() {
 
 /**
  */
-good.drive.view.baseview.View.prototype.clearList = function() {
-  if (this.checkList != []) {
-    for (var i = 0; i < this.checkList.length; i++) {
-      var checkElement = this.checkList[i];
-      checkElement.deSelect(checkElement);
-    }
+good.drive.view.baseview.View.prototype.clearSelect = function() {
+  if (goog.array.isEmpty(this.checkList)) {
+    return;
   }
+  var bakListClick = goog.array.clone(this.checkList);
+  goog.array.forEach(bakListClick, function(cell) {
+    cell.deSelect();
+  });
 };
 
 /**
@@ -222,26 +225,26 @@ good.drive.view.baseview.View.prototype.insertFolderPath = function() {
  */
 good.drive.view.baseview.View.prototype.setSelectedItem =
   function(cell) {
-  if (this._selectedItem == undefined) {
-    this._selectedItem = cell;
-  }
-  if (this._selectedItem == cell) {
-    if (this.selected == false) {
-      cell.setSelectedInternal(this.selected = true);
-      this._selectedItem = cell;
-      goog.array.insert(this.checkList, this._selectedItem);
-      return;
-    }
-  }
   this._selectedItem = cell;
-  if (cell.selected_ == true) {
-    cell.setSelectedInternal(this.selected = false);
-    goog.array.remove(this.checkList, this._selectedItem);
-  } else {
-    cell.setSelectedInternal(this.selected = true);
-    this._selectedItem = cell;
-    goog.array.insert(this.checkList, this._selectedItem);
+  if (cell.isSelected()) {
+    return;
   }
+  cell.setSelectedInternal(true);
+  goog.array.insert(this.checkList, cell);
+  cell.select();
+};
+
+/**
+ * @param {good.drive.view.baseview.Cell} cell
+ */
+good.drive.view.baseview.View.prototype.setDeSelectedItem = function(cell) {
+  if (!cell.isSelected()) {
+    return;
+  }
+  this._selectedItem = undefined;
+  cell.setSelectedInternal(false);
+  goog.array.remove(this.checkList, cell);
+  cell.deSelect();
 };
 
 /**
@@ -257,12 +260,6 @@ good.drive.view.baseview.View.prototype.getCheckBox = function(cell) {
  * @return {good.drive.view.baseview.Cell}
  */
 good.drive.view.baseview.View.prototype.getSelectedItem = function() {
-  return this._selectedItem;
-};
-/**
- * @return {good.drive.view.baseview.Cell}
- */
-good.drive.view.baseview.View.prototype.getSelectItem = function() {
   return this._selectedItem;
 };
 

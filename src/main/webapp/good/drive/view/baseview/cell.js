@@ -129,6 +129,9 @@ good.drive.view.baseview.Cell.prototype.getCheckImageElement = function() {
 /**
  */
 good.drive.view.baseview.Cell.prototype.select = function() {
+  if (this.isSelected()) {
+    return;
+  }
   var view = this.getParent();
   view.setSelectedItem(this);
   this.getCheckStyle();
@@ -137,10 +140,20 @@ good.drive.view.baseview.Cell.prototype.select = function() {
 /**
  * @param {good.drive.view.baseview.Cell} cell
  */
-good.drive.view.baseview.Cell.prototype.deSelect = function(cell) {
+good.drive.view.baseview.Cell.prototype.deSelect = function() {
+  if (!this.isSelected()) {
+    return;
+  }
   var view = this.getParent();
-  view.setSelectedItem(cell);
-  cell.getCheckStyle();
+  view.setDeSelectedItem(this);
+  this.getCheckStyle();
+};
+
+/**
+ * @return {boolean}
+ */
+good.drive.view.baseview.Cell.prototype.isSelected = function() {
+  return this.selected_;
 };
 
 /**
@@ -149,6 +162,7 @@ good.drive.view.baseview.Cell.prototype.deSelect = function(cell) {
 good.drive.view.baseview.Cell.prototype.setSelectedInternal =
   function(selected) {
   if (this.selected_ == selected) {
+    return;
   }
   this.selected_ = selected;
 };
@@ -193,14 +207,14 @@ good.drive.view.baseview.Cell.prototype.clickHandle = function(e) {
   e.stopPropagation();
   var listClick = this.getParent().checkList;
   if (listClick.length > 0) {
-    for (var i = 0; i < listClick.length; i++) {
-      var clickElement = listClick[i];
-      if (this == clickElement) {
-        break;
+    var that = this;
+    var bakListClick = goog.array.clone(listClick);
+    goog.array.forEach(bakListClick, function(cell) {
+      if (that == cell) {
+        return;
       }
-      this.deSelect(clickElement);
-      i--;
-    }
+      cell.deSelect();
+    });
   }
   if (this.selected_ == false) {
     this.select();
@@ -215,7 +229,7 @@ good.drive.view.baseview.Cell.prototype.clickBoxHandle = function(e) {
   if (this.selected_ != true) {
     this.select();
   } else {
-    this.deSelect(this);
+    this.deSelect();
   }
 };
 
