@@ -62,14 +62,15 @@ good.drive.view.baseview.Cell.prototype.setIsFolder = function(isFolder) {
  */
 good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
   var el = this.getElement();
-
+  var checkImage = this.getCheckImageElement();
+  var checkBox = this.getCheckbox();
   this.getHandler().
       listen(el, goog.events.EventType.MOUSEOVER, this.handleKeyEvent).
       listen(el, goog.events.EventType.MOUSEOUT, this.handleKeyEvent).
       listen(el, goog.events.EventType.MOUSEDOWN, this.handleKeyEvent).
       listen(el, goog.events.EventType.CLICK, this.clickHandle).
-      listen(this.getCheckImageElement(), goog.events.EventType.CLICK, this.clickImageHandle).
-      listen(this.getCheckbox(), goog.events.EventType.CLICK, this.clickBoxHandle);
+      listen(checkImage, goog.events.EventType.CLICK, this.clickImageHandle).
+      listen(checkBox, goog.events.EventType.CLICK, this.clickBoxHandle);
 };
 
 /**
@@ -81,11 +82,11 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
   var that = this;
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.getCurrentDocid;
-    if(docId !=  good.constants.MYRESDOCID) {
+    if (docId != good.constants.MYRESDOCID) {
       if (that.data instanceof good.realtime.CollaborativeMap) {
-        if(that.data.get('isfile') != undefined) {
+        if (that.data.get('isfile') != undefined) {
           good.drive.rightmenu.Rightmenu.PREVIEW(that.data.get('id'));
-        } 
+        }
       } else {
         good.drive.rightmenu.Rightmenu.PREVIEW(that.data.id);
       }
@@ -111,10 +112,16 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
   }
 };
 
+/**
+ * @return {Element}
+ */
 good.drive.view.baseview.Cell.prototype.getCheckbox = function() {
   return this.getElement();
 };
 
+/**
+ * @return {Element}
+ */
 good.drive.view.baseview.Cell.prototype.getCheckImageElement = function() {
   return this.getElement();
 };
@@ -186,12 +193,12 @@ good.drive.view.baseview.Cell.prototype.clickHandle = function(e) {
   e.stopPropagation();
   var listClick = this.getParent().checkList;
   if (listClick.length > 0) {
-    for(var i = 0; i < listClick.length; i++) {
+    for (var i = 0; i < listClick.length; i++) {
       var clickElement = listClick[i];
-      if (this === clickElement) {
+      if (this == clickElement) {
         break;
       }
-      this.deSelect(clickElement); 
+      this.deSelect(clickElement);
       i--;
     }
   }
@@ -205,13 +212,15 @@ good.drive.view.baseview.Cell.prototype.clickHandle = function(e) {
  */
 good.drive.view.baseview.Cell.prototype.clickBoxHandle = function(e) {
   e.stopPropagation();
-  if(this.selected_ != true) {
+  if (this.selected_ != true) {
     this.select();
   } else {
     this.deSelect(this);
   }
 };
 
+/**
+ */
 good.drive.view.baseview.Cell.prototype.getCheckStyle = function() {
   var checkElement = this.getCheckbox().firstChild;
   if (!goog.dom.classes.has(checkElement, 'jfk-checkbox-checked')) {

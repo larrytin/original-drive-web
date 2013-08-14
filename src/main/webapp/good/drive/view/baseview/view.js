@@ -62,6 +62,37 @@ good.drive.view.baseview.View.prototype.renderCell = function(data) {
 };
 
 /**
+ * @return {Array.<good.drive.view.baseview.Cell>}
+ */
+good.drive.view.baseview.View.prototype.getClickList = function() {
+  if (this.checkList != []) {
+    return this.checkList;
+  }
+};
+
+/**
+ * @return {boolean}
+ */
+good.drive.view.baseview.View.prototype.getClickView = function() {
+  if (this.checkList != []) {
+    return true;
+  } else {
+    return false;
+  }
+};
+
+/**
+ */
+good.drive.view.baseview.View.prototype.clearList = function() {
+  if (this.checkList != []) {
+    for (var i = 0; i < this.checkList.length; i++) {
+      var checkElement = this.checkList[i];
+      checkElement.deSelect(checkElement);
+    }
+  }
+};
+
+/**
  */
 good.drive.view.baseview.View.prototype.clear = function() {
   var length = this.getChildCount();
@@ -191,11 +222,11 @@ good.drive.view.baseview.View.prototype.insertFolderPath = function() {
  */
 good.drive.view.baseview.View.prototype.setSelectedItem =
   function(cell) {
-  if(this._selectedItem == undefined) {
+  if (this._selectedItem == undefined) {
     this._selectedItem = cell;
   }
-  if(this._selectedItem == cell) {
-    if(this.selected == false) {
+  if (this._selectedItem == cell) {
+    if (this.selected == false) {
       cell.setSelectedInternal(this.selected = true);
       this._selectedItem = cell;
       goog.array.insert(this.checkList, this._selectedItem);
@@ -203,7 +234,7 @@ good.drive.view.baseview.View.prototype.setSelectedItem =
     }
   }
   this._selectedItem = cell;
-  if(cell.selected_ == true) {
+  if (cell.selected_ == true) {
     cell.setSelectedInternal(this.selected = false);
     goog.array.remove(this.checkList, this._selectedItem);
   } else {
@@ -216,9 +247,8 @@ good.drive.view.baseview.View.prototype.setSelectedItem =
 /**
  * @param {good.drive.view.baseview.Cell} cell
  */
-good.drive.view.baseview.View.prototype.getCheckBox = 
-  function(cell) {
-  if(this.selected == undefined) {
+good.drive.view.baseview.View.prototype.getCheckBox = function(cell) {
+  if (this.selected == undefined) {
     this._selectedItem = cell;
   }
 };
