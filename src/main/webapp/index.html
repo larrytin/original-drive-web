@@ -26,6 +26,94 @@
 <script>
   goog.require('good.drive.init');
 </script>
+<script type="text/javascript">
+function getFlashMovieObject(movieName)  
+ {  
+   if (window.document[movieName])  
+   {  
+
+       return window.document[movieName];  
+
+   }  
+
+   if (navigator.appName.indexOf("Microsoft Internet")==-1)  
+
+   {  
+
+     if (document.embeds && document.embeds[movieName])  
+
+       return document.embeds[movieName];  
+
+   }  
+
+   else // if (navigator.appName.indexOf("Microsoft Internet")!=-1)  
+
+   {  
+
+     return document.getElementById(movieName);  
+
+   }  
+
+ } 
+ 
+ function StopFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	flashMovie.StopPlay();
+}
+
+function PlayFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	flashMovie.Play();
+	//embed.nativeProperty.anotherNativeMethod();
+}
+
+function RewindFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	flashMovie.Rewind();
+}
+
+function NextFrameFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	// 4 is the index of the property for _currentFrame
+	var currentFrame=flashMovie.TGetProperty("/", 4);
+	var nextFrame=parseInt(currentFrame);
+	if (nextFrame>=9)
+		nextFrame=0;
+	flashMovie.GotoFrame(nextFrame);		
+}
+
+
+function ZoominFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	flashMovie.Zoom(90);
+}
+
+function ZoomoutFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	flashMovie.Zoom(110);
+}
+
+
+function SendDataToFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	flashMovie.SetVariable("/:mytext", document.getElementById("data").value);
+}
+
+function ReceiveDataFromFlashMovie()
+{
+	var flashMovie=getFlashMovieObject("Myflash");
+	document.getElementById("data").value=flashMovie.GetVariable("/:mytext");
+	//document.controller.Data.value=message;
+}
+
+</script>
 <!-- <script src="drive-compiled.js"></script> -->
 <style type="text/css">
 </style>
@@ -800,7 +888,7 @@
 <!-- 预览 -->
   <div id="previewdiv" class="drive-viewer drive-viewer-focus-outlines-disabled" tabindex="0" style="opacity: 1; display: none;">
     <div class="OVERLAY-DRIVE_VIEWER_SHADOW"></div>   
-    <div class="drive-viewer-close-button goog-inline-block drive-viewer-button" aria-label="关闭" role="button" tabindex="0"
+    <div id="preview_close" class="drive-viewer-close-button goog-inline-block drive-viewer-button" aria-label="关闭" role="button" tabindex="0"
       style="-webkit-user-select: none; right: 12px;">
       <div class="drive-viewer-nav-icon"></div>
     </div>
@@ -815,15 +903,32 @@
           </div>
         </div>
         <div id="flashplayer" class="drive-viewer-video drive-viewer-video-transition" tabindex="0"
-          style="width: 640px; height: 360px; left: 394px; top: 83px; display: none;"> 
-          <object id="flashpreview" type="application/x-shockwave-flash" allowscriptaccess="always" allowfullscreen="true" class="drive-viewer-video-player"
-            wmode="opaque" data="" width="640px" height="360px"
-            id="drive-viewer-video-player-object-0" style="visibility: visible;">
-            <param name="allowFullScreen" value="true">
-            <param name="allowscriptaccess" value="always">
-            <param name="wmode" value="opaque">
-            <param id="paramsrc" name="src" value=""/>            
-          </object>
+          style="width: 540px; height: 360px; left: 394px; top: 83px;"> 
+          <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
+              codebase="http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0"
+              id="Myflash" width=440 height=100> 
+              <param id="movie" name=movie value=""> 
+              <param name=quality value=high> 
+              <param name=play value=false> 
+              <param name=autoplay value=true> 
+              <param name=bgcolor value=#FFFFFF> 
+              <embed id="embedflash" play=false swliveconnect="true" controller="true" 
+              name="Myflash" src="" 
+              quality=high bgcolor=#FFFFFF  
+              width=440 height=100 type="application/x-shockwave-flash"  
+                   pluginspage="http://get.adobe.com/cn/flashplayer/"> </embed > 
+            </object>
+              <br/>  <br/>  <br/>
+            <input type="button" value="播放" onclick="PlayFlashMovie()" />
+            <input type="button" value="暂停" onclick="StopFlashMovie()" />
+            <input type="button" value="停止" onclick="RewindFlashMovie()" />
+            <input type="button" value="下一帧" onclick="NextFrameFlashMovie()" />
+            <input type="button" value="放大" onclick="ZoominFlashMovie()" />
+            <input type="button" value="缩小" onclick="ZoomoutFlashMovie()" />
+            <input type="button" value="发送数据" onclick="SendDataToFlashMovie()" />
+            <input type="button" value="接收数据" onclick="ReceiveDataFromFlashMovie()" />
+            <input type="text" id="data" />
+            
         </div>
         <!-- <div class="drive-viewer-minibar" style="display: none;">
           <div class="drive-viewer-image-zoom-in drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="放大"
@@ -833,7 +938,7 @@
           <div class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="打印" tabindex="0">
             <div class="drive-viewer-minibar-icon"></div>
           </div>
-        </div>  -->       
+        </div>  -->  
       </div>
     </div>   
   </div>

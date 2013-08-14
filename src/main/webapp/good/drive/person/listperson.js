@@ -27,7 +27,10 @@ good.drive.person.Listperson = function() {
   var dialog = view.createDailog('编辑人员', function(evt) {
   switch (evt.key) {
     case 'cr':
-      that.insertOrUpdate();
+      view.insertOrUpdate(good.drive.person.Listperson.USERID,
+          function(e) {
+            that.searchPerson();
+          });
       if (good.drive.person.AddPerson.FLAG) {
         return false;
       }
@@ -100,10 +103,11 @@ good.drive.person.Listperson.prototype.editPerson = function(userId) {
   var rpc = new good.net.CrossDomainRpc('GET',
       good.config.ACCOUNT,
       good.config.VERSION,
-      'accountinfo' + personId,
+      'accountinfo/' + userId,
       good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
+      that._dialog.setVisible(true);
       that._view.initDailog(json);
     }
   });

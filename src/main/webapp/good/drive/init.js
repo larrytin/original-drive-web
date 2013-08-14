@@ -480,7 +480,7 @@ good.drive.init.init = function() {
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
   var listperson = new good.drive.person.Listperson();
-  listperson.searchPerson();
+  //listperson.searchPerson();
   goog.events.listen(list.listMenu(), 'action', function(e) {
     listperson.searchPerson();
   });

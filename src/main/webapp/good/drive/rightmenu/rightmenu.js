@@ -17,6 +17,7 @@ goog.require('goog.ui.Dialog');
 good.drive.rightmenu.Rightmenu = function() {
   var fileupload = new good.drive.creation.Fileupload();
   this._fileupload = fileupload;
+  this.closepreview();
 };
 
 /**
@@ -206,8 +207,8 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
   var imgpreview = goog.dom.getElement('imgpreview');
   
   var flashplayer_div = goog.dom.getElement('flashplayer');
-  var flashpreview = goog.dom.getElement('flashpreview');
-  var paramsrc = goog.dom.getElement('paramsrc');
+  var embedflash = goog.dom.getElement('embedflash');
+  var movie = goog.dom.getElement('movie');
   var uri = new goog.Uri(good.constants.SERVERADRESS);
   uri.setPath('serve');
   uri.setQuery('id');
@@ -221,9 +222,9 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
       var contentType = json['contentType'];
       if (contentType == 'application/x-shockwave-flash') {
         imgplayer_div.style.display = 'none';
-        flashplayer_div.style.display = 'block';
-        flashpreview.data = uri;
-        paramsrc.value = uri;
+        flashplayer_div.style.display = 'block';        
+        movie.value = uri;
+        embedflash.src = uri;
       } else if (contentType.indexOf('image/') != -1){
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
@@ -232,4 +233,15 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
       previewdiv.style.display = 'block';
     }
   });
+};
+
+/**
+ *
+ */
+good.drive.rightmenu.Rightmenu.prototype.closepreview  = function() {
+  var preview_close = goog.dom.getElement('preview_close');
+  var previewdiv = goog.dom.getElement('previewdiv');
+  goog.events.listen(preview_close, goog.events.EventType.CLICK, function(e) {
+    previewdiv.style.display = 'none';
+  });  
 };
