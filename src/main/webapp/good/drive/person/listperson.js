@@ -23,27 +23,17 @@ good.drive.person.Listperson = function() {
     good.drive.view.baseview.View.visiable(grid);
   }
   
-  var view = new good.drive.person.View();
-  var dialog = view.createDailog('编辑人员', function(evt) {
-  switch (evt.key) {
-    case 'cr':
-      view.insertOrUpdate(good.drive.person.Listperson.USERID,
+  var view = new good.drive.person.View(function() {
+      view.insertOrUpdate(
           function(e) {
-            that.searchPerson();
+           good.drive.person.Listperson.SEARCHPERSON();
           });
-      if (good.drive.person.AddPerson.FLAG) {
-        return false;
-      }
-      break;
-      case 'c':
-        break;
-      default:
-        break;
-    }
-  });
-  this._dialog = dialog;
+    });  
   this._view = view;
 };
+
+/** Type {good.drive.view.table.View} */
+good.drive.person.Listperson.DIALOG = undefined;
 
 /** Type {good.drive.view.table.View} */
 good.drive.person.Listperson.SEARCHGRID = undefined;
@@ -54,13 +44,14 @@ good.drive.person.Listperson.USERID = undefined;
 /**
  *
  */
-good.drive.person.Listperson.prototype.searchPerson = function() {
+good.drive.person.Listperson.SEARCHPERSON = function() {
   var rpc = new good.net.CrossDomainRpc('GET',
       good.config.ACCOUNT,
       good.config.VERSION,
       'accountinfo',
       good.config.SERVERADRESS);
   rpc.send(function(json) {
+    good.drive.person.Listperson.SEARCHGRID.clear();
     if (json && !json['error']) {
       var grid = good.drive.person.Listperson.SEARCHGRID;
       goog.array.forEach(json['items'], function(item) {
@@ -84,12 +75,12 @@ good.drive.person.Listperson.prototype.deletePerson = function(userId) {
   var rpc = new good.net.CrossDomainRpc('POST',
       good.config.ACCOUNT,
       good.config.VERSION,
-      'accountinfo' + userId,
+      'accountinfo/' + userId,
       good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
       alert('删除成功！');
-      that.searchPerson();
+      good.drive.person.Listperson.SEARCHPERSON();
     }
   });
 };
@@ -107,8 +98,8 @@ good.drive.person.Listperson.prototype.editPerson = function(userId) {
       good.config.SERVERADRESS);
   rpc.send(function(json) {
     if (json && !json['error']) {
-      that._dialog.setVisible(true);
-      that._view.initDailog(json);
+      good.drive.person.View.DIALOG.setTitle('编辑人员');
+      that._view.initDailog(json);      
     }
   });
 };

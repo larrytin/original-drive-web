@@ -328,16 +328,18 @@ good.drive.nav.folders.Tree.prototype.setDraggable = function() {
       if (dropData == undefined) {
         dropData = that.tree.map;
       }
-      dragdrop.set(path.pathNameType().DROPDATA,
-          dropData.get('folders').getId());
-      dragdrop.set(path.pathNameType().DROPDOCID,
-          that.control().model().docId());
       if ((event.dragSourceItem.data.get('isclass') &&
           dropData.get('isclass')) ||
           (!event.dragSourceItem.data.get('isclass') &&
               dropData.get('isclass'))) {
         return;
       }
+      dragdrop.set(path.pathNameType().DROPDATA,
+          dropData.getId());
+      dragdrop.set(path.pathNameType().DROPTARGET,
+          dropData.get('folders').getId());
+      dragdrop.set(path.pathNameType().DROPDOCID,
+          that.control().model().docId());
       dragdrop.set(path.pathNameType().ISDRAGOVER,
           1);
       dragDropGroup.removeItem(

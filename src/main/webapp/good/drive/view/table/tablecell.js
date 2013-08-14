@@ -68,12 +68,12 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
             goog.dom.createDom('a',
                 {'class': 'doclist-content-wrapper'},
                 goog.dom.createDom('span',
-                    {'class': this.getLabelIcon()},
+                    {'class': this.getLabelIcon()}),
                     goog.dom.createDom('span',
                         {'class': 'goog-inline-block doclist-name'},
                         goog.dom.createDom('span',
                             {'dir': 'ltr'},
-                            value))))));
+                            value)))));
     return el;
   }
   el = goog.dom.createDom('td',

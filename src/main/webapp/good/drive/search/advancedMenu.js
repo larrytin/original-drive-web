@@ -314,6 +314,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
 
     if (search_type == undefined && path == 'search?limit=10') {
       grid.clear();
+      good.drive.view.baseview.View.visiable(grid);
       return;
     } else {
     //连接服务器查询
