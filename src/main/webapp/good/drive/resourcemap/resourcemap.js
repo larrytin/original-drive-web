@@ -56,5 +56,7 @@ good.drive.resourcemap.Resourcemap.initcallback = function(path) {
         menu.createCondition(contentType);
         menu.inputstyle();
         menu.search();
-  }
+  } else if (docid == good.constants.OTHERDOCID) {
+    good.drive.person.Listperson.SEARCHPERSON();
+  };
 };

@@ -480,9 +480,16 @@ good.drive.init.init = function() {
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
   var listperson = new good.drive.person.Listperson();
-  //listperson.searchPerson();
+//  var path = good.drive.nav.folders.Path.getINSTANCE().path;
+//  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+//  if (docid == good.constants.OTHERDOCID) {
+//    good.drive.person.Listperson.SEARCHPERSON();
+//  }
   goog.events.listen(list.listMenu(), 'action', function(e) {
-    listperson.searchPerson();
+    var id = e.target.getId();
+    if (id == 'personman') {
+      good.drive.person.Listperson.SEARCHPERSON();
+    }    
   });
   
   var userMenu = new good.drive.person.rigthmenu.Menu(

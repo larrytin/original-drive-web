@@ -6,8 +6,28 @@ goog.require('goog.ui.Dialog');
 /**
  * @constructor
  */
-good.drive.person.View = function() {  
+good.drive.person.View = function(handle) {
+  if (good.drive.person.View.DIALOG == undefined) {    
+    var dialog = this.createDailog('新建人员', function(evt) {
+      switch (evt.key) {
+      case 'cr':
+        handle();
+        if (good.drive.person.View.FLAG) {
+          return false;
+        }
+        break;
+      case 'c':        
+        break;
+      default:
+        break;
+    }
+    });
+    good.drive.person.View.DIALOG = dialog;
+  }
 };
+
+/** Type{goog.ui.Dialog} */
+good.drive.person.View.DIALOG = undefined;
 
 /** Type{boolean} */
 good.drive.person.View.FLAG = false;
@@ -99,6 +119,7 @@ good.drive.person.View.prototype.genButtonSet = function(buttons) {
  * 
  */
 good.drive.person.View.prototype.initDailog = function(data) {
+  good.drive.person.View.DIALOG.setVisible(true);
   var that = this; 
   var displayname = goog.dom.getElement('name');
   displayname.value = '';
@@ -113,7 +134,7 @@ good.drive.person.View.prototype.initDailog = function(data) {
   errormsg_password.innerText = '';
   errormsg_username.innerText = '';
   if (data != undefined) {
-    displayname.value = data['displayname'];
+    displayname.value = data['displayName'];
     username.value = data['name'];    
   }
   goog.events.listen(username, goog.events.EventType.CHANGE, function(e) {
@@ -136,10 +157,9 @@ good.drive.person.View.prototype.initDailog = function(data) {
 };
 
 /**
-* @param {string} userId
 * @param {Function} handle
 */
-good.drive.person.View.prototype.insertOrUpdate = function(userId, handle) {
+good.drive.person.View.prototype.insertOrUpdate = function(handle) {
  var displayname = goog.dom.getElement('name').value;
  var errormsg_name = goog.dom.getElement('errormsg_name');
  var username = goog.dom.getElement('username').value;
@@ -168,7 +188,7 @@ good.drive.person.View.prototype.insertOrUpdate = function(userId, handle) {
    good.drive.person.View.FLAG = false;
  }
   if (!good.drive.person.View.FLAG) {
-    if (userId == undefined) {
+    if (good.drive.person.Listperson.USERID == undefined) {
       var rpc = new good.net.CrossDomainRpc('POST',
           good.config.ACCOUNT,
           good.config.VERSION, 'accountinfo',
@@ -184,10 +204,11 @@ good.drive.person.View.prototype.insertOrUpdate = function(userId, handle) {
         }
       });
     } else {
+      var userId = good.drive.person.Listperson.USERID;
       var rpc = new good.net.CrossDomainRpc('GET',
           good.config.ACCOUNT,
           good.config.VERSION,
-          'accountinfo' + personId,
+          'accountinfo/' + userId,
           good.config.SERVERADRESS);
       rpc.send(function(json) {
         if (json && !json['error']) {

@@ -17,24 +17,11 @@ good.drive.person.AddPerson = function() {
   this._personman = personman;
   this.rightmenu();
   var that = this;
-  var view = new good.drive.person.View();
-  var dialog = view.createDailog('新建人员', function(evt) {
-  switch (evt.key) {
-      case 'cr':
-        view.insertOrUpdate(undefined, function() {
-          
-        });
-        if (good.drive.person.View.FLAG) {
-          return false;
-        }
-        break;
-      case 'c':
-        break;
-      default:
-        break;
-    }
-  });
-  this._dialog = dialog;
+  var view = new good.drive.person.View(function() {
+       view.insertOrUpdate(function() {
+         good.drive.person.Listperson.SEARCHPERSON();
+      });
+    }); 
   this._view = view;
   };
 
@@ -49,7 +36,7 @@ good.drive.person.AddPerson.prototype.rightmenu = function() {
       menuCorner: undefined, contextMenu: true};
   var rightMenu = menu.genPopupMenu(that._personman, type, undefined, corner);
   goog.events.listen(rightMenu, 'action', function(e) {
-    that._dialog.setVisible(true);
+    good.drive.person.View.DIALOG.setTitle('新建人员');
     that._view.initDailog();    
   });
 };
