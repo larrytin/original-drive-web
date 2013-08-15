@@ -131,7 +131,7 @@ good.drive.init.init = function() {
           var model = view.getCurrentItem();
           var data = model.map;
           var query = data.get(good.constants.QUERY);
-          var tags = query.get(good.constants.TAGS).asArray();
+          var tags = query.get(good.constants.TAGS);
           tags.push(createInput.value);
           view.addLeaf({'label': createInput.value,
             'query': {'tags': tags}});
@@ -436,12 +436,13 @@ good.drive.init.init = function() {
         var view = pathControl.getViewBydocId(docid);
         switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
         case 0:
-          var model = view.getCurrentItem();
+          /*var model = view.getCurrentItem();
           var data = model.map;
           var query = data.get(good.constants.QUERY);
-          var tags = query.get(good.constants.TAGS).asArray();
+          var tags = query.get(good.constants.TAGS);
           tags.push(createInput.value);
-          view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});
+          view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});*/
+          createdialog.setVisible(true);
           break;
         case 1:
           isGridEvent = false;
