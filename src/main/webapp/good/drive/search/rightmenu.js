@@ -30,6 +30,9 @@ good.drive.search.Rightmenu = function(dom) {
       goog.ui.Menu.EventType.BEFORE_SHOW, function(e) {
     var grid = good.drive.view.baseview.View.currentGrid;
     var selectedElemnet = grid.getSelectedItem();
+    if (selectedElemnet == undefined) {
+      return;
+    }
     var data = selectedElemnet.data;
     var path = good.drive.nav.folders.Path.getINSTANCE();
     var docId = path.currentDocId;
@@ -101,6 +104,9 @@ good.drive.search.Rightmenu = function(dom) {
         goog.events.listen(rightMenu, 'action', function(e) {
           var grid = good.drive.view.baseview.View.currentGrid;
           var selectedElemnet = grid.getSelectedItem();
+          if (selectedElemnet == undefined) {
+            return;
+          }
           var data = selectedElemnet.data;
           var rightmenusource = new good.drive.rightmenu.Rightmenu();
 

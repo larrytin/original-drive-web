@@ -63,6 +63,10 @@ good.drive.init.toolBarRename;
  * @type {good.drive.nav.button.ToolBarView}
  */
 good.drive.init.toolBarDelete;
+/**
+ * @type {good.drive.nav.button.MenuBarView}
+ */
+good.drive.init.menuBarMore;
 
 /** */
 good.drive.init.init = function() {
@@ -113,18 +117,6 @@ good.drive.init.init = function() {
   good.drive.nav.folders.AbstractControl.linkload();
   var leftButton = new good.drive.nav.button.LeftButton();
   var leftCreateBtn = leftButton.createBtn();
-  var toolBarButton = new good.drive.nav.button.ToolBarButton();
-  good.drive.init.toolBarCreate = toolBarButton.createTolBtn();
-  good.drive.init.toolBarCreate.setVisible(false);
-  goog.events.listen(good.drive.init.toolBarCreate.getButton(),
-      goog.events.EventType.CLICK, function(e) {
-    
-  });
-  good.drive.init.toolBarRename = toolBarButton.renameTolBtn();
-  good.drive.init.toolBarRename.setVisible(false);
-  good.drive.init.toolBarDelete = toolBarButton.deleteTolBtn();
-  good.drive.init.toolBarDelete.setVisible(false);
-
   var dialog = new good.drive.nav.dialog.View();
   var createdialog = dialog.createFolderDialog(function(evt) {
     if (createInput == undefined) {
@@ -474,8 +466,37 @@ good.drive.init.init = function() {
       }
   }, corner);
 
+  var toolBarButton = new good.drive.nav.button.ToolBarButton();
+  good.drive.init.toolBarCreate = toolBarButton.createTolBtn();
+  goog.events.listen(good.drive.init.toolBarCreate.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    var docid = pathControl.getCurrentDocid();
+    var view = pathControl.getViewBydocId(docid);
+    var item = view.getCurrentItem();
+    if (item.map.get('isclass') == undefined || !item.map.get('isclass')) {
+      createdialog.setVisible(true);
+    }
+  });
+  good.drive.init.toolBarRename = toolBarButton.renameTolBtn();
+  goog.events.listen(good.drive.init.toolBarRename.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    moToDialog.setVisible(true);
+    if (moToClassTree == undefined) {
+      var data = myclass.control().model().getData();
+      moToClassTree = new good.drive.nav.folders.Tree(data.get('label'),
+          good.constants.MYCLASSRESDOCID,
+          goog.dom.getElement('moveTo'));
+      moToClassTree.setData(data);
+    }
+  });
+  good.drive.init.toolBarDelete = toolBarButton.deleteTolBtn();
+  goog.events.listen(good.drive.init.toolBarDelete.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    var grid = good.drive.view.baseview.View.currentGrid;
+    grid.removeCurrentData();
+  });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
-  var menuBarMore = menuBarButton.moreMenuBar(leftSubmenu);
+  good.drive.init.menuBarMore = menuBarButton.moreMenuBar(rightmenu.getRightMenu());
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
@@ -494,6 +515,11 @@ good.drive.init.init = function() {
   
   var userMenu = new good.drive.person.rigthmenu.Menu(
       goog.dom.getElement('tableviewmanager'));
+  
+  good.drive.init.toolBarRename.setVisible(false);
+  good.drive.init.toolBarCreate.setVisible(false);
+  good.drive.init.toolBarDelete.setVisible(false);
+  good.drive.init.menuBarMore.setVisible(false);
 };
 
 /**
@@ -513,8 +539,6 @@ good.drive.init.initgrid = function() {
     }
   });
   good.drive.init.initCallback(
-      good.drive.nav.folders.Path.getINSTANCE().path);
-  good.drive.init.visiabletoolbar(
       good.drive.nav.folders.Path.getINSTANCE().path);
 };
 
@@ -569,23 +593,29 @@ good.drive.init.initCallback = function(path) {
  * @param {Object} selected
  */
 good.drive.init.visiabletoolbar = function(selected) {
-  var path = good.drive.nav.folders.Path.getINSTANCE().path;
-  var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
-  if (goog.array.isEmpty(pathlist)) {
+  var pathControl = good.drive.nav.folders.Path.getINSTANCE();
+  var root = pathControl.root;
+  var isSelected = root.get(good.drive.nav.folders.Path.NameType.SELECT);
+  if (!isSelected) {
+    good.drive.init.toolBarRename.setVisible(false);
+    good.drive.init.toolBarDelete.setVisible(false);
+    good.drive.init.menuBarMore.setVisible(false);
     return;
   }
-  var id = pathlist[pathlist.length - 1];
-  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
-  var model = goog.object.get(
-      good.drive.nav.folders.AbstractControl.docs, docid);
+  var docid = pathControl.getCurrentDocid();
   switch (docid) {
     case good.constants.MYCLASSRESDOCID:
-      break;
     case good.constants.MYRESDOCID:
+      good.drive.init.toolBarDelete.setVisible(true);
+      good.drive.init.menuBarMore.setVisible(true);
       break;
     case good.constants.PUBLICRESDOCID:
+      good.drive.init.toolBarRename.setVisible(true);
+      good.drive.init.menuBarMore.setVisible(true);
       break;
     case good.constants.OTHERDOCID:
+      good.drive.init.toolBarDelete.setVisible(true);
+      good.drive.init.menuBarMore.setVisible(true);
       break;
     default:
       break;
