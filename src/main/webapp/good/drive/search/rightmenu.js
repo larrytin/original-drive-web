@@ -14,11 +14,11 @@ good.drive.search.Rightmenu = function(dom) {
   this._rightMenu = undefined;
   var submenu = new goog.ui.SubMenu('发送');
   var menu = new good.drive.nav.menu.View();
-  var type = [['i', '打开'], ['s', ''],
+  var type = [['i', '打开'], ['i', '预览'], ['s', ''],
               ['m', submenu], ['i', '资源安排至'], ['i', '收藏'],
               ['i', '详细信息'], ['i', '重命名'], ['s', ''],
-              ['i', '重新上传'], ['i', '删除'], ['i', '预览']];
-
+              ['i', '重新上传'], ['i', '删除']];
+   
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
   var rightmenuChildIds = undefined;
