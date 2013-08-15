@@ -5,6 +5,7 @@ goog.require('good.auth');
 goog.require('good.config');
 goog.require('good.drive.creation.fileupload');
 goog.require('good.drive.creation.mouserevent');
+goog.require('good.drive.flashcontrol');
 goog.require('good.drive.nav.button.CustomView');
 goog.require('good.drive.nav.button.LeftButton');
 goog.require('good.drive.nav.button.MenuBarButton');
@@ -494,6 +495,8 @@ good.drive.init.init = function() {
   
   var userMenu = new good.drive.person.rigthmenu.Menu(
       goog.dom.getElement('tableviewmanager'));
+  
+  var control = new good.drive.flashcontrol.Control();
 };
 
 /**
