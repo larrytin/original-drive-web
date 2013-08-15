@@ -343,7 +343,7 @@ good.drive.view.grid.GridCell.prototype.getLabelClassName = function() {
  * @param {Element} dom
  */
 good.drive.view.grid.GridCell.prototype.setLabel = function(dom) {
-//  goog.dom.removeChildren(this.getImageContainerElement());
+//  goog.dom.removeChildren(this.getImageCheckElement());
   goog.dom.removeChildren(this.getLabelElement());
   goog.dom.appendChild(this.getLabelElement(), dom);
 };

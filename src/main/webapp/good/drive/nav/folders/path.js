@@ -80,7 +80,7 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
   this.pathload();
   this.locationPath(path);
   this.dragdropEvent();
-  root.set(this.pathNameType().SELECT, []);
+  root.set(this.pathNameType().SELECT, false);
 };
 
 /**
@@ -315,7 +315,7 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   map.set(this.pathNameType().DROPDOCID, '');
   map.set(this.pathNameType().ISDRAGOVER, 0);
   root.set(this.pathNameType().DRAGDROP, map);
-  root.set(this.pathNameType().SELECT, []);
+  root.set(this.pathNameType().SELECT, false);
 };
 
 /**

@@ -232,6 +232,7 @@ good.drive.view.baseview.View.prototype.setSelectedItem =
   cell.setSelectedInternal(true);
   goog.array.insert(this.checkList, cell);
   cell.select();
+  this.dispatchEvent(goog.events.EventType.CHANGE);
 };
 
 /**
@@ -329,6 +330,7 @@ good.drive.view.baseview.View.prototype.removeCurrentData = function() {
     var files = this.data.get('files');
     files.removeValue(data);
   }
+  item.deSelect();
 };
 
 /**
