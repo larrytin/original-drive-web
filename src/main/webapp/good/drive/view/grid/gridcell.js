@@ -43,7 +43,7 @@ good.drive.view.grid.GridCell.prototype.getImageData =
       if (data.get('thumbnail') != null) {
         return goog.dom.createDom('img', {
           'class' : 'gv-image-el',
-          'src' : data.get('thumbnail')
+          'src' : data.get('thumbnail') + '=s218'
         });
       } else if (data.get('type') == 'audio/mp3') {
         return goog.dom.createDom('img', {
@@ -61,7 +61,7 @@ good.drive.view.grid.GridCell.prototype.getImageData =
     if (data['thumbnail'] != undefined) {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
-        'src' : data['thumbnail']
+        'src' : data['thumbnail'] + '=s218'
       });
     } else if (data.contentType == 'audio/mp3') {
       return goog.dom.createDom('img', {
