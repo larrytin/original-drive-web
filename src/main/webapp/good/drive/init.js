@@ -12,6 +12,7 @@ goog.require('good.drive.nav.button.MenuBarButton');
 goog.require('good.drive.nav.button.MenuBarView');
 goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
+goog.require('good.drive.nav.button.rigthmenu');
 goog.require('good.drive.nav.dialog');
 goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.folders.MyClassViewControl');
@@ -199,7 +200,7 @@ good.drive.init.init = function() {
   advancedMenu.init();
   var rightmenu = new good.drive.search.
   Rightmenu(goog.dom.getElement('viewmanager'));
-  goog.events.listen(rightmenu.getRightMenu(), 'action', function(e) {
+  var rightMenuHandle = function(e) {
     var caption = e.target.getCaption();
     var grid = good.drive.view.baseview.View.currentGrid;
     switch (caption) {
@@ -241,7 +242,8 @@ good.drive.init.init = function() {
       default:
         break;
     }
-  });
+  };
+  goog.events.listen(rightmenu.getRightMenu(), 'action', rightMenuHandle);
   var detailinfo = new good.drive.rightmenu.
   DetailInfo(function() {
     advancedMenu.search('click');
@@ -498,8 +500,22 @@ good.drive.init.init = function() {
     grid.removeCurrentData();
   });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
-  var toolBarType = [['i', '打开'], ['i', '重命名'], ['i', '详细信息']];
-  good.drive.init.menuBarMore = menuBarButton.moreMenuBar(rightmenu.getRightMenu());
+  var toolbarSettingMenu = new good.drive.nav.button.rigthmenu();
+  good.drive.init.menuBarMore = menuBarButton.moreMenuBar(
+      toolbarSettingMenu.getRightMenu());
+  goog.events.listen(good.drive.init.menuBarMore.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    toolbarSettingMenu.onSelectedHandle(e);
+  });
+  goog.events.listen(good.drive.init.menuBarMore.getButton(),
+      goog.ui.Component.EventType.ACTION, rightMenuHandle);
+  goog.events.listen(good.drive.init.menuBarMore.getButton(),
+      'enter', function(e) {
+    if (e.target != good.drive.init.menuBarMore.getButton()) {
+      return;
+    }
+    toolbarSettingMenu.hideMenuItem(e);
+  });
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();

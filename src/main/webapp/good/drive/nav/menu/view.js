@@ -26,22 +26,46 @@ good.drive.nav.menu.View = function() {
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.genPopupMenu =
-  function(dom, items, handle, corner, target) {
+  function(dom, items, handle, corner, target, isLazy) {
   var popupMenu = new goog.ui.PopupMenu();
-  this.genItems_(popupMenu, items);
   popupMenu.setToggleMode(true);
-  popupMenu.render(target == undefined ? document.body : target);
-  if (corner == undefined) {
-    popupMenu.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
-        goog.positioning.Corner.TOP_LEFT);
-  } else {
-    popupMenu.attach(dom, corner.targetCorner,
-        corner.menuCorner, corner.contextMenu);
+  this.genBase_(popupMenu, dom, items, handle, corner, target, isLazy);
+  return popupMenu;
+};
+
+/**
+ * @param {Element} dom
+ * @param {Array.<Array>} items
+ * @param {Function} handle
+ * @param {Object} corner
+ * @param {Element} target
+ * @return {goog.ui.PopupMenu}
+ */
+good.drive.nav.menu.View.prototype.genMenu =
+  function(dom, items, handle, corner, target, isLazy) {
+  var popupMenu = new goog.ui.Menu();
+  this.genBase_(popupMenu, dom, items, handle, corner, target, isLazy);
+  return popupMenu;
+};
+
+good.drive.nav.menu.View.prototype.genBase_=
+  function(menu, dom, items, handle, corner, target, isLazy) {
+  this.genItems_(menu, items);
+  if (isLazy == undefined || !isLazy) {
+    menu.render(target == undefined ? document.body : target);
+  }
+  if (dom != undefined) {
+    if (corner == undefined) {
+      menu.attach(dom, goog.positioning.Corner.BOTTOM_LEFT,
+          goog.positioning.Corner.TOP_LEFT);
+    } else {
+      menu.attach(dom, corner.targetCorner,
+          corner.menuCorner, corner.contextMenu);
+    }
   }
   if (handle != undefined) {
-    goog.events.listen(popupMenu, 'action', handle);
+    goog.events.listen(menu, 'action', handle);
   }
-  return popupMenu;
 };
 
 /**
