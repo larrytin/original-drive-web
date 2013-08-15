@@ -98,6 +98,7 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
 good.drive.view.baseview.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     if (this.data.get('isfile') != undefined) {
+    	good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
       return;
     }
     var newPath = {};
@@ -109,6 +110,7 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
+	  good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
   }
 };
 
