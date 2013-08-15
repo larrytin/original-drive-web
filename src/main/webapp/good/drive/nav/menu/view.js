@@ -23,6 +23,7 @@ good.drive.nav.menu.View = function() {
  * @param {Function} handle
  * @param {Object} corner
  * @param {Element} target
+ * @param {boolean} isLazy
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.genPopupMenu =
@@ -39,6 +40,7 @@ good.drive.nav.menu.View.prototype.genPopupMenu =
  * @param {Function} handle
  * @param {Object} corner
  * @param {Element} target
+ * @param {boolean} isLazy
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.menu.View.prototype.genMenu =
@@ -48,7 +50,17 @@ good.drive.nav.menu.View.prototype.genMenu =
   return popupMenu;
 };
 
-good.drive.nav.menu.View.prototype.genBase_=
+/**
+ * @param {goog.ui.Menu} menu
+ * @param {Element} dom
+ * @param {Array.<Array>} items
+ * @param {Function} handle
+ * @param {Object} corner
+ * @param {Element} target
+ * @param {boolean} isLazy
+ * @private
+ */
+good.drive.nav.menu.View.prototype.genBase_ =
   function(menu, dom, items, handle, corner, target, isLazy) {
   this.genItems_(menu, items);
   if (isLazy == undefined || !isLazy) {

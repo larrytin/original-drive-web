@@ -52,6 +52,9 @@ good.drive.search.Rightmenu = function(dom) {
   });
 };
 
+/**
+ * @return {Function}
+ */
 good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
   var that = this;
   return function(e) {
@@ -105,12 +108,11 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
       break;
     case good.constants.PUBLICRESDOCID:
       if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-        var array = new Array(7, 8, 9,10);
+        var array = new Array(7, 8, 9, 10);
         if (data.contentType ==
         'application/x-print') {
         array.push(3);
-       }
-        if (data['contentType'] !=
+       } if (data['contentType'] !=
           'application/x-shockwave-flash' &&
           data['contentType'].indexOf('image/') == -1) {
           array.push(1);
@@ -136,9 +138,12 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
   };
 };
 
+/**
+ * @return {Function}
+ */
 good.drive.search.Rightmenu.prototype.onSelectedHandle = function() {
   var that = this;
-  return function (e) {
+  return function(e) {
     var grid = good.drive.view.baseview.View.currentGrid;
     var selectedElemnet = grid.getSelectedItem();
     if (selectedElemnet == undefined) {
@@ -146,7 +151,6 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function() {
     }
     var data = selectedElemnet.data;
     var rightmenusource = new good.drive.rightmenu.Rightmenu();
-  
     var action = e.target.getCaption();
     switch (action) {
       case '预览':

@@ -26,6 +26,9 @@ good.drive.nav.button.rigthmenu = function() {
   this._menu = menu;
 };
 
+/**
+ * @param {goog.events.Event} e
+ */
 good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
   var that = this;
   var grid = good.drive.view.baseview.View.currentGrid;
@@ -50,8 +53,8 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
       if (data.get('type') == 'application/x-print') {
         array.push(3);
       }
-      if (data.get('type') != 'application/x-shockwave-flash'
-        && data.get('type').indexOf('image/') == -1) {
+      if (data.get('type') != 'application/x-shockwave-flash' &&
+          data.get('type').indexOf('image/') == -1) {
         array.push(1);
       }
       that._menu.hideItem(that._rightMenu, array);
@@ -62,8 +65,8 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
     if (data.contentType == 'application/x-print') {
       array.push(3);
     }
-    if (data['contentType'] != 'application/x-shockwave-flash'
-        && data['contentType'].indexOf('image/') == -1) {
+    if (data['contentType'] != 'application/x-shockwave-flash' &&
+        data['contentType'].indexOf('image/') == -1) {
       array.push(1);
     }
     that._menu.hideItem(that._rightMenu, array);
@@ -73,6 +76,9 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
   }
 };
 
+/**
+ * @param {goog.events.Event} e
+ */
 good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
   var that = this;
   var grid = good.drive.view.baseview.View.currentGrid;

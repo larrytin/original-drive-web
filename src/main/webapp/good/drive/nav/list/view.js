@@ -5,6 +5,7 @@ goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItemRenderer');
 /**
  * @constructor
+ * @param {string} docid
  */
 good.drive.nav.list.View = function(docid) {
 //  var render = goog.ui.ContainerRenderer.getCustomRenderer(
@@ -30,7 +31,6 @@ good.drive.nav.list.View = function(docid) {
       goog.dom.getElement('navpanelist').
       firstElementChild.firstElementChild.firstElementChild);
   this.menu = menu;
-  
   this.idx = -1;
   this.docid = docid;
 };
@@ -61,7 +61,8 @@ good.drive.nav.list.View.prototype.initPath =
     var curPath = {};
     curPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] =
       that.docid;
-    curPath[good.drive.nav.folders.Path.NameType.CURRENTPATH] = [e.target.getId()];
+    curPath[good.drive.nav.folders.Path.NameType.CURRENTPATH] =
+      [e.target.getId()];
     pathroot.set(good.drive.nav.folders.Path.NameType.PATH,
         curPath);
   });

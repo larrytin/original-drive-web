@@ -140,7 +140,9 @@ good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
 };
 
 /**
- * @param {Object} path
+ * @param {good.realtime.Model} mod
+ * @param {string} id
+ * @param {string} targetId
  */
 good.drive.nav.folders.Path.prototype.isParent = function(mod, id, targetId) {
   if (id == targetId) {

@@ -18,6 +18,7 @@ goog.require('good.drive.nav.folders');
 goog.require('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.folders.PublicViewControl');
+goog.require('good.drive.nav.list');
 goog.require('good.drive.nav.menu');
 goog.require('good.drive.nav.menu.popupmenu');
 goog.require('good.drive.nav.userinfo');
@@ -32,7 +33,6 @@ goog.require('good.drive.search');
 goog.require('good.drive.view.baseview');
 goog.require('good.drive.view.grid');
 goog.require('good.drive.view.table');
-goog.require('good.drive.nav.list');
 goog.require('goog.dom');
 
 /**
@@ -529,13 +529,11 @@ good.drive.init.init = function() {
     var id = e.target.getId();
     if (id == 'personman') {
       good.drive.person.Listperson.SEARCHPERSON();
-    }    
+    }
   });
-  
   var userMenu = new good.drive.person.rigthmenu.Menu(
       goog.dom.getElement('tableviewmanager'));
   var control = new good.drive.flashcontrol.Control();
-  
   good.drive.init.toolBarRename.setVisible(false);
   good.drive.init.toolBarCreate.setVisible(false);
   good.drive.init.toolBarDelete.setVisible(false);
