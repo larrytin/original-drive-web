@@ -497,6 +497,7 @@ good.drive.init.init = function() {
     grid.removeCurrentData();
   });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
+  var toolBarType = [['i', '打开'], ['i', '重命名'], ['i', '详细信息']];
   good.drive.init.menuBarMore = menuBarButton.moreMenuBar(rightmenu.getRightMenu());
   var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
