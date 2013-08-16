@@ -75,6 +75,8 @@ good.drive.resourcemap.Resourcemap.initcallback = function(path) {
         menu.inputstyle();
         menu.search();
   } else if (docid == good.constants.OTHERDOCID) {
+    var previewpane = goog.dom.getElement('previewpane');
+    previewpane.style.display = 'none';
     var pathControl = good.drive.nav.folders.Path.getINSTANCE();
     var view = pathControl.getViewBydocId(docid);
     var curItem = view.getCurItem();

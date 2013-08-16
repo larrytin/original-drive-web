@@ -135,9 +135,13 @@ good.drive.init.init = function() {
           var data = model.map;
           var query = data.get(good.constants.QUERY);
           var tags = query.get(good.constants.TAGS);
-          tags.push(createInput.value);
+          var leaftags = new Array();
+          goog.array.forEach(tags.asArray(), function(item) {
+            leaftags.push(item);
+          });
+          leaftags.push(createInput.value);
           view.addLeaf({'label': createInput.value,
-            'query': {'tags': tags}});
+            'query': {'tags': leaftags}});
         } else {
           view.addLeaf({'label': createInput.value, 'isclass': false});
         }

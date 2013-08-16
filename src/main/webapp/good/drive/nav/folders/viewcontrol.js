@@ -372,7 +372,11 @@ good.drive.nav.folders.ViewControl.prototype.addLeafValue =
       if (map.get(key) instanceof good.realtime.CollaborativeMap) {
         that.addLeafValue(map.get(key), value);
       } else if (map.get(key) instanceof good.realtime.CollaborativeList) {
-        map.set(key, value);
+        var list = map.get(key);
+        goog.array.forEach(value, function(item) {
+          list.push(item);
+        });
+        map.set(key, list);
       }
       break;
     }

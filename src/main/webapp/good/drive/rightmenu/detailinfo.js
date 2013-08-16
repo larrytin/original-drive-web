@@ -34,6 +34,7 @@ good.drive.rightmenu.DetailInfo.TYPEFLAG = undefined;
  */
 good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
   //var fieldcombo = goog.dom.getElement('fieldcombo');
+  var that = this;
   var tags_text = goog.dom.getElement('tags');
   var typecombo = goog.dom.getElement('typecombo');
   var fileId_Txt = goog.dom.getElement('fileId');
@@ -61,6 +62,7 @@ good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
         tags_query.push(item);
       });
       query.set('contentType', typecombo.value);
+      that.close();
   }
 };
 
