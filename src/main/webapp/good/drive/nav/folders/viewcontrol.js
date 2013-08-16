@@ -221,6 +221,14 @@ good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
   list.addValuesRemovedListener(function(evt) {
     var idx = evt.getIndex();
     var vals = evt.getValues();
+    if (node.getChildCount() == 0) {
+      if (!goog.dom.classes.has(node.getExpandIconElement(),
+      'treedoclistview-expand-icon-hidden')) {
+        goog.dom.classes.add(node.getExpandIconElement(),
+        'treedoclistview-expand-icon-hidden');
+      }
+      return;
+    }
     for (var i in vals) {
       var val = vals[i];
       var removeNode = that.view().removeNode(node, idx);

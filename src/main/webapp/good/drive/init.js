@@ -10,6 +10,7 @@ goog.require('good.drive.nav.button.CustomView');
 goog.require('good.drive.nav.button.LeftButton');
 goog.require('good.drive.nav.button.MenuBarButton');
 goog.require('good.drive.nav.button.MenuBarView');
+goog.require('good.drive.nav.button.Settingmenu');
 goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.button.rigthmenu');
@@ -519,7 +520,20 @@ good.drive.init.init = function() {
     }
     toolbarSettingMenu.hideMenuItem(e);
   });
-  var settingBarMore = menuBarButton.settingMenuBar(leftSubmenu);
+  var settingDialog = new goog.ui.Dialog(null, true);
+  settingDialog.setContent('版本1.0');
+  var settingMenu = new good.drive.nav.button.Settingmenu();
+  var settingBarMore = menuBarButton.settingMenuBar(settingMenu.getRightMenu());
+  goog.events.listen(settingBarMore.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    switch (e.target.getCaption()) {
+    case '关于科睿星':
+      settingDialog.setVisible(true);
+      break;
+    default:
+      break;
+    }
+  });
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
   var listperson = new good.drive.person.Listperson();
