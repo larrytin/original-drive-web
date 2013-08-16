@@ -455,12 +455,15 @@ good.drive.init.init = function() {
           modifeInput.value = view.getCurrentItem().title;
           break;
         case 2:
-//          isGridEvent = false;
-//          modifydialog.setVisible(true);
-//          if (modifeInput == undefined) {
-//            modifeInput = goog.dom.getElement('modifyFolder');
-//          }
-//          modifeInput.value = view.getCurrentItem().title;
+          var model = view.getCurrentItem();
+          var data = model.map;
+          var label = data.get(good.constants.LABEL);
+          var query = data.get(good.constants.QUERY);
+          var tags = query.get(good.constants.TAGS);
+          var contentType = query.get('contentType');
+          good.drive.rightmenu.DetailInfo.TYPEFLAG = 'public';
+          good.drive.rightmenu.DetailInfo.PUBLICDETAIL(label,
+              tags, contentType);
           break;
         case 4:
           view.removeLeaf();

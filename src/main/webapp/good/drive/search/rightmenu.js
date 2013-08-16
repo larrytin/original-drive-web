@@ -168,6 +168,7 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function() {
           rightmenusource.detailInfo(data.id, function() {
           });
         }
+        good.drive.rightmenu.DetailInfo.TYPEFLAG = undefined;
         break;
       case '重新上传':
         if (data instanceof good.realtime.CollaborativeMap) {

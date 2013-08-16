@@ -5,9 +5,10 @@ goog.require('goog.ui.Dialog');
 
 /**
  * @constructor
+ * @param {Function} handle
  */
 good.drive.person.View = function(handle) {
-  if (good.drive.person.View.DIALOG == undefined) {    
+  if (good.drive.person.View.DIALOG == undefined) {
     var dialog = this.createDailog('新建人员', function(evt) {
       switch (evt.key) {
       case 'cr':
@@ -16,7 +17,7 @@ good.drive.person.View = function(handle) {
           return false;
         }
         break;
-      case 'c':        
+      case 'c':
         break;
       default:
         break;
@@ -116,11 +117,11 @@ good.drive.person.View.prototype.genButtonSet = function(buttons) {
 
 
 /**
- * 
+ * @param {Json} data
  */
 good.drive.person.View.prototype.initDailog = function(data) {
   good.drive.person.View.DIALOG.setVisible(true);
-  var that = this; 
+  var that = this;
   var displayname = goog.dom.getElement('name');
   displayname.value = '';
   var username = goog.dom.getElement('username');
@@ -135,7 +136,7 @@ good.drive.person.View.prototype.initDailog = function(data) {
   errormsg_username.innerText = '';
   if (data != undefined) {
     displayname.value = data['displayName'];
-    username.value = data['name'];    
+    username.value = data['name'];
   }
   goog.events.listen(username, goog.events.EventType.CHANGE, function(e) {
     if (!good.drive.person.View.ISEMPTY(username.value)) {
@@ -227,6 +228,6 @@ good.drive.person.View.prototype.insertOrUpdate = function(handle) {
           });
         }
       });
-    }   
+    }
   }
 };

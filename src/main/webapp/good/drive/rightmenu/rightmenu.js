@@ -108,20 +108,16 @@ good.drive.rightmenu.Rightmenu.PREVIEW = function(fileId) {
  */
 good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
   var previewpane = goog.dom.getElement('previewpane');
-  var fieldcombo = goog.dom.getElement('fieldcombo');
-  var gradecombo = goog.dom.getElement('gradecombo');
+  var tags_text = goog.dom.getElement('tags');
   var typecombo = goog.dom.getElement('typecombo');
   var filename = goog.dom.getElement('filename');
   var thumbnail = goog.dom.getElement('thumbnail');
   var fileId_Txt = goog.dom.getElement('fileId');
   var update_info = goog.dom.getElement('update_info');
   fileId_Txt.value = fileId;
-  fieldcombo.value = '';
-  gradecombo.value = '';
   typecombo.value = '';
  if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-   fieldcombo.disabled = 'true';
-   gradecombo.disabled = 'true';
+   tags_text.disabled = 'true';
    typecombo.disabled = 'ture';
    update_info.disabled = 'true';
   }
@@ -155,13 +151,11 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
       }
 
       var tags = json['tags'];
+      var tagdata = '';
       goog.array.forEach(tags, function(item) {
-        if (goog.array.contains(good.constants.FIELDARRAY, item)) {
-          fieldcombo.value = item;
-        } else if (goog.array.contains(good.constants.GRADEARRAY, item)) {
-          gradecombo.value = item;
-        }
+        tagdata += item + ',';
       });
+      tags_text.value = tagdata.substr(0, tagdata.lastIndexOf(','));
       if (json['contentType'] != undefined &&
           json['contentType'].indexOf('image/') != -1) {
         typecombo.value = 'image/';
@@ -172,6 +166,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
     }
   });
 };
+
 
 /**
  * @param {string} fileId
@@ -205,7 +200,7 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
   var previewdiv = goog.dom.getElement('previewdiv');
   var imgplayer_div = goog.dom.getElement('imgplayer');
   var imgpreview = goog.dom.getElement('imgpreview');
-  
+
   var flashplayer_div = goog.dom.getElement('flashplayer');
   var embedflash = goog.dom.getElement('embedflash');
   var movie = goog.dom.getElement('movie');
@@ -222,10 +217,10 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
       var contentType = json['contentType'];
       if (contentType == 'application/x-shockwave-flash') {
         imgplayer_div.style.display = 'none';
-        flashplayer_div.style.display = 'block';        
+        flashplayer_div.style.display = 'block';
         movie.value = uri;
         embedflash.src = uri;
-      } else if (contentType.indexOf('image/') != -1){
+      } else if (contentType.indexOf('image/') != -1) {
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
         imgpreview.src = uri;
@@ -238,10 +233,10 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
 /**
  *
  */
-good.drive.rightmenu.Rightmenu.prototype.closepreview  = function() {
+good.drive.rightmenu.Rightmenu.prototype.closepreview = function() {
   var preview_close = goog.dom.getElement('preview_close');
   var previewdiv = goog.dom.getElement('previewdiv');
   goog.events.listen(preview_close, goog.events.EventType.CLICK, function(e) {
     previewdiv.style.display = 'none';
-  });  
+  });
 };
