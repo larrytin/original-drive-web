@@ -16,6 +16,7 @@ good.drive.view.grid.GridCell =
   good.drive.view.baseview.Cell.call(this,
       data, keytype, defaultConfig, opt_domHelper);
   this.bindHandle(data);
+  var createImage = undefined;
 };
 goog.inherits(good.drive.view.grid.GridCell, good.drive.view.baseview.Cell);
 
@@ -23,12 +24,16 @@ goog.inherits(good.drive.view.grid.GridCell, good.drive.view.baseview.Cell);
 /** @override */
 good.drive.view.grid.GridCell.prototype.renderCell = function() {
   var label = this.getLabelData(this.data);
-  var imageData = this.getImageData(this.data);
   var labelElm = goog.dom.createDom('div',
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
-  goog.dom.appendChild(this.getImageCheckElement(), imageData);
+  if(!this.createImage) {
+    var imageData = this.getImageData(this.data);
+    goog.dom.appendChild(this.getImageCheckElement(), imageData);
+    this.createImage = true;
+  }
+  
 };
 
 /**
