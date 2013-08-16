@@ -28,12 +28,11 @@ good.drive.view.grid.GridCell.prototype.renderCell = function() {
       {'class': 'gv-view-name  dir=ltr'},
       goog.dom.createDom('div', {'dir': 'ltr'}, label));
   this.setLabel(labelElm);
-  if(!this.createImage) {
+  if (!this.createImage) {
     var imageData = this.getImageData(this.data);
     goog.dom.appendChild(this.getImageCheckElement(), imageData);
     this.createImage = true;
   }
-  
 };
 
 /**

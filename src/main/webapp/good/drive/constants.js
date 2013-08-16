@@ -67,5 +67,14 @@ good.constants.TYPE = {'动画': 'application/x-shockwave-flash',
     '手偶': 'application/x-print',
     '电子书': 'text/plain'};
 
+/** @type {JSON} */
+good.constants.REVERSETYPE = {'application/x-shockwave-flash': '动画',
+    'video/mpeg': '视频',
+    'audio/mp3': '音频',
+    'image/': '图片',
+    'text/plain': '文本',
+    'application/x-print': '手偶',
+    'text/html': '电子书'};
+
 /** @type {string} */
 good.constants.ADMIN = 'admin';

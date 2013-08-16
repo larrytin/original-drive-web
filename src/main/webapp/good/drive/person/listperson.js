@@ -22,13 +22,13 @@ good.drive.person.Listperson = function() {
     good.drive.person.Listperson.SEARCHGRID = grid;
     good.drive.view.baseview.View.visiable(grid);
   }
-  
+
   var view = new good.drive.person.View(function() {
       view.insertOrUpdate(
           function(e) {
            good.drive.person.Listperson.SEARCHPERSON();
           });
-    });  
+    });
   this._view = view;
 };
 
@@ -99,7 +99,7 @@ good.drive.person.Listperson.prototype.editPerson = function(userId) {
   rpc.send(function(json) {
     if (json && !json['error']) {
       good.drive.person.View.DIALOG.setTitle('编辑人员');
-      that._view.initDailog(json);      
+      that._view.initDailog(json);
     }
   });
 };
