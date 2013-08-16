@@ -88,7 +88,7 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
           good.drive.rightmenu.Rightmenu.PREVIEW(that.data.get('id'));
         }
       } else {
-        good.drive.rightmenu.Rightmenu.PREVIEW(that.data.id);
+          good.drive.rightmenu.Rightmenu.PREVIEW(that.data.id);
       }
     }
 };
@@ -98,7 +98,7 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
 good.drive.view.baseview.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     if (this.data.get('isfile') != undefined) {
-    	good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
+      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
       return;
     }
     var newPath = {};
@@ -110,7 +110,7 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
-	  good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
+      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
   }
 };
 
@@ -142,7 +142,6 @@ good.drive.view.baseview.Cell.prototype.select = function() {
 };
 
 /**
- * @param {good.drive.view.baseview.Cell} cell
  */
 good.drive.view.baseview.Cell.prototype.deSelect = function() {
   if (!this.isSelected()) {
