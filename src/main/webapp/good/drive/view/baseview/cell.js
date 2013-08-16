@@ -79,18 +79,6 @@ good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
 good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
   e.stopPropagation();
   this.openCell();
-  var that = this;
-    var path = good.drive.nav.folders.Path.getINSTANCE();
-    var docId = path.getCurrentDocid;
-    if (docId != good.constants.MYRESDOCID) {
-      if (that.data instanceof good.realtime.CollaborativeMap) {
-        if (that.data.get('isfile') != undefined) {
-          good.drive.rightmenu.Rightmenu.PREVIEW(that.data.get('id'));
-        }
-      } else {
-          good.drive.rightmenu.Rightmenu.PREVIEW(that.data.id);
-      }
-    }
 };
 
 /**
