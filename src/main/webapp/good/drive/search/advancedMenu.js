@@ -349,8 +349,8 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
               grid.add(cell);
               cell.renderCell();
             });
-            good.drive.view.baseview.View.visiable(grid);
           }
+          good.drive.view.baseview.View.visiable(grid);
         }
       });
     }

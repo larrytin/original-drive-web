@@ -75,6 +75,14 @@ good.drive.resourcemap.Resourcemap.initcallback = function(path) {
         menu.inputstyle();
         menu.search();
   } else if (docid == good.constants.OTHERDOCID) {
-    good.drive.person.Listperson.SEARCHPERSON();
+    var pathControl = good.drive.nav.folders.Path.getINSTANCE();
+    var view = pathControl.getViewBydocId(docid);
+    var curItem = view.getCurItem();
+    var id = curItem.getId();
+    if (id == 'personman') {
+      good.drive.person.Listperson.SEARCHPERSON();
+    } else {
+      good.drive.device.Listdevice.SEARCHDEVICE();
+    }
   }
 };

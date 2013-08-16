@@ -5,6 +5,7 @@ goog.require('good.auth');
 goog.require('good.config');
 goog.require('good.drive.creation.fileupload');
 goog.require('good.drive.creation.mouserevent');
+goog.require('good.drive.device.listdevice');
 goog.require('good.drive.flashcontrol');
 goog.require('good.drive.nav.button.CustomView');
 goog.require('good.drive.nav.button.LeftButton');
@@ -537,16 +538,14 @@ good.drive.init.init = function() {
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
   var listperson = new good.drive.person.Listperson();
-//  var path = good.drive.nav.folders.Path.getINSTANCE().path;
-//  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
-//  if (docid == good.constants.OTHERDOCID) {
-//    good.drive.person.Listperson.SEARCHPERSON();
-//  }
+  var listdevice = new good.drive.device.Listdevice();
   goog.events.listen(list.listMenu(), 'action', function(e) {
-    var id = e.target.getId();
+    /*var id = e.target.getId();
     if (id == 'personman') {
       good.drive.person.Listperson.SEARCHPERSON();
-    }
+    } else {
+      good.drive.device.Listdevice.SEARCHDEVICE();
+    }*/
   });
   var userMenu = new good.drive.person.rigthmenu.Menu(
       goog.dom.getElement('tableviewmanager'));
