@@ -4,7 +4,9 @@ goog.provide('good.drive.flashcontrol');
 goog.require('goog.dom');
 goog.require('goog.events');
 
-
+/**
+ * @constructor
+ */
 good.drive.flashcontrol.Control = function() {
   var PlayFlash = goog.dom.getElement('PlayFlash');
   var StopFlash = goog.dom.getElement('StopFlash');
@@ -32,7 +34,7 @@ good.drive.flashcontrol.Control = function() {
  */
 good.drive.flashcontrol.Control.prototype.
   getFlashMovieObject = function(movieName)  
-{  
+{
   if (window.document[movieName]) {
       return window.document[movieName];
   }
@@ -51,12 +53,10 @@ good.drive.flashcontrol.Control.prototype.StopFlashMovie = function() {
   var that = this;
   goog.events.listen(that._StopFlash, goog.events.EventType.CLICK,
      function(e) {
-    var flashMovie=that.getFlashMovieObject("Myflash");
+    var flashMovie = that.getFlashMovieObject('Myflash');
     flashMovie.StopPlay();
     });
 };
-
-
 
 /**
  *
@@ -65,7 +65,7 @@ good.drive.flashcontrol.Control.prototype.PlayFlashMovie = function() {
   var that = this;
   goog.events.listen(that._PlayFlash, goog.events.EventType.CLICK,
      function(e) {
-    var flashMovie=that.getFlashMovieObject("Myflash");
+    var flashMovie = that.getFlashMovieObject('Myflash');
     flashMovie.Play();
     });
 };
@@ -77,7 +77,7 @@ good.drive.flashcontrol.Control.prototype.RewindFlashMovie = function() {
  var that = this;
  goog.events.listen(that._RewindFlash, goog.events.EventType.CLICK,
     function(e) {
-   var flashMovie=that.getFlashMovieObject("Myflash");
+   var flashMovie = that.getFlashMovieObject('Myflash');
    flashMovie.Rewind();
    });
 };
@@ -89,12 +89,12 @@ good.drive.flashcontrol.Control.prototype.NextFrameFlashMovie = function() {
  var that = this;
  goog.events.listen(that._NextFrameFlash, goog.events.EventType.CLICK,
     function(e) {
-   var flashMovie=that.getFlashMovieObject("Myflash");
-   var currentFrame=flashMovie.TGetProperty("/", 4);
-   var nextFrame=parseInt(currentFrame);
-   if (nextFrame>=9)
-     nextFrame=0;
-   flashMovie.GotoFrame(nextFrame);   
+   var flashMovie = that.getFlashMovieObject('Myflash');
+   var currentFrame = flashMovie.TGetProperty('/', 4);
+   var nextFrame = parseInt(currentFrame);
+   if (nextFrame >= 9)
+     nextFrame = 0;
+     flashMovie.GotoFrame(nextFrame);
    });
 };
 
@@ -105,7 +105,7 @@ good.drive.flashcontrol.Control.prototype.ZoominFlashMovie = function() {
  var that = this;
  goog.events.listen(that._ZoominFlash, goog.events.EventType.CLICK,
     function(e) {
-   var flashMovie=that.getFlashMovieObject("Myflash");
+   var flashMovie = that.getFlashMovieObject('Myflash');
    flashMovie.Zoom(90);
    });
 };
@@ -117,7 +117,7 @@ good.drive.flashcontrol.Control.prototype.ZoomoutFlashMovie = function() {
  var that = this;
  goog.events.listen(that._ZoomoutFlash, goog.events.EventType.CLICK,
     function(e) {
-   var flashMovie=that.getFlashMovieObject("Myflash");
+   var flashMovie = that.getFlashMovieObject('Myflash');
    flashMovie.Zoom(110);
    });
 };

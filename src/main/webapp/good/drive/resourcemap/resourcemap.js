@@ -21,6 +21,24 @@ good.drive.resourcemap.Resourcemap.init = function() {
     }
     var newValue = evt.getNewValue();
     good.drive.resourcemap.Resourcemap.initcallback(newValue);
+    var previewpane = goog.dom.getElement('previewpane');
+    if (previewpane.style.display == 'block') {
+      var pathControl = good.drive.nav.folders.Path.getINSTANCE();
+      var docid = pathControl.currentDocId;
+      if (docid == good.constants.PUBLICRESDOCID) {
+        var view = pathControl.getViewBydocId(docid);
+        var model = view.getCurrentItem();
+        var data = model.map;
+        var label = data.get(good.constants.LABEL);
+        var query = data.get(good.constants.QUERY);
+        var tags = query.get(good.constants.TAGS);
+        var contentType = query.get('contentType');
+        good.drive.rightmenu.DetailInfo.TYPEFLAG = 'public';
+        good.drive.rightmenu.DetailInfo.PUBLICDETAIL(label, tags, contentType);
+      } else {
+        previewpane.style.display = 'none';
+      }
+    }
   });
   good.drive.resourcemap.Resourcemap.
   initcallback(good.drive.nav.folders.Path.getINSTANCE().path);
@@ -53,10 +71,10 @@ good.drive.resourcemap.Resourcemap.initcallback = function(path) {
         goog.array.forEach(tags, function(e) {
           menu.createCondition(e);
         });
-        menu.createCondition(contentType);
+        menu.createCondition(good.constants.REVERSETYPE[contentType]);
         menu.inputstyle();
         menu.search();
   } else if (docid == good.constants.OTHERDOCID) {
     good.drive.person.Listperson.SEARCHPERSON();
-  };
+  }
 };
