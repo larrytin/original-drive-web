@@ -325,7 +325,6 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
       rpc.send(function(json) {
         //填充网格数据
         if (json && !json['error']) {
-          grid.clearSelect();
           grid.clear();
           if (json['items'] != undefined) {
             goog.array.forEach(json['items'], function(item) {

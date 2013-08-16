@@ -98,6 +98,7 @@ good.drive.view.baseview.View.prototype.clearSelect = function() {
 /**
  */
 good.drive.view.baseview.View.prototype.clear = function() {
+  this.clearSelect();
   var length = this.getChildCount();
   if (length == 0) {
     return;
