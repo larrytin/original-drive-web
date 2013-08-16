@@ -43,6 +43,15 @@ good.drive.nav.list.View.prototype.listMenu = function() {
 };
 
 /**
+ * @return {goog.ui.MenuItem}
+ */
+good.drive.nav.list.View.prototype.getCurItem = function() {
+  var path = good.drive.nav.folders.Path.getINSTANCE().path;
+  var pathjson = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+  return this.menu.getChild(pathjson[0]);
+};
+
+/**
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {good.realtime.CollaborativeMap} pathroot
  * @param {Function} callback
