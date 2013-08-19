@@ -1,0 +1,134 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!DOCTYPE svg  PUBLIC '-//W3C//DTD SVG 1.1//EN'  'http://www.w3.org/Graphics/SVG/1.1/DTD/svg11.dtd'>
+<svg xmlns="http://www.w3.org/2000/svg" height="1e3px" width="31px" version="1.1" y="0" x="0" preserveAspectRatio="none" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 31 1000">
+ <g transform="translate(0,720)" fill="#fff">
+  <polygon points="9.578 4 14.577 12.658 20.213 12.658 15.213 4"/>
+  <polygon points="8.184 19.109 18.182 19.109 21 14.229 11 14.229"/>
+  <polygon points="9 6.74 9 8 6.839 8 6 9.454 6 11 5.108 11 3.284 14.159 6.103 19.039 11.102 10.38"/>
+  <polygon points="4.999 4.987 4.999 1.95 3.003 1.95 3.003 4.987 0.007 4.987 0.007 7.013 3.003 7.013 3.003 10.05 4.999 10.05 4.999 7.013 7.994 7.013 7.994 4.987"/>
+ </g>
+ <g transform="translate(0,400)">
+  <polygon points="4.958 17.998 2 12.875 7.542 3.275 10.5 8.398" fill="#0DA960"/>
+  <polygon points="4.958 17.998 7.915 12.875 19 12.875 16.042 18" fill="#4373FD"/>
+  <polygon points="19 12.875 13.085 12.875 7.542 3.275 13.458 3.275" fill="#FFD24D"/>
+ </g>
+ <g stroke="#FFF" transform="translate(0,960)">
+  <polygon stroke-linejoin="round" points="5 12 8 12 14 6 14 22 8 16 5 16" stroke-width="2.2" fill="#FFF"/>
+  <path d="m17.5 11c1.5 1 1.5 4.5 0 5.5" stroke-linecap="round" stroke-width="1.5" fill="none"/>
+  <path d="m19 9c3 1.5 3 8.5 0 10" stroke-linecap="round" stroke-width="1.5" fill="none"/>
+  <path d="m21 7c4 2 4 12 0 14" stroke-linecap="round" stroke-width="1.5" fill="none"/>
+ </g>
+ <g stroke="#FFF" transform="translate(0,320)">
+  <polygon stroke-linejoin="round" points="5 12 8 12 14 6 14 22 8 16 5 16" stroke-width="2.2" fill="#FFF"/>
+  <path d="m17.5 11c1.5 1 1.5 4.5 0 5.5" stroke-linecap="round" stroke-width="1.5" fill="none"/>
+ </g>
+ <g stroke="#FFF" transform="translate(0,360)">
+  <polygon stroke-linejoin="round" points="5 12 8 12 14 6 14 22 8 16 5 16" stroke-width="2.2" fill="#FFF"/>
+  <path d="m17.5 11c1.5 1 1.5 4.5 0 5.5" stroke-linecap="round" stroke-width="1.5" fill="none"/>
+  <path d="m19 9c3 1.5 3 8.5 0 10" stroke-linecap="round" stroke-width="1.5" fill="none"/>
+ </g>
+ <g transform="translate(0,120)" fill="#fff">
+  <path d="m5 17.1h1.134l8.966-8.966v-2.134c0-0.445-0.268-0.846-0.679-1.016-0.411-0.172-0.884-0.077-1.199 0.238l-5.678 5.678h-2.544c-0.607 0-1.1 0.493-1.1 1.1v4c0 0.607 0.493 1.1 1.1 1.1z"/>
+  <path d="m10.004 19.559l3.218 3.219c0.211 0.21 0.492 0.322 0.778 0.322 0.142 0 0.285-0.027 0.421-0.083 0.411-0.171 0.679-0.572 0.679-1.017v-7.537l-5.096 5.096z"/>
+  <path d="m5.088 22.354l14.314-14.313c0.008-0.007 0.018-0.01 0.025-0.017 0.271-0.295 0.267-0.75-0.019-1.035-0.289-0.293-0.759-0.292-1.052-0.005-0.012 0.014-0.017 0.031-0.029 0.044l-14.314 14.313c-0.002 0.002-0.005 0.003-0.007 0.005-0.255 0.295-0.252 0.736 0.027 1.016 0.287 0.286 0.745 0.288 1.04 0.016 0.006-0.008 0.008-0.018 0.015-0.024z"/>
+ </g>
+ <g stroke-linejoin="round" stroke="#FFF" stroke-width="3" transform="translate(0,480)" fill="#FFF">
+  <rect height="14" width="3" y="7" x="6"/>
+  <rect height="14" width="3" y="7" x="14"/>
+ </g>
+ <g transform="translate(0,840)">
+  <polygon stroke-linejoin="round" stroke="#FFF" points="6 7 6 21 17 14" stroke-width="3" fill="#FFF"/>
+ </g>
+ <g transform="translate(0,920)">
+  <polygon points="19 8.414 17.586 7 13 11.586 8.414 7 7 8.414 11.586 13 7 17.586 8.414 19 13 14.414 17.586 19 19 17.586 14.414 13" fill="#fff"/>
+ </g>
+ <g transform="translate(0,40)">
+  <defs>
+   <filter id="glow" y="-100%" x="-100%" height="26px" width="26px">
+    <feGaussianBlur stdDeviation="4"/>
+   </filter>
+  </defs>
+  <circle filter="url(#glow)" cy="13" cx="13" r="6" fill="#fff"/>
+  <polygon points="19 8.414 17.586 7 13 11.586 8.414 7 7 8.414 11.586 13 7 17.586 8.414 19 13 14.414 17.586 19 19 17.586 14.414 13" fill="#fff"/>
+ </g>
+ <g transform="translate(0,600)">
+  <polygon points="10.5 16 16 11 13 11 13 5 8 5 8 11 5 11" fill="#fff"/>
+ </g>
+ <g transform="translate(0,160)">
+  <polygon points="21 10 31 10 21 0" fill="#bbb"/>
+  <defs>
+   <filter id="Adobe_OpacityMaskFilter" height="10" width="10" y="0" x="21" filterUnits="userSpaceOnUse">
+    <feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" type="matrix" color-interpolation-filters="sRGB" result="source"/>
+   </filter>
+  </defs>
+  <mask id="SVGID_1_" height="10" width="10" y="0" x="21" maskUnits="userSpaceOnUse">
+   <g filter="url(#Adobe_OpacityMaskFilter)">
+    <image width="14" overflow="visible" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEASABIAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMAEAMCAwYAAAGAAAABlwAAAeb/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoXHh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIAA4ADgMBIgACEQEDEQH/ xABzAAEBAAAAAAAAAAAAAAAAAAAGBQEBAAAAAAAAAAAAAAAAAAAAABAAAgMBAAAAAAAAAAAAAAAAAAQBBQYDEQACAQEGBwEAAAAAAAAAAAABAgMEABESIhMFECExQaEyciMSAQAAAAAAAAAAAAAAAAAA AAD/2gAMAwEAAhEDEQAAADEZ2aP/2gAIAQIAAQUAP//aAAgBAwABBQA//9oACAEBAAEFAOWadZpDJvabhSyxM33/2gAIAQICBj8Af//aAAgBAwIGPwB//9oACAEBAQY/ABu9KpkVSwljHNrlJF68Am37alXR4n/Vpo4+5xZXYGyzCkjEokzU2oumZPv16+bf/9k=" transform="translate(19 -1.9995)" height="14"></image>
+   </g>
+  </mask>
+  <g opacity=".17" mask="url(#SVGID_1_)">
+   <polygon points="21 10 31 10 21 0"/>
+  </g>
+  <path d="m20 11v-11h-17c-1.656 0-3 1.344-3 3v31c0 1.657 1.344 3 3 3h25c1.657 0 3-1.343 3-3v-23h-11zm-11 1c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.344-3 3-3zm13.153 18c-1.383-2.048-3.96-3.429-6.919-3.429s-5.536 1.382-6.919 3.429c-1.106 0-1.315-0.857-2.315-1.713 2-2.573 4.572-5.287 9.234-5.287s6.766 2.714 8.766 5.287c-1 0.856-0.639 1.713-1.847 1.713zm-1.153-12c-1.656 0-3-1.343-3-3s1.344-3 3-3 3 1.343 3 3-1.343 3-3 3z" fill="#C9C9C9"/>
+  <defs>
+   <filter id="Adobe_OpacityMaskFilter_1_" height="37" width="31" y="0" x="0" filterUnits="userSpaceOnUse">
+    <feColorMatrix values="-1 0 0 0 1  0 -1 0 0 1  0 0 -1 0 1  0 0 0 1 0" type="matrix" color-interpolation-filters="sRGB" result="source"/>
+   </filter>
+  </defs>
+  <mask id="SVGID_2_" height="37" width="31" y="0" x="0" maskUnits="userSpaceOnUse">
+   <g filter="url(#Adobe_OpacityMaskFilter_1_)">
+    <image width="35" overflow="visible" xlink:href="data:image/jpeg;base64,/9j/4AAQSkZJRgABAgEASABIAAD/7AARRHVja3kAAQAEAAAAHgAA/+4AIUFkb2JlAGTAAAAAAQMAEAMCAwYAAAG6AAACIAAAAuj/2wCEABALCwsMCxAMDBAXDw0PFxsUEBAUGx8XFxcXFx8eFxoaGhoXHh4jJSclIx4vLzMzLy9AQEBAQEBAQEBAQEBAQEABEQ8PERMRFRISFRQRFBEUGhQWFhQaJhoaHBoa JjAjHh4eHiMwKy4nJycuKzU1MDA1NUBAP0BAQEBAQEBAQEBAQP/CABEIACkAIwMBIgACEQEDEQH/ xACMAAACAwEBAAAAAAAAAAAAAAAABgIEBwUDAQEAAAAAAAAAAAAAAAAAAAAAEAABBAEDBAMAAAAAAAAAAAAFAgMEBgEAFAcQIDATERIXEQACAQMCAwMNAQAAAAAAAAABAhEAMQMhElETBLEihBAgQWFx gaEyQoKSFEQFEgEAAAAAAAAAAAAAAAAAAAAw/9oADAMBAAIRAxEAAADksPmyGeK+koZSJhoHQpVBjgtORlJIOw0ZWGs0c0C4Uw//2gAIAQIAAQUA8P8A/9oACAEDAAEFAPD/AP/aAAgBAQABBQCsVaOZY/Nx/wAWirshmenHjyGh0OyCpsvkdaMw2xM11r1L1QY24GC6YyMLWWuMH0prrI4R9Ma49e9Q0nPsRkhtbeKViauYD1Uz8QZHZuYJvK7yDVgjcxbsXco7v//aAAgBAgIGPwAf/9oACAEDAgY/AB//2gAIAQEBBj8A5uQm5BgkWr5m/I0MmMm4Gpm/ldnMAM3bR6PBmVswmVBE6aGkxlgrFhEmJjWucigpEzNW +rZ91OkwCWHxpv8AQOcmSxCmI7xnhWJRm2NjM92OEemjhB3nGsbjc6V4zbTm8Fu2nwdAH6fBiYqXII3EcJFqHVc09Sq6tjOkiv2MiFGdJKsCDbga8dRx53CySYPrNbt6Am9qg5FPtNNhw5F1EAA1f+jm+7zv/9k=" transform="translate(-1.9995 -1.9995)" height="41"></image>
+   </g>
+  </mask>
+  <g opacity=".15" mask="url(#SVGID_2_)">
+   <path d="m20 11v-11h-17c-1.656 0-3 1.344-3 3v31c0 1.657 1.344 3 3 3h25c1.657 0 3-1.343 3-3v-23h-11zm-11 1c1.657 0 3 1.343 3 3s-1.343 3-3 3-3-1.343-3-3 1.344-3 3-3zm13.153 18c-1.383-2.048-3.96-3.429-6.919-3.429s-5.536 1.382-6.919 3.429c-1.106 0-1.315-0.857-2.315-1.713 2-2.573 4.572-5.287 9.234-5.287s6.766 2.714 8.766 5.287c-1 0.856-0.639 1.713-1.847 1.713zm-1.153-12c-1.656 0-3-1.343-3-3s1.344-3 3-3 3 1.343 3 3-1.343 3-3 3z"/>
+  </g>
+ </g>
+ <g transform="translate(0)" fill="#fff">
+  <path d="m8 10v1h6v2l3-2.5-3-2.5v2h-6zm-2-2l-3 2.5 3 2.5v-2h3v-1h-3v-2z"/>
+  <path enable-background="new" d="m9 4h-8v13h1v-12h16v12h1v-13h-17"/>
+ </g>
+ <g transform="translate(0,680)">
+  <polygon points="9 13 15.5 19.5 17 18 12 13 17 8 15.5 6.5" fill="#fff"/>
+ </g>
+ <g transform="translate(0,80)">
+  <circle filter="url(#glow)" cy="13" cx="14" r="6" fill="#fff"/>
+  <polygon points="9 13 15.5 19.5 17 18 12 13 17 8 15.5 6.5" fill="#fff"/>
+ </g>
+ <g transform="translate(0,760)">
+  <path d="m8 8h-1v11h11v-1h-10v-10zm1-1v10h10v-10h-10z" fill="#fff"/>
+  <polygon points="13 9 13 10 15.293 10 10.793 14.5 11.5 15.207 16 10.707 16 13 17 13 17 9"/>
+ </g>
+ <g transform="translate(0,200)">
+  <circle filter="url(#glow)" cy="13" cx="12.7" r="7" fill="#fff"/>
+  <path d="m8 8h-1v11h11v-1h-10v-10zm1-1v10h10v-10h-10z" fill="#fff"/>
+  <polygon points="13 9 13 10 15.293 10 10.793 14.5 11.5 15.207 16 10.707 16 13 17 13 17 9"/>
+ </g>
+ <g transform="translate(0,280)">
+  <path d="m15.5 8h-11c-0.828 0-1.5 0.67-1.5 1.5v4.5h3v3h8v-3h3v-4.5c0-0.83-0.672-1.5-1.5-1.5zm-2.5 8h-6v-4h6v4zm1.5-5.75c-0.414 0-0.75-0.337-0.75-0.75 0-0.416 0.336-0.75 0.75-0.75s0.75 0.334 0.75 0.75c0 0.413-0.336 0.75-0.75 0.75zm-0.5-5.25h-8v2h8v-2z" fill="#fff"/>
+ </g>
+ <g transform="translate(0,240)">
+  <polygon points="17 13 10.5 19.5 9 18 14 13 9 8 10.5 6.5" fill="#fff"/>
+ </g>
+ <g transform="translate(0,800)">
+  <circle filter="url(#glow)" cy="13" cx="12" r="6" fill="#fff"/>
+  <polygon points="17 13 10.5 19.5 9 18 14 13 9 8 10.5 6.5" fill="#fff"/>
+ </g>
+ <g transform="translate(0,560)">
+  <polygon points="11 14 4.5 7.5 6 6 11 11 16 6 17.5 7.5" fill="#fff"/>
+ </g>
+ <g transform="translate(0,640)">
+  <polygon points="11 6 4.5 12.5 6 14 11 9 16 14 17.5 12.5" fill="#fff"/>
+ </g>
+ <g transform="translate(0,520)">
+  <path d="m7 10c1.656 0 3-1.342 3-3 0-1.656-1.344-3-3-3s-3 1.344-3 3c0 1.658 1.344 3 3 3zm10-2v-3h-2v3h-3v2h3v3h2v-3h3v-2h-3zm-10 4c-2 0-6 1-6 3v2h12v-2c0-2-4-3-6-3z" fill="#fff"/>
+ </g>
+ <g transform="translate(0,440)" fill="#fff">
+  <polygon opacity=".85" enable-background="new" points="9 8 9 6 8 6 8 8 6 8 6 9 8 9 8 11 9 11 9 9 11 9 11 8"/>
+  <path d="m16.742 15.501l-2.742-2.743h-0.643l-0.684-0.683c0.827-0.962 1.327-2.209 1.327-3.575 0-3.038-2.463-5.5-5.5-5.5s-5.5 2.462-5.5 5.5 2.463 5.5 5.5 5.5c1.367 0 2.613-0.501 3.576-1.327l0.684 0.683v0.644l2.742 2.742c0.342 0.343 0.896 0.344 1.24 0.001 0.344-0.345 0.344-0.898 0-1.242zm-8.242-3.301c-2.044 0-3.7-1.657-3.7-3.7s1.656-3.7 3.7-3.7c2.043 0 3.699 1.657 3.699 3.7s-1.656 3.7-3.699 3.7z"/>
+ </g>
+ <g transform="translate(0,880)" fill="#fff">
+  <path d="m16.742 15.501l-2.742-2.743h-0.643l-0.684-0.684c0.827-0.961 1.327-2.208 1.327-3.574 0-3.037-2.463-5.5-5.5-5.5s-5.5 2.463-5.5 5.5 2.463 5.5 5.5 5.5c1.367 0 2.613-0.502 3.576-1.326l0.684 0.682v0.644l2.742 2.742c0.342 0.343 0.896 0.344 1.24 0.001 0.344-0.345 0.344-0.898 0-1.242zm-8.242-3.301c-2.044 0-3.7-1.657-3.7-3.7s1.656-3.7 3.7-3.7c2.043 0 3.699 1.657 3.699 3.7s-1.656 3.7-3.699 3.7z"/>
+  <polygon opacity=".85" enable-background="new" points="9 8 8 8 6 8 6 9 8 9 9 9 11 9 11 8"/>
+ </g>
+</svg>

@@ -2,6 +2,7 @@
 goog.provide('good.drive.device.listdevice');
 
 goog.require('good.constants');
+goog.require('good.drive.device.createdialog');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -17,15 +18,26 @@ good.drive.device.Listdevice = function() {
   if (grid == undefined) {
     grid = new good.drive.view.table.View(
         {'select': 'select', 'information': '设备信息',
-          'name': '教师名称'});
+          'name': '教室名称'});
     grid.render(goog.dom.getElement('tableviewmanager'));
     good.drive.device.Listdevice.SEARCHGRID = grid;
     good.drive.view.baseview.View.visiable(grid);
   }
+
+  var view = new good.drive.device.View(function() {
+    view.insertOrUpdate(
+        function(e) {
+          good.drive.device.Listdevice.SEARCHDEVICE();
+        });
+  });
+  this._view = view;
 };
 
 /** Type {good.drive.view.table.View} */
 good.drive.device.Listdevice.SEARCHGRID = undefined;
+
+/** Type {string} */
+good.drive.device.Listdevice.DEVICEID = undefined;
 
 /**
  *
@@ -52,3 +64,42 @@ good.drive.device.Listdevice.SEARCHDEVICE = function() {
     }
   });
 };
+
+
+/**
+ * @param {string} deviceId
+ */
+good.drive.device.Listdevice.prototype.deletePerson = function(deviceId) {
+  var that = this;
+  var rpc = new good.net.CrossDomainRpc('POST',
+      good.constants.DEVICE,
+      good.config.VERSION,
+      'deviceinfo/' + deviceId,
+      good.config.SERVERADRESS);
+  rpc.send(function(json) {
+    if (json && !json['error']) {
+      alert('删除成功！');
+      good.drive.device.Listdevice.SEARCHDEVICE();
+    }
+  });
+};
+
+/**
+ * @param {string} deviceId
+ */
+good.drive.device.Listdevice.prototype.editPerson = function(deviceId) {
+  good.drive.device.Listdevice.DEVICEID = deviceId;
+  var that = this;
+  var rpc = new good.net.CrossDomainRpc('GET',
+      good.constants.DEVICE,
+      good.config.VERSION,
+      'deviceinfo/' + deviceId,
+      good.config.SERVERADRESS);
+  rpc.send(function(json) {
+    if (json && !json['error']) {
+      good.drive.device.View.DIALOG.setTitle('编辑设备');
+      that._view.initDailog(json);
+    }
+  });
+};
+

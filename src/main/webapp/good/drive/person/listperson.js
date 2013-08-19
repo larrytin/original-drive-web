@@ -33,9 +33,6 @@ good.drive.person.Listperson = function() {
 };
 
 /** Type {good.drive.view.table.View} */
-good.drive.person.Listperson.DIALOG = undefined;
-
-/** Type {good.drive.view.table.View} */
 good.drive.person.Listperson.SEARCHGRID = undefined;
 
 /** Type {string} */
