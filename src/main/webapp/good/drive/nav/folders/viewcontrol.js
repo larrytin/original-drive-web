@@ -221,12 +221,14 @@ good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
   list.addValuesRemovedListener(function(evt) {
     var idx = evt.getIndex();
     var vals = evt.getValues();
-    if (node.getChildCount() == 0) {
+    if (that.getChildList(node.map).length() == 0) {
       if (!goog.dom.classes.has(node.getExpandIconElement(),
-      'treedoclistview-expand-icon-hidden')) {
+          'treedoclistview-expand-icon-hidden')) {
         goog.dom.classes.add(node.getExpandIconElement(),
         'treedoclistview-expand-icon-hidden');
       }
+    }
+    if (node.getChildCount() == 0) {
       return;
     }
     for (var i in vals) {

@@ -27,7 +27,7 @@ good.drive.search.Rightmenu = function(dom) {
   this._rightMenu = rightMenu;
   this._subMenu = submenu;
   this._menu = menu;
-  this._names;
+  this._names = undefined;
 
   rightMenu.getHandler().listen(rightMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW, this.hideMenuItem());

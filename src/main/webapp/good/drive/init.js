@@ -179,9 +179,11 @@ good.drive.init.init = function() {
         if (node == moToClassTree.tree) {
           return;
         }
-        var cellData = good.drive.view.baseview.View.currentGrid.
-        getSelectedItem().data;
-        moToClassTree.moveToNode(cellData);
+        var items = good.drive.view.baseview.View.currentGrid.
+        getClickList();
+        goog.array.forEach(items, function(item) {
+          moToClassTree.moveToNode(item.data);
+        });
         break;
       case 'c':
         break;
@@ -194,9 +196,11 @@ good.drive.init.init = function() {
         if (node == moToresTree.tree) {
           return;
         }
-        var cellData = good.drive.view.baseview.View.currentGrid.
-        getSelectedItem().data;
-        moToresTree.moveToNode(cellData);
+        var items = good.drive.view.baseview.View.currentGrid.
+        getClickList();
+        goog.array.forEach(items, function(item) {
+          moToresTree.moveToNode(item.data);
+        });
         break;
       case 'c':
         break;

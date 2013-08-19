@@ -322,16 +322,19 @@ good.drive.view.baseview.View.prototype.removeCell = function(data) {
 /**
  */
 good.drive.view.baseview.View.prototype.removeCurrentData = function() {
-  var item = good.drive.view.baseview.View.currentGrid.getSelectedItem();
-  var data = item.data;
-  if (data.get('isfile') == undefined) {
-    var folders = this.data.get('folders');
-    folders.removeValue(data);
-  } else {
-    var files = this.data.get('files');
-    files.removeValue(data);
-  }
-  item.deSelect();
+  var that = this;
+  var bakListClick = goog.array.clone(this.checkList);
+  goog.array.forEach(bakListClick, function(item) {
+    var data = item.data;
+    if (data.get('isfile') == undefined) {
+      var folders = that.data.get('folders');
+      folders.removeValue(data);
+    } else {
+      var files = that.data.get('files');
+      files.removeValue(data);
+    }
+    item.deSelect();
+  });
 };
 
 /**
