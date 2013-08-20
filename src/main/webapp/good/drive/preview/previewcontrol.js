@@ -165,6 +165,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         flashplayer_div.style.display = 'block';
         movie.value = uri;
         embedflash.src = uri;
+        embedflash.style.display = 'block';
       } else if (contentType.indexOf('image/') != -1) {
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
