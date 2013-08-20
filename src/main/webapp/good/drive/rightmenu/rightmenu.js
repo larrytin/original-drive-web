@@ -17,7 +17,6 @@ goog.require('goog.ui.Dialog');
 good.drive.rightmenu.Rightmenu = function() {
   var fileupload = new good.drive.creation.Fileupload();
   this._fileupload = fileupload;
-  this.closepreview();
 };
 
 /**
