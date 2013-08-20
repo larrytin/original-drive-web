@@ -1,6 +1,7 @@
 'use strict';
 goog.provide('good.drive.search.rigthmenu');
 
+goog.require('good.drive.preview.previewcontrol');
 goog.require('good.drive.rightmenu');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.ui.SubMenu');
@@ -151,14 +152,16 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function() {
     }
     var data = selectedElemnet.data;
     var rightmenusource = new good.drive.rightmenu.Rightmenu();
+    var preview = new good.drive.preview.Control();
     var action = e.target.getCaption();
     switch (action) {
       case '预览':
-        if (data instanceof good.realtime.CollaborativeMap) {
+        /*if (data instanceof good.realtime.CollaborativeMap) {
           rightmenusource.preview2(data.get('id'));
         } else {
           rightmenusource.preview2(data.id);
-        }
+        }*/
+        preview.getselcetItem();
         break;
       case '详细信息':
         if (data instanceof good.realtime.CollaborativeMap) {

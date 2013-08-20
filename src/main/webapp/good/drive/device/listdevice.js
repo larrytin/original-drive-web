@@ -33,10 +33,10 @@ good.drive.device.Listdevice = function() {
   this._view = view;
 };
 
-/** Type {good.drive.view.table.View} */
+/** @type {good.drive.view.table.View} */
 good.drive.device.Listdevice.SEARCHGRID = undefined;
 
-/** Type {string} */
+/** @type {string} */
 good.drive.device.Listdevice.DEVICEID = undefined;
 
 /**

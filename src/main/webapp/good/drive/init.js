@@ -27,6 +27,7 @@ goog.require('good.drive.nav.userinfo');
 goog.require('good.drive.person');
 goog.require('good.drive.person.listperson');
 goog.require('good.drive.person.rigthmenu');
+goog.require('good.drive.preview.previewcontrol');
 goog.require('good.drive.resourcemap');
 goog.require('good.drive.rightmenu');
 goog.require('good.drive.rightmenu.detailinfo');
@@ -562,6 +563,9 @@ good.drive.init.init = function() {
   good.drive.init.toolBarCreate.setVisible(false);
   good.drive.init.toolBarDelete.setVisible(false);
   good.drive.init.menuBarMore.setVisible(false);
+  var preview = new good.drive.preview.Control();
+  preview.prev();
+  preview.next();
 };
 
 /**

@@ -27,10 +27,10 @@ good.drive.person.View = function(handle) {
   }
 };
 
-/** Type{goog.ui.Dialog} */
+/** @type {goog.ui.Dialog} */
 good.drive.person.View.DIALOG = undefined;
 
-/** Type{boolean} */
+/** @type {boolean} */
 good.drive.person.View.FLAG = false;
 
 /**
@@ -66,7 +66,7 @@ good.drive.person.View.prototype.createDailog = function(title, handle) {
   return dialog;
 };
 
-/** Type{string} */
+/** @type {string} */
 good.drive.person.View.CREATEFORM =
 '<p><strong>姓名 </strong></p><div class="new' +
 '-item-dialog-folder-input"><input id="name" type="text"' +

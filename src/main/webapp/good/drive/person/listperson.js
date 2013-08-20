@@ -32,10 +32,10 @@ good.drive.person.Listperson = function() {
   this._view = view;
 };
 
-/** Type {good.drive.view.table.View} */
+/** @type {good.drive.view.table.View} */
 good.drive.person.Listperson.SEARCHGRID = undefined;
 
-/** Type {string} */
+/** @type {string} */
 good.drive.person.Listperson.USERID = undefined;
 
 /**

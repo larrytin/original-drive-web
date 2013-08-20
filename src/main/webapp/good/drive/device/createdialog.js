@@ -27,10 +27,10 @@ good.drive.device.View = function(handle) {
   }
 };
 
-/** Type{goog.ui.Dialog} */
+/** @type {goog.ui.Dialog} */
 good.drive.device.View.DIALOG = undefined;
 
-/** Type{boolean} */
+/** @type {boolean} */
 good.drive.device.View.FLAG = false;
 
 /**
