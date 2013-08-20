@@ -5305,13 +5305,47 @@ margin-left: 7px;
 margin-top: -20px;
 top: 50%;
 }
-.drive-viewer-close-button .drive-viewer-nav-icon {
-background-position: 0 -40px;
-}
 .drive-viewer-nav-icon {
 background-image: url(../images/v-sprite1.svg);
 background-repeat: no-repeat;
 height: 40px;
 position: absolute;
 width: 40px;
+}
+.drive-viewer-unknown-transition {
+-webkit-transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+-moz-transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+-o-transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+transition: left .218s ease-out,top .218s ease-out,height .218s ease-out,width .218s ease-out;
+}
+.drive-viewer-unknown {
+position: absolute;
+font-size: 20px;
+text-align: center;
+}
+.drive-viewer-unknown-has-apps {
+color: #ccc;
+font-size: 13px;
+font-weight: normal;
+}
+.drive-viewer-unknown-has-apps .drive-viewer-unknown-no-preview-msg {
+font-size: 20px;
+color: white;
+}
+
+.drive-viewer-close-button .drive-viewer-nav-icon {
+background-position: 0 -920px;
+height: 26px;
+}
+.drive-viewer-next-button .drive-viewer-nav-icon:hover {
+background-position-x: 0;
+background-position-y: -800px;
+}
+
+.drive-viewer-prev-button .drive-viewer-nav-icon:hover {
+background-position-x: 0;
+background-position-y: -80px;
+}
+.drive-viewer-close-button .drive-viewer-nav-icon:hover {
+background-position: 0 -40px;
 }
