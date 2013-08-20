@@ -29,6 +29,14 @@ good.drive.preview.Control.GRID = undefined;
 /** @type {Array.<string>} */
 good.drive.preview.Control.GRIDLISTIDS = undefined;
 
+/**
+ *
+ */
+good.drive.preview.Control.prototype.init = function() {
+  this.prev();
+  this.next();
+  this.closepreview();
+};
 
 /**
  *
@@ -71,6 +79,17 @@ good.drive.preview.Control.prototype.next = function() {
           }
         }
       });
+};
+
+/**
+*
+*/
+good.drive.preview.Control.prototype.closepreview = function() {
+ var preview_close = goog.dom.getElement('preview_close');
+ var previewdiv = goog.dom.getElement('previewdiv');
+ goog.events.listen(preview_close, goog.events.EventType.CLICK, function(e) {
+   previewdiv.style.display = 'none';
+ });
 };
 
 /**

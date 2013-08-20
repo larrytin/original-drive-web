@@ -564,8 +564,7 @@ good.drive.init.init = function() {
   good.drive.init.toolBarDelete.setVisible(false);
   good.drive.init.menuBarMore.setVisible(false);
   var preview = new good.drive.preview.Control();
-  preview.prev();
-  preview.next();
+  preview.init();
 };
 
 /**

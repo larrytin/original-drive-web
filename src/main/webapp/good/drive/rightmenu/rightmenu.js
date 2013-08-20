@@ -229,14 +229,3 @@ good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
     }
   });
 };
-
-/**
- *
- */
-good.drive.rightmenu.Rightmenu.prototype.closepreview = function() {
-  var preview_close = goog.dom.getElement('preview_close');
-  var previewdiv = goog.dom.getElement('previewdiv');
-  goog.events.listen(preview_close, goog.events.EventType.CLICK, function(e) {
-    previewdiv.style.display = 'none';
-  });
-};
