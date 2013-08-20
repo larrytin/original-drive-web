@@ -4592,7 +4592,10 @@ padding: 0;
 vertical-align: top;
 width: 100%;
 }
-
+.doclistview {
+overflow-y: auto;
+height: 501px;
+}
 .banner-box .density-tiny {
 padding: 0 16px;
 }
