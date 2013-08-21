@@ -2,6 +2,7 @@ html,body,form {
   margin: 0;
   padding: 0;
   font: 13px/27px Arial, sans-serif;
+  overflow-y: hidden;
 }
 
 #gbz,#gbg {
@@ -4663,7 +4664,7 @@ width: 100%;
 }
 .doclistview {
 overflow-y: auto;
-height: 501px;
+height: 500px;
 }
 .banner-box .density-tiny {
 padding: 0 16px;
