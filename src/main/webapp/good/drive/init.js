@@ -308,7 +308,7 @@ good.drive.init.init = function() {
           createdialog.setVisible(true);
           break;
         case 3:
-          isGridEvent = true;
+          isGridEvent = false;
           modifydialog.setVisible(true);
           if (modifeInput == undefined) {
             modifeInput = goog.dom.getElement('modifyFolder');
