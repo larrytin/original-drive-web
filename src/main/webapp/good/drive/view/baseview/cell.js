@@ -78,6 +78,7 @@ good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
  */
 good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
   e.stopPropagation();
+  this.select();
   this.openCell();
 };
 
@@ -86,7 +87,8 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
 good.drive.view.baseview.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     if (this.data.get('isfile') != undefined) {
-      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
+      var preview = new good.drive.preview.Control();
+      preview.getselcetItem();
       return;
     }
     var newPath = {};
@@ -98,7 +100,8 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
-      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
+	  var preview = new good.drive.preview.Control();
+      preview.getselcetItem();
   }
 };
 
@@ -173,28 +176,33 @@ good.drive.view.baseview.Cell.prototype.detachEvents_ = function() {
  * @param {goog.events.BrowserEvent} e
  */
 good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
-  var el = this.getElement();
-  switch (e.type) {
-    case goog.events.EventType.MOUSEOVER:
-      if (!goog.dom.classes.has(el, this.defaultConfig.cssCellHover)) {
-        goog.dom.classes.add(el,
-            this.defaultConfig.cssCellHover);
-      }
-      break;
-    case goog.events.EventType.MOUSEOUT:
-      if (goog.dom.classes.has(el, this.defaultConfig.cssCellHover)) {
-        goog.dom.classes.remove(el,
-            this.defaultConfig.cssCellHover);
-      }
-      break;
-    case goog.events.EventType.MOUSEDOWN:
-      if (e.button == 2) {
-        this.clickHandle(e);
-      }
-      break;
-  }
+	var el = this.getElement();
+	var className = this.cellHover(); 
+	  switch (e.type) {
+	    case goog.events.EventType.MOUSEOVER:
+	      if (!goog.dom.classes.has(el, className)) {
+	        goog.dom.classes.add(el,className);
+	      }
+	      break;
+	    case goog.events.EventType.MOUSEOUT:
+	      if (goog.dom.classes.has(el, className)) {
+	        goog.dom.classes.remove(el, className);
+	      }
+	      break;
+	    case goog.events.EventType.MOUSEDOWN:
+	      if (e.button == 2) {
+	        this.clickHandle(e);
+	      }
+	      break;
+	  }
 };
 
+/**
+ * @return {string}
+ */
+good.drive.view.baseview.Cell.prototype.cellHover = function() {
+	return;
+};
 /**
  * @param {goog.events.BrowserEvent} e
  */
