@@ -22,6 +22,10 @@ good.drive.view.baseview.View = function(data, docid, opt_domHelper) {
   this.menu = undefined;
   this.checkList = [];
   this.selected = false;
+  this.displayNum = 10;
+  this.displayStart = 0;
+  this.isRemote = false;
+  this.isEnd = false;
 };
 goog.inherits(good.drive.view.baseview.View, goog.ui.Component);
 
@@ -29,6 +33,14 @@ goog.inherits(good.drive.view.baseview.View, goog.ui.Component);
  * @type {struct}
  */
 good.drive.view.baseview.View.grids = {};
+/**
+ * @type {struct}
+ */
+good.drive.view.baseview.View.lists = {};
+/**
+ * @type {string}
+ */
+good.drive.view.baseview.View.isGrid = true;
 
 /**
  * @type {good.drive.view.baseview.View}
@@ -99,6 +111,7 @@ good.drive.view.baseview.View.prototype.clearSelect = function() {
  */
 good.drive.view.baseview.View.prototype.clear = function() {
   this.clearSelect();
+  this.isEnd = false;
   var length = this.getChildCount();
   if (length == 0) {
     return;
@@ -125,13 +138,13 @@ good.drive.view.baseview.View.prototype.renderCellByObject = function(data) {
   var file = data.get(good.drive.nav.folders.ViewControl.ViewControlType.FILES);
   var folder = data.get(
       good.drive.nav.folders.ViewControl.ViewControlType.FOLDERS);
-  for (var i = 0; i < file.length(); i++) {
-    var data = file.get(i);
-    this.insertCell(data, false);
-  }
   for (var i = 0; i < folder.length(); i++) {
     var data = folder.get(i);
     this.insertCell(data, true);
+  }
+  for (var i = 0; i < file.length(); i++) {
+    var data = file.get(i);
+    this.insertCell(data, false);
   }
 };
 
@@ -608,6 +621,37 @@ good.drive.view.baseview.View.prototype.getGridViewElement = function() {
   return el ? /** @type {Element} */ (el.lastChild) : null;
 };
 
+/** 
+ * @param {boolean} isRemote
+ */
+good.drive.view.baseview.View.prototype.setRemote = function(isRemote) {
+  if (!this.isRemote) {
+    var that = this;
+    this.getHandler().
+      listen(this.getElement(), goog.events.EventType.SCROLL, function(e) {
+        var el = that.getElement();
+        if (el == undefined) {
+          return;
+        }
+        var hght= el.scrollHeight; 
+        var clientHeight =el.clientHeight; 
+        var top = el.scrollTop;
+        if(top >= (parseInt(hght) - clientHeight)){
+          if (that.isEnd) {
+            return;
+          }
+          that.scrollToEnd();
+        }
+    });
+  };
+  this.isRemote = isRemote;
+};
+
+/**
+ */
+good.drive.view.baseview.View.prototype.scrollToEnd = function() {
+  
+};
 
 /**
  * @return {string}

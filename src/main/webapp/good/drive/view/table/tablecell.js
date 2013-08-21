@@ -91,7 +91,11 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
  * @return {Object}
  */
 good.drive.view.table.TableCell.prototype.getValue = function(key) {
-  return this.data.get(key);
+  if (this.data instanceof good.realtime.CollaborativeMap) {
+    return this.data.get(key);
+  } else {
+    return this.data.key;
+  }
 };
 
 /**

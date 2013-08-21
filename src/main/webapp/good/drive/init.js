@@ -12,6 +12,8 @@ goog.require('good.drive.nav.button.LeftButton');
 goog.require('good.drive.nav.button.MenuBarButton');
 goog.require('good.drive.nav.button.MenuBarView');
 goog.require('good.drive.nav.button.Settingmenu');
+goog.require('good.drive.nav.button.ToggleButton');
+goog.require('good.drive.nav.button.ToggleView');
 goog.require('good.drive.nav.button.ToolBarButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('good.drive.nav.button.rigthmenu');
@@ -72,6 +74,14 @@ good.drive.init.toolBarDelete;
  * @type {good.drive.nav.button.MenuBarView}
  */
 good.drive.init.menuBarMore;
+/**
+ * @type {good.drive.nav.button.ToggleView}
+ */
+good.drive.init.gridBtn;
+/**
+ * @type {good.drive.nav.button.ToggleView}
+ */
+good.drive.init.listBtn;
 
 /** */
 good.drive.init.init = function() {
@@ -513,6 +523,36 @@ good.drive.init.init = function() {
     var grid = good.drive.view.baseview.View.currentGrid;
     grid.removeCurrentData();
   });
+  var toggleButton = new good.drive.nav.button.ToggleButton();
+  good.drive.init.listBtn = toggleButton.createListBtn();
+  good.drive.init.gridBtn = toggleButton.createGridBtn();
+  goog.events.listen(good.drive.init.listBtn.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    good.drive.init.listBtn.getButton().setChecked(true);
+    good.drive.init.gridBtn.getButton().setChecked(false);
+    good.drive.view.baseview.View.isGrid = false;
+    var docid = good.drive.nav.folders.Path.getINSTANCE().getCurrentDocid();
+    if (docid == good.constants.PUBLICRESDOCID) {
+      advancedMenu.search('click');
+    } else {
+      good.drive.init.initCallback(
+          good.drive.nav.folders.Path.getINSTANCE().path);
+    }
+  });
+  good.drive.init.gridBtn.getButton().setChecked(true);
+  goog.events.listen(good.drive.init.gridBtn.getButton(),
+      goog.ui.Component.EventType.ACTION, function(e) {
+    good.drive.init.gridBtn.getButton().setChecked(true);
+    good.drive.init.listBtn.getButton().setChecked(false);
+    good.drive.view.baseview.View.isGrid = true;
+    var docid = good.drive.nav.folders.Path.getINSTANCE().getCurrentDocid();
+    if (docid == good.constants.PUBLICRESDOCID) {
+      advancedMenu.search('click');
+    } else {
+      good.drive.init.initCallback(
+          good.drive.nav.folders.Path.getINSTANCE().path);
+    }
+  });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
   var toolbarSettingMenu = new good.drive.nav.button.rigthmenu();
   good.drive.init.menuBarMore = menuBarButton.moreMenuBar(
@@ -601,23 +641,45 @@ good.drive.init.initCallback = function(path) {
   switch (docid) {
     case good.constants.MYCLASSRESDOCID:
       good.drive.init.toolBarCreate.setVisible(true);
+      good.drive.init.gridBtn.setVisible(true);
+      good.drive.init.listBtn.setVisible(true);
       break;
     case good.constants.MYRESDOCID:
       good.drive.init.toolBarCreate.setVisible(true);
+      good.drive.init.gridBtn.setVisible(true);
+      good.drive.init.listBtn.setVisible(true);
+      break;
+    case good.constants.PUBLICRESDOCID:
+      good.drive.init.toolBarCreate.setVisible(true);
+      good.drive.init.gridBtn.setVisible(true);
+      good.drive.init.listBtn.setVisible(true);
       break;
     default:
       good.drive.init.toolBarCreate.setVisible(false);
+      good.drive.init.gridBtn.setVisible(false);
+      good.drive.init.listBtn.setVisible(false);
       break;
   }
   if (docid == good.constants.PUBLICRESDOCID ||
       docid == good.constants.OTHERDOCID) {
     return;
   }
-  if (!goog.object.containsKey(good.drive.view.baseview.View.grids, docid)) {
+  var grids = good.drive.view.baseview.View.isGrid ?
+      good.drive.view.baseview.View.grids :
+      good.drive.view.baseview.View.lists;
+  good.drive.init.callListOrGrid(grids, docid, id);
+};
+
+/**
+ * @param {struct} grids
+ * @param {string} docid
+ */
+good.drive.init.callListOrGrid = function(grids ,docid, id) {
+  if (!goog.object.containsKey(grids, docid)) {
     var cells = {};
-    goog.object.add(good.drive.view.baseview.View.grids, docid, cells);
+    goog.object.add(grids, docid, cells);
   }
-  var cells = goog.object.get(good.drive.view.baseview.View.grids, docid);
+  var cells = goog.object.get(grids, docid);
   if (goog.object.containsKey(cells, id)) {
     good.drive.view.baseview.View.visiable(goog.object.get(cells, id));
     return;
@@ -626,8 +688,12 @@ good.drive.init.initCallback = function(path) {
       good.drive.nav.folders.AbstractControl.docs, docid);
   var data = model.getObject(id);
   var grid = new good.drive.view.grid.View(data, docid);
-//  var grid = new good.drive.view.table.View(
-//      {'select': 'select', 'label': '名字', 'abc': 'adsdf'}, data, docid);
+  if (good.drive.view.baseview.View.isGrid) {
+    grid = new good.drive.view.grid.View(data, docid);
+  } else {
+  var grid = new good.drive.view.table.View(
+      {'select': 'select', 'label': '名字'}, data, docid);
+  }
   grid.render(goog.dom.getElement('viewmanager'));
   grid.renderCell(data);
   grid.renderFolderPath();

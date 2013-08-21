@@ -4,6 +4,7 @@ goog.provide('good.drive.search');
 goog.require('good.constants');
 goog.require('good.drive.search.rigthmenu');
 goog.require('good.drive.view.baseview');
+goog.require('good.drive.view.table');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -27,6 +28,13 @@ good.drive.search.AdvancedMenu = function() {
   var pop = new goog.ui.PopupMenu();
   popupElt.style.minWidth = '509px';
 
+  var list = good.drive.search.AdvancedMenu.SEARCHLIST;
+  if (list == undefined) {
+    list = new good.drive.view.table.View({'select': 'select', 'label': '名字'});
+    list.render(goog.dom.getElement('viewmanager'));
+    good.drive.search.AdvancedMenu.SEARCHLIST = list;
+    good.drive.view.baseview.View.visiable(list);
+  }
   var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
   if (grid == undefined) {
     grid = new good.drive.view.grid.View();
@@ -45,6 +53,8 @@ good.drive.search.AdvancedMenu = function() {
 
 /** @type {good.drive.view.baseview.View} */
 good.drive.search.AdvancedMenu.SEARCHGRID = undefined;
+/** @type {good.drive.view.baseview.View} */
+good.drive.search.AdvancedMenu.SEARCHLIST = undefined;
 
 /**
  *
@@ -310,7 +320,9 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
       path = path + '?limit=10';
     }
 
-    var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
+    var grid = good.drive.view.baseview.View.isGrid ?
+        good.drive.search.AdvancedMenu.SEARCHGRID :
+          good.drive.search.AdvancedMenu.SEARCHLIST;
 
     if (search_type == undefined && path == 'search?limit=10') {
       grid.clear();
