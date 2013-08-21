@@ -58,7 +58,8 @@ good.drive.device.View.CREATEFORM =
 '<p><strong>设备名称</strong></p><div class="new' +
 '-item-dialog-folder-input"><input id="devicename" type="text"' +
 ' dir="ltr"><span role="alert" style="margin: .5em 0 0;display: ' +
-'block;color: #dd4b39;line-height: 17px" id="errormsg_devicename" ></span></div>' +
+'block;color: #dd4b39;line-height: 17px"' +
+' id="errormsg_devicename" ></span></div>' +
 '<p><strong>教室名称</strong></p><div class="new' +
 '-item-dialog-folder-input"><input id="classroom" type="text"' +
 ' dir="ltr"><span role="alert" style="margin: .5em 0 0;display: ' +
@@ -106,10 +107,10 @@ good.drive.device.View.prototype.initDailog = function(data) {
   var devicename = goog.dom.getElement('devicename');
   devicename.value = '';
   var classroom = goog.dom.getElement('classroom');
-  classroom.value = '';  
+  classroom.value = '';
   var errormsg_devicename = goog.dom.getElement('errormsg_devicename');
   errormsg_devicename.innerText = '';
-  var errormsg_classroom = goog.dom.getElement('errormsg_classroom'); 
+  var errormsg_classroom = goog.dom.getElement('errormsg_classroom');
   errormsg_classroom.innerText = '';
   if (data != undefined) {
     if (data['information'] == undefined) {
@@ -132,7 +133,7 @@ good.drive.device.View.prototype.insertOrUpdate = function(handle) {
  var devicename = goog.dom.getElement('devicename').value;
  var errormsg_devicename = goog.dom.getElement('errormsg_devicename');
  var classroom = goog.dom.getElement('classroom').value;
- var errormsg_classroom = goog.dom.getElement('errormsg_classroom'); 
+ var errormsg_classroom = goog.dom.getElement('errormsg_classroom');
  if (good.drive.person.View.ISEMPTY(devicename)) {
    errormsg_devicename.innerText = '请输入设备名称';
  } else {
@@ -180,7 +181,7 @@ good.drive.device.View.prototype.insertOrUpdate = function(handle) {
               good.config.VERSION, 'updateDeviceInfo',
               good.config.SERVERADRESS);
           json['name'] = classroom;
-          json['information'] = devicename;          
+          json['information'] = devicename;
           rpc.body = json;
           rpc.send(function(json) {
             if (json && !json['error']) {

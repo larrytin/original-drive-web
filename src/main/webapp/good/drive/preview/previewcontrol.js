@@ -12,7 +12,7 @@ goog.require('goog.events');
 good.drive.preview.Control = function() {
   var prev_button = goog.dom.getElement('prev_button');
   var next_button = goog.dom.getElement('next_button');
-  
+
   this._next_button = next_button;
   this._prev_button = prev_button;
 };
@@ -29,12 +29,20 @@ good.drive.preview.Control.GRID = undefined;
 /** @type {Array.<string>} */
 good.drive.preview.Control.GRIDLISTIDS = undefined;
 
+/**
+ *
+ */
+good.drive.preview.Control.prototype.init = function() {
+  this.prev();
+  this.next();
+  this.closepreview();
+};
 
 /**
  *
  */
 good.drive.preview.Control.prototype.prev = function() {
-  var that = this;  
+  var that = this;
   goog.events.listen(that._prev_button, goog.events.EventType.CLICK,
       function(e) {
         var grid = good.drive.preview.Control.GRID;
@@ -48,7 +56,7 @@ good.drive.preview.Control.prototype.prev = function() {
             that.preview(data.id);
           }
         }
-      });  
+      });
 };
 
 
@@ -70,7 +78,18 @@ good.drive.preview.Control.prototype.next = function() {
             that.preview(data.id);
           }
         }
-      });  
+      });
+};
+
+/**
+*
+*/
+good.drive.preview.Control.prototype.closepreview = function() {
+ var preview_close = goog.dom.getElement('preview_close');
+ var previewdiv = goog.dom.getElement('previewdiv');
+ goog.events.listen(preview_close, goog.events.EventType.CLICK, function(e) {
+   previewdiv.style.display = 'none';
+ });
 };
 
 /**
@@ -83,11 +102,11 @@ good.drive.preview.Control.prototype.getselcetItem = function() {
   if (docId != good.constants.OTHERDOCID) {
     var grid = good.drive.view.baseview.View.currentGrid;
     good.drive.preview.Control.GRID = grid;
-    if (docId == good.constants.PUBLICRESDOCID) {     
+    if (docId == good.constants.PUBLICRESDOCID) {
       var childlistIds = grid.getChildIds();
       good.drive.preview.Control.GRIDLISTIDS = childlistIds;
       var selectedElemnet = grid.getSelectedItem();
-      var selectedItemId =  selectedElemnet.getId();      
+      var selectedItemId = selectedElemnet.getId();
       that.display(selectedItemId);
       var data = selectedElemnet.data;
       that.preview(data.id);
@@ -102,11 +121,11 @@ good.drive.preview.Control.prototype.getselcetItem = function() {
       });
       good.drive.preview.Control.GRIDLISTIDS = dataListIds;
       var selectedElemnet = grid.getSelectedItem();
-      var selectedItemId =  selectedElemnet.getId();      
+      var selectedItemId = selectedElemnet.getId();
       that.display(selectedItemId);
-      var data = selectedElemnet.data;     
-      that.preview(data.get('id'));      
-    }    
+      var data = selectedElemnet.data;
+      that.preview(data.get('id'));
+    }
    }
 };
 
@@ -122,7 +141,7 @@ good.drive.preview.Control.prototype.display = function(id) {
     that._next_button.style.display = 'block';
     good.drive.preview.Control.PREVID = undefined;
     good.drive.preview.Control.NEXTID = childlistId[index + 1];
-  } else if (index == (childlistId.length -1)) {
+  } else if (index == (childlistId.length - 1)) {
     that._prev_button.style.display = 'block';
     that._next_button.style.display = 'none';
     good.drive.preview.Control.PREVID = childlistId[index - 1];
@@ -134,8 +153,7 @@ good.drive.preview.Control.prototype.display = function(id) {
     good.drive.preview.Control.NEXTID = childlistId[index + 1];
   }
 };
-  
-  
+
  /**
  * @param {string} fileId
  */
@@ -144,7 +162,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
   var imgplayer_div = goog.dom.getElement('imgplayer');
   var imgpreview = goog.dom.getElement('imgpreview');
   var unknown_div = goog.dom.getElement('unknown_div');
-  
+
   var flashplayer_div = goog.dom.getElement('flashplayer');
   var embedflash = goog.dom.getElement('embedflash');
   var movie = goog.dom.getElement('movie');
@@ -165,6 +183,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         flashplayer_div.style.display = 'block';
         movie.value = uri;
         embedflash.src = uri;
+        embedflash.style.display = 'block';
       } else if (contentType.indexOf('image/') != -1) {
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';

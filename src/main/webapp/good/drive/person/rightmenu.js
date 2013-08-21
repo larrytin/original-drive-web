@@ -52,11 +52,11 @@ good.drive.person.rigthmenu.Menu.prototype.action = function() {
             list.editPerson(data.userId);
           } else {
             listdevice.editPerson(data.id);
-          }        
+          }
         break;
       case '删除':
           if (flag) {
-             list.deletePerson(data.userId);          
+             list.deletePerson(data.userId);
           } else {
             listdevice.deletePerson(data.id);
           }
