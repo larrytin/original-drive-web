@@ -46,6 +46,14 @@ good.drive.view.table.TableCell.prototype.genTd = function() {
 };
 
 /**
+ * @return {string}
+ * @override
+ */
+good.drive.view.table.TableCell.prototype.cellHover = function() {
+	return this.defaultConfig.cssTablehover;
+};
+
+/**
  * @param {string} key
  * @param {data} value
  * @param {number} idx
@@ -56,7 +64,7 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
   if (key == 'select') {
     var enable = new goog.ui.Checkbox();
     el = goog.dom.createDom('td',
-        {'class': 'doclist-td-checkbox'},
+        {'class': 'doclist-td-checkbox', 'style' : 'padding: 0 0 0 6px;'},
         this.genCheckBox());
     enable.render(el);
     return el;
@@ -64,7 +72,7 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
   if (idx == 1) {
     el = goog.dom.createDom('td',
         {'class': 'doclist-td-name'},
-        goog.dom.createDom('div', {'class': 'class="doclist-name-wrapper'},
+        goog.dom.createDom('div', {'class': 'doclist-name-wrapper'},
             goog.dom.createDom('a',
                 {'class': 'doclist-content-wrapper'},
                 goog.dom.createDom('span',
@@ -103,7 +111,7 @@ good.drive.view.table.TableCell.prototype.getValue = function(key) {
  */
 good.drive.view.table.TableCell.prototype.getLabelIcon = function() {
   return 'goog-inline-block doclist-icon doclist-icon-sprite' +
-  ' drive-sprite-folder-list-shared-icon icon-color-1';
+  ' drive-sprite-folder-list-icon icon-color-1';
 };
 
 /** */

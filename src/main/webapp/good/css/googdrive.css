@@ -4686,7 +4686,6 @@ margin: 0 16px;
 
 .doclistview-fixed-container {
 left: 0;
-position: absolute;
 right: 0;
 top: 0;
 z-index: 1;
@@ -5421,4 +5420,164 @@ background-position-y: -80px;
 }
 .drive-viewer-close-button .drive-viewer-nav-icon:hover {
 background-position: 0 -40px;
+}
+
+<!-- table  -->
+::-webkit-scrollbar {
+height: 16px;
+overflow: visible;
+width: 16px;
+}
+::-webkit-scrollbar-thumb {
+background-color: rgba(0, 0, 0, 0.2);
+background-clip: padding-box;
+border: solid rgba(0, 0, 0, 0);
+border-width: 1px 1px 1px 6px;
+min-height: 28px;
+padding: 100px 0 0;
+box-shadow: inset 1px 1px 0 rgba(0, 0, 0, 0.1),inset 0 -1px 0 rgba(0, 0, 0, 0.07);
+}
+::-webkit-scrollbar-button {
+height: 0;
+width: 0;
+}
+::-webkit-scrollbar-corner {
+background: rgba(0, 0, 0, 0);
+}
+.doclistview {
+overflow-y: auto;
+height: 500px;
+}
+.doclistview-list {
+zoom: 1;
+}
+.doclist, .doclistview, .doclistview-ie, .doclistview-inner, .doclistview-inner-ie, .doclistview-child-inner, 
+
+.doclistview-child-inner-ie {
+cursor: default;
+}
+.doclist-header th {
+background: rgb(255, 255, 255);
+font-size: 11px;
+font-weight: bold;
+text-transform: uppercase;
+zoom: 1;
+z-index: 1;
+}
+.doclist-header th {
+border-bottom: 1px solid rgb(229, 229, 229);
+empty-cells: show;
+overflow: hidden;
+padding: 0 0 0 6px;
+text-align: left;
+white-space: nowrap;
+}
+.doclist-header-sorted {
+color: rgb(221, 75, 57);
+}
+.doclist-col-name, .doclist-header-name {
+width: 100%;
+}
+.doclist-header-label-owners, .doclist-header-label-date, .doclist-header-label-quota {
+width: 209px;
+}
+.doclist-header-inner {
+display: block;
+outline: none;
+vertical-align: middle;
+}
+.doclistview-list.doclistview-transitions .doclist-tr, .doclistview-list.doclistview-transitions .doclist-tr-selected,
+.doclistview-list.doclistview-transitions .doclist-tr-message, .doclistview-list.doclistview-transitions .doclist-tr-blank
+{
+-webkit-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+-moz-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+-o-transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+transition: font-size .218s,height .218s,line-height .218s,margin .218s,padding .218s,width .218s;
+}
+.doclist-tr-selected {
+background-color: rgb(255, 255, 204)!important;
+cursor: url(../images/cursor_grab.cur),-moz-grab;
+}
+.doclist-tr-hover {
+background-color: rgb(255, 255, 214);
+cursor: default;
+}
+.doclistview-list.density-tiny .jfk-checkbox {
+margin-top: 5px;
+}
+.doclist-td-name {
+background-repeat: no-repeat;
+background-position: 3px;
+}
+.doclist-tr-underlined .doclist-td, .doclist-tr-underlined .doclist-td-content, .doclist-tr-underlined .doclist-td-checkbox,
+.doclist-tr-underlined .doclist-td-date, .doclist-tr-underlined .doclist-td-info-toggle, .doclist-tr-underlined,
+.doclist-td-modifiers, .doclist-tr-underlined .doclist-td-name, .doclist-tr-underlined .doclist-td-owners, .doclist-tr-underlined .doclist-td-quota,
+.doclist-tr-underlined .doclist-td-spacing, .doclist-tr-underlined .doclist-td-share-date, .doclist-tr-underlined .doclist-td-star,
+.doclist-tr-underlined .doclist-td-trash {
+border-bottom: 1px solid rgb(235, 235, 235);
+}
+.doclist-name-wrapper {
+padding: 0 7px;
+}
+.doclistview-list.density-tiny .doclist-name-wrapper, .doclistview-list.density-tiny .doclist-content-wrapper {
+height: 39px;
+line-height: 39px;
+}
+.doclist-tr-selected a, .doclist-tr-selected a:visited, .doclist-tr-selected a:active, .doclist-tr-selected a:link, 
+
+.gridview-doc-selected a, .gridview-doc-selected a:visited, .gridview-doc-selected a:active, .gridview-doc-selected a:link 
+
+{
+color: rgb(0, 0, 0);
+text-decoration: none;
+cursor: url(../images/cursor_grab.cur),-moz-grab;
+}
+.doclist-colored-folders-wrapper {
+color: rgb(119, 119, 119);
+}
+.doclist-colored-folders-wrapper, .doclist-colored-folders-wrapper-ie {
+padding-left: 6px;
+vertical-align: top;
+}
+.doclist-modifier, .doclist-owner {
+white-space: nowrap;
+}
+.doclist-modifiers, .doclist-owners, .doclist-share-date {
+overflow: hidden;
+padding: 0 6px;
+}
+.drive-sprite-folder-list-icon .icon-color-1 {
+background: no-repeat url(../images/folder_list-b50435e37fca82b700ce413b4d657092.png) 0 0;
+background-size: 16px 335px;
+width: 16px;
+height: 13px;
+}
+.doclistview-list.density-tiny .doclist-td-name .doclist-icon {
+vertical-align: middle;
+}
+.doclist-name {
+font-size: 13px;
+overflow: hidden;
+white-space: nowrap;
+vertical-align: middle;
+}
+.doclist-name {
+border: 1px solid rgb(255, 255, 255);
+color: rgb(34, 34, 34);
+padding: 0 1px 0 4px;
+vertical-align: top!important;
+}
+.goog-checkbox {
+  border: 1px solid #1C5180;
+  display: -moz-inline-box;
+  display: inline-block;
+  font-size: 1px;  /* Fixes the height in IE6 */
+  height: 11px;
+  margin: 0 6px 0 1px;
+  vertical-align: text-bottom;
+  width: 11px;
+}
+.doclist-tr-hover {
+background-color: rgb(255, 255, 214);
+cursor: default;
 }

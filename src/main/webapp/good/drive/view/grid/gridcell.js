@@ -133,6 +133,14 @@ good.drive.view.grid.GridCell.prototype.getCheckbox = function() {
 };
 
 /**
+ * @return {string}
+ * @override
+ */
+good.drive.view.grid.GridCell.prototype.cellHover = function() {
+	return this.defaultConfig.cssCellHover;
+};
+
+/**
  * @override
  */
 good.drive.view.grid.GridCell.prototype.getCheckStyle = function() {
