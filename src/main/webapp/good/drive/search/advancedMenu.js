@@ -30,17 +30,26 @@ good.drive.search.AdvancedMenu = function() {
 
   var list = good.drive.search.AdvancedMenu.SEARCHLIST;
   if (list == undefined) {
-    list = new good.drive.view.table.View({'select': 'select', 'label': '名字'});
+    list = new good.drive.view.table.View({'select': 'select', 'filename': '名字'});
     list.render(goog.dom.getElement('viewmanager'));
     good.drive.search.AdvancedMenu.SEARCHLIST = list;
     good.drive.view.baseview.View.visiable(list);
+    list.setRemote(true);
+    list.scrollToEnd = function() {      
+      that.nextpage();      
+    };
   }
+  var that = this;
   var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
   if (grid == undefined) {
     grid = new good.drive.view.grid.View();
     grid.render(goog.dom.getElement('viewmanager'));
     good.drive.search.AdvancedMenu.SEARCHGRID = grid;
     good.drive.view.baseview.View.visiable(grid);
+    grid.setRemote(true);
+    grid.scrollToEnd = function() {      
+      that.nextpage();      
+    };
   }
   this._typeArray = good.constants.TYPEARRAY;
   this._fieldArray = good.constants.FIELDARRAY;
@@ -55,6 +64,9 @@ good.drive.search.AdvancedMenu = function() {
 good.drive.search.AdvancedMenu.SEARCHGRID = undefined;
 /** @type {good.drive.view.baseview.View} */
 good.drive.search.AdvancedMenu.SEARCHLIST = undefined;
+
+/** @type {string} */
+good.drive.search.AdvancedMenu.NEXTPAGETOKEN = undefined;
 
 /**
  *
@@ -265,6 +277,62 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
 //    var pathlist = good.drive.nav.folders.Path.getINSTANCE().pathlist;
 //    pathlist.push('root');
   }
+  var that = this;
+  var path = that.getPath();
+    var grid = good.drive.view.baseview.View.isGrid ?
+        good.drive.search.AdvancedMenu.SEARCHGRID :
+          good.drive.search.AdvancedMenu.SEARCHLIST;
+
+    if (search_type == undefined && path == 'search?limit=20') {
+      grid.clear();
+      good.drive.view.baseview.View.visiable(grid);
+      return;
+    } else {
+    //连接服务器查询
+      var rpc = new good.net.CrossDomainRpc('GET',
+          good.constants.NAME,
+          good.constants.VERSION, path,
+          good.constants.SERVERADRESS);
+      rpc.send(function(json) {
+        //填充网格数据
+        if (json && !json['error']) {
+          grid.clear();
+          if (json['items'] != undefined) {
+            goog.array.forEach(json['items'], function(item) {             
+              if (item['thumbnail'] != undefined) {
+                if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') == -1) {
+                  var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
+                  var uri = new goog.Uri(item['thumbnail']);
+                  uri.setDomain(uri_server.getDomain());
+                  uri.setScheme(uri_server.getScheme());
+                  uri.setScheme(uri_server.getScheme());
+                  uri.setPort(uri_server.getPort());
+                  item['thumbnail'] = uri.toString();
+                } else {
+                  item['thumbnail'] = item['thumbnail'];
+                }
+              }
+              var cell = grid.createCell(item);
+              cell.getLabelData = function(data) {
+                return data.filename;
+              };
+              grid.add(cell);
+              cell.renderCell();
+            });
+          }
+          if (json['nextPageToken'] != undefined) {
+            good.drive.search.AdvancedMenu.NEXTPAGETOKEN = json['nextPageToken'];
+          }
+          good.drive.view.baseview.View.visiable(grid);
+        }
+      });
+    }
+};
+
+/**
+ * @return {string} path
+ */
+good.drive.search.AdvancedMenu.prototype.getPath = function() {
 
   var that = this;
 
@@ -315,59 +383,65 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
     }
 
     if (flag) {
-      path = path + '&limit=10';
+      path = path + '&limit=20';
     } else {
-      path = path + '?limit=10';
+      path = path + '?limit=20';
     }
-
-    var grid = good.drive.view.baseview.View.isGrid ?
-        good.drive.search.AdvancedMenu.SEARCHGRID :
-          good.drive.search.AdvancedMenu.SEARCHLIST;
-
-    if (search_type == undefined && path == 'search?limit=10') {
-      grid.clear();
-      good.drive.view.baseview.View.visiable(grid);
-      return;
-    } else {
-    //连接服务器查询
-      var rpc = new good.net.CrossDomainRpc('GET',
-          good.constants.NAME,
-          good.constants.VERSION, path,
-          good.constants.SERVERADRESS);
-      rpc.send(function(json) {
-        //填充网格数据
-        if (json && !json['error']) {
-          grid.clear();
-          if (json['items'] != undefined) {
-            goog.array.forEach(json['items'], function(item) {
-
-              if (item['thumbnail'] != undefined) {
-                if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') == -1) {
-                  var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
-                  var uri = new goog.Uri(item['thumbnail']);
-                  uri.setDomain(uri_server.getDomain());
-                  uri.setScheme(uri_server.getScheme());
-                  uri.setScheme(uri_server.getScheme());
-                  uri.setPort(uri_server.getPort());
-                  item['thumbnail'] = uri.toString();
-                } else {
-                  item['thumbnail'] = item['thumbnail'];
-                }
-              }
-              var cell = grid.createCell(item);
-              cell.getLabelData = function(data) {
-                return data.filename;
-              };
-              grid.add(cell);
-              cell.renderCell();
-            });
-          }
-          good.drive.view.baseview.View.visiable(grid);
-        }
-      });
-    }
+    return path;
 };
 
+/**
+ *
+ */
+good.drive.search.AdvancedMenu.prototype.nextpage = function() {
+  var that = this;
+  var path = that.getPath();
+  path = path + '&cursor=' +
+       good.drive.search.AdvancedMenu.NEXTPAGETOKEN;
+  var grid = good.drive.view.baseview.View.isGrid ?
+      good.drive.search.AdvancedMenu.SEARCHGRID :
+        good.drive.search.AdvancedMenu.SEARCHLIST;
+  //连接服务器查询
+  var rpc = new good.net.CrossDomainRpc('GET',
+      good.constants.NAME,
+      good.constants.VERSION, path,
+      good.constants.SERVERADRESS);
+  rpc.send(function(json) {
+    //填充网格数据
+    if (json && !json['error']) {
+      if (json['nextPageToken'] != undefined) {
+        good.drive.search.AdvancedMenu.NEXTPAGETOKEN = json['nextPageToken'];
+      }
+      if (json['items'] != undefined) {
+        goog.array.forEach(json['items'], function(item) {             
+          if (item['thumbnail'] != undefined) {
+            if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') == -1) {
+              var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
+              var uri = new goog.Uri(item['thumbnail']);
+              uri.setDomain(uri_server.getDomain());
+              uri.setScheme(uri_server.getScheme());
+              uri.setScheme(uri_server.getScheme());
+              uri.setPort(uri_server.getPort());
+              item['thumbnail'] = uri.toString();
+            } else {
+              item['thumbnail'] = item['thumbnail'];
+            }
+          }
+          var cell = grid.createCell(item);
+          cell.getLabelData = function(data) {
+            return data.filename;
+          };
+          grid.add(cell);
+          cell.renderCell();
+        });
+      } else {
+        good.drive.search.AdvancedMenu.NEXTPAGETOKEN = undefined;
+        grid.isEnd = true;
+      }
+      good.drive.view.baseview.View.visiable(grid);
+    }
+  });
+};
 
 /**
  *
