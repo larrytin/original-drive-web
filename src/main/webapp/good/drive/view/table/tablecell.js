@@ -94,7 +94,7 @@ good.drive.view.table.TableCell.prototype.getValue = function(key) {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     return this.data.get(key);
   } else {
-    return this.data.key;
+    return this.data[key];
   }
 };
 
