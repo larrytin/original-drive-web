@@ -3,6 +3,7 @@ goog.provide('good.drive.preview.previewcontrol');
 
 goog.require('good.constants');
 goog.require('good.net.CrossDomainRpc');
+goog.require('goog.Uri');
 goog.require('goog.dom');
 goog.require('goog.events');
 
@@ -12,9 +13,10 @@ goog.require('goog.events');
 good.drive.preview.Control = function() {
   var prev_button = goog.dom.getElement('prev_button');
   var next_button = goog.dom.getElement('next_button');
-
+  var print_button = goog.dom.getElement('print_button');
   this._next_button = next_button;
   this._prev_button = prev_button;
+  this._print_button = print_button;
 };
 
 /** @type {string} */
@@ -36,6 +38,7 @@ good.drive.preview.Control.prototype.init = function() {
   this.prev();
   this.next();
   this.closepreview();
+  this.print();
 };
 
 /**
@@ -90,6 +93,40 @@ good.drive.preview.Control.prototype.closepreview = function() {
  goog.events.listen(preview_close, goog.events.EventType.CLICK, function(e) {
    previewdiv.style.display = 'none';
  });
+};
+
+/**
+*
+*/
+good.drive.preview.Control.prototype.print = function() {
+ var that = this;
+ goog.events.listen(that._print_button, goog.events.EventType.CLICK, function(e) {
+   var imgpreview = goog.dom.getElement('imgpreview');
+   var imgsrc = imgpreview.src;
+//   var win = window.open('about:blank');
+//   win.document.write('<html>');
+//   win.document.write('<head>');
+//   win.document.write('<title>打印页面的标题<\/title>');
+//   win.document.write('<\/head>');
+//   win.document.write('<body>');
+//   win.document.write('这是一条打印的内容'); //往弹出窗口中写入需要打印的内容
+//   win.document.write('<img src=' + '123.jpg' +'>'); //往弹出窗口中写入需要打印的内容
+//   win.document.write('<\/body>');
+//   win.document.write('<\/html>');
+//   win.focus();
+//   win.print();
+//   win.close();
+   var uri = new goog.Uri('print.html');
+   uri.setParameterValue('SRC', imgsrc);   
+   window.open(uri);
+ });
+};
+
+/**
+*
+*/
+good.drive.preview.Control.prototype.mywait = function(newWindow) {
+  
 };
 
 /**
@@ -162,7 +199,8 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
   var imgplayer_div = goog.dom.getElement('imgplayer');
   var imgpreview = goog.dom.getElement('imgpreview');
   var unknown_div = goog.dom.getElement('unknown_div');
-
+  var view_print = goog.dom.getElement('view_print');
+  
   var flashplayer_div = goog.dom.getElement('flashplayer');
   var embedflash = goog.dom.getElement('embedflash');
   var movie = goog.dom.getElement('movie');
@@ -181,6 +219,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         imgplayer_div.style.display = 'none';
         unknown_div.style.display = 'none';
         flashplayer_div.style.display = 'block';
+        view_print.style.display = 'none';
         movie.value = uri;
         embedflash.src = uri;
         embedflash.style.display = 'block';
@@ -188,11 +227,19 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
         unknown_div.style.display = 'none';
+        view_print.style.display = 'none';
+        imgpreview.src = uri;
+      } else if (contentType == 'application/x-print') {
+        imgplayer_div.style.display = 'block';
+        flashplayer_div.style.display = 'none';
+        unknown_div.style.display = 'none';
+        view_print.style.display = 'block';
         imgpreview.src = uri;
       } else {
         unknown_div.style.display = 'block';
         imgplayer_div.style.display = 'none';
         flashplayer_div.style.display = 'none';
+        view_print.style.display = 'none';
       }
       previewdiv.style.display = 'block';
     }

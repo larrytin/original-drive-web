@@ -39,7 +39,8 @@ goog.addDependency('../../../../good/drive/person/addperson.js', ['good.drive.pe
 goog.addDependency('../../../../good/drive/person/createdailog.js', ['good.drive.person.createdailog'], ['goog.ui.Dialog']);
 goog.addDependency('../../../../good/drive/person/listperson.js', ['good.drive.person.listperson'], ['good.constants', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events', 'goog.events.EventType']);
 goog.addDependency('../../../../good/drive/person/rightmenu.js', ['good.drive.person.rigthmenu'], ['good.drive.device.listdevice', 'good.drive.nav.menu', 'good.drive.person.listperson']);
-goog.addDependency('../../../../good/drive/preview/previewcontrol.js', ['good.drive.preview.previewcontrol'], ['good.constants', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
+goog.addDependency('../../../../good/drive/preview/previewcontrol.js', ['good.drive.preview.previewcontrol'], ['good.constants', 'good.net.CrossDomainRpc', 'goog.Uri', 'goog.dom', 'goog.events']);
+goog.addDependency('../../../../good/drive/preview/print.js', ['good.drive.preview.print'], ['goog.Uri', 'goog.dom']);
 goog.addDependency('../../../../good/drive/resourcemap/resourcemap.js', ['good.drive.resourcemap'], ['good.drive.search']);
 goog.addDependency('../../../../good/drive/rightmenu/detailinfo.js', ['good.drive.rightmenu.detailinfo'], ['good.constants', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
 goog.addDependency('../../../../good/drive/rightmenu/preview.js', ['good.drive.rightmenu.preview'], ['goog.Uri', 'goog.dom']);
