@@ -65,7 +65,8 @@ good.drive.view.grid.GridCell.prototype.getImageData =
     if (data['thumbnail'] != undefined) {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
-        'src' : data['thumbnail'] + '=s218'
+        'src' : data['thumbnail'] + '=s218',
+        'style': 'max-height: 205px;'
       });
     } else if (data.contentType == 'audio/mp3') {
       return goog.dom.createDom('img', {
