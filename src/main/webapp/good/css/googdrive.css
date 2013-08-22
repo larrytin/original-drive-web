@@ -5422,6 +5422,60 @@ background-position-y: -80px;
 background-position: 0 -40px;
 }
 
+.drive-viewer-minibar {
+bottom: 16px;
+height: 28px;
+position: absolute;
+right: 50px;
+z-index: 3;
+}
+.drive-viewer-dark-button.drive-viewer-button {
+background: #232323;
+border: 1px solid #000;
+-webkit-border-radius: 3px;
+-moz-border-radius: 3px;
+border-radius: 3px;
+-webkit-box-shadow: inset 0 1px 0 rgba(101,101,101,.1);
+-moz-box-shadow: inset 0 1px 0 rgba(101,101,101,.1);
+box-shadow: inset 0 1px 0 rgba(101,101,101,.1);
+color: rgba(255,255,255,0.9);
+cursor: default;
+font-size: 11px;
+font-weight: bold;
+text-align: center;
+text-shadow: 0 1px 0 rgba(0,0,0,.8);
+height: 24px;
+line-height: 24px;
+margin-right: 16px;
+min-width: 54px;
+outline: 0;
+padding: 0 8px;
+}
+.drive-viewer-print.drive-viewer-button {
+margin-left: 2px;
+}
+.drive-viewer-minibar .drive-viewer-dark-button {
+height: 28px;
+line-height: 28px;
+margin: 0;
+min-width: 28px;
+padding: 0;
+}
+.drive-viewer-print .drive-viewer-minibar-icon {
+background-position: 0 -280px;
+}
+.drive-viewer-minibar-icon {
+background-image: url(../images/v-sprite1.svg);
+background-repeat: no-repeat;
+filter: alpha(opacity=80);
+opacity: .8;
+left: 4px;
+position: absolute;
+top: 4px;
+height: 21px;
+width: 21px;
+}
+
 <!-- table  -->
 ::-webkit-scrollbar {
 height: 16px;

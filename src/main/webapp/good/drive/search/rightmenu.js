@@ -112,10 +112,13 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
         var array = new Array(7, 8, 9, 10);
         if (data.contentType ==
         'application/x-print') {
-        array.push(3);
-       } if (data['contentType'] !=
+          array.push(3);
+        } 
+        if (data['contentType'] !=
           'application/x-shockwave-flash' &&
-          data['contentType'].indexOf('image/') == -1) {
+          data['contentType'].indexOf('image/') == -1
+          && data['contentType'] !=
+            'application/x-print') {
           array.push(1);
          }
         that._menu.hideItem(that._rightMenu, array);
@@ -125,11 +128,13 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
         'application/x-print') {
         array.push(3);
        }
-        if (data['contentType'] !=
+       if (data['contentType'] !=
           'application/x-shockwave-flash' &&
-          data['contentType'].indexOf('image/') == -1) {
+          data['contentType'].indexOf('image/') == -1 
+          && data['contentType'] !=
+            'application/x-print') {
           array.push(1);
-         }
+        }
         that._menu.hideItem(that._rightMenu, array);
       }
       break;

@@ -28,6 +28,7 @@
 </script>
 <!-- <script src="drive-compiled.js"></script> -->
 <style type="text/css">
+
 </style>
 </head>
 <body class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
@@ -837,11 +838,10 @@
       <div class="drive-viewer-carousel-slide drive-viewer-close-enabled">
         <div id="imgplayer" class="drive-viewer-microscope-overlay" style="right: 52px; overflow: hidden; direction: ltr; display: none;">          
           <div style="margin: 20px 0px 0px 249px;">
-            <div class="m2-tileLayer" style="z-index: 0; width: 851px; height: 638px;">
-              <img id="imgpreview" class="m2-tileLayerImg m2-noTransition" src=""
+            <div id="print_div" class="m2-tileLayer" style="z-index: 0; width: 851px; height: 638px;">
+              <img id="imgpreview" class="m2-tileLayerImg m2-noTransition" src="123.jpg"
                 style="left: 0px; top: 0px; width: 851px; height: 638px;">
-            </div>           
-          </div>
+            </div>            
         </div>
         <div id="flashplayer" class="drive-viewer-video drive-viewer-video-transition" tabindex="0"
           style="width: 540px; height: 360px; left: 394px; top: 83px;"> 
@@ -870,12 +870,8 @@
             <input type="button" value="接收数据" onclick="ReceiveDataFromFlashMovie()" />
             <input type="text" id="data" />             -->
         </div>
-        <div class="drive-viewer-minibar" style="display: none;">
-          <div class="drive-viewer-image-zoom-in drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="放大"
-            tabindex="0" style="display: none;">
-            <div class="drive-viewer-minibar-icon"></div>
-          </div>
-          <div class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="打印" tabindex="0">
+        <div class="drive-viewer-minibar" id="view_print">         
+          <div id="print_button" class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="打印" tabindex="0">
             <div class="drive-viewer-minibar-icon"></div>
           </div>
         </div>   
