@@ -103,8 +103,8 @@ good.drive.rightmenu.DetailInfo.prototype.updatefile = function(fileId,
            }
          }*/
          json['tags'] = tags;
-         if (content_Type != null && content_Type != ''
-           && content_Type == 'application/x-print') {           
+         if (content_Type != null && content_Type != '' &&
+             content_Type == 'application/x-print') {
            json['contentType'] = content_Type;
          }
          var rpc = new good.net.CrossDomainRpc('POST',

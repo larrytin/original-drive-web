@@ -47,7 +47,7 @@ good.drive.search.Rightmenu = function(dom) {
           submenu.addItem(new goog.ui.MenuItem(item.name));
           names.push(item.name);
         });
-        goog.events.listen(rightMenu, 'action', that.onSelectedHandle());
+        goog.events.listen(rightMenu, 'action', that.onSelectedHandle(items));
       }
     }
   });
@@ -113,11 +113,11 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
         if (data.contentType ==
         'application/x-print') {
           array.push(3);
-        } 
+        }
         if (data['contentType'] !=
           'application/x-shockwave-flash' &&
-          data['contentType'].indexOf('image/') == -1
-          && data['contentType'] !=
+          data['contentType'].indexOf('image/') == -1 &&
+          data['contentType'] !=
             'application/x-print') {
           array.push(1);
          }
@@ -130,8 +130,8 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
        }
        if (data['contentType'] !=
           'application/x-shockwave-flash' &&
-          data['contentType'].indexOf('image/') == -1 
-          && data['contentType'] !=
+          data['contentType'].indexOf('image/') == -1 &&
+          data['contentType'] !=
             'application/x-print') {
           array.push(1);
         }
@@ -145,9 +145,10 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
 };
 
 /**
+ * @param {JSON} items
  * @return {Function}
  */
-good.drive.search.Rightmenu.prototype.onSelectedHandle = function() {
+good.drive.search.Rightmenu.prototype.onSelectedHandle = function(items) {
   var that = this;
   return function(e) {
     var grid = good.drive.view.baseview.View.currentGrid;
