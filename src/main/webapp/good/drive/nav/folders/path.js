@@ -171,7 +171,7 @@ good.drive.nav.folders.Path.prototype.isParent = function(mod, id, targetId) {
 good.drive.nav.folders.Path.prototype.locationPath = function(path) {
   var docids = goog.object.getKeys(
       this.pathHeap);
-  if (docids.indexOf(path[this.pathNameType().CURRENTDOCID]) == -1) {
+  if (!goog.array.contains(docids, path[this.pathNameType().CURRENTDOCID])) {
     return;
   }
   if (goog.array.isEmpty(
