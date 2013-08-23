@@ -27,9 +27,12 @@ good.drive.nav.list.View = function(docid) {
       renderer.decorateChildren(this, contentElements[i]);
     }
   };
+  
   menu.decorate(
-      goog.dom.getElement('navpanelist').
-      firstElementChild.firstElementChild.firstElementChild);
+      goog.dom.getFirstElementChild(
+          goog.dom.getFirstElementChild(
+              goog.dom.getFirstElementChild(
+                  goog.dom.getElement('navpanelist')))));
   this.menu = menu;
   this.idx = -1;
   this.docid = docid;
