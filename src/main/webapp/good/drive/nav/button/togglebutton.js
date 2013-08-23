@@ -20,7 +20,8 @@ good.drive.nav.button.ToggleButton = function() {
  */
 good.drive.nav.button.ToggleButton.prototype.createListBtn = function() {
   var icon = goog.dom.createDom('div', {
-    'class' : 'viewpane-toolbar-details-icon drive-sprite-core-view-options-list'
+    'class' :
+      'viewpane-toolbar-details-icon drive-sprite-core-view-options-list'
   });
   return new good.drive.nav.button.ToggleView(icon,
       ['jfk-button-standard', 'jfk-button-narrow',

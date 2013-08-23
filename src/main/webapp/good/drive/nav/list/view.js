@@ -27,7 +27,6 @@ good.drive.nav.list.View = function(docid) {
       renderer.decorateChildren(this, contentElements[i]);
     }
   };
-  
   menu.decorate(
       goog.dom.getFirstElementChild(
           goog.dom.getFirstElementChild(
@@ -64,7 +63,7 @@ good.drive.nav.list.View.prototype.initPath =
   var childs = this.menu.getChildIds();
   var that = this;
   goog.events.listen(this.menu, 'action', function(e) {
-    that.idx = childs.indexOf(e.target.getId());
+    that.idx = goog.array.indexOf(childs, e.target.getId());
     var path = good.drive.nav.folders.Path.getINSTANCE().path;
     var pathjson = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
     if (e.target.getId() == pathjson[0]) {

@@ -670,10 +670,11 @@ good.drive.init.initCallback = function(path) {
 };
 
 /**
- * @param {struct} grids
+ * @param {Object} grids
  * @param {string} docid
+ * @param {string} id
  */
-good.drive.init.callListOrGrid = function(grids ,docid, id) {
+good.drive.init.callListOrGrid = function(grids, docid, id) {
   if (!goog.object.containsKey(grids, docid)) {
     var cells = {};
     goog.object.add(grids, docid, cells);

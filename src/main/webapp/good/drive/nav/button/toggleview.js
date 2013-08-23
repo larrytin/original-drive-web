@@ -1,10 +1,9 @@
 'use strict';
 goog.provide('good.drive.nav.button.ToggleView');
 
-goog.require('goog.ui.ToggleButton');
 goog.require('good.drive.nav.button.ToolBarView');
 goog.require('goog.dom');
-
+goog.require('goog.ui.ToggleButton');
 
 
 /**
