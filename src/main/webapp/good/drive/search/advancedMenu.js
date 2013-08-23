@@ -30,13 +30,14 @@ good.drive.search.AdvancedMenu = function() {
 
   var list = good.drive.search.AdvancedMenu.SEARCHLIST;
   if (list == undefined) {
-    list = new good.drive.view.table.View({'select': 'select', 'filename': '名字'});
+    list = new good.drive.view.table.View({'select': 'select',
+      'filename': '名字'});
     list.render(goog.dom.getElement('viewmanager'));
     good.drive.search.AdvancedMenu.SEARCHLIST = list;
     good.drive.view.baseview.View.visiable(list);
     list.setRemote(true);
-    list.scrollToEnd = function() {      
-      that.nextpage();      
+    list.scrollToEnd = function() {
+      that.nextpage();
     };
   }
   var that = this;
@@ -47,8 +48,8 @@ good.drive.search.AdvancedMenu = function() {
     good.drive.search.AdvancedMenu.SEARCHGRID = grid;
     good.drive.view.baseview.View.visiable(grid);
     grid.setRemote(true);
-    grid.scrollToEnd = function() {      
-      that.nextpage();      
+    grid.scrollToEnd = function() {
+      that.nextpage();
     };
   }
   this._typeArray = good.constants.TYPEARRAY;
@@ -298,7 +299,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
         if (json && !json['error']) {
           grid.clear();
           if (json['items'] != undefined) {
-            goog.array.forEach(json['items'], function(item) {             
+            goog.array.forEach(json['items'], function(item) {
               if (item['thumbnail'] != undefined) {
                 if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') == -1) {
                   var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
@@ -321,7 +322,8 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
             });
           }
           if (json['nextPageToken'] != undefined) {
-            good.drive.search.AdvancedMenu.NEXTPAGETOKEN = json['nextPageToken'];
+            good.drive.search.AdvancedMenu.NEXTPAGETOKEN =
+              json['nextPageToken'];
           }
           good.drive.view.baseview.View.visiable(grid);
         }
@@ -330,7 +332,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
 };
 
 /**
- * @return {string} path
+ * @return {string}
  */
 good.drive.search.AdvancedMenu.prototype.getPath = function() {
 
@@ -413,7 +415,7 @@ good.drive.search.AdvancedMenu.prototype.nextpage = function() {
         good.drive.search.AdvancedMenu.NEXTPAGETOKEN = json['nextPageToken'];
       }
       if (json['items'] != undefined) {
-        goog.array.forEach(json['items'], function(item) {             
+        goog.array.forEach(json['items'], function(item) {
           if (item['thumbnail'] != undefined) {
             if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') == -1) {
               var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
