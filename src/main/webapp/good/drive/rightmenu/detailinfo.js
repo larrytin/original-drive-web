@@ -141,7 +141,9 @@ good.drive.rightmenu.DetailInfo.PUBLICDETAIL = function(label,
    typecombo.disabled = 'ture';
    update_info.disabled = 'true';
   }
- thumbnail.src = './good/images/folder_grid.png';
+  thumbnail.src = './good/images/folder.png';
+  thumbnail.style.width = '80%';
+  thumbnail.style.height = '80%';
   var tagdata = '';
   goog.array.forEach(tags.asArray(), function(item) {
     tagdata += item + ',';
