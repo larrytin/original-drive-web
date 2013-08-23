@@ -17,6 +17,7 @@ good.drive.view.table.TableCell =
   good.drive.view.baseview.Cell.call(
       this, data, keytype, defaultConfig, opt_domHelper);
   this.heads = heads;
+  var el = undefined;
 };
 goog.inherits(good.drive.view.table.TableCell, good.drive.view.baseview.Cell);
 
@@ -33,13 +34,6 @@ good.drive.view.table.TableCell.prototype.createDom = function() {
     'id': this.getId()});
   this.setElementInternal(/** @type {Element} */ (tr));
 };
-
-/** */
-good.drive.view.table.TableCell.prototype.getTdELement = function() {
-	var el = this.createDom();
-	return el ?
-	    /** @type {Element} */ (el.firstChild) : null;
-}
 
 /** */
 good.drive.view.table.TableCell.prototype.genTd = function() {
@@ -61,32 +55,23 @@ good.drive.view.table.TableCell.prototype.cellHover = function() {
 };
 
 /**
- * @param {string} el
- * @return {Element}
- */
-good.drive.view.table.TableCell.prototype.createCheckbox = function (el){
-	var endble = new goog.ui.Checkbox();
-	endble.addClassName('jfk-checkbox goog-inline-block jfk-checkbox');
-	endble.render(el);
-	return el;
-}
-
-/**
  * @param {string} key
  * @param {data} value
  * @param {number} idx
  * @return {Element}
  */
 good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
-  var el = undefined;
   var image = this.createImageElement(this.data);
   if (key == 'select') {
-    el = this.getTd();
-    this.createCheckbox(el);
-    return el;
+	  var endble = new goog.ui.Checkbox();
+	  this.el = goog.dom.createDom('td',
+			  {'class': 'doclist-td-checkbox', 'style': 'padding: 0 0 0 6px;'});
+    endble.addClassName('jfk-checkbox goog-inline-block jfk-checkbox');
+	endble.render(this.el);
+    return this.el;
   }
   if (idx == 1) {
-    el = goog.dom.createDom('td',
+    this.el = goog.dom.createDom('td',
         {'class': 'doclist-td-name'},
         goog.dom.createDom('div', {'class': 'doclist-name-wrapper'},
             goog.dom.createDom('a',
@@ -97,15 +82,15 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
                         goog.dom.createDom('span',
                             {'dir': 'ltr'},
                             value)))));
-    return el;
+    return this.el;
   }
-  el = goog.dom.createDom('td',
+  this.el = goog.dom.createDom('td',
       {'class': 'doclist-td-owners'},
       goog.dom.createDom('div', {'class': 'doclist-owners'},
           goog.dom.createDom('span', {'class': 'doclist-owner'},
               goog.dom.createDom('span', {'class': 'g-hovercard'},
                   value))));
-  return el;
+  return this.el;
 };
 
 /**
@@ -186,5 +171,7 @@ good.drive.view.table.TableCell.prototype.getLabelIcon = function() {
 
 /** */
 good.drive.view.table.TableCell.prototype.genCheckBox = function() {
+//	return goog.dom.createDom('div',
+//    {'class': 'jfk-checkbox-checkmark'});
 };
 
