@@ -16,6 +16,7 @@ good.drive.nav.folders.Path = function(str) {
   this.path = undefined;
   this.root = undefined;
   this._isParent = false;
+  this.mod = undefined;
 };
 goog.inherits(good.drive.nav.folders.Path,
     good.drive.nav.folders.AbstractControl);
@@ -30,6 +31,7 @@ good.drive.nav.folders.Path.INSTANCE;
  */
 good.drive.nav.folders.Path.NameType = {
     PATH: 'path',
+    PLAYFILE: 'playfile',
     CURRENTPATH: 'currentpath',
     CURRENTDOCID: 'currentdocid',
     DRAGDROP: 'dragdrop',
@@ -93,6 +95,10 @@ good.drive.nav.folders.Path.prototype.pathload = function() {
 good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
   var that = this;
   var dragdrop = this.root.get(this.pathNameType().DRAGDROP);
+  if (dragdrop == undefined) {
+    dragdrop = this.initDragDrop();
+    this.root.set(this.pathNameType().DRAGDROP, dragdrop);
+  }
   dragdrop.addValueChangedListener(function(evt) {
     var property = evt.getProperty();
     if (property != that.pathNameType().ISDRAGOVER) {
@@ -194,6 +200,10 @@ good.drive.nav.folders.Path.prototype.hasPathProperty_ = function() {
   }
   if (docid == undefined) {
     this.path[this.pathNameType().CURRENTDOCID] = '';
+  }
+  if (this.root.get(this.pathNameType().PLAYFILE) == undefined) {
+    this.root.set(this.pathNameType().PLAYFILE,
+        this.model().mod().createList());
   }
 };
 
@@ -308,6 +318,16 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   var path = {'currentpath': [],
       'currentdocid': ''};
   root.set(this.pathNameType().PATH, path);
+  root.set(this.pathNameType().PLAYFILE, mod.createList());
+  root.set(this.pathNameType().PATH, path);
+  root.set(this.pathNameType().SELECT, false);
+};
+
+/**
+ * @return {good.realtime.CollaborativeMap}
+ */
+good.drive.nav.folders.Path.prototype.initDragDrop = function() {
+  var mod = this.model().mod();
   var map = mod.createMap();
   map.set(this.pathNameType().DRAGDATA, '');
   map.set(this.pathNameType().DROPDATA, '');
@@ -316,8 +336,7 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   map.set(this.pathNameType().DRAGDOCID, '');
   map.set(this.pathNameType().DROPDOCID, '');
   map.set(this.pathNameType().ISDRAGOVER, 0);
-  root.set(this.pathNameType().DRAGDROP, map);
-  root.set(this.pathNameType().SELECT, false);
+  return map;
 };
 
 /**

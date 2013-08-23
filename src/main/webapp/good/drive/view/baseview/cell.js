@@ -91,7 +91,8 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     if (this.data.get('isfile') != undefined) {
       if (this.checkImage != true) {
         good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
-	    return;
+        this.buildPlayPath();
+        return;
       } else {
         var preview = new good.drive.preview.Control();
         preview.getselcetItem();
@@ -107,16 +108,44 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
-	  if (this.checkImage != true) {
-    	good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
-	    return;
-      } else {
-    	var preview = new good.drive.preview.Control();
-    	preview.getselcetItem();
-    	this.checkImage = false;
-    	return;
-      }
+    if (this.checkImage != true) {
+      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
+      this.buildPlayPath();
+      return;
+    } else {
+      var preview = new good.drive.preview.Control();
+      preview.getselcetItem();
+      this.checkImage = false;
+      return;
+    }
   }
+};
+
+/**
+ */
+good.drive.view.baseview.Cell.prototype.buildPlayPath = function() {
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  var list = root.get(good.drive.nav.folders.Path.NameType.PLAYFILE);
+  var file = {};
+  var that = this;
+  if (this.data instanceof good.realtime.CollaborativeMap) {
+    goog.array.forEach(this.data.keys(), function(key) {
+      file[key] = that.data.get(key);
+    });
+  } else {
+    goog.object.forEach(this.data, function(value, key) {
+      if (key == 'filename') {
+        file['label'] = value;
+        return;
+      }
+      if (key == 'contentType') {
+        file['type'] = value;
+        return;
+      }
+      file[key] = value;
+    });
+  }
+  list.push(file);
 };
 
 /**
