@@ -303,7 +303,15 @@ good.drive.nav.folders.Tree.prototype.setDraggable = function() {
   var dragDropGroup = this.dragDropGroup;
   dragDropGroup.createDragElement =
     function(sourceEl) {
-    return goog.dom.createDom('div', 'foo', 'Custom drag element');
+    var data = this.dragItem_.data;
+    return goog.dom.createDom('div',
+        {'class': 'doclist-dragdrop-drag doclist-drag-unmodified'},
+        goog.dom.createDom('div',
+            {'class': 'goog-inline-block doclist-name doclist-drag-move'},
+            data.get('label')),
+            goog.dom.createDom('div',
+                {'class': 'goog-inline-block doclist-name doclist-drag-add'},
+                data.get('label')));
   };
   this.dragDropGroup.init();
   this.dragDropGroup.addTarget(this.dragDropGroup);

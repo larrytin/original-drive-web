@@ -364,7 +364,7 @@ good.drive.init.init = function() {
     switch (docid) {
     case good.constants.MYCLASSRESDOCID:
       if (node.map.get('isclass')) {
-        menu.hideItem(createPopup, [0]);
+        menu.hideItem(createPopup, [0, 1]);
         return;
       }
       menu.hideItem(createPopup, []);
