@@ -35,6 +35,13 @@ good.drive.view.table.TableCell.prototype.createDom = function() {
 };
 
 /** */
+good.drive.view.table.TableCell.prototype.getTdELement = function() {
+	var el = this.createDom();
+	return el ?
+	    /** @type {Element} */ (el.firstChild) : null;
+}
+
+/** */
 good.drive.view.table.TableCell.prototype.genTd = function() {
   var tr = this.getElement();
   var i = 0;
@@ -54,6 +61,17 @@ good.drive.view.table.TableCell.prototype.cellHover = function() {
 };
 
 /**
+ * @param {string} el
+ * @return {Element}
+ */
+good.drive.view.table.TableCell.prototype.createCheckbox = function (el){
+	var endble = new goog.ui.Checkbox();
+	endble.addClassName('jfk-checkbox goog-inline-block jfk-checkbox');
+	endble.render(el);
+	return el;
+}
+
+/**
  * @param {string} key
  * @param {data} value
  * @param {number} idx
@@ -61,12 +79,10 @@ good.drive.view.table.TableCell.prototype.cellHover = function() {
  */
 good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
   var el = undefined;
+  var image = this.createImageElement(this.data);
   if (key == 'select') {
-    var enable = new goog.ui.Checkbox();
-    el = goog.dom.createDom('td',
-        {'class': 'doclist-td-checkbox', 'style' : 'padding: 0 0 0 6px;'},
-        this.genCheckBox());
-    enable.render(el);
+    el = this.getTd();
+    this.createCheckbox(el);
     return el;
   }
   if (idx == 1) {
@@ -75,8 +91,7 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
         goog.dom.createDom('div', {'class': 'doclist-name-wrapper'},
             goog.dom.createDom('a',
                 {'class': 'doclist-content-wrapper'},
-                goog.dom.createDom('span',
-                    {'class': this.getLabelIcon()}),
+                image,
                     goog.dom.createDom('span',
                         {'class': 'goog-inline-block doclist-name'},
                         goog.dom.createDom('span',
@@ -93,6 +108,61 @@ good.drive.view.table.TableCell.prototype.getTdElm = function(key, value, idx) {
   return el;
 };
 
+/**
+ * @return {Element}
+ */
+good.drive.view.table.TableCell.prototype.createImageElement = function() {
+  var images = this.createImage(this.data);
+  if (this.data instanceof good.realtime.CollaborativeMap) {
+    if (this.data.get('isfile') == undefined) {
+      return goog.dom.createDom('span',
+      {'class': this.getLabelIcon()});
+    }
+  }
+  return goog.dom.createDom('img', {
+	'class' : 'doclist-icon-image',
+	'src' : images
+  });
+}
+
+/**
+ * @return {string}
+ */
+good.drive.view.table.TableCell.prototype.createImage = function(data) {
+  var path = good.drive.nav.folders.Path.getINSTANCE().path;
+  var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+  if (data instanceof good.realtime.CollaborativeMap) {
+    if (data.get('isfile') != undefined) {
+      if (dataImage != -1) {
+		return './good/images/icon_11_image_list.png';
+	  } else if (audioImage != -1) {
+		return './good/images/icon_10_audio_list.png';
+	  } else {
+		return './good/images/icon_10_generic_list.png';
+	  }
+    }
+  } else {
+	if (docid == good.constants.PUBLICRESDOCID) {
+	  if (data.contentType.indexOf('image/') != -1) {
+		return './good/images/icon_11_image_list.png';
+	  } else if (data.contentType.indexOf('audio/') != -1) {
+		return './good/images/icon_10_audio_list.png';
+	  } else {
+		return 'good/images/icon_10_generic_list.png';
+	  }
+	} else {
+		var pathControl = good.drive.nav.folders.Path.getINSTANCE();
+	    var view = pathControl.getViewBydocId(docid);
+	    var curItem = view.getCurItem();
+	    var id = curItem.getId();
+	    if (id == 'personman') {
+	      return 'good/images/tablephoto.png';
+	    } else {
+	      return 'good/images/device.png';
+	    }
+	}
+  }
+}
 
 /**
  * @param {string} key

@@ -21,6 +21,7 @@ good.drive.view.baseview.Cell =
   this.keytype = keytype;
   this.isFolder_ = undefined;
   this.selected_ = false;
+  var checkImage = undefined;
 };
 goog.inherits(good.drive.view.baseview.Cell, goog.ui.Component);
 
@@ -79,6 +80,7 @@ good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
 good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
   e.stopPropagation();
   this.select();
+  this.checkImage = true;
   this.openCell();
 };
 
@@ -87,9 +89,14 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
 good.drive.view.baseview.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
     if (this.data.get('isfile') != undefined) {
-      var preview = new good.drive.preview.Control();
-      preview.getselcetItem();
-      return;
+      if (this.checkImage != true) {
+        good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
+	    return;
+      } else {
+        var preview = new good.drive.preview.Control();
+        preview.getselcetItem();
+        return;
+      }
     }
     var newPath = {};
     var path = good.drive.nav.folders.Path.getINSTANCE().path;
@@ -100,8 +107,15 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
-	  var preview = new good.drive.preview.Control();
-      preview.getselcetItem();
+	  if (this.checkImage != true) {
+    	good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
+	    return;
+      } else {
+    	var preview = new good.drive.preview.Control();
+    	preview.getselcetItem();
+    	this.checkImage = false;
+    	return;
+      }
   }
 };
 
@@ -181,7 +195,7 @@ good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
 	  switch (e.type) {
 	    case goog.events.EventType.MOUSEOVER:
 	      if (!goog.dom.classes.has(el, className)) {
-	        goog.dom.classes.add(el,className);
+	        goog.dom.classes.add(el, className);
 	      }
 	      break;
 	    case goog.events.EventType.MOUSEOUT:

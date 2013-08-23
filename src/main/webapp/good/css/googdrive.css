@@ -1777,6 +1777,7 @@ vertical-align: top;
     text-overflow: ellipsis;
     zoom: 1;
     width: 82px;
+    position: absolute;
 }
 .navpane .treedoclistview-root-node-name {
     font-size: 13px;
@@ -5475,7 +5476,6 @@ top: 4px;
 height: 21px;
 width: 21px;
 }
-
 <!-- table  -->
 ::-webkit-scrollbar {
 height: 16px;
@@ -5500,13 +5500,16 @@ background: rgba(0, 0, 0, 0);
 }
 .doclistview {
 overflow-y: auto;
-height: 500px;
+height: 620px;
 }
 .doclistview-list {
 zoom: 1;
 }
+.doclist-table-thead {
+top: 0;
+z-index: 1;
+}
 .doclist, .doclistview, .doclistview-ie, .doclistview-inner, .doclistview-inner-ie, .doclistview-child-inner, 
-
 .doclistview-child-inner-ie {
 cursor: default;
 }
@@ -5562,6 +5565,7 @@ margin-top: 5px;
 .doclist-td-name {
 background-repeat: no-repeat;
 background-position: 3px;
+width: 100%;
 }
 .doclist-tr-underlined .doclist-td, .doclist-tr-underlined .doclist-td-content, .doclist-tr-underlined .doclist-td-checkbox,
 .doclist-tr-underlined .doclist-td-date, .doclist-tr-underlined .doclist-td-info-toggle, .doclist-tr-underlined,
