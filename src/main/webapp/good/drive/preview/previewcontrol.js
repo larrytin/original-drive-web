@@ -31,6 +31,9 @@ good.drive.preview.Control.GRID = undefined;
 /** @type {Array.<string>} */
 good.drive.preview.Control.GRIDLISTIDS = undefined;
 
+/** @type {boolean} */
+good.drive.preview.Control.OBJECTFLAG = false;
+
 /**
  *
  */
@@ -153,7 +156,7 @@ good.drive.preview.Control.prototype.getselcetItem = function() {
 good.drive.preview.Control.prototype.display = function(id) {
   var that = this;
   var childlistId = good.drive.preview.Control.GRIDLISTIDS;
-  var index = childlistId.indexOf(id);
+  var index = goog.array.indexOf(childlistId, id);
   if (index == 0) {
     that._prev_button.style.display = 'none';
     that._next_button.style.display = 'block';
@@ -176,6 +179,7 @@ good.drive.preview.Control.prototype.display = function(id) {
  * @param {string} fileId
  */
 good.drive.preview.Control.prototype.preview = function(fileId) {
+  var that = this;
   var previewdiv = goog.dom.getElement('previewdiv');
   var imgplayer_div = goog.dom.getElement('imgplayer');
   var imgpreview = goog.dom.getElement('imgpreview');
@@ -183,8 +187,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
   var view_print = goog.dom.getElement('view_print');
 
   var flashplayer_div = goog.dom.getElement('flashplayer');
-  var embedflash = goog.dom.getElement('embedflash');
-  var movie = goog.dom.getElement('movie');
+  var objectplay = goog.dom.getElement('objectplay');
   var uri = new goog.Uri(good.constants.SERVERADRESS);
   uri.setPath('serve');
   uri.setQuery('id');
@@ -201,9 +204,18 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         unknown_div.style.display = 'none';
         flashplayer_div.style.display = 'block';
         view_print.style.display = 'none';
-        movie.value = uri;
-        embedflash.src = uri;
-        embedflash.style.display = 'block';
+        if (good.drive.preview.Control.OBJECTFLAG) {
+          var movie = goog.dom.getElement('movie');
+          movie.value = uri;
+          if (!goog.userAgent.IE) {
+            var embedflash = goog.dom.getElement('embedflash');
+            embedflash.src = uri;
+            embedflash.style.display = 'block';
+           }
+        } else {
+          objectplay.innerHTML = that.getobject(uri);
+          good.drive.preview.Control.OBJECTFLAG = true;
+        }
       } else if (contentType.indexOf('image/') != -1) {
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
@@ -225,4 +237,28 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
       previewdiv.style.display = 'block';
     }
   });
+};
+
+/**
+ * @param {string} uri
+ * @return {String}
+ */
+good.drive.preview.Control.prototype.getobject = function(uri) {
+  var o = '<object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000" ' +
+  'codebase="' +
+  'http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0" ' +
+  'id="Myflash" width=540 height=360> ' +
+  '<param id="movie" name=movie value="' + uri + '"> ' +
+  '<param name=quality value=high> ' +
+  '<param name=play value=false> ' +
+  '<param name=autoplay value=true> ' +
+  '<param name=bgcolor value=#FFFFFF> ' +
+  '<embed id="embedflash" ' +
+  'play="false" swliveconnect="true" controller="true" ' +
+  'name="Myflash" src="' + uri + '" ' +
+  'quality=high bgcolor=#FFFFFF ' +
+  'width=540 height=360 type="application/x-shockwave-flash" ' +
+  'pluginspage="http://get.adobe.com/cn/flashplayer/"> </embed > ' +
+  '</object>';
+  return o;
 };

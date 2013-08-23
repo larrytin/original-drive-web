@@ -843,23 +843,11 @@
                 style="left: 0px; top: 0px; width: 851px; height: 638px;">
             </div>            
         </div>
+        </div>
         <div id="flashplayer" class="drive-viewer-video drive-viewer-video-transition" tabindex="0"
-          style="width: 540px; height: 360px; left: 394px; top: 83px;"> 
-          <object classid="clsid:D27CDB6E-AE6D-11cf-96B8-444553540000"
-              codebase="http://active.macromedia.com/flash2/cabs/swflash.cab#version=4,0,0,0"
-              id="Myflash" width=540 height=360> 
-              <param id="movie" name=movie value=""> 
-              <param name=quality value=high> 
-              <param name=play value=false> 
-              <param name=autoplay value=true> 
-              <param name=bgcolor value=#FFFFFF> 
-              <embed id="embedflash" play="false" swliveconnect="true" controller="true" 
-              name="Myflash" src="" 
-              quality=high bgcolor=#FFFFFF  
-              width=540 height=360 type="application/x-shockwave-flash"  
-                   pluginspage="http://get.adobe.com/cn/flashplayer/"> </embed > 
-            </object>
-              <br/>  <br/>  <br/>
+          style="width: 540px; height: 360px; left: 430px; top: 83px;">
+            <div id="objectplay"></div>
+            <div id="control" >
             <input id="PlayFlash" type="button" value="播放"/>
             <input id="StopFlash" type="button" value="暂停"/>
             <input id="RewindFlash" type="button" value="停止"/>
@@ -868,7 +856,8 @@
             <input id="ZoomoutFlash" type="button" value="缩小"/>
             <!-- <input type="button" value="发送数据" onclick="SendDataToFlashMovie()" />
             <input type="button" value="接收数据" onclick="ReceiveDataFromFlashMovie()" />
-            <input type="text" id="data" />             -->
+            <input type="text" id="data" />  -->
+            </div>            
         </div>
         <div class="drive-viewer-minibar" id="view_print">         
           <div id="print_button" class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="打印" tabindex="0">
