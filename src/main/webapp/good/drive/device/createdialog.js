@@ -1,5 +1,5 @@
 'use strict';
-goog.provide('good.drive.device.createdialog');
+goog.provide('good.drive.device.View');
 
 goog.require('goog.ui.Dialog');
 

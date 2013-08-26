@@ -219,32 +219,31 @@ good.drive.view.baseview.Cell.prototype.detachEvents_ = function() {
  * @param {goog.events.BrowserEvent} e
  */
 good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
-	var el = this.getElement();
-	var className = this.cellHover(); 
-	  switch (e.type) {
-	    case goog.events.EventType.MOUSEOVER:
-	      if (!goog.dom.classes.has(el, className)) {
-	        goog.dom.classes.add(el, className);
-	      }
-	      break;
-	    case goog.events.EventType.MOUSEOUT:
-	      if (goog.dom.classes.has(el, className)) {
-	        goog.dom.classes.remove(el, className);
-	      }
-	      break;
-	    case goog.events.EventType.MOUSEDOWN:
-	      if (e.button == 2) {
-	        this.clickHandle(e);
-	      }
-	      break;
-	  }
+  var el = this.getElement();
+  var className = this.cellHover();
+  switch (e.type) {
+    case goog.events.EventType.MOUSEOVER:
+      if (!goog.dom.classes.has(el, className)) {
+        goog.dom.classes.add(el, className);
+      }
+      break;
+    case goog.events.EventType.MOUSEOUT:
+      if (goog.dom.classes.has(el, className)) {
+        goog.dom.classes.remove(el, className);
+      }
+      break;
+    case goog.events.EventType.MOUSEDOWN:
+      if (e.button == 2) {
+        this.clickHandle(e);
+      }
+      break;
+  }
 };
 
 /**
- * @return {string}
  */
 good.drive.view.baseview.Cell.prototype.cellHover = function() {
-	return;
+  return;
 };
 /**
  * @param {goog.events.BrowserEvent} e

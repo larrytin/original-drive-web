@@ -621,7 +621,7 @@ good.drive.view.baseview.View.prototype.getGridViewElement = function() {
   return el ? /** @type {Element} */ (el.lastChild) : null;
 };
 
-/** 
+/**
  * @param {boolean} isRemote
  */
 good.drive.view.baseview.View.prototype.setRemote = function(isRemote) {
@@ -633,24 +633,23 @@ good.drive.view.baseview.View.prototype.setRemote = function(isRemote) {
         if (el == undefined) {
           return;
         }
-        var hght= el.scrollHeight; 
-        var clientHeight =el.clientHeight; 
+        var hght = el.scrollHeight;
+        var clientHeight = el.clientHeight;
         var top = el.scrollTop;
-        if(top >= (parseInt(hght) - clientHeight)){
+        if (top >= (parseInt(hght) - clientHeight)) {
           if (that.isEnd) {
             return;
           }
           that.scrollToEnd();
         }
     });
-  };
+  }
   this.isRemote = isRemote;
 };
 
 /**
  */
 good.drive.view.baseview.View.prototype.scrollToEnd = function() {
-  
 };
 
 /**

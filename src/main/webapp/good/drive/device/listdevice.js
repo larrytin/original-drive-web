@@ -2,7 +2,7 @@
 goog.provide('good.drive.device.listdevice');
 
 goog.require('good.constants');
-goog.require('good.drive.device.createdialog');
+goog.require('good.drive.device.View');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');

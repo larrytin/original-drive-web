@@ -587,7 +587,7 @@ good.drive.init.init = function() {
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
   var addperson = new good.drive.person.AddPerson();
   var listperson = new good.drive.person.Listperson();
-  var listdevice = new good.drive.device.Listdevice();  
+  var listdevice = new good.drive.device.Listdevice();
   var userMenu = new good.drive.person.rigthmenu.Menu(
       goog.dom.getElement('tableviewmanager'));
   var control = new good.drive.flashcontrol.Control();

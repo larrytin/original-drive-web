@@ -2,7 +2,7 @@
 goog.provide('good.drive.device');
 
 goog.require('good.constants');
-goog.require('good.drive.device.createdailog');
+goog.require('good.drive.device.View');
 goog.require('good.drive.nav.menu');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
