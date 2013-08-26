@@ -37,6 +37,7 @@ good.drive.person.AddPerson.prototype.rightmenu = function() {
   var rightMenu = menu.genPopupMenu(that._personman, type, undefined, corner);
   goog.events.listen(rightMenu, 'action', function(e) {
     good.drive.person.View.DIALOG.setTitle('新建人员');
+    good.drive.person.Listperson.USERID = undefined;
     that._view.initDailog();
   });
 };
