@@ -29,6 +29,7 @@ good.drive.search.Rightmenu = function(dom) {
   this._subMenu = submenu;
   this._menu = menu;
   this._names = undefined;
+  this._rightmenusource = undefined;
 
   rightMenu.getHandler().listen(rightMenu,
       goog.ui.Menu.EventType.BEFORE_SHOW, this.hideMenuItem());
@@ -158,6 +159,7 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function(items) {
     }
     var data = selectedElemnet.data;
     var rightmenusource = new good.drive.rightmenu.Rightmenu();
+    that._rightmenusource = rightmenusource;
     var preview = new good.drive.preview.Control();
     var action = e.target.getCaption();
     switch (action) {
@@ -198,13 +200,25 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function(items) {
             deviceId = item.id;
           }
        });
-        if (data instanceof good.realtime.CollaborativeMap) {
-          rightmenusource.send(data.get('id'), deviceId);
-        } else {
-          rightmenusource.send(data.id, deviceId);
-        }
+        var selectedCells = grid.getClickList();
+        goog.array.forEach(selectedCells, function(cell) {
+          var data = cell.data;
+          if (data instanceof good.realtime.CollaborativeMap) {
+            that.sendDevice(data.get('id'), deviceId);
+          } else {
+            that.sendDevice(data.id, deviceId);
+          }
+        });
      }
   };
+};
+
+/**
+ * @param {string} dataId
+ * @param {string} deviceId
+ */
+good.drive.search.Rightmenu.prototype.sendDevice = function(dataId, deviceId) {
+  this._rightmenusource.send(dataId, deviceId);
 };
 
 /**

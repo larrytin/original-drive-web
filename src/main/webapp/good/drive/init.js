@@ -100,6 +100,7 @@ good.drive.init.init = function() {
   good.config.start();
   var auth = good.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
+  good.drive.init.buildIndexurl();
   var myclassLabel = '我的课程';
   var myClassViewControl =
     new good.drive.nav.folders.MyClassViewControl(
@@ -410,6 +411,23 @@ good.drive.init.init = function() {
           view.removeLeaf();
           break;
         default:
+          var subdata = good.drive.search.Rightmenu.SUBMENUDATA;
+          var deviceId = undefined;
+          var action = e.target.getCaption();
+          goog.array.forEach(subdata, function(item) {
+            if (item.name == action) {
+              deviceId = item.id;
+              var files = view.getCurrentItem().map.get('files');
+              if (files.length() == 0) {
+                return;
+              }
+              for (var i = 0; i < files.length(); i++) {
+                var file = files.get(i);
+                rightmenu.sendDevice(file.get('id'), deviceId);
+              }
+              return;
+            }
+          });
           break;
       }
   }, corner);
@@ -724,6 +742,15 @@ good.drive.init.visiabletoolbar = function(selected) {
     default:
       break;
   }
+};
+
+/**
+ */
+good.drive.init.buildIndexurl = function() {
+  var els = goog.dom.getElementsByClass('gbqla');
+  goog.array.forEach(els, function(el) {
+    el.href = location.href;
+  });
 };
 
 goog.exportSymbol('good.drive.init.start', good.drive.init.start);

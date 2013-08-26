@@ -234,7 +234,10 @@ good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
       break;
     case goog.events.EventType.MOUSEDOWN:
       if (e.button == 2) {
-        this.clickHandle(e);
+        e.stopPropagation();
+        if (this.selected_ == false) {
+          this.select();
+        }
       }
       break;
   }
