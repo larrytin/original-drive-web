@@ -49,16 +49,16 @@ good.drive.person.rigthmenu.Menu.prototype.action = function() {
     switch (action) {
       case '详细信息':
           if (flag) {
-            list.editPerson(data.userId);
+            list.editPerson(data['userId']);
           } else {
-            listdevice.editPerson(data.id);
+            listdevice.editPerson(data['id']);
           }
         break;
       case '删除':
           if (flag) {
-             list.deletePerson(data.userId);
+             list.deletePerson(data['userId']);
           } else {
-            listdevice.deletePerson(data.id);
+            listdevice.deletePerson(data['id']);
           }
         break;
       default:
