@@ -421,6 +421,7 @@ good.drive.init.init = function() {
               if (files.length() == 0) {
                 return;
               }
+              
               for (var i = 0; i < files.length(); i++) {
                 var file = files.get(i);
                 rightmenu.sendDevice(file.get('id'), deviceId);
