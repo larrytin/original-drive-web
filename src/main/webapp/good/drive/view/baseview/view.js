@@ -263,6 +263,24 @@ good.drive.view.baseview.View.prototype.setDeSelectedItem = function(cell) {
 };
 
 /**
+ */
+good.drive.view.baseview.View.prototype.selectAll = function() {
+  for (var i = 0; i < this.getChildCount(); i++) {
+    var cell = this.getChildAt(i);
+    cell.select();
+  }
+};
+
+/**
+ */
+good.drive.view.baseview.View.prototype.deSelectAll = function() {
+  for (var i = 0; i < this.getChildCount(); i++) {
+    var cell = this.getChildAt(i);
+    cell.deSelect();
+  }
+};
+
+/**
  * @param {good.drive.view.baseview.Cell} cell
  */
 good.drive.view.baseview.View.prototype.getCheckBox = function(cell) {

@@ -74,6 +74,10 @@ good.drive.view.table.View.prototype.genCheckBox = function() {
   var el = goog.dom.createDom('div',
       {'class': 'doclist-header-inner doclist-header-label-checkbox'},
       goog.dom.createDom('div', {'class': 'doclist-header-label'}, en));
+  var that = this;
+  goog.events.listen(enable, 'change', function(e) {
+    e.target.getChecked() ? that.selectAll() : that.deSelectAll();
+  });
   return el;
 };
 
