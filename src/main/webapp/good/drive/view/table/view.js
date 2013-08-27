@@ -67,7 +67,10 @@ good.drive.view.table.View.prototype.genHeads = function() {
  * @return {Element}
  */
 good.drive.view.table.View.prototype.genCheckBox = function() {
-  var enable = new goog.ui.Checkbox();
+  var render = goog.ui.ContainerRenderer.getCustomRenderer(
+      goog.ui.CheckboxRenderer, 'jfk-checkbox');
+  var enable = new goog.ui.Checkbox(undefined, undefined, render);
+  var content = goog.dom.createDom('div', {'class': 'jfk-checkbox-checkmark'});
   var en = goog.dom.createDom('div',
       {'class': 'goog-inline-block selectioncomponent'});
   enable.render(en);
@@ -75,9 +78,11 @@ good.drive.view.table.View.prototype.genCheckBox = function() {
       {'class': 'doclist-header-inner doclist-header-label-checkbox'},
       goog.dom.createDom('div', {'class': 'doclist-header-label'}, en));
   var that = this;
+  enable.setContent(content);
   goog.events.listen(enable, 'change', function(e) {
     e.target.getChecked() ? that.selectAll() : that.deSelectAll();
   });
+  this.allCheck = enable;
   return el;
 };
 

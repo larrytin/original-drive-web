@@ -38,7 +38,7 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
   }
   var data = selectedElemnet.data;
   var path = good.drive.nav.folders.Path.getINSTANCE();
-  var docId = path.currentDocId;
+  var docId = path.getCurrentDocid();
   var grid = good.drive.view.baseview.View.currentGrid;
   var cell = grid.getSelectedItem();
   switch (docId) {

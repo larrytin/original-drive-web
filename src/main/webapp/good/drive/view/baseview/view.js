@@ -26,6 +26,7 @@ good.drive.view.baseview.View = function(data, docid, opt_domHelper) {
   this.displayStart = 0;
   this.isRemote = false;
   this.isEnd = false;
+  this.allCheck = undefined;
 };
 goog.inherits(good.drive.view.baseview.View, goog.ui.Component);
 
@@ -246,6 +247,11 @@ good.drive.view.baseview.View.prototype.setSelectedItem =
   cell.setSelectedInternal(true);
   goog.array.insert(this.checkList, cell);
   cell.select();
+  if (this.allCheck != undefined) {
+    this.allCheck.setChecked(this.checkList.length == this.getChildCount() ?
+        goog.ui.Checkbox.State.CHECKED :
+          goog.ui.Checkbox.State.UNDETERMINED);
+  }
   this.dispatchEvent(goog.events.EventType.CHANGE);
 };
 
@@ -260,6 +266,11 @@ good.drive.view.baseview.View.prototype.setDeSelectedItem = function(cell) {
   cell.setSelectedInternal(false);
   goog.array.remove(this.checkList, cell);
   cell.deSelect();
+  if (this.allCheck != undefined) {
+    this.allCheck.setChecked(this.hasSeleted() ?
+        goog.ui.Checkbox.State.UNCHECKED :
+          goog.ui.Checkbox.State.UNDETERMINED);
+  }
 };
 
 /**
