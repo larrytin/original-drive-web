@@ -180,12 +180,14 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        if (modifeInput.value.indexOf(' ') != -1) {
-          if (isGridEvent) {
-            var grid = good.drive.view.baseview.View.currentGrid;
-            grid.renameChildData(modifeInput.value);
-          } else {
-            view.renameLeaf(modifeInput.value);
+        if (modifeInput.value.indexOf(' ') == -1) {
+          if (modifeInput.value != '') {
+            if (isGridEvent) {
+              var grid = good.drive.view.baseview.View.currentGrid;
+              grid.renameChildData(modifeInput.value);
+            } else {
+              view.renameLeaf(modifeInput.value);
+            }
           }
         }
         break;
