@@ -69,7 +69,7 @@ good.drive.device.Listdevice.SEARCHDEVICE = function() {
 /**
  * @param {string} deviceId
  */
-good.drive.device.Listdevice.prototype.deletePerson = function(deviceId) {
+good.drive.device.Listdevice.prototype.deleteDevice = function(deviceId) {
   var that = this;
   var rpc = new good.net.CrossDomainRpc('POST',
       good.constants.DEVICE,
@@ -87,7 +87,7 @@ good.drive.device.Listdevice.prototype.deletePerson = function(deviceId) {
 /**
  * @param {string} deviceId
  */
-good.drive.device.Listdevice.prototype.editPerson = function(deviceId) {
+good.drive.device.Listdevice.prototype.editDevice = function(deviceId) {
   good.drive.device.Listdevice.DEVICEID = deviceId;
   var that = this;
   var rpc = new good.net.CrossDomainRpc('GET',

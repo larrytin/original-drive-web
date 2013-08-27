@@ -1478,12 +1478,16 @@
   <div style="clear: both"></div>
   <div id="doclist">
     <div class="editpasswdpage main content clearfix">
-      <h1 class="redtext">更改密码</h1>
+      <h1 class="redtext">更改用户信息</h1>
       <div class="change-password">
         <div class="change-password-box">
           <form class="change-password-form" id="editpasswd" name="editpasswd" action="EditPasswd" method="post">
             <input type="hidden" name="hl" id="hl" value="zh_CN"> <input type="hidden" name="timeStmp" id="timeStmp"
               value="1373252293"> <input type="hidden" name="secTok" id="secTok" value=".AG5fkS99RtweGolgMrX8YxbVpLAyLcYT2Q==">
+            <div class="form-element">
+              <label id="username">新姓名 <input type="text" autocomplete="off" id="newname">
+              </label>          
+            </div>
             <div class="form-element">
               <label id="old-password-label"> 当前密码 <input type="password" autocomplete="off" name="OldPasswd" id="OldPasswd">
               </label> <span role="alert" class="errormsg" id="errormsg_0_OldPasswd"> </span>             
