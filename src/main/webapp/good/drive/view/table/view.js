@@ -70,6 +70,7 @@ good.drive.view.table.View.prototype.genCheckBox = function() {
   var render = goog.ui.ContainerRenderer.getCustomRenderer(
       goog.ui.CheckboxRenderer, 'jfk-checkbox');
   var enable = new goog.ui.Checkbox(undefined, undefined, render);
+  enable.addClassName('goog-inline-block');
   var content = goog.dom.createDom('div', {'class': 'jfk-checkbox-checkmark'});
   var en = goog.dom.createDom('div',
       {'class': 'goog-inline-block selectioncomponent'});

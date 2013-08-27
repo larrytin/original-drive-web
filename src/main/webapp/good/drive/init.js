@@ -142,6 +142,12 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
+        if (createInput.value.indexOf(' ') != -1) {
+          break;
+        }
+        if (createInput.value == "") {
+          createInput.value = "新建文件夹";
+        }
         if (docid == good.constants.PUBLICRESDOCID) {
           var model = view.getCurrentItem();
           var data = model.map;
