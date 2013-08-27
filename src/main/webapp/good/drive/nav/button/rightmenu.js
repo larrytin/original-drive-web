@@ -24,6 +24,10 @@ good.drive.nav.button.rigthmenu = function() {
       type, undefined, undefined, undefined, true);
   this._rightMenu = rightMenu;
   this._menu = menu;
+  var listPerson = new good.drive.person.Listperson();
+  this.listPerson = listPerson;
+  var listdevice = new good.drive.device.Listdevice();
+  this.listdevice = listdevice;
 };
 
 /**
@@ -71,6 +75,10 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
     }
     that._menu.hideItem(that._rightMenu, array);
     break;
+  case good.constants.OTHERDOCID:
+    var array = new Array(0, 1, 2, 3, 4, 6);
+    that._menu.hideItem(that._rightMenu, array);
+    break;
   default:
     break;
   }
@@ -86,9 +94,10 @@ good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
   if (selectedElemnet == undefined) {
     return;
   }
+  var path = good.drive.nav.folders.Path.getINSTANCE();
+  var docId = path.getCurrentDocid();
   var data = selectedElemnet.data;
   var rightmenusource = new good.drive.rightmenu.Rightmenu();
-
   var action = e.target.getCaption();
   switch (action) {
   case '预览':
@@ -99,12 +108,19 @@ good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
     }
     break;
   case '详细信息':
-    if (data instanceof good.realtime.CollaborativeMap) {
-      rightmenusource.detailInfo(data.get('id'), function() {
-      });
-    } else {
-      rightmenusource.detailInfo(data.id, function() {
-      });
+    switch (docId) {
+      case good.constants.OTHERDOCID:
+        this.deletePersonOrdevice(data, 'edit');
+        break;
+      default:
+        if (data instanceof good.realtime.CollaborativeMap) {
+          rightmenusource.detailInfo(data.get('id'), function() {
+          });
+        } else {
+          rightmenusource.detailInfo(data.id, function() {
+          });
+        }
+        break;
     }
     break;
   case '重新上传':
@@ -116,8 +132,46 @@ good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
       });
     }
     break;
+  case '删除':
+    this.deletePersonOrdevice(data, 'delete');
+    break;
   default:
     break;
+  }
+};
+
+/**
+ * @param {boolean} flag
+ * @param {Object} data
+ */
+good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
+  function(data, type) {
+  var path = good.drive.nav.folders.Path.getINSTANCE();
+  var docId = path.getCurrentDocid();
+  if (docId != good.constants.OTHERDOCID) {
+    return;
+  }
+  var flag = false;
+  var view = path.getViewBydocId(docId);
+  var curItem = view.getCurItem();
+  var id = curItem.getId();
+  if (id == 'personman') {
+    flag = true;
+  } else {
+    flag = false;
+  }
+  if (flag) {
+    if (type == 'edit') {
+      this.listPerson.editPerson(data['userId']);
+    } else {
+      this.listPerson.deletePerson(data['userId']);
+    }
+  } else {
+    if (type == 'edit') {
+      this.listdevice.editPerson(data['id']);
+    } else {
+      this.listdevice.deletePerson(data['id']);
+    }
   }
 };
 

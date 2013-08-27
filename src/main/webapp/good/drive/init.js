@@ -259,6 +259,11 @@ good.drive.init.init = function() {
         modifeInput.value = grid.getCurrentTitle();
         break;
       case '删除':
+        var path = good.drive.nav.folders.Path.getINSTANCE();
+        var docId = path.getCurrentDocid();
+        if (docId == good.constants.OTHERDOCID) {
+          break;
+        }
         grid.removeCurrentData();
         break;
       default:
@@ -535,10 +540,18 @@ good.drive.init.init = function() {
       moToClassTree.setData(data);
     }
   });
+  var toolbarSettingMenu = new good.drive.nav.button.rigthmenu();
   good.drive.init.toolBarDelete = toolBarButton.deleteTolBtn();
   goog.events.listen(good.drive.init.toolBarDelete.getButton(),
       goog.ui.Component.EventType.ACTION, function(e) {
+    var path = good.drive.nav.folders.Path.getINSTANCE();
+    var docId = path.getCurrentDocid();
     var grid = good.drive.view.baseview.View.currentGrid;
+    if (docId == good.constants.OTHERDOCID) {
+      var cell = grid.getSelectedItem();
+      toolbarSettingMenu.deletePersonOrdevice(cell.data, 'delete');
+      return;
+    }
     grid.removeCurrentData();
   });
   var toggleButton = new good.drive.nav.button.ToggleButton();
@@ -572,7 +585,6 @@ good.drive.init.init = function() {
     }
   });
   var menuBarButton = new good.drive.nav.button.MenuBarButton();
-  var toolbarSettingMenu = new good.drive.nav.button.rigthmenu();
   good.drive.init.menuBarMore = menuBarButton.moreMenuBar(
       toolbarSettingMenu.getRightMenu());
   goog.events.listen(good.drive.init.menuBarMore.getButton(),
@@ -590,6 +602,13 @@ good.drive.init.init = function() {
   });
   var settingDialog = new goog.ui.Dialog(null, true);
   settingDialog.setContent('版本1.0');
+  settingDialog.setButtonSet(dialog.genButtonSet([ {
+    key : 'cr',
+    caption : '确定'
+  }, {
+    key : 'c',
+    caption : '取消'
+  } ]));
   var settingMenu = new good.drive.nav.button.Settingmenu();
   var settingBarMore = menuBarButton.settingMenuBar(settingMenu.getRightMenu());
   goog.events.listen(settingBarMore.getButton(),
