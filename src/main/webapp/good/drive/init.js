@@ -150,8 +150,8 @@ good.drive.init.init = function() {
         if (createInput.value.indexOf(' ') != -1) {
           break;
         }
-        if (createInput.value == "") {
-          createInput.value = "新建文件夹";
+        if (createInput.value == '') {
+          createInput.value = '新建文件夹';
         }
         if (docid == good.constants.PUBLICRESDOCID) {
           var model = view.getCurrentItem();
@@ -180,11 +180,13 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        if (isGridEvent) {
-          var grid = good.drive.view.baseview.View.currentGrid;
-          grid.renameChildData(modifeInput.value);
-        } else {
-          view.renameLeaf(modifeInput.value);
+        if (modifeInput.value.indexOf(' ') != -1) {
+          if (isGridEvent) {
+            var grid = good.drive.view.baseview.View.currentGrid;
+            grid.renameChildData(modifeInput.value);
+          } else {
+            view.renameLeaf(modifeInput.value);
+          }
         }
         break;
       case 'c':
@@ -286,7 +288,7 @@ good.drive.init.init = function() {
   DetailInfo(function() {
     advancedMenu.search('click');
   });
-  var menu = new good.drive.nav.menu.View();  
+  var menu = new good.drive.nav.menu.View();
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(myResTree.tree.getChildrenElement(),
       function(e) {
@@ -646,7 +648,7 @@ good.drive.init.init = function() {
     } else {
       var navpanelist = goog.dom.getElement('navpanelist');
       navpanelist.style.display = 'none';
-    };
+    }
   });
   var control = new good.drive.flashcontrol.Control();
   good.drive.init.toolBarRename.setVisible(false);
