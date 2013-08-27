@@ -30,6 +30,7 @@ good.drive.nav.editpwd.start = function() {
     var name = goog.dom.getElement('gbgs4dn').innerText;
     var OldPasswd = $('OldPasswd').value;
     var pwd = $('Passwd').value;
+    var displayname = $('newname').value;
     var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
         good.config.VERSION, 'login/' + encodeURIComponent(name) +
         '/' + encodeURIComponent(OldPasswd),
@@ -39,6 +40,9 @@ good.drive.nav.editpwd.start = function() {
         var rpc = new good.net.CrossDomainRpc('POST', good.config.ACCOUNT,
             good.config.VERSION, 'updateAccountInfo',
             good.config.SERVERADRESS);
+        if (displayname != null && displayname != '') {
+          json['displayName'] = displayname;
+        }
         json['token'] = pwd;
         delete json['kind'];
         delete json['etag'];
