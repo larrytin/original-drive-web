@@ -130,7 +130,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
       filename.innerText = json['filename'];
       if (json['thumbnail'] != undefined) {
         if (good.constants.DRIVE_SERVER.indexOf('.goodow.com') != -1) {
-          thumbnail.src = json['thumbnail'] + '=s218';
+          thumbnail.src = json['thumbnail'] + '=s300';
         } else {
           var uri_server = new goog.Uri(good.constants.DRIVE_SERVER);
           var uri = new goog.Uri(json['thumbnail']);
@@ -138,7 +138,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
           uri.setScheme(uri_server.getScheme());
           uri.setScheme(uri_server.getScheme());
           uri.setPort(uri_server.getPort());
-          thumbnail.src = uri.toString() + '=s218';
+          thumbnail.src = uri.toString() + '=s300';
         }
       } else {
         var contentType = json['contentType'];

@@ -147,6 +147,12 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
+        if (createInput.value.indexOf(' ') != -1) {
+          break;
+        }
+        if (createInput.value == "") {
+          createInput.value = "新建文件夹";
+        }
         if (docid == good.constants.PUBLICRESDOCID) {
           var model = view.getCurrentItem();
           var data = model.map;
@@ -280,29 +286,7 @@ good.drive.init.init = function() {
   DetailInfo(function() {
     advancedMenu.search('click');
   });
-  var menu = new good.drive.nav.menu.View();
-  var role = new good.drive.role.Role(auth.userId,
-      function(username) {
-    if (username == good.constants.ADMIN) {
-      var leftUpdateBtn = leftButton.updateBtn();
-//    var moverEvent = good.drive.creation.Mouserevent(
-//        leftUpdateBtn.getElement());
-      if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
-        var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
-        menu.genPopupMenu(leftUpdateBtn.getElement(),
-            [['i', menulst]], function(e) {
-        });
-      } else {
-        var menulst = '文件...';
-        var fileupload = new good.drive.creation.Fileupload();
-        fileupload.fileChange();
-        menu.genPopupMenu(leftUpdateBtn.getElement(),
-            [['i', menulst]], function(e) {
-          fileupload.fileClick('new', '');
-        });
-      }
-    }
-  });
+  var menu = new good.drive.nav.menu.View();  
   var leftSubmenuChildIds = undefined;
   var leftSubmenu = menu.leftSubMenu(myResTree.tree.getChildrenElement(),
       function(e) {
@@ -632,11 +616,38 @@ good.drive.init.init = function() {
     }
   });
   var headuserinfo = new good.drive.nav.userinfo.Headuserinfo();
-  var addperson = new good.drive.person.AddPerson();
-  var listperson = new good.drive.person.Listperson();
-  var listdevice = new good.drive.device.Listdevice();
-  var userMenu = new good.drive.person.rigthmenu.Menu(
-      goog.dom.getElement('tableviewmanager'));
+  var role = new good.drive.role.Role(auth.userId,
+      function(username) {
+    if (username == good.constants.ADMIN) {
+      var navpanelist = goog.dom.getElement('navpanelist');
+      navpanelist.style.display = '';
+      var addperson = new good.drive.person.AddPerson();
+      var listperson = new good.drive.person.Listperson();
+      var listdevice = new good.drive.device.Listdevice();
+      var userMenu = new good.drive.person.rigthmenu.Menu(
+          goog.dom.getElement('tableviewmanager'));
+      var leftUpdateBtn = leftButton.updateBtn();
+//    var moverEvent = good.drive.creation.Mouserevent(
+//        leftUpdateBtn.getElement());
+      if (goog.userAgent.IE && goog.userAgent.VERSION < 10) {
+        var menulst = '上传功能不支持IE10以下浏览器，建议选择Google Chrome浏览器。';
+        menu.genPopupMenu(leftUpdateBtn.getElement(),
+            [['i', menulst]], function(e) {
+        });
+      } else {
+        var menulst = '文件...';
+        var fileupload = new good.drive.creation.Fileupload();
+        fileupload.fileChange();
+        menu.genPopupMenu(leftUpdateBtn.getElement(),
+            [['i', menulst]], function(e) {
+          fileupload.fileClick('new', '');
+        });
+      }
+    } else {
+      var navpanelist = goog.dom.getElement('navpanelist');
+      navpanelist.style.display = 'none';
+    };
+  });
   var control = new good.drive.flashcontrol.Control();
   good.drive.init.toolBarRename.setVisible(false);
   good.drive.init.toolBarCreate.setVisible(false);
