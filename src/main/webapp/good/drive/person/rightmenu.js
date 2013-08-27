@@ -51,14 +51,14 @@ good.drive.person.rigthmenu.Menu.prototype.action = function() {
           if (flag) {
             list.editPerson(data['userId']);
           } else {
-            listdevice.editPerson(data['id']);
+            listdevice.editDevice(data['id']);
           }
         break;
       case '删除':
           if (flag) {
              list.deletePerson(data['userId']);
           } else {
-            listdevice.deletePerson(data['id']);
+            listdevice.deleteDevice(data['id']);
           }
         break;
       default:
