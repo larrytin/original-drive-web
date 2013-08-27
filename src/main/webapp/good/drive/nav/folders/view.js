@@ -181,6 +181,107 @@ good.drive.nav.folders.Tree.prototype.setData = function(data) {
 good.drive.nav.folders.Tree.prototype.customNode =
     function(tree, data) {
   tree.setAfterLabelHtml('<div class="selection-highlighter"></div>');
+  tree.addChildAt = function(child, index,
+      opt_render) {
+    goog.asserts.assert(!child.getParent());
+    var prevNode = this.getChildAt(index - 1);
+    var nextNode = this.getChildAt(index);
+    goog.ui.tree.BaseNode.superClass_.addChildAt.call(this, child, index);
+    child.previousSibling_ = prevNode;
+    child.nextSibling_ = nextNode;
+    if (prevNode) {
+      prevNode.nextSibling_ = child;
+    } else {
+      this.firstChild_ = child;
+    }
+    if (nextNode) {
+      nextNode.previousSibling_ = child;
+    } else {
+      this.lastChild_ = child;
+    }
+    var tree = this.getTree();
+    if (tree) {
+      child.setTreeInternal(tree);
+    }
+    child.setDepth_(this.getDepth() + 1);
+    if (this.getElement()) {
+      this.updateExpandIcon();
+      if (this.getExpanded()) {
+        var el = this.getChildrenElement();
+        if (!child.getElement()) {
+          child.createDom();
+        }
+        var childElement = child.getElement();
+        var nextElement = nextNode && nextNode.getElement();
+        el.insertBefore(childElement, nextElement);
+
+        if (this.isInDocument()) {
+          child.enterDocument();
+        }
+        if (!nextNode) {
+          if (prevNode) {
+          } else {
+            goog.style.setElementShown(el, true);
+            this.setExpanded(this.getExpanded());
+          }
+        }
+      }
+    }
+  };
+  tree.removeChild =
+      function(childNode, opt_unrender) {
+    var child = /** @type {goog.ui.tree.BaseNode} */ (childNode);
+    var tree = this.getTree();
+    var selectedNode = tree ? tree.getSelectedItem() : null;
+    if (selectedNode == child || child.contains(selectedNode)) {
+      if (tree.hasFocus()) {
+        this.select();
+        goog.Timer.callOnce(this.onTimeoutSelect_, 10, this);
+      } else {
+        this.select();
+      }
+    }
+    goog.ui.tree.BaseNode.superClass_.removeChild.call(this, child);
+    if (this.lastChild_ == child) {
+      this.lastChild_ = child.previousSibling_;
+    }
+    if (this.firstChild_ == child) {
+      this.firstChild_ = child.nextSibling_;
+    }
+    if (child.previousSibling_) {
+      child.previousSibling_.nextSibling_ = child.nextSibling_;
+    }
+    if (child.nextSibling_) {
+      child.nextSibling_.previousSibling_ = child.previousSibling_;
+    }
+    var wasLast = child.isLastSibling();
+    child.tree_ = null;
+    child.depth_ = -1;
+    if (tree) {
+      // Tell the tree control that this node is now removed.
+      tree.removeNode(this);
+      if (this.isInDocument()) {
+        var el = this.getChildrenElement();
+        if (child.isInDocument()) {
+          var childEl = child.getElement();
+          el.removeChild(childEl);
+          child.exitDocument();
+        }
+        if (wasLast) {
+          var newLast = this.getLastChild();
+          if (newLast) {
+//            newLast.updateExpandIcon();
+          }
+        }
+        if (!this.hasChildren()) {
+          el.style.display = 'none';
+          this.updateExpandIcon();
+          this.updateIcon_();
+        }
+      }
+    }
+    return child;
+  };
   tree.onMouseDown = function(e) {
     var el = e.target;
     // expand icon

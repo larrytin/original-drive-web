@@ -85,6 +85,7 @@ good.drive.init.listBtn;
 
 /** */
 good.drive.init.init = function() {
+  var isInitCreate = false;
   var createInput;
   var modifeInput;
   var navFolderslist = goog.dom.getElement('navfolderslist');
@@ -135,6 +136,10 @@ good.drive.init.init = function() {
   var leftCreateBtn = leftButton.createBtn();
   var dialog = new good.drive.nav.dialog.View();
   var createdialog = dialog.createFolderDialog(function(evt) {
+    if (!isInitCreate) {
+      return;
+    }
+    isInitCreate = false;
     if (createInput == undefined) {
       createInput = goog.dom.getElement('crateFolder');
     }
@@ -312,6 +317,7 @@ good.drive.init.init = function() {
           break;
         case 2:
           createdialog.setVisible(true);
+          isInitCreate = true;
           break;
         case 3:
           isGridEvent = false;
@@ -353,6 +359,7 @@ good.drive.init.init = function() {
       createPopup.getChildIds(), e.target.getId())) {
         case 0:
           createdialog.setVisible(true);
+          isInitCreate = true;
           break;
         case 1:
           newClassDialog.setVisible(true);
@@ -387,7 +394,7 @@ good.drive.init.init = function() {
   var corner = {targetCorner: undefined,
       menuCorner: undefined, contextMenu: true};
   var submenu = new goog.ui.SubMenu('发送');
-  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '修改'], ['s', ''],
+  var type = [['i', '新建课程'], ['i', '新建文件夹'], ['i', '重命名'], ['s', ''],
               ['i', '删除'], ['m', submenu]];
   var myClassMenuChildIds = undefined;
   var myClassMenu = menu.genPopupMenu(
@@ -403,6 +410,7 @@ good.drive.init.init = function() {
           break;
         case 1:
           createdialog.setVisible(true);
+          isInitCreate = true;
           break;
         case 2:
           isGridEvent = false;
@@ -489,6 +497,7 @@ good.drive.init.init = function() {
           tags.push(createInput.value);
           view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});*/
           createdialog.setVisible(true);
+          isInitCreate = true;
           break;
         case 1:
           isGridEvent = false;
@@ -526,6 +535,7 @@ good.drive.init.init = function() {
     var item = view.getCurrentItem();
     if (item.map.get('isclass') == undefined || !item.map.get('isclass')) {
       createdialog.setVisible(true);
+      isInitCreate = true;
     }
   });
   good.drive.init.toolBarRename = toolBarButton.renameTolBtn();
@@ -602,13 +612,13 @@ good.drive.init.init = function() {
   });
   var settingDialog = new goog.ui.Dialog(null, true);
   settingDialog.setContent('版本1.0');
-  settingDialog.setButtonSet(dialog.genButtonSet([ {
-    key : 'cr',
-    caption : '确定'
+  settingDialog.setButtonSet(dialog.genButtonSet([{
+    key: 'cr',
+    caption: '确定'
   }, {
-    key : 'c',
-    caption : '取消'
-  } ]));
+    key: 'c',
+    caption: '取消'
+  }]));
   var settingMenu = new good.drive.nav.button.Settingmenu();
   var settingBarMore = menuBarButton.settingMenuBar(settingMenu.getRightMenu());
   goog.events.listen(settingBarMore.getButton(),

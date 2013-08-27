@@ -80,7 +80,7 @@ good.drive.view.table.View.prototype.genCheckBox = function() {
   var that = this;
   enable.setContent(content);
   goog.events.listen(enable, 'change', function(e) {
-    e.target.getChecked() ? that.selectAll() : that.deSelectAll();
+      e.target.getChecked() ? that.selectAll() : that.deSelectAll();
   });
   this.allCheck = enable;
   return el;

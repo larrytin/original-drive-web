@@ -141,8 +141,8 @@ good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
 };
 
 /**
- * @param {boolean} flag
  * @param {Object} data
+ * @param {string} type
  */
 good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
   function(data, type) {

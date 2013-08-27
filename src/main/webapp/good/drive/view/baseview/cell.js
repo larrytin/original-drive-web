@@ -235,8 +235,15 @@ good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {
     case goog.events.EventType.MOUSEDOWN:
       if (e.button == 2) {
         e.stopPropagation();
-        if (this.selected_ == false) {
-          this.select();
+        var listClick = this.getParent().checkList;
+        if (listClick.length > 1) {
+          if (this.selected_ == false) {
+            this.clickHandle(e);
+          } else {
+            this.select();
+          }
+        } else {
+          this.clickHandle(e);
         }
       }
       break;
