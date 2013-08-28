@@ -220,7 +220,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
         unknown_div.style.display = 'none';
-        view_print.style.display = 'none';
+        view_print.style.display = 'block';
         imgpreview.src = uri;
       } else if (contentType == 'application/x-print') {
         imgplayer_div.style.display = 'block';

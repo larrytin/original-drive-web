@@ -52,12 +52,14 @@ good.drive.person.Listperson.SEARCHPERSON = function() {
     if (json && !json['error']) {
       var grid = good.drive.person.Listperson.SEARCHGRID;
       goog.array.forEach(json['items'], function(item) {
-        var cell = grid.createCell(item);
-        cell.getValue = function(key) {
-          return this.data[key];
-        };
-        grid.add(cell);
-        cell.renderCell();
+        if (item['name'] != good.constants.ADMIN) {
+          var cell = grid.createCell(item);
+          cell.getValue = function(key) {
+            return this.data[key];
+          };
+          grid.add(cell);
+          cell.renderCell();
+        }        
       });
       good.drive.view.baseview.View.visiable(grid);
     }
