@@ -79,7 +79,7 @@ good.drive.person.View.CREATEFORM =
 'id="errormsg_username" ></span></div>' +
 '<p><strong>密码 </strong></p><div class="new' +
 '-item-dialog-folder-input"><input id="password" type="password"' +
-' dir="ltr"><span role="alert" style="margin: .5em 0 0;display: ' +
+' dir="ltr" maxlength="12"><span role="alert" style="margin: .5em 0 0;display: ' +
 'block;color: #dd4b39;line-height: 17px" ' +
 'id="errormsg_password" ></span></div>';
 

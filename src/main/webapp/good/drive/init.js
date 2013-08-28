@@ -465,55 +465,6 @@ good.drive.init.init = function() {
     submenu.setEnabled(false);
   });
 
-  var submenu = new goog.ui.SubMenu('发送');
-  var type = [['i', '新建文件夹..'], ['i', '重命名'], ['i', '详细信息'],
-               ['s', ''], ['i', '删除']];
-  var publicResMenuChildIds = undefined;
-  var publicResMenu = menu.genPopupMenu(
-      publicResTree.tree.getChildrenElement(), type, function(e) {
-        if (publicResMenuChildIds == undefined) {
-          publicResMenuChildIds = publicResMenu.getChildIds();
-        }
-        var docid = pathControl.currentDocId;
-        var view = pathControl.getViewBydocId(docid);
-        switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
-        case 0:
-          /*var model = view.getCurrentItem();
-          var data = model.map;
-          var query = data.get(good.constants.QUERY);
-          var tags = query.get(good.constants.TAGS);
-          tags.push(createInput.value);
-          view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});*/
-          createdialog.setVisible(true);
-          isInitCreate = true;
-          break;
-        case 1:
-          isGridEvent = false;
-          modifydialog.setVisible(true);
-          if (modifeInput == undefined) {
-            modifeInput = goog.dom.getElement('modifyFolder');
-          }
-          modifeInput.value = view.getCurrentItem().title;
-          break;
-        case 2:
-          var model = view.getCurrentItem();
-          var data = model.map;
-          var label = data.get(good.constants.LABEL);
-          var query = data.get(good.constants.QUERY);
-          var tags = query.get(good.constants.TAGS);
-          var contentType = query.get('contentType');
-          good.drive.rightmenu.DetailInfo.TYPEFLAG = 'public';
-          good.drive.rightmenu.DetailInfo.PUBLICDETAIL(label,
-              tags, contentType);
-          break;
-        case 4:
-          view.removeLeaf();
-          break;
-        default:
-          break;
-      }
-  }, corner);
-
   var toolBarButton = new good.drive.nav.button.ToolBarButton();
   good.drive.init.toolBarCreate = toolBarButton.createTolBtn();
   goog.events.listen(good.drive.init.toolBarCreate.getButton(),
@@ -630,6 +581,55 @@ good.drive.init.init = function() {
       var listdevice = new good.drive.device.Listdevice();
       var userMenu = new good.drive.person.rigthmenu.Menu(
           goog.dom.getElement('tableviewmanager'));
+      
+      //公共资料库右键
+      var type = [['i', '新建文件夹..'], ['i', '重命名'], ['i', '详细信息'],
+                  ['s', ''], ['i', '删除']];
+     var publicResMenuChildIds = undefined;
+     var publicResMenu = menu.genPopupMenu(
+         publicResTree.tree.getChildrenElement(), type, function(e) {
+           if (publicResMenuChildIds == undefined) {
+             publicResMenuChildIds = publicResMenu.getChildIds();
+           }
+           var docid = pathControl.currentDocId;
+           var view = pathControl.getViewBydocId(docid);
+           switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
+           case 0:
+             /*var model = view.getCurrentItem();
+             var data = model.map;
+             var query = data.get(good.constants.QUERY);
+             var tags = query.get(good.constants.TAGS);
+             tags.push(createInput.value);
+             view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});*/
+             createdialog.setVisible(true);
+             isInitCreate = true;
+             break;
+           case 1:
+             isGridEvent = false;
+             modifydialog.setVisible(true);
+             if (modifeInput == undefined) {
+               modifeInput = goog.dom.getElement('modifyFolder');
+             }
+             modifeInput.value = view.getCurrentItem().title;
+             break;
+           case 2:
+             var model = view.getCurrentItem();
+             var data = model.map;
+             var label = data.get(good.constants.LABEL);
+             var query = data.get(good.constants.QUERY);
+             var tags = query.get(good.constants.TAGS);
+             var contentType = query.get('contentType');
+             good.drive.rightmenu.DetailInfo.TYPEFLAG = 'public';
+             good.drive.rightmenu.DetailInfo.PUBLICDETAIL(label,
+                 tags, contentType);
+             break;
+           case 4:
+             view.removeLeaf();
+             break;
+           default:
+             break;
+         }
+     }, corner);
       var leftUpdateBtn = leftButton.updateBtn();
 //    var moverEvent = good.drive.creation.Mouserevent(
 //        leftUpdateBtn.getElement());
