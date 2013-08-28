@@ -16,7 +16,7 @@ good.drive.search.Rightmenu = function(dom) {
   this._rightMenu = undefined;
   var submenu = new goog.ui.SubMenu('发送');
   var menu = new good.drive.nav.menu.View();
-  var type = [['i', '打开'], ['i', '预览'], ['s', ''],
+  var type = [['i', '预览'], ['i', '打开'], ['s', ''],
               ['m', submenu], ['i', '资源安排至'], ['i', '收藏'],
               ['i', '详细信息'], ['i', '重命名'], ['s', ''],
               ['i', '重新上传'], ['i', '删除']];
@@ -73,7 +73,7 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
     case good.constants.MYCLASSRESDOCID:
       var cell = grid.getSelectedItem();
       if (cell.data.get('isfile') == undefined) {
-        var array = new Array(1, 3, 4, 5, 6, 9);
+        var array = new Array(0, 3, 4, 5, 6, 9);
         that._menu.hideItem(that._rightMenu, array);
       } else {
         var array = new Array(4, 7, 9);
@@ -92,7 +92,7 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
     case good.constants.MYRESDOCID:
       var cell = grid.getSelectedItem();
       if (cell.data.get('isfile') == undefined) {
-        var array = new Array(1, 3, 4, 5, 6, 9);
+        var array = new Array(0, 3, 4, 5, 6, 9);
         that._menu.hideItem(that._rightMenu, array);
       } else {
         var array = new Array(5, 7, 9);
