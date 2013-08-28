@@ -346,8 +346,7 @@ good.drive.search.AdvancedMenu.prototype.getPath = function() {
       var spantext = child.children[0].innerText;
       if (goog.array.contains(this._typeArray, spantext)) {
         contentType = good.constants.TYPE[spantext];
-      } else if (goog.array.contains(this._fieldArray, spantext) ||
-          goog.array.contains(this._gradeArray, spantext)) {
+      } else {
         goog.array.insert(tags, spantext);
       }
     }
