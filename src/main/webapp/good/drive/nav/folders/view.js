@@ -269,9 +269,6 @@ good.drive.nav.folders.Tree.prototype.customNode =
         }
         if (wasLast) {
           var newLast = this.getLastChild();
-          if (newLast) {
-//            newLast.updateExpandIcon();
-          }
         }
         if (!this.hasChildren()) {
           el.style.display = 'none';
