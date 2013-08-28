@@ -374,7 +374,11 @@ good.drive.init.init = function() {
       menu.hideItem(createPopup, [1]);
       break;
     case good.constants.PUBLICRESDOCID:
-      menu.hideItem(createPopup, [1]);
+      if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
+        menu.hideItem(createPopup, [0, 1]);
+      } else {
+        menu.hideItem(createPopup, [1]);
+      }
       break;
     }
   });
@@ -595,12 +599,6 @@ good.drive.init.init = function() {
            var view = pathControl.getViewBydocId(docid);
            switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
            case 0:
-             /*var model = view.getCurrentItem();
-             var data = model.map;
-             var query = data.get(good.constants.QUERY);
-             var tags = query.get(good.constants.TAGS);
-             tags.push(createInput.value);
-             view.addLeaf({'label': createInput.value, 'query': {'tags': tags}});*/
              createdialog.setVisible(true);
              isInitCreate = true;
              break;
@@ -703,7 +701,11 @@ good.drive.init.initCallback = function(path) {
       good.drive.init.listBtn.setVisible(true);
       break;
     case good.constants.PUBLICRESDOCID:
-      good.drive.init.toolBarCreate.setVisible(true);
+      if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
+        good.drive.init.toolBarCreate.setVisible(false);
+      } else {
+        good.drive.init.toolBarCreate.setVisible(true);        
+      }
       good.drive.init.gridBtn.setVisible(true);
       good.drive.init.listBtn.setVisible(true);
       break;
