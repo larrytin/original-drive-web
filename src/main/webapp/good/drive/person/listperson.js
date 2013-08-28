@@ -20,7 +20,7 @@ good.drive.person.Listperson = function() {
           'name': '用户名'});
     grid.render(goog.dom.getElement('tableviewmanager'));
     good.drive.person.Listperson.SEARCHGRID = grid;
-    good.drive.view.baseview.View.visiable(grid);
+    //good.drive.view.baseview.View.visiable(grid);
   }
 
   var view = new good.drive.person.View(function() {

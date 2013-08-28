@@ -21,7 +21,7 @@ good.drive.device.Listdevice = function() {
           'name': '教室名称'});
     grid.render(goog.dom.getElement('tableviewmanager'));
     good.drive.device.Listdevice.SEARCHGRID = grid;
-    good.drive.view.baseview.View.visiable(grid);
+    //good.drive.view.baseview.View.visiable(grid);
   }
 
   var view = new good.drive.device.View(function() {
