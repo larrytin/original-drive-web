@@ -59,7 +59,7 @@ good.drive.person.Listperson.SEARCHPERSON = function() {
           };
           grid.add(cell);
           cell.renderCell();
-        }        
+        }
       });
       good.drive.view.baseview.View.visiable(grid);
     }

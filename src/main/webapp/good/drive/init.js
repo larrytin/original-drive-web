@@ -585,7 +585,6 @@ good.drive.init.init = function() {
       var listdevice = new good.drive.device.Listdevice();
       var userMenu = new good.drive.person.rigthmenu.Menu(
           goog.dom.getElement('tableviewmanager'));
-      
       //公共资料库右键
       var type = [['i', '新建文件夹..'], ['i', '重命名'], ['i', '详细信息'],
                   ['s', ''], ['i', '删除']];
@@ -597,7 +596,7 @@ good.drive.init.init = function() {
            }
            var docid = pathControl.currentDocId;
            var view = pathControl.getViewBydocId(docid);
-           switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
+         switch (goog.array.indexOf(publicResMenuChildIds, e.target.getId())) {
            case 0:
              createdialog.setVisible(true);
              isInitCreate = true;
@@ -704,7 +703,7 @@ good.drive.init.initCallback = function(path) {
       if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
         good.drive.init.toolBarCreate.setVisible(false);
       } else {
-        good.drive.init.toolBarCreate.setVisible(true);        
+        good.drive.init.toolBarCreate.setVisible(true);
       }
       good.drive.init.gridBtn.setVisible(true);
       good.drive.init.listBtn.setVisible(true);
