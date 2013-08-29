@@ -454,6 +454,8 @@ good.drive.view.baseview.View.prototype.enterDocument = function() {
   good.drive.view.baseview.View.superClass_.enterDocument.call(this);
   var el = this.getElement();
   el.className = this.getConfig().cssRoot;
+  var scrollbarHeight = window.innerHeight - 156;
+  goog.style.setHeight(el, scrollbarHeight);
 };
 
 
