@@ -62,7 +62,6 @@ good.drive.device.Listdevice.SEARCHDEVICE = function() {
         cell.renderCell();
       });
       good.drive.view.baseview.View.visiable(grid);
-      
     }
   });
 };

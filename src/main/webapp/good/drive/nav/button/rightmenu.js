@@ -168,9 +168,9 @@ good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
     }
   } else {
     if (type == 'edit') {
-      this.listdevice.editPerson(data['id']);
+      this.listdevice.editDevice(data['id']);
     } else {
-      this.listdevice.deletePerson(data['id']);
+      this.listdevice.deleteDevice(data['id']);
     }
   }
 };
