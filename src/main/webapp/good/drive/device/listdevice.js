@@ -85,6 +85,29 @@ good.drive.device.Listdevice.prototype.deleteDevice = function(deviceId) {
   });
 };
 
+
+/**
+ * @param {Array.<string>} deviceIds
+ */
+good.drive.device.Listdevice.prototype.deleteDevices = function(deviceIds) {
+  if (deviceIds != null && deviceIds.length != 0) {
+    goog.array.forEach(deviceIds, function(deviceId) {
+      var rpc = new good.net.CrossDomainRpc('POST',
+          good.constants.DEVICE,
+          good.config.VERSION,
+          'deviceinfo/' + deviceId,
+          good.config.SERVERADRESS);
+      rpc.send(function(json) {
+        if (json && !json['error']) {
+        }
+      });
+    });
+    alert('删除成功！');
+    good.drive.device.Listdevice.SEARCHDEVICE();
+  }
+};
+
+
 /**
  * @param {string} deviceId
  */

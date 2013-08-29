@@ -86,6 +86,27 @@ good.drive.person.Listperson.prototype.deletePerson = function(userId) {
 };
 
 /**
+ * @param {Array.<string>} userIds
+ */
+good.drive.person.Listperson.prototype.deletePersons = function(userIds) {
+  if (userIds != null && userIds.length != 0) {
+    goog.array.forEach(userIds, function(userId) {
+      var rpc = new good.net.CrossDomainRpc('POST',
+          good.config.ACCOUNT,
+          good.config.VERSION,
+          'accountinfo/' + userId,
+          good.config.SERVERADRESS);
+      rpc.send(function(json) {
+        if (json && !json['error']) {
+        }
+      });
+    });
+    alert('删除成功！');
+    good.drive.person.Listperson.SEARCHPERSON();
+  }
+};
+
+/**
  * @param {string} userId
  */
 good.drive.person.Listperson.prototype.editPerson = function(userId) {
