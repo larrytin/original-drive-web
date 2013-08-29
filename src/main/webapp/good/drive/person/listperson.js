@@ -90,7 +90,7 @@ good.drive.person.Listperson.prototype.deletePerson = function(userId) {
  */
 good.drive.person.Listperson.prototype.deletePersons = function(userIds) {
   if (userIds != null && userIds.length != 0) {
-    goog.array.forEach(userIds, function(userId) {
+    goog.array.forEach(userIds, function(userId, index) {
       var rpc = new good.net.CrossDomainRpc('POST',
           good.config.ACCOUNT,
           good.config.VERSION,
@@ -98,11 +98,13 @@ good.drive.person.Listperson.prototype.deletePersons = function(userIds) {
           good.config.SERVERADRESS);
       rpc.send(function(json) {
         if (json && !json['error']) {
+           if (index == (userIds.length - 1)) {
+             alert('删除成功！');
+             good.drive.person.Listperson.SEARCHPERSON();
+           }
         }
       });
     });
-    alert('删除成功！');
-    good.drive.person.Listperson.SEARCHPERSON();
   }
 };
 

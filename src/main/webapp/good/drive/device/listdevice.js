@@ -91,7 +91,7 @@ good.drive.device.Listdevice.prototype.deleteDevice = function(deviceId) {
  */
 good.drive.device.Listdevice.prototype.deleteDevices = function(deviceIds) {
   if (deviceIds != null && deviceIds.length != 0) {
-    goog.array.forEach(deviceIds, function(deviceId) {
+    goog.array.forEach(deviceIds, function(deviceId, index) {
       var rpc = new good.net.CrossDomainRpc('POST',
           good.constants.DEVICE,
           good.config.VERSION,
@@ -99,11 +99,13 @@ good.drive.device.Listdevice.prototype.deleteDevices = function(deviceIds) {
           good.config.SERVERADRESS);
       rpc.send(function(json) {
         if (json && !json['error']) {
+          if (index == (deviceIds.length - 1)) {
+            alert('删除成功！');
+            good.drive.device.Listdevice.SEARCHDEVICE();
+          }
         }
       });
     });
-    alert('删除成功！');
-    good.drive.device.Listdevice.SEARCHDEVICE();
   }
 };
 
