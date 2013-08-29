@@ -180,7 +180,7 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        if (modifeInput.value.indexOf(' ') == -1) {
+        if (modifeInput.value[0] != ' ') {
           if (modifeInput.value != '') {
             if (isGridEvent) {
               var grid = good.drive.view.baseview.View.currentGrid;
@@ -331,7 +331,14 @@ good.drive.init.init = function() {
     var view = pathControl.getViewBydocId(docid);
     switch (evt.key) {
       case 'cr':
-        view.addLeaf({'label': newClassInput.value, 'isclass': true});
+        if (newClassInput.value[0] != '') {
+          if (newClassInput.value != '') {
+            view.addLeaf({'label': newClassInput.value, 'isclass': true});
+            break;
+          }
+        }
+        var classInput = '新建课程';
+        view.addLeaf({'label': classInput, 'isclass': true});
         break;
       case 'c':
         break;
