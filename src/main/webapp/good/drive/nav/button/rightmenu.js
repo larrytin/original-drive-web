@@ -151,6 +151,7 @@ good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
   if (docId != good.constants.OTHERDOCID) {
     return;
   }
+  var grid = good.drive.view.baseview.View.currentGrid;
   var flag = false;
   var view = path.getViewBydocId(docId);
   var curItem = view.getCurItem();
@@ -160,17 +161,22 @@ good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
   } else {
     flag = false;
   }
+  var clickList = grid.getClickList();
+  var dels = [];
+  goog.array.forEach(clickList, function(cell) {
+    dels.push(flag ? cell.data['userId'] : cell.data['id'] );
+  });
   if (flag) {
     if (type == 'edit') {
       this.listPerson.editPerson(data['userId']);
     } else {
-      this.listPerson.deletePerson(data['userId']);
+      this.listPerson.deletePersons(dels);
     }
   } else {
     if (type == 'edit') {
       this.listdevice.editDevice(data['id']);
     } else {
-      this.listdevice.deleteDevice(data['id']);
+      this.listdevice.deleteDevices(dels);
     }
   }
 };
