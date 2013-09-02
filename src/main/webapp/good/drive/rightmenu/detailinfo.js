@@ -7,6 +7,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 
 /**
+ * 资源内容详细信息类
  * @constructor
  * @param {Function} handle
  */
@@ -30,6 +31,7 @@ good.drive.rightmenu.DetailInfo.TYPEFLAG = undefined;
 
 
 /**
+ * 详细信息更新方法
  * @param {Function} handle
  */
 good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
@@ -48,8 +50,10 @@ good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
     });
   }
   if (good.drive.rightmenu.DetailInfo.TYPEFLAG == undefined) {
+    //公共资源更新
     this.updatefile(fileId, tags, typecombo.value, handle);
   } else {
+    //公共资料库左边树形结构菜单更新详细信息
     var pathControl = good.drive.nav.folders.Path.getINSTANCE();
     var docid = pathControl.currentDocId;
       var view = pathControl.getViewBydocId(docid);
@@ -67,7 +71,7 @@ good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
 };
 
 /**
- *
+ * 详细信息关闭方法
  */
 good.drive.rightmenu.DetailInfo.prototype.close = function() {
   var previewpane = goog.dom.getElement('previewpane');
@@ -76,6 +80,7 @@ good.drive.rightmenu.DetailInfo.prototype.close = function() {
 
 
 /**
+ * 公共资源内容详细信息更新
  * @param {string} fileId
  * @param {Array.<string>} tags
  * @param {string} content_Type
@@ -122,6 +127,7 @@ good.drive.rightmenu.DetailInfo.prototype.updatefile = function(fileId,
 
 
 /**
+ * 公共资料库左边树形菜单详细信息更新
  * @param {string} label
  * @param {Array.<string>} tags
  * @param {string} contentType

@@ -49,6 +49,8 @@ good.drive.search.Rightmenu = function(dom) {
           names.push(item.name);
         });
         goog.events.listen(rightMenu, 'action', that.onSelectedHandle(items));
+      } else {
+        goog.events.listen(rightMenu, 'action', that.onSelectedHandle());
       }
     }
   });
@@ -193,22 +195,24 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function(items) {
       default:
         break;
      }
-     if (goog.array.contains(that._names, action)) {
-       var deviceId = undefined;
-        goog.array.forEach(items, function(item) {
-          if (item.name == action) {
-            deviceId = item.id;
-          }
-       });
-        var selectedCells = grid.getClickList();
-        goog.array.forEach(selectedCells, function(cell) {
-          var data = cell.data;
-          if (data instanceof good.realtime.CollaborativeMap) {
-            that.sendDevice(data.get('id'), deviceId);
-          } else {
-            that.sendDevice(data.id, deviceId);
-          }
-        });
+     if (items != undefined) {
+       if (goog.array.contains(that._names, action)) {
+         var deviceId = undefined;
+          goog.array.forEach(items, function(item) {
+            if (item.name == action) {
+              deviceId = item.id;
+            }
+         });
+          var selectedCells = grid.getClickList();
+          goog.array.forEach(selectedCells, function(cell) {
+            var data = cell.data;
+            if (data instanceof good.realtime.CollaborativeMap) {
+              that.sendDevice(data.get('id'), deviceId);
+            } else {
+              that.sendDevice(data.id, deviceId);
+            }
+          });
+       }
      }
   };
 };

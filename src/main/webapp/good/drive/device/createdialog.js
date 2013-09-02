@@ -4,6 +4,7 @@ goog.provide('good.drive.device.View');
 goog.require('goog.ui.Dialog');
 
 /**
+ * 设备管理中对话框的创建类
  * @constructor
  * @param {Function} handle
  */
@@ -34,6 +35,7 @@ good.drive.device.View.DIALOG = undefined;
 good.drive.device.View.FLAG = false;
 
 /**
+ * 创建设备管理对话框
  * @param {string} title
  * @param {Function} handle
  * @return {goog.ui.Dialog}
@@ -99,6 +101,7 @@ good.drive.device.View.prototype.genButtonSet = function(buttons) {
 };
 
 /**
+ * 初始化设备管理对话框
  * @param {Json} data
  */
 good.drive.device.View.prototype.initDailog = function(data) {
@@ -112,6 +115,7 @@ good.drive.device.View.prototype.initDailog = function(data) {
   errormsg_devicename.innerText = '';
   var errormsg_classroom = goog.dom.getElement('errormsg_classroom');
   errormsg_classroom.innerText = '';
+  //更新设备时设定选中的数据
   if (data != undefined) {
     if (data['information'] == undefined) {
       devicename.value = '';
@@ -127,6 +131,7 @@ good.drive.device.View.prototype.initDailog = function(data) {
 };
 
 /**
+ * 新建或者更新设备（目前更新设备可用）
 * @param {Function} handle
 */
 good.drive.device.View.prototype.insertOrUpdate = function(handle) {
@@ -153,6 +158,7 @@ good.drive.device.View.prototype.insertOrUpdate = function(handle) {
  }
   if (!good.drive.device.View.FLAG) {
     if (good.drive.device.Listdevice.DEVICEID == undefined) {
+      //新建设备
       var rpc = new good.net.CrossDomainRpc('POST',
           good.constants.DEVICE,
           good.config.VERSION, 'deviceinfo',
@@ -168,6 +174,7 @@ good.drive.device.View.prototype.insertOrUpdate = function(handle) {
         }
       });
     } else {
+      //更新设备与教室的对应关系
       var deviceID = good.drive.device.Listdevice.DEVICEID;
       var rpc = new good.net.CrossDomainRpc('GET',
           good.constants.DEVICE,

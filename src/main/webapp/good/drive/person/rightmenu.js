@@ -6,6 +6,7 @@ goog.require('good.drive.nav.menu');
 goog.require('good.drive.person.listperson');
 
 /**
+ * 人员管理和设备管理选中信息右键类
  * @constructor
  * @param {Element} dom
  */
@@ -23,7 +24,7 @@ good.drive.person.rigthmenu.Menu = function(dom) {
 };
 
 /**
- *
+ * 右键按钮响应Action
  */
 good.drive.person.rigthmenu.Menu.prototype.action = function() {
   var that = this;
@@ -40,6 +41,7 @@ good.drive.person.rigthmenu.Menu.prototype.action = function() {
     var view = pathControl.getViewBydocId(docid);
     var curItem = view.getCurItem();
     var id = curItem.getId();
+    //判断当前Table是人员信息还是设备信息
     var flag = false;
     if (id == 'personman') {
       flag = true;

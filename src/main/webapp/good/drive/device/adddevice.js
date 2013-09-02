@@ -11,6 +11,7 @@ goog.require('goog.events.EventType');
 
 
 /**
+ * 添加设备类（一期暂停使用）
  * @constructor
  */
 good.drive.device.AddDevice = function() {

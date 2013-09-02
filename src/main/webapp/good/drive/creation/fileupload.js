@@ -9,6 +9,7 @@ goog.require('goog.events');
 
 
 /**
+ * 文件上传类
  * @constructor
  */
 good.drive.creation.Fileupload = function() {
@@ -26,7 +27,10 @@ good.drive.creation.Fileupload = function() {
   this.closeuploadAction();
 };
 
-/**@type {string} */
+/**
+ * 文件新上传与更新区分
+ * @type {string}
+ */
 good.drive.creation.Fileupload.NEWORUPDATE = 'new';
 
 /**@type {string} */
@@ -60,7 +64,7 @@ good.drive.creation.Fileupload.prototype.fileChange = function() {
         //显示上传信息div
         that._upload_div.style.display = 'block';
 
-
+        //计算文件上传大小
         for (var i = 0; i < files.length; i++) {
           var filename = files[i].name;
 
@@ -81,13 +85,16 @@ good.drive.creation.Fileupload.prototype.fileChange = function() {
             }
           }
           var json = {'name': filename, 'size': size};
+          //调用显示文件上传的table
           that.createTable(json);
         }
+        //调用文件上传方法
         that.geturl(files);
       });
 };
 
 /**
+ * 构建文件上传显示Table
  * @param {JSON} json
  */
 good.drive.creation.Fileupload.prototype.createTable = function(json) {
@@ -160,6 +167,7 @@ good.drive.creation.Fileupload.prototype.createTable = function(json) {
 };
 
 /**
+ * 调用后台接口上传文件
  * @param {string} url
  * @param {FileList} files
  * @param {Function} handler
@@ -192,7 +200,7 @@ good.drive.creation.Fileupload.prototype.uploadFiles =
 };
 
 /**
- *
+ * 绑定文件上传Table的关闭按钮Action
  */
 good.drive.creation.Fileupload.prototype.closeuploadAction = function() {
   var that = this;
@@ -205,6 +213,7 @@ good.drive.creation.Fileupload.prototype.closeuploadAction = function() {
 };
 
 /**
+ * 构建文件上传内容实现文件上传
  * @param {Array.<Object>} files
  */
 good.drive.creation.Fileupload.prototype.geturl = function(files) {
@@ -232,10 +241,12 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
             delete insertJson['creation'];
             insertJson['blobKey'] = blobKey;
             if (good.drive.creation.Fileupload.TYPE == 'new') {
+              //上传新的文件
               var tags = that.getTags();
               insertJson['tags'] = tags;
               that.insertfile(insertJson);
             } else {
+              //更新上传文件
               that.updateAgain(good.drive.creation.Fileupload.FILEID,
                   insertJson);
             }
@@ -248,6 +259,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
 };
 
 /**
+ * 新文件上传
  * @param {JSON} json
  */
 good.drive.creation.Fileupload.prototype.insertfile = function(json) {
@@ -270,6 +282,7 @@ good.drive.creation.Fileupload.prototype.insertfile = function(json) {
 };
 
 /**
+ * 更新上传文件
  * @param {string} fileId
  * @param {JSON} updatejson
  */
@@ -303,6 +316,7 @@ good.drive.creation.Fileupload.prototype.updateAgain =
 
 
 /**
+ * 公共资料库上传时取得默认上传的标签
  * @return {Array.<string>}
  */
 good.drive.creation.Fileupload.prototype.getTags = function() {

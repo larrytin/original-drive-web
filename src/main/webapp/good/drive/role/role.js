@@ -4,6 +4,7 @@ goog.provide('good.drive.role');
 goog.require('good.net.CrossDomainRpc');
 
 /**
+ * 角色判断类
  * @constructor
  * @param {string} userId
  * @param {Function} handle

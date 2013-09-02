@@ -5,7 +5,7 @@ goog.require('goog.Uri');
 goog.require('goog.dom');
 
 /**
- *
+ * 文件打印的类
  */
 good.drive.preview.print.start = function() {
   var uri = new goog.Uri(window.location);

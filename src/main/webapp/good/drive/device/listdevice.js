@@ -9,6 +9,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 
 /**
+ * 设备管理查询类
  * @constructor
  */
 good.drive.device.Listdevice = function() {
@@ -41,7 +42,7 @@ good.drive.device.Listdevice.SEARCHGRID = undefined;
 good.drive.device.Listdevice.DEVICEID = undefined;
 
 /**
- *
+ * 查询设备并Table显示
  */
 good.drive.device.Listdevice.SEARCHDEVICE = function() {
   var rpc = new good.net.CrossDomainRpc('GET',
@@ -53,14 +54,16 @@ good.drive.device.Listdevice.SEARCHDEVICE = function() {
     good.drive.device.Listdevice.SEARCHGRID.clear();
     if (json && !json['error']) {
       var grid = good.drive.device.Listdevice.SEARCHGRID;
-      goog.array.forEach(json['items'], function(item) {
-        var cell = grid.createCell(item);
-        cell.getValue = function(key) {
-          return this.data[key];
-        };
-        grid.add(cell);
-        cell.renderCell();
-      });
+      if (json['items'] != undefined) {
+        goog.array.forEach(json['items'], function(item) {
+          var cell = grid.createCell(item);
+          cell.getValue = function(key) {
+            return this.data[key];
+          };
+          grid.add(cell);
+          cell.renderCell();
+        });
+      }
       good.drive.view.baseview.View.visiable(grid);
     }
   });
@@ -68,6 +71,7 @@ good.drive.device.Listdevice.SEARCHDEVICE = function() {
 
 
 /**
+ * 根据设备Id删除设备
  * @param {string} deviceId
  */
 good.drive.device.Listdevice.prototype.deleteDevice = function(deviceId) {
@@ -87,6 +91,7 @@ good.drive.device.Listdevice.prototype.deleteDevice = function(deviceId) {
 
 
 /**
+ * 删除选中的多个设备
  * @param {Array.<string>} deviceIds
  */
 good.drive.device.Listdevice.prototype.deleteDevices = function(deviceIds) {
@@ -111,6 +116,7 @@ good.drive.device.Listdevice.prototype.deleteDevices = function(deviceIds) {
 
 
 /**
+ * 更新设备与教室的对应关系
  * @param {string} deviceId
  */
 good.drive.device.Listdevice.prototype.editDevice = function(deviceId) {

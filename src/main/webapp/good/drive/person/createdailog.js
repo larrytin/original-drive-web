@@ -4,6 +4,7 @@ goog.provide('good.drive.person.createdailog');
 goog.require('goog.ui.Dialog');
 
 /**
+ * 人员管理对话框类
  * @constructor
  * @param {Function} handle
  */
@@ -47,6 +48,7 @@ good.drive.person.View.ISEMPTY = function(str) {
 
 
 /**
+ * 创建人员管理对话框
  * @param {string} title
  * @param {Function} handle
  * @return {goog.ui.Dialog}
@@ -118,6 +120,7 @@ good.drive.person.View.prototype.genButtonSet = function(buttons) {
 
 
 /**
+ * 初始化人员管理对话框
  * @param {Json} data
  */
 good.drive.person.View.prototype.initDailog = function(data) {
@@ -135,6 +138,7 @@ good.drive.person.View.prototype.initDailog = function(data) {
   var errormsg_password = goog.dom.getElement('errormsg_password');
   errormsg_password.innerText = '';
   errormsg_username.innerText = '';
+  //更新人员信息时设定选中的数据
   if (data != undefined) {
     displayname.value = data['displayName'];
     username.value = data['name'];
@@ -159,9 +163,11 @@ good.drive.person.View.prototype.initDailog = function(data) {
 };
 
 /**
+* 新建或者更新人员信息
 * @param {Function} handle
 */
 good.drive.person.View.prototype.insertOrUpdate = function(handle) {
+ //添加和更新时对人员信息进行check
  var displayname = goog.dom.getElement('name').value;
  var errormsg_name = goog.dom.getElement('errormsg_name');
  var username = goog.dom.getElement('username').value;
@@ -190,7 +196,9 @@ good.drive.person.View.prototype.insertOrUpdate = function(handle) {
    good.drive.person.View.FLAG = false;
  }
   if (!good.drive.person.View.FLAG) {
+    //check通过后进行插入或者更新用户信息
     if (good.drive.person.Listperson.USERID == undefined) {
+      //插入新的用户
       var rpc = new good.net.CrossDomainRpc('POST',
           good.config.ACCOUNT,
           good.config.VERSION, 'accountinfo',
@@ -206,6 +214,7 @@ good.drive.person.View.prototype.insertOrUpdate = function(handle) {
         }
       });
     } else {
+      //更新用户信息
       var userId = good.drive.person.Listperson.USERID;
       var rpc = new good.net.CrossDomainRpc('GET',
           good.config.ACCOUNT,

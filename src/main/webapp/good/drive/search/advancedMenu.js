@@ -13,6 +13,7 @@ goog.require('goog.ui.Popup');
 goog.require('goog.ui.PopupMenu');
 
 /**
+ * 公共资料库查询类
  * @constructor
  */
 good.drive.search.AdvancedMenu = function() {
@@ -28,6 +29,7 @@ good.drive.search.AdvancedMenu = function() {
   var pop = new goog.ui.PopupMenu();
   popupElt.style.minWidth = '509px';
 
+  //列表显示初始化Table
   var list = good.drive.search.AdvancedMenu.SEARCHLIST;
   if (list == undefined) {
     list = new good.drive.view.table.View({'select': 'select',
@@ -36,11 +38,13 @@ good.drive.search.AdvancedMenu = function() {
     good.drive.search.AdvancedMenu.SEARCHLIST = list;
     good.drive.view.baseview.View.visiable(list);
     list.setRemote(true);
+    //滚动条翻页
     list.scrollToEnd = function() {
       that.nextpage();
     };
   }
   var that = this;
+  //网格显示初始化Grid
   var grid = good.drive.search.AdvancedMenu.SEARCHGRID;
   if (grid == undefined) {
     grid = new good.drive.view.grid.View();
@@ -48,6 +52,7 @@ good.drive.search.AdvancedMenu = function() {
     good.drive.search.AdvancedMenu.SEARCHGRID = grid;
     good.drive.view.baseview.View.visiable(grid);
     grid.setRemote(true);
+    //滚动条翻页
     grid.scrollToEnd = function() {
       that.nextpage();
     };
@@ -70,7 +75,7 @@ good.drive.search.AdvancedMenu.SEARCHLIST = undefined;
 good.drive.search.AdvancedMenu.NEXTPAGETOKEN = undefined;
 
 /**
- *
+ * 初始化
  */
 good.drive.search.AdvancedMenu.prototype.init = function() {
   this.createPopMenu();
@@ -82,7 +87,7 @@ good.drive.search.AdvancedMenu.prototype.init = function() {
 
 
 /**
- *
+ * 创建高级搜索的popmenu
  */
 good.drive.search.AdvancedMenu.prototype.createPopMenu = function() {
   var btn = goog.dom.getElement('advanced-search-button-container');
@@ -114,7 +119,7 @@ good.drive.search.AdvancedMenu.prototype.createPopMenu = function() {
 };
 
 /**
- *
+ * 高级搜索类型、领域、年级选择查询响应按钮
  */
 good.drive.search.AdvancedMenu.prototype.popaction = function() {
   var that = this;
@@ -129,6 +134,7 @@ good.drive.search.AdvancedMenu.prototype.popaction = function() {
 
 
 /**
+ * 选择标签时搜索栏中创建对应的查询标签，并绑定删除按钮Action
  * @param {string} title
  */
 good.drive.search.AdvancedMenu.prototype.createCondition = function(title) {
@@ -168,7 +174,7 @@ good.drive.search.AdvancedMenu.prototype.createCondition = function(title) {
 };
 
 /**
- *
+ * 绑定删除按钮Action
  */
 good.drive.search.AdvancedMenu.prototype.clearAction = function() {
   var that = this;
@@ -184,6 +190,7 @@ good.drive.search.AdvancedMenu.prototype.clearAction = function() {
 };
 
 /**
+ * 判断时候包含相同类型的标签工具类
  * @param {Array} array
  * @return {number}
  */
@@ -201,6 +208,7 @@ good.drive.search.AdvancedMenu.prototype.ishave = function(array) {
 };
 
 /**
+ * 根据标签内容取得同一类型的所有内容项
  * @param {string} str
  * @return {Array.<string>}
  */
@@ -215,7 +223,7 @@ good.drive.search.AdvancedMenu.prototype.getArray = function(str) {
 };
 
 /**
- *
+ * 根据选择标签的个数设定输入框的长短
  */
 good.drive.search.AdvancedMenu.prototype.inputstyle = function() {
   var input_div = goog.dom.getElement('gbqfqwb');
@@ -247,7 +255,7 @@ good.drive.search.AdvancedMenu.prototype.inputstyle = function() {
 };
 
 /**
- *
+ * 绑定查询输入框Action
  */
 good.drive.search.AdvancedMenu.prototype.inputAction = function() {
   var that = this;
@@ -268,9 +276,11 @@ good.drive.search.AdvancedMenu.prototype.trim = function(str) {
 
 
 /**
+ * 查询数据并显示
  * @param {string} search_type
  */
 good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
+  //当前PATH不是公共资料库是点击查询按钮时后台默认修改PATH指向公共资料库
   var path = good.drive.nav.folders.Path.getINSTANCE();
   var docId = path.currentDocId;
   if (docId != good.constants.PUBLICRESDOCID) {
@@ -279,6 +289,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
 //    pathlist.push('root');
   }
   var that = this;
+  //取得查询path
   var path = that.getPath();
     var grid = good.drive.view.baseview.View.isGrid ?
         good.drive.search.AdvancedMenu.SEARCHGRID :
@@ -332,6 +343,7 @@ good.drive.search.AdvancedMenu.prototype.search = function(search_type) {
 };
 
 /**
+ * 根据查询搜索框中的选中内容组件查询path
  * @return {string}
  */
 good.drive.search.AdvancedMenu.prototype.getPath = function() {
@@ -392,7 +404,7 @@ good.drive.search.AdvancedMenu.prototype.getPath = function() {
 };
 
 /**
- *
+ * 滚动条查询方法
  */
 good.drive.search.AdvancedMenu.prototype.nextpage = function() {
   var that = this;
@@ -445,7 +457,7 @@ good.drive.search.AdvancedMenu.prototype.nextpage = function() {
 };
 
 /**
- *
+ * 绑定查询按钮Action
  */
 good.drive.search.AdvancedMenu.prototype.searchbtncick = function() {
   var that = this;

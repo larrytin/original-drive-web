@@ -4,13 +4,14 @@ goog.provide('good.drive.resourcemap');
 goog.require('good.drive.search');
 
 /**
+ * PATH变化监听类
  * @constructor
  */
 good.drive.resourcemap.Resourcemap = function() {
 };
 
 /**
- *
+ * 初始化类
  */
 good.drive.resourcemap.Resourcemap.init = function() {
   var root = good.drive.nav.folders.Path.getINSTANCE().root;
@@ -26,6 +27,7 @@ good.drive.resourcemap.Resourcemap.init = function() {
       var pathControl = good.drive.nav.folders.Path.getINSTANCE();
       var docid = pathControl.currentDocId;
       if (docid == good.constants.PUBLICRESDOCID) {
+        //公共资料库详细信息显示
         var view = pathControl.getViewBydocId(docid);
         var model = view.getCurrentItem();
         var data = model.map;
@@ -62,6 +64,7 @@ good.drive.resourcemap.Resourcemap.initcallback = function(path) {
   input_text.value = '';
   menu.inputstyle();
   if (docid == good.constants.PUBLICRESDOCID) {
+    // 公共资料库PATH变化查询
     var model = goog.object.get(good.drive.nav
         .folders.AbstractControl.docs, docid);
         var data = model.getObject(id);
@@ -75,6 +78,7 @@ good.drive.resourcemap.Resourcemap.initcallback = function(path) {
         menu.inputstyle();
         menu.search();
   } else if (docid == good.constants.OTHERDOCID) {
+    //人员管理和设备管理查询
     var previewpane = goog.dom.getElement('previewpane');
     previewpane.style.display = 'none';
     var pathControl = good.drive.nav.folders.Path.getINSTANCE();

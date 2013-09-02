@@ -5,7 +5,7 @@ goog.require('goog.Uri');
 goog.require('goog.dom');
 
 /**
- *
+ * IE文件打开页面控制类
  */
 good.drive.rightmenu.preview.start = function() {
 

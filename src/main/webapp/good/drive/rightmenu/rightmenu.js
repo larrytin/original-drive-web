@@ -12,6 +12,7 @@ goog.require('goog.ui.ComboBox');
 goog.require('goog.ui.Dialog');
 
 /**
+ * 右键按钮响应类
  * @constructor
  */
 good.drive.rightmenu.Rightmenu = function() {
@@ -20,6 +21,7 @@ good.drive.rightmenu.Rightmenu = function() {
 };
 
 /**
+ * 删除公共资料库内容方法
  * @param {string} fileId
  * @param {Function} fn
  */
@@ -47,6 +49,7 @@ good.drive.rightmenu.Rightmenu.prototype.changeinfo = function(fileId,
 };
 
 /**
+ * 公共资料库右键重新上传按钮响应方法
  * @param {string} fileId
  * @param {Function} fn
  */
@@ -61,6 +64,7 @@ good.drive.rightmenu.Rightmenu.prototype.uploadAgain = function(fileId, fn) {
 
 
 /**
+ * 右键打开按钮响应方法
  * @param {string} fileId
  */
 good.drive.rightmenu.Rightmenu.PREVIEW = function(fileId) {
@@ -102,6 +106,7 @@ good.drive.rightmenu.Rightmenu.PREVIEW = function(fileId) {
 
 
 /**
+ * 显示文件详细信息方法
  * @param {string} fileId
  * @param {Function} fn
  */
@@ -168,6 +173,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
 
 
 /**
+ * 发送到设备方法
  * @param {string} fileId
  * @param {string} subscribeId
  */
@@ -189,42 +195,4 @@ good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
     }
   });
 
-};
-
-
-/**
- * @param {string} fileId
- */
-good.drive.rightmenu.Rightmenu.prototype.preview2 = function(fileId) {
-  var previewdiv = goog.dom.getElement('previewdiv');
-  var imgplayer_div = goog.dom.getElement('imgplayer');
-  var imgpreview = goog.dom.getElement('imgpreview');
-
-  var flashplayer_div = goog.dom.getElement('flashplayer');
-  var embedflash = goog.dom.getElement('embedflash');
-  var movie = goog.dom.getElement('movie');
-  var uri = new goog.Uri(good.constants.SERVERADRESS);
-  uri.setPath('serve');
-  uri.setQuery('id');
-  uri = uri.toString() + '=' + fileId;
-  var rpc = new good.net.CrossDomainRpc('GET',
-      good.constants.NAME,
-      good.constants.VERSION, 'attachment/' + fileId,
-      good.constants.SERVERADRESS);
-  rpc.send(function(json) {
-    if (json && !json['error']) {
-      var contentType = json['contentType'];
-      if (contentType == 'application/x-shockwave-flash') {
-        imgplayer_div.style.display = 'none';
-        flashplayer_div.style.display = 'block';
-        movie.value = uri;
-        embedflash.src = uri;
-      } else if (contentType.indexOf('image/') != -1) {
-        imgplayer_div.style.display = 'block';
-        flashplayer_div.style.display = 'none';
-        imgpreview.src = uri;
-      }
-      previewdiv.style.display = 'block';
-    }
-  });
 };

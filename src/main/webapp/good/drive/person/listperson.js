@@ -8,6 +8,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 
 /**
+ * 查询人员管理
  * @constructor
  */
 good.drive.person.Listperson = function() {
@@ -40,7 +41,7 @@ good.drive.person.Listperson.SEARCHGRID = undefined;
 good.drive.person.Listperson.USERID = undefined;
 
 /**
- *
+ * 查询人员并Table显示
  */
 good.drive.person.Listperson.SEARCHPERSON = function() {
   var rpc = new good.net.CrossDomainRpc('GET',
@@ -52,22 +53,25 @@ good.drive.person.Listperson.SEARCHPERSON = function() {
     good.drive.person.Listperson.SEARCHGRID.clear();
     if (json && !json['error']) {
       var grid = good.drive.person.Listperson.SEARCHGRID;
-      goog.array.forEach(json['items'], function(item) {
-        if (item['name'] != good.constants.ADMIN) {
-          var cell = grid.createCell(item);
-          cell.getValue = function(key) {
-            return this.data[key];
-          };
-          grid.add(cell);
-          cell.renderCell();
-        }
-      });
+      if (json['items'] != undefined) {
+        goog.array.forEach(json['items'], function(item) {
+          if (item['name'] != good.constants.ADMIN) {
+            var cell = grid.createCell(item);
+            cell.getValue = function(key) {
+              return this.data[key];
+            };
+            grid.add(cell);
+            cell.renderCell();
+          }
+        });
+      }
       good.drive.view.baseview.View.visiable(grid);
     }
   });
 };
 
 /**
+ * 根据人员Id删除人员信息
  * @param {string} userId
  */
 good.drive.person.Listperson.prototype.deletePerson = function(userId) {
@@ -86,6 +90,7 @@ good.drive.person.Listperson.prototype.deletePerson = function(userId) {
 };
 
 /**
+ * 删除多选的人员
  * @param {Array.<string>} userIds
  */
 good.drive.person.Listperson.prototype.deletePersons = function(userIds) {
@@ -109,6 +114,7 @@ good.drive.person.Listperson.prototype.deletePersons = function(userIds) {
 };
 
 /**
+ * 编辑人员
  * @param {string} userId
  */
 good.drive.person.Listperson.prototype.editPerson = function(userId) {

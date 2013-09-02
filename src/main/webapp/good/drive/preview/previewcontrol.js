@@ -8,6 +8,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 
 /**
+ * 文件预览控制类
  * @constructor
  */
 good.drive.preview.Control = function() {
@@ -35,7 +36,7 @@ good.drive.preview.Control.GRIDLISTIDS = undefined;
 good.drive.preview.Control.OBJECTFLAG = false;
 
 /**
- *
+ * 初始化文件预览绑定的Action
  */
 good.drive.preview.Control.prototype.init = function() {
   this.prev();
@@ -45,7 +46,7 @@ good.drive.preview.Control.prototype.init = function() {
 };
 
 /**
- *
+ * 绑定预览页面上页按钮Action
  */
 good.drive.preview.Control.prototype.prev = function() {
   var that = this;
@@ -67,7 +68,7 @@ good.drive.preview.Control.prototype.prev = function() {
 
 
 /**
- *
+ * 绑定预览页面下页按钮Action
  */
 good.drive.preview.Control.prototype.next = function() {
   var that = this;
@@ -88,7 +89,7 @@ good.drive.preview.Control.prototype.next = function() {
 };
 
 /**
-*
+* 绑定文件预览页面关闭按钮Action
 */
 good.drive.preview.Control.prototype.closepreview = function() {
  var preview_close = goog.dom.getElement('preview_close');
@@ -99,7 +100,7 @@ good.drive.preview.Control.prototype.closepreview = function() {
 };
 
 /**
-*
+* 绑定文件打印按钮Action
 */
 good.drive.preview.Control.prototype.print = function() {
  var that = this;
@@ -114,7 +115,7 @@ good.drive.preview.Control.prototype.print = function() {
 };
 
 /**
- *
+ * 取得选中的信息
  */
 good.drive.preview.Control.prototype.getselcetItem = function() {
   var that = this;
@@ -124,6 +125,7 @@ good.drive.preview.Control.prototype.getselcetItem = function() {
     var grid = good.drive.view.baseview.View.currentGrid;
     good.drive.preview.Control.GRID = grid;
     if (docId == good.constants.PUBLICRESDOCID) {
+      //公共资料库的选中的信息取得
       var childlistIds = grid.getChildIds();
       good.drive.preview.Control.GRIDLISTIDS = childlistIds;
       var selectedElemnet = grid.getSelectedItem();
@@ -132,8 +134,10 @@ good.drive.preview.Control.prototype.getselcetItem = function() {
       var data = selectedElemnet.data;
       that.preview(data.id);
     } else {
+      //课程或者收藏夹的所有资源信息的取得
       var childlistIds = grid.getChildIds();
       var dataListIds = new Array();
+      //去掉文件夹的内容
       goog.array.forEach(childlistIds, function(item) {
         var cell = grid.getChild(item);
         if (cell.data.get('isfile') != undefined) {
@@ -151,6 +155,7 @@ good.drive.preview.Control.prototype.getselcetItem = function() {
 };
 
 /**
+ * 预览界面按钮显示控制
  * @param {string} id
  */
 good.drive.preview.Control.prototype.display = function(id) {
@@ -176,6 +181,7 @@ good.drive.preview.Control.prototype.display = function(id) {
 };
 
  /**
+ * 预览内容显示
  * @param {string} fileId
  */
 good.drive.preview.Control.prototype.preview = function(fileId) {
@@ -188,6 +194,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
 
   var flashplayer_div = goog.dom.getElement('flashplayer');
   var objectplay = goog.dom.getElement('objectplay');
+  //构建显示的URI
   var uri = new goog.Uri(good.constants.SERVERADRESS);
   uri.setPath('serve');
   uri.setQuery('id');
@@ -199,6 +206,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
   rpc.send(function(json) {
     if (json && !json['error']) {
       var contentType = json['contentType'];
+      //根据不同的文件类型显示不同的预览界面
       if (contentType == 'application/x-shockwave-flash') {
         imgplayer_div.style.display = 'none';
         unknown_div.style.display = 'none';
@@ -207,6 +215,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
         if (good.drive.preview.Control.OBJECTFLAG) {
           var movie = goog.dom.getElement('movie');
           movie.value = uri;
+          //区分不同浏览器设置
           if (!goog.userAgent.IE) {
             var embedflash = goog.dom.getElement('embedflash');
             embedflash.src = uri;
@@ -217,18 +226,21 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
           good.drive.preview.Control.OBJECTFLAG = true;
         }
       } else if (contentType.indexOf('image/') != -1) {
+        //图片类型文件显示
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
         unknown_div.style.display = 'none';
         view_print.style.display = 'block';
         imgpreview.src = uri;
       } else if (contentType == 'application/x-print') {
+        //手偶类型文件显示
         imgplayer_div.style.display = 'block';
         flashplayer_div.style.display = 'none';
         unknown_div.style.display = 'none';
         view_print.style.display = 'block';
         imgpreview.src = uri;
       } else {
+        //其他类型文件显示不可预览
         unknown_div.style.display = 'block';
         imgplayer_div.style.display = 'none';
         flashplayer_div.style.display = 'none';
@@ -240,6 +252,7 @@ good.drive.preview.Control.prototype.preview = function(fileId) {
 };
 
 /**
+ * 点击预览的时构建flash文件显示对话框
  * @param {string} uri
  * @return {String}
  */

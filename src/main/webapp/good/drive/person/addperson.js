@@ -10,6 +10,7 @@ goog.require('goog.events');
 goog.require('goog.events.EventType');
 
 /**
+ * 添加人员类
  * @constructor
  */
 good.drive.person.AddPerson = function() {
@@ -26,7 +27,7 @@ good.drive.person.AddPerson = function() {
   };
 
 /**
- *
+ * 人员管理菜单绑定右键事件，实现新建人员功能
  */
 good.drive.person.AddPerson.prototype.rightmenu = function() {
   var that = this;

@@ -5,6 +5,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 
 /**
+ * Flash播放控制类
  * @constructor
  */
 good.drive.flashcontrol.Control = function() {
@@ -29,6 +30,7 @@ good.drive.flashcontrol.Control = function() {
 };
 
 /**
+ * 取得Flash对象方法
  * @param {string} movieName
  * @return {Element}
  */
@@ -47,7 +49,7 @@ good.drive.flashcontrol.Control.prototype.
 };
 
 /**
- *
+ * 绑定暂停按钮Action
  */
 good.drive.flashcontrol.Control.prototype.StopFlashMovie = function() {
   var that = this;
@@ -59,7 +61,7 @@ good.drive.flashcontrol.Control.prototype.StopFlashMovie = function() {
 };
 
 /**
- *
+ * 绑定播放按钮Action
  */
 good.drive.flashcontrol.Control.prototype.PlayFlashMovie = function() {
   var that = this;
@@ -71,7 +73,7 @@ good.drive.flashcontrol.Control.prototype.PlayFlashMovie = function() {
 };
 
 /**
-*
+* 绑定停止按钮Action
 */
 good.drive.flashcontrol.Control.prototype.RewindFlashMovie = function() {
  var that = this;
@@ -83,7 +85,7 @@ good.drive.flashcontrol.Control.prototype.RewindFlashMovie = function() {
 };
 
 /**
-*
+* 绑定下一帧按钮Action
 */
 good.drive.flashcontrol.Control.prototype.NextFrameFlashMovie = function() {
  var that = this;
@@ -99,7 +101,7 @@ good.drive.flashcontrol.Control.prototype.NextFrameFlashMovie = function() {
 };
 
 /**
-*
+* 绑定放大按钮Action
 */
 good.drive.flashcontrol.Control.prototype.ZoominFlashMovie = function() {
  var that = this;
@@ -111,7 +113,7 @@ good.drive.flashcontrol.Control.prototype.ZoominFlashMovie = function() {
 };
 
 /**
-*
+* 绑定缩小按钮Action
 */
 good.drive.flashcontrol.Control.prototype.ZoomoutFlashMovie = function() {
  var that = this;
