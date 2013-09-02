@@ -75,7 +75,7 @@ good.drive.person.View.CREATEFORM =
 ' dir="ltr"><span role="alert" style="margin: .5em 0 0;display: ' +
 'block;color: #dd4b39;line-height: 17px" id="errormsg_name" ></span></div>' +
 '<p><strong>用户名</strong></p><div class="new' +
-'-item-dialog-folder-input"><input id="username" type="text"' +
+'-item-dialog-folder-input"><input id="username" maxlength="30" type="text"' +
 ' dir="ltr"><span role="alert" style="margin: .5em 0 0;display: ' +
 'block;color: #dd4b39;line-height: 17px" ' +
 'id="errormsg_username" ></span></div>' +
