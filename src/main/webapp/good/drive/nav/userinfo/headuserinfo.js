@@ -13,6 +13,7 @@ goog.require('goog.ui.Popup');
 
 
 /**
+ * 首页右上角用户信息显示类
  * @constructor
  */
 good.drive.nav.userinfo.Headuserinfo = function() {
@@ -30,7 +31,7 @@ good.drive.nav.userinfo.Headuserinfo = function() {
 
 
 /**
- *
+ * 初始化方法
  */
 good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
   var query = new goog.Uri.QueryData(window.location.hash.substring(1));
@@ -53,7 +54,7 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
 
 
 /**
- *
+ * 绑定右上角用户信息Action
  */
 good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
   var name = goog.dom.getElement('gbg4');
@@ -69,7 +70,7 @@ good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
 
 
 /**
- *
+ * 绑定账户按钮Action
 */
 good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
   var account = goog.dom.getElement('account');
@@ -92,7 +93,7 @@ good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
 
 
 /**
-*
+* 绑定退出按钮Action
 */
 good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
   var cancel = goog.dom.getElement('cancel');

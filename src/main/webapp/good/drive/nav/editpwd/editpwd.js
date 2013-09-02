@@ -9,7 +9,7 @@ goog.require('goog.dom');
 goog.require('goog.events');
 
 /**
- *
+ * 修改用户信息类
  */
 good.drive.nav.editpwd.start = function() {
   good.config.start();
