@@ -8,6 +8,7 @@ goog.require('goog.ui.CustomButton');
 
 
 /**
+ * Button的基类
  * @constructor
  * @param {goog.ui.Button} button
  * @param {Element} renderTarget
@@ -23,6 +24,7 @@ good.drive.nav.button.View = function(button, renderTarget, var_args) {
 
 
 /**
+ * 获取Button的Element
  * @return {Element}
  */
 good.drive.nav.button.View.prototype.getElement = function() {
@@ -30,6 +32,7 @@ good.drive.nav.button.View.prototype.getElement = function() {
 };
 
 /**
+ * 获取Button对象
  * @return {goog.ui.Button}
  */
 good.drive.nav.button.View.prototype.getButton = function() {
@@ -37,6 +40,7 @@ good.drive.nav.button.View.prototype.getButton = function() {
 };
 
 /**
+ * 设置Button的显示状态
  * @param {boolean} visiable
  */
 good.drive.nav.button.View.prototype.setVisible = function(visiable) {

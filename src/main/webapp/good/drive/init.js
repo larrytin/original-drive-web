@@ -770,7 +770,7 @@ good.drive.init.visiabletoolbar = function(selected) {
   var pathControl = good.drive.nav.folders.Path.getINSTANCE();
   var root = pathControl.root;
   var isSelected = root.get(good.drive.nav.folders.Path.NameType.SELECT);
-  if (!isSelected) {
+  if (isSelected == 0) {
     good.drive.init.toolBarRename.setVisible(false);
     good.drive.init.toolBarDelete.setVisible(false);
     good.drive.init.menuBarMore.setVisible(false);
@@ -778,21 +778,25 @@ good.drive.init.visiabletoolbar = function(selected) {
   }
   var docid = pathControl.getCurrentDocid();
   switch (docid) {
-    case good.constants.MYCLASSRESDOCID:
-    case good.constants.MYRESDOCID:
+  case good.constants.MYCLASSRESDOCID:
+  case good.constants.MYRESDOCID:
+    good.drive.init.toolBarDelete.setVisible(true);
+    good.drive.init.menuBarMore.setVisible(true);
+    break;
+  case good.constants.PUBLICRESDOCID:
+    good.drive.init.toolBarRename.setVisible(true);
+    good.drive.init.menuBarMore.setVisible(true);
+    break;
+  case good.constants.OTHERDOCID:
+    if (isSelected == 1) {
       good.drive.init.toolBarDelete.setVisible(true);
       good.drive.init.menuBarMore.setVisible(true);
-      break;
-    case good.constants.PUBLICRESDOCID:
-      good.drive.init.toolBarRename.setVisible(true);
-      good.drive.init.menuBarMore.setVisible(true);
-      break;
-    case good.constants.OTHERDOCID:
-      good.drive.init.toolBarDelete.setVisible(true);
-      good.drive.init.menuBarMore.setVisible(true);
-      break;
-    default:
-      break;
+      return;
+    }
+    good.drive.init.menuBarMore.setVisible(false);
+    break;
+  default:
+    break;
   }
 };
 

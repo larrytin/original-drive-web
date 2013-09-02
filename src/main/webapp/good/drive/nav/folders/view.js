@@ -10,6 +10,7 @@ goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 
 /**
+ * Tree结构的封装
  * @constructor
  * @param {string} title
  * @param {string} docid
@@ -45,6 +46,7 @@ good.drive.nav.folders.Tree = function(title, docid, targetElm, control) {
 
 
 /**
+ * 插入一个节点
  * @param {goog.ui.tree.TreeControl} parent
  * @param {good.realtime.CollaborativeMap} data
  * @param {string} title
@@ -67,6 +69,7 @@ good.drive.nav.folders.Tree.prototype.insertNode =
 };
 
 /**
+ * 用于便捷添加tree change事件
  * @param {Function} handle
  */
 good.drive.nav.folders.Tree.prototype.changeHandle = function(handle) {
@@ -75,6 +78,7 @@ good.drive.nav.folders.Tree.prototype.changeHandle = function(handle) {
 };
 
 /**
+ * 判断一个节点是否处于展开状态
  * @param {goog.ui.tree.TreeControl} node
  * @return {boolean}
  */
@@ -82,7 +86,7 @@ good.drive.nav.folders.Tree.prototype.hasExtended = function(node) {
   return node.getExpanded();
 };
 
-/** */
+/** 展开一个节点 */
 good.drive.nav.folders.Tree.prototype.extended =
     function() {
   var selected = this.getCurrentItem();
@@ -93,6 +97,7 @@ good.drive.nav.folders.Tree.prototype.extended =
 };
 
 /**
+ * 设置此选项可以让View受path的控制
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {good.realtime.CollaborativeMap} pathroot
  * @param {Function} callback
@@ -109,12 +114,14 @@ good.drive.nav.folders.Tree.prototype.initPath =
 };
 
 /**
+ * 取消Tree 让其处于无选中状态
  */
 good.drive.nav.folders.Tree.prototype.recovery = function() {
   this.roottree.setSelectedItem(null);
 };
 
 /**
+ * 通过pahtlist定位到一个具体的节点上
  * @param {good.realtime.CollaborativeList} pathlist
  */
 good.drive.nav.folders.Tree.prototype.location = function(pathlist) {
@@ -122,6 +129,7 @@ good.drive.nav.folders.Tree.prototype.location = function(pathlist) {
 };
 
 /**
+ * 获取当前选中的Item
  * @return {goog.ui.tree.TreeControl}
  */
 good.drive.nav.folders.Tree.prototype.getCurrentItem = function() {
@@ -129,6 +137,7 @@ good.drive.nav.folders.Tree.prototype.getCurrentItem = function() {
 };
 
 /**
+ * 设置节点的Title
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeMap} data
  * @param {string} title
@@ -155,6 +164,7 @@ good.drive.nav.folders.Tree.prototype.setNodeTitle =
 };
 
 /**
+ * 生产节点的图标
  * @param {good.realtime.CollaborativeMap} data
  * @return {string}
  */
@@ -168,6 +178,7 @@ good.drive.nav.folders.Tree.prototype.getFolderIcon =
 };
 
 /**
+ * 设置tree的数据 会自动解析 然后加载
  * @param {good.realtime.CollaborativeMap} data
  */
 good.drive.nav.folders.Tree.prototype.setData = function(data) {
@@ -175,6 +186,7 @@ good.drive.nav.folders.Tree.prototype.setData = function(data) {
 };
 
 /**
+ * 自定义一个节点
  * @param {goog.ui.tree.TreeControl} tree
  * @param {Object} data
  */
@@ -335,6 +347,7 @@ good.drive.nav.folders.Tree.prototype.customNode =
 };
 
 /**
+ * 根据一个索引删除一个节点
  * @param {goog.ui.tree.TreeControl} parent
  * @param {number} idx
  * @return {goog.ui.tree.TreeControl}
@@ -352,6 +365,7 @@ good.drive.nav.folders.Tree.prototype.moveToNode = function(data) {
 };
 
 /**
+ * 根据一个Object对象读取该对象中的字段添加到这棵树中
  * @param {Object} param
  */
 good.drive.nav.folders.Tree.prototype.addLeaf = function(param) {
@@ -361,6 +375,7 @@ good.drive.nav.folders.Tree.prototype.addLeaf = function(param) {
 };
 
 /**
+ * 根据str修改当前选中节点中的title
  * @param {Object} str
  */
 good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
@@ -369,7 +384,7 @@ good.drive.nav.folders.Tree.prototype.renameLeaf = function(str) {
       this.getIndexByChild(selected), str);
 };
 
-/**  */
+/** 删除节点 */
 good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
   var selected = this.getCurrentItem();
   this.control().removeLeaf(selected.getParent(),
@@ -377,6 +392,7 @@ good.drive.nav.folders.Tree.prototype.removeLeaf = function() {
 };
 
 /**
+ * 根据节点获取该节点的索引
  * @param {goog.ui.tree.TreeControl} node
  * @return {integer}
  */
@@ -389,6 +405,7 @@ good.drive.nav.folders.Tree.prototype.getIndexByChild = function(node) {
 };
 
 /**
+ * 获取Control
  * @return {good.drive.nav.folders.ViewControl}
  */
 good.drive.nav.folders.Tree.prototype.control = function() {
@@ -396,6 +413,7 @@ good.drive.nav.folders.Tree.prototype.control = function() {
 };
 
 /**
+ * 设置是否支持拖拽
  */
 good.drive.nav.folders.Tree.prototype.setDraggable = function() {
   var dragDropGroup = this.dragDropGroup;

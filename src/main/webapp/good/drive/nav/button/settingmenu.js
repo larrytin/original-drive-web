@@ -7,6 +7,7 @@ goog.require('goog.ui.SubMenu');
 
 
 /**
+ * 设置按钮
  * @constructor
  */
 good.drive.nav.button.Settingmenu = function() {
@@ -24,6 +25,7 @@ good.drive.nav.button.Settingmenu = function() {
 };
 
 /**
+ * 隐藏Item事件
  * @param {goog.events.Event} e
  */
 good.drive.nav.button.Settingmenu.prototype.hideMenuItem = function(e) {
@@ -74,6 +76,7 @@ good.drive.nav.button.Settingmenu.prototype.hideMenuItem = function(e) {
 };
 
 /**
+ * 点击Item事件
  * @param {goog.events.Event} e
  */
 good.drive.nav.button.Settingmenu.prototype.onSelectedHandle = function(e) {
@@ -119,17 +122,11 @@ good.drive.nav.button.Settingmenu.prototype.onSelectedHandle = function(e) {
 };
 
 /**
+ * 获取设置Button的Menu
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.button.Settingmenu.prototype.getRightMenu = function() {
   return this._rightMenu;
-};
-
-/**
- * @return {goog.ui.SubMenu}
- */
-good.drive.nav.button.Settingmenu.prototype.getsubMenu = function() {
-  return this._subMenu;
 };
 
 /** @type {JSON} */

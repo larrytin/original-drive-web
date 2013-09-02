@@ -6,6 +6,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Dialog');
 
 /**
+ * 构建弹出框
  * @constructor
  */
 good.drive.nav.dialog.View = function() {
@@ -36,6 +37,7 @@ good.drive.nav.dialog.View = function() {
 };
 
 /**
+ * 生成一个弹出框
  * @param {string} title
  * @param {Function} handle
  * @param {number} id
@@ -67,6 +69,7 @@ good.drive.nav.dialog.View.prototype.genDialog =
 };
 
 /**
+ * 构建一个弹出框功能按钮
  * @param {Object} buttons
  * @return {goog.ui.Dialog.ButtonSet}
  */
@@ -99,6 +102,7 @@ good.drive.nav.dialog.View.prototype.genButtonSet = function(buttons) {
 };
 
 /**
+ * 构建一个移动的弹出框
  * @param {string} title
  * @param {Function} handle
  * @return {goog.ui.Dialog}
@@ -120,6 +124,7 @@ good.drive.nav.dialog.View.prototype.moveToDialog = function(title, handle) {
 };
 
 /**
+ * 构建资源安排至的弹出框
  * @param {string} title
  * @param {Function} handle
  * @return {goog.ui.Dialog}
@@ -141,6 +146,7 @@ good.drive.nav.dialog.View.prototype.favoritesToDialog =
 };
 
 /**
+ * 构建Tree移动的弹出框
  * @param {string} title
  * @param {string} target
  * @return {string}
@@ -164,6 +170,7 @@ good.drive.nav.dialog.View.prototype.getMoveToContent =
 };
 
 /**
+ * 构建以个创建弹出框
  * @param {Function} handle
  * @return {goog.ui.Dialog}
  */
@@ -175,6 +182,7 @@ good.drive.nav.dialog.View.prototype.createFolderDialog = function(handle) {
 
 
 /**
+ * 构建一个修改弹出框
  * @param {Function} handle
  * @return {goog.ui.Dialog}
  */

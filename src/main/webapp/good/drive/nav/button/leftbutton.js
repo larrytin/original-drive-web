@@ -6,6 +6,7 @@ goog.require('good.drive.nav.button.CustomView');
 
 
 /**
+ * 用来构建工具栏的按的按钮
  * @constructor
  */
 good.drive.nav.button.LeftButton = function() {
@@ -15,6 +16,7 @@ good.drive.nav.button.LeftButton = function() {
 
 
 /**
+ * 获取创建按钮
  * @return {good.drive.nav.button.CustomView}
  */
 good.drive.nav.button.LeftButton.prototype.createBtn = function() {
@@ -30,6 +32,7 @@ good.drive.nav.button.LeftButton.prototype.createBtn = function() {
 
 
 /**
+ * 获取上传按钮
  * @return {good.drive.nav.button.CustomView}
  */
 good.drive.nav.button.LeftButton.prototype.updateBtn = function() {

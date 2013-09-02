@@ -7,6 +7,7 @@ goog.require('goog.ui.SubMenu');
 
 
 /**
+ * 更多按钮弹出框
  * @constructor
  */
 good.drive.nav.button.rigthmenu = function() {
@@ -31,6 +32,7 @@ good.drive.nav.button.rigthmenu = function() {
 };
 
 /**
+ * 隐藏按钮Item的回调
  * @param {goog.events.Event} e
  */
 good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
@@ -65,7 +67,7 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
     }
     break;
   case good.constants.PUBLICRESDOCID:
-    var array = new Array(6, 7, 8);
+    var array = new Array(3, 6, 7, 8);
     if (data.contentType == 'application/x-print') {
       array.push(3);
     }
@@ -76,7 +78,7 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
     that._menu.hideItem(that._rightMenu, array);
     break;
   case good.constants.OTHERDOCID:
-    var array = new Array(0, 1, 2, 3, 4, 6);
+    var array = new Array(0, 1, 2, 3, 4, 5, 6, 7);
     that._menu.hideItem(that._rightMenu, array);
     break;
   default:
@@ -85,6 +87,7 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
 };
 
 /**
+ * 选择Item的事件
  * @param {goog.events.Event} e
  */
 good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
@@ -141,6 +144,7 @@ good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
 };
 
 /**
+ * 用于人员管理和设备管理的查看和删除
  * @param {Object} data
  * @param {string} type
  */
@@ -164,7 +168,7 @@ good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
   var clickList = grid.getClickList();
   var dels = [];
   goog.array.forEach(clickList, function(cell) {
-    dels.push(flag ? cell.data['userId'] : cell.data['id'] );
+    dels.push(flag ? cell.data['userId'] : cell.data['id']);
   });
   if (flag) {
     if (type == 'edit') {
@@ -182,17 +186,11 @@ good.drive.nav.button.rigthmenu.prototype.deletePersonOrdevice =
 };
 
 /**
+ * 更多设置Button的Menu
  * @return {goog.ui.PopupMenu}
  */
 good.drive.nav.button.rigthmenu.prototype.getRightMenu = function() {
   return this._rightMenu;
-};
-
-/**
- * @return {goog.ui.SubMenu}
- */
-good.drive.nav.button.rigthmenu.prototype.getsubMenu = function() {
-  return this._subMenu;
 };
 
 /** @type {JSON} */

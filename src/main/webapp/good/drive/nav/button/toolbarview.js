@@ -8,6 +8,7 @@ goog.require('goog.dom');
 
 
 /**
+ * 创建ToobarButton
  * @constructor
  * @param {goog.ui.ControlContent} content
  * @param {...Array.<string>} var_args
@@ -24,6 +25,7 @@ goog.inherits(good.drive.nav.button.ToolBarView, good.drive.nav.button.View);
 
 
 /**
+ * 创建ToobarButton 自定的Renderer
  * @constructor
  */
 good.drive.nav.button.TooBarRenderer = function() {

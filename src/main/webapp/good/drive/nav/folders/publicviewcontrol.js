@@ -4,6 +4,7 @@ goog.provide('good.drive.nav.folders.PublicViewControl');
 goog.require('good.drive.nav.folders.ViewControl');
 
 /**
+ * publickview的control 继承自ViewControl
  * @constructor
  * @param {string} title
  * @param {string} docid
@@ -17,6 +18,7 @@ goog.inherits(good.drive.nav.folders.PublicViewControl,
     good.drive.nav.folders.ViewControl);
 
 /**
+ * 数据结构
  * @override
  */
 good.drive.nav.folders.PublicViewControl.prototype.getKeyType = function() {

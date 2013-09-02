@@ -6,6 +6,7 @@ goog.require('good.drive.nav.button.ToolBarView');
 
 
 /**
+ * 获取ToolbarButton
  * @constructor
  */
 good.drive.nav.button.ToolBarButton = function() {
@@ -16,6 +17,7 @@ good.drive.nav.button.ToolBarButton = function() {
 
 
 /**
+ * 获取工具栏创建按钮
  * @return {good.drive.nav.button.ToolBarView}
  */
 good.drive.nav.button.ToolBarButton.prototype.createTolBtn = function() {
@@ -28,6 +30,7 @@ good.drive.nav.button.ToolBarButton.prototype.createTolBtn = function() {
 
 
 /**
+ * 获取工具栏删除按钮
  * @return {good.drive.nav.button.ToolBarView}
  */
 good.drive.nav.button.ToolBarButton.prototype.deleteTolBtn = function() {
@@ -40,6 +43,7 @@ good.drive.nav.button.ToolBarButton.prototype.deleteTolBtn = function() {
 
 
 /**
+ * 获取工具栏重命名按钮
  * @return {good.drive.nav.button.ToolBarView}
  */
 good.drive.nav.button.ToolBarButton.prototype.renameTolBtn = function() {
