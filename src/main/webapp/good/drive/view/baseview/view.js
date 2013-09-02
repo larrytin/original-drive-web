@@ -8,6 +8,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 
 /**
+ * 这个是GridView和TableView的基类
  * @param {Object} data
  * @param {string} docid
  * @param {goog.dom.DomHelper=} opt_domHelper
@@ -49,6 +50,7 @@ good.drive.view.baseview.View.isGrid = true;
 good.drive.view.baseview.View.currentGrid = undefined;
 
 /**
+ * 设置传入的grid为显示状态
  * @param {good.drive.view.baseview.View} grid
  */
 good.drive.view.baseview.View.visiable = function(grid) {
@@ -62,6 +64,7 @@ good.drive.view.baseview.View.visiable = function(grid) {
 };
 
 /**
+ * 根据Data渲染Cell
  * @param {Object} data
  */
 good.drive.view.baseview.View.prototype.renderCell = function(data) {
@@ -76,6 +79,7 @@ good.drive.view.baseview.View.prototype.renderCell = function(data) {
 };
 
 /**
+ * 返回一个选中Cell列表的集合
  * @return {Array.<good.drive.view.baseview.Cell>}
  */
 good.drive.view.baseview.View.prototype.getClickList = function() {
@@ -86,6 +90,7 @@ good.drive.view.baseview.View.prototype.getClickList = function() {
 };
 
 /**
+ * 当前Grid是否有元素被选中
  * @return {boolean}
  */
 good.drive.view.baseview.View.prototype.hasSeleted = function() {
@@ -97,6 +102,7 @@ good.drive.view.baseview.View.prototype.hasSeleted = function() {
 };
 
 /**
+ * 清楚所有的选中状态
  */
 good.drive.view.baseview.View.prototype.clearSelect = function() {
   if (goog.array.isEmpty(this.checkList)) {
@@ -109,6 +115,7 @@ good.drive.view.baseview.View.prototype.clearSelect = function() {
 };
 
 /**
+ * 删除所有的Cell
  */
 good.drive.view.baseview.View.prototype.clear = function() {
   this.clearSelect();
@@ -123,6 +130,7 @@ good.drive.view.baseview.View.prototype.clear = function() {
 };
 
 /**
+ * 根据一个数组渲染Grid
  * @param {Array.<Object>} data
  */
 good.drive.view.baseview.View.prototype.renderCellByArray = function(data) {
@@ -133,6 +141,7 @@ good.drive.view.baseview.View.prototype.renderCellByArray = function(data) {
 };
 
 /**
+ * 根据一个Object数据来渲染Grid
  * @param {Object} data
  */
 good.drive.view.baseview.View.prototype.renderCellByObject = function(data) {
@@ -150,6 +159,7 @@ good.drive.view.baseview.View.prototype.renderCellByObject = function(data) {
 };
 
 /**
+ * 对data添加监听事件
  * @param {Object} data
  */
 good.drive.view.baseview.View.prototype.bindDataEvent = function(data) {
@@ -191,6 +201,7 @@ good.drive.view.baseview.View.prototype.bindDataEvent = function(data) {
 };
 
 /**
+ * 渲染文件导航路径
  */
 good.drive.view.baseview.View.prototype.renderFolderPath = function() {
   var headElm = this.getHeadContainerElement();
@@ -204,6 +215,7 @@ good.drive.view.baseview.View.prototype.renderFolderPath = function() {
 };
 
 /**
+ * 新建或者插入导航路径
  */
 good.drive.view.baseview.View.prototype.insertFolderPath = function() {
   var that = this;
@@ -236,6 +248,7 @@ good.drive.view.baseview.View.prototype.insertFolderPath = function() {
 };
 
 /**
+ * 设置传入的Cell为选中状态
  * @param {good.drive.view.baseview.Cell} cell
  */
 good.drive.view.baseview.View.prototype.setSelectedItem =
@@ -256,6 +269,7 @@ good.drive.view.baseview.View.prototype.setSelectedItem =
 };
 
 /**
+ * 设置传入的Cell取消选中状态
  * @param {good.drive.view.baseview.Cell} cell
  */
 good.drive.view.baseview.View.prototype.setDeSelectedItem = function(cell) {
@@ -274,6 +288,7 @@ good.drive.view.baseview.View.prototype.setDeSelectedItem = function(cell) {
 };
 
 /**
+ * 选中所有
  */
 good.drive.view.baseview.View.prototype.selectAll = function() {
   for (var i = 0; i < this.getChildCount(); i++) {
@@ -283,6 +298,7 @@ good.drive.view.baseview.View.prototype.selectAll = function() {
 };
 
 /**
+ * 取消选中所有
  */
 good.drive.view.baseview.View.prototype.deSelectAll = function() {
   for (var i = 0; i < this.getChildCount(); i++) {
@@ -301,6 +317,7 @@ good.drive.view.baseview.View.prototype.getCheckBox = function(cell) {
 };
 
 /**
+ * 返回最后一个选中的的Cell
  * @return {good.drive.view.baseview.Cell}
  */
 good.drive.view.baseview.View.prototype.getSelectedItem = function() {
@@ -308,6 +325,7 @@ good.drive.view.baseview.View.prototype.getSelectedItem = function() {
 };
 
 /**
+ * 给导航添加路径
  * @param {Element} elm
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {string} currentid
@@ -324,12 +342,14 @@ good.drive.view.baseview.View.prototype.pathHandle =
 };
 
 /**
+ * 将当前的Grid从他的父亲中删除
  */
 good.drive.view.baseview.View.prototype.removeFromParent = function() {
   goog.dom.removeNode(this.getElement());
 };
 
 /**
+ * 插入一个Cell根据data
  * @param {good.realtime.CollaborativeMap} data
  * @param {boolean} isFolder
  */
@@ -342,6 +362,7 @@ good.drive.view.baseview.View.prototype.insertCell = function(data, isFolder) {
 
 
 /**
+ * 根据data删除一个Cell
  * @param {good.realtime.CollaborativeMap} data
  */
 good.drive.view.baseview.View.prototype.removeCell = function(data) {
@@ -362,6 +383,7 @@ good.drive.view.baseview.View.prototype.removeCell = function(data) {
 };
 
 /**
+ * 删除当前选中的Cell
  */
 good.drive.view.baseview.View.prototype.removeCurrentData = function() {
   var that = this;
@@ -380,6 +402,7 @@ good.drive.view.baseview.View.prototype.removeCurrentData = function() {
 };
 
 /**
+ * 获取当前选中的Cell的Title
  * @return {string}
  */
 good.drive.view.baseview.View.prototype.getCurrentTitle = function() {
@@ -393,6 +416,7 @@ good.drive.view.baseview.View.prototype.getCurrentTitle = function() {
 };
 
 /**
+ * 修改Cell的标题
  * @param {string} title
  */
 good.drive.view.baseview.View.prototype.renameChildData =

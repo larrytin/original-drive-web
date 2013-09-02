@@ -13,11 +13,14 @@ goog.require('goog.ui.SubMenu');
 goog.require('goog.ui.registry');
 
 /**
+ * 用于构建弹出菜单的类
  * @constructor
  */
 good.drive.nav.menu.View = function() {
 };
+
 /**
+ * 构建一个弹出菜单 你最少需要提供一个时间源和一个结构化的item
  * @param {Element} dom
  * @param {Array.<Array>} items
  * @param {Function} handle
@@ -35,6 +38,7 @@ good.drive.nav.menu.View.prototype.genPopupMenu =
 };
 
 /**
+ * 构建一个弹出框 功能genPopupMenu类似
  * @param {Element} dom
  * @param {Array.<Array>} items
  * @param {Function} handle
@@ -51,6 +55,7 @@ good.drive.nav.menu.View.prototype.genMenu =
 };
 
 /**
+ * 构建菜单的基本方法 提供了自动生成的功能
  * @param {goog.ui.Menu} menu
  * @param {Element} dom
  * @param {Array.<Array>} items
@@ -81,6 +86,7 @@ good.drive.nav.menu.View.prototype.genBase_ =
 };
 
 /**
+ * 重新构建
  * @param {goog.ui.PopupMenu} popupMenu
  * @param {Array.<Array>} items
  * @param {Function} handle
@@ -98,6 +104,7 @@ good.drive.nav.menu.View.prototype.reload =
 };
 
 /**
+ * 根据一个有序的Items来构建一个菜单
  * @param {goog.ui.PopupMenu} popupMenu
  * @param {Array.<Array>} items
  * @private
@@ -125,6 +132,7 @@ good.drive.nav.menu.View.prototype.genItems_ =
 };
 
 /**
+ * 根据提供的hides的数组来隐藏菜单中的匹配的索引
  * @param {goog.ui.PopupMenu} popupMenu
  * @param {Array.<number>} hides
  */
@@ -141,6 +149,7 @@ good.drive.nav.menu.View.prototype.hideItem = function(popupMenu, hides) {
 };
 
 /**
+ * 清除弹出框的内容
  * @param {goog.ui.PopupMenu} popupMenu
  */
 good.drive.nav.menu.View.prototype.clearItem =
@@ -151,6 +160,7 @@ good.drive.nav.menu.View.prototype.clearItem =
 };
 
 /**
+ * 构建一个创建的弹出康
  * @param {Element} dom
  * @param {Function} handle
  * @return {goog.ui.PopupMenu}
@@ -184,6 +194,7 @@ good.drive.nav.menu.View.prototype.createPopup = function(dom, handle) {
 };
 
 /**
+ * 构建一个右键的弹出框
  * @param {Element} dom
  * @param {Function} handle
  * @return {goog.ui.PopupMenu}

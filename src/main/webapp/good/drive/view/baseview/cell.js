@@ -6,6 +6,7 @@ goog.require('goog.string.StringBuffer');
 goog.require('goog.ui.Component');
 
 /**
+ * Grid中Cell的基类 这个类抽象了一些功能
  * @param {good.realtime.CollaborativeMap} data
  * @param {Object} keytype
  * @param {Object} defaultConfig
@@ -45,6 +46,7 @@ good.drive.view.baseview.Cell.prototype.exitDocument = function() {
 };
 
 /**
+ * 查看当前的Cell是否是一个文件夹
  * @return {boolean}
  */
 good.drive.view.baseview.Cell.prototype.isFolder = function() {
@@ -52,6 +54,7 @@ good.drive.view.baseview.Cell.prototype.isFolder = function() {
 };
 
 /**
+ * 设置是否为文件夹
  * @param {boolean} isFolder
  */
 good.drive.view.baseview.Cell.prototype.setIsFolder = function(isFolder) {
@@ -59,6 +62,7 @@ good.drive.view.baseview.Cell.prototype.setIsFolder = function(isFolder) {
 };
 
 /**
+ * 为这个Cell添加初始化的事件
  * @private
  */
 good.drive.view.baseview.Cell.prototype.attachEvents_ = function() {
@@ -85,6 +89,7 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
 };
 
 /**
+ * 点击Cell后触发的事件
  */
 good.drive.view.baseview.Cell.prototype.openCell = function() {
   if (this.data instanceof good.realtime.CollaborativeMap) {
@@ -163,6 +168,7 @@ good.drive.view.baseview.Cell.prototype.getCheckImageElement = function() {
 };
 
 /**
+ * 选择当前Cell
  */
 good.drive.view.baseview.Cell.prototype.select = function() {
   if (this.isSelected()) {
@@ -178,6 +184,7 @@ good.drive.view.baseview.Cell.prototype.select = function() {
 };
 
 /**
+ * 反选当前Cell
  */
 good.drive.view.baseview.Cell.prototype.deSelect = function() {
   if (!this.isSelected()) {
@@ -188,7 +195,7 @@ good.drive.view.baseview.Cell.prototype.deSelect = function() {
   this.getCheckStyle();
   var root = good.drive.nav.folders.Path.getINSTANCE().root;
   var select = root.get(good.drive.nav.folders.Path.NameType.SELECT);
-  select --;
+  select--;
   root.set(good.drive.nav.folders.Path.NameType.SELECT, select);
   if (select == 0) {
     root.set(good.drive.nav.folders.Path.NameType.SELECT, 0);
@@ -197,6 +204,7 @@ good.drive.view.baseview.Cell.prototype.deSelect = function() {
 };
 
 /**
+ * 查看当前Cell是否处于选中状态
  * @return {boolean}
  */
 good.drive.view.baseview.Cell.prototype.isSelected = function() {
@@ -204,6 +212,7 @@ good.drive.view.baseview.Cell.prototype.isSelected = function() {
 };
 
 /**
+ * 设置Cell的选中状态
  * @param {boolean} selected
  */
 good.drive.view.baseview.Cell.prototype.setSelectedInternal =
@@ -215,6 +224,7 @@ good.drive.view.baseview.Cell.prototype.setSelectedInternal =
 };
 
 /**
+ * 取消事件绑定
  * @private
  */
 good.drive.view.baseview.Cell.prototype.detachEvents_ = function() {
@@ -222,6 +232,7 @@ good.drive.view.baseview.Cell.prototype.detachEvents_ = function() {
 };
 
 /**
+ * 鼠标时间绑定的回调
  * @param {goog.events.BrowserEvent} e
  */
 good.drive.view.baseview.Cell.prototype.handleKeyEvent = function(e) {

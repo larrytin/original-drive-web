@@ -9,6 +9,7 @@ goog.require('goog.ui.PopupMenu');
 
 
 /**
+ * 构建一个右击菜单
  * @constructor
  * @param {Array} menulst
  */
@@ -26,6 +27,7 @@ good.drive.nav.menu.Popupmenu = function(menulst) {
 
 
 /**
+ * 返回一个创建按钮按下的弹出菜单
  * @param {Element} dom
  * @param {Function} handle
  * @return {goog.ui.PopupMenu}
@@ -39,6 +41,7 @@ good.drive.nav.menu.Popupmenu.prototype.createPopup =
 };
 
 /**
+ * 返回一个按下上传按钮弹出的菜单
  * @param {Element} dom
  * @param {Function} handle
  * @return {goog.ui.PopupMenu}

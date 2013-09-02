@@ -3,7 +3,9 @@ goog.provide('good.drive.nav.list');
 
 goog.require('goog.ui.Menu');
 goog.require('goog.ui.MenuItemRenderer');
+
 /**
+ * 人员管理和设备管理的View
  * @constructor
  * @param {string} docid
  */
@@ -38,6 +40,7 @@ good.drive.nav.list.View = function(docid) {
 };
 
 /**
+ * 返回一个人员管理和设备管理的Menu
  * @return {goog.ui.Menu}
  */
 good.drive.nav.list.View.prototype.listMenu = function() {
@@ -45,6 +48,7 @@ good.drive.nav.list.View.prototype.listMenu = function() {
 };
 
 /**
+ * 获取当前选中的Item
  * @return {goog.ui.MenuItem}
  */
 good.drive.nav.list.View.prototype.getCurItem = function() {
@@ -54,6 +58,7 @@ good.drive.nav.list.View.prototype.getCurItem = function() {
 };
 
 /**
+ * 初始化Path操作
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {good.realtime.CollaborativeMap} pathroot
  * @param {Function} callback
@@ -80,6 +85,7 @@ good.drive.nav.list.View.prototype.initPath =
 };
 
 /**
+ * 回复到Paht丢失的状态
  */
 good.drive.nav.list.View.prototype.recovery = function() {
   var childIds = this.menu.getChildIds();
@@ -94,6 +100,7 @@ good.drive.nav.list.View.prototype.recovery = function() {
 };
 
 /**
+ * 通过一个pathlist定位
  * @param {good.realtime.CollaborativeList} pathlist
  */
 good.drive.nav.list.View.prototype.location = function(pathlist) {
