@@ -8,6 +8,7 @@ goog.require('goog.dom');
 
 
 /**
+ * 自定义Button
  * @constructor
  * @param {goog.ui.ControlContent} content
  * @param {...Array.<string>} var_args
@@ -23,6 +24,7 @@ goog.inherits(good.drive.nav.button.CustomView, good.drive.nav.button.View);
 
 
 /**
+ * 自定义Button的Renderer
  * @constructor
  */
 good.drive.nav.button.CustomRenderer = function() {

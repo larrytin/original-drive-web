@@ -9,6 +9,7 @@ goog.require('goog.ui.MenuButtonRenderer');
 
 
 /**
+ * 创建带有Menu的Button
  * @constructor
  * @param {goog.ui.ControlContent} content
  * @param {...Array.<string>} var_args
@@ -25,7 +26,7 @@ goog.inherits(good.drive.nav.button.MenuBarView, good.drive.nav.button.View);
 
 
 
-/**
+/**创建带有Menu的Button的Renderer
  * @constructor
  */
 good.drive.nav.button.MenuBarRenderer = function() {
@@ -37,6 +38,7 @@ goog.addSingletonGetter(good.drive.nav.button.MenuBarRenderer);
 
 
 /**
+ * 自定义一个Css
  * @type {string}
  */
 good.drive.nav.button.MenuBarRenderer.CSS_CLASS =
@@ -44,6 +46,7 @@ good.drive.nav.button.MenuBarRenderer.CSS_CLASS =
 
 
 /**
+ * 构建Button内的Element
  * @param {goog.ui.Control} control goog.ui.Button to render.
  * @return {Element} Root element for the button.
  * @override

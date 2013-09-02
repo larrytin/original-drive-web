@@ -4,6 +4,7 @@ goog.provide('good.drive.nav.folders.MyClassViewControl');
 goog.require('good.drive.nav.folders.ViewControl');
 
 /**
+ * myclass的Document Control 继承自ViewControl
  * @constructor
  * @param {string} title
  * @param {string} docid
@@ -17,6 +18,7 @@ goog.inherits(good.drive.nav.folders.MyClassViewControl,
     good.drive.nav.folders.ViewControl);
 
 /**
+ * 获取数据结构
  * @override
  */
 good.drive.nav.folders.MyClassViewControl.prototype.getKeyType = function() {

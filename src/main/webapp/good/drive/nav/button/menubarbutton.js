@@ -6,6 +6,7 @@ goog.require('good.drive.nav.button.MenuBarView');
 
 
 /**
+ * 用来构建带Menu的按钮
  * @constructor
  */
 good.drive.nav.button.MenuBarButton = function() {
@@ -16,6 +17,7 @@ good.drive.nav.button.MenuBarButton = function() {
 
 
 /**
+ * 获取更多按钮
  * @param {goog.ui.PopupMenu} menu
  * @return {good.drive.nav.button.MenuBarView}
  */
@@ -30,6 +32,7 @@ good.drive.nav.button.MenuBarButton.prototype.moreMenuBar = function(menu) {
 
 
 /**
+ * 获取设置按钮
  * @param {goog.ui.PopupMenu} menu
  * @return {good.drive.nav.button.MenuBarView}
  */

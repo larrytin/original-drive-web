@@ -7,6 +7,7 @@ goog.require('goog.ui.tree.BaseNode');
 goog.require('goog.ui.tree.TreeControl');
 
 /**
+ * 这个是TreeView的控制类
  * @constructor
  * @param {string} docid
  * @extends {good.drive.nav.folders.AbstractControl}
@@ -20,6 +21,7 @@ goog.inherits(good.drive.nav.folders.ViewControl,
     good.drive.nav.folders.AbstractControl);
 
 /**
+ * Tree的基本数据类型
  * @enum {string}
  */
 good.drive.nav.folders.ViewControl.ViewControlType = {
@@ -32,6 +34,7 @@ good.drive.nav.folders.ViewControl.ViewControlType = {
 good.drive.nav.folders.ViewControl.BASEDATA = ['我的课件', '我的音乐', '我的视频', '我的图片'];
 
 /**
+ * 加载完成Document之后调用这个方法对数据进行映射
  * @override
  */
 good.drive.nav.folders.ViewControl.prototype.connect = function(doc) {
@@ -39,6 +42,7 @@ good.drive.nav.folders.ViewControl.prototype.connect = function(doc) {
 };
 
 /**
+ * 映射数据和界面的关系
  * @param {goog.ui.tree.TreeControl} view
  * @param {good.realtime.CollaborativeMap} data
  */
@@ -51,6 +55,7 @@ good.drive.nav.folders.ViewControl.prototype.mappingView =
 };
 
 /**
+ * 根据一个path定位一个节点在整棵树中的位置
  * @param {goog.ui.tree.TreeControl} root
  * @param {good.realtime.CollaborativeList} path
  */
@@ -63,6 +68,7 @@ good.drive.nav.folders.ViewControl.prototype.locationNode =
 };
 
 /**
+ * 定位的具体实现 通过递归来遍历整棵树来匹配Path
  * @param {goog.ui.tree.TreeControl} parentNode
  * @param {good.realtime.CollaborativeList} path
  * @param {number} idx
@@ -97,6 +103,7 @@ good.drive.nav.folders.ViewControl.prototype.locationNode_ =
 };
 
 /**
+ * 每次选中一个树后会调用这个方法 来构建这个数的pathlist
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {good.realtime.CollaborativeMap} pathmap
  */
@@ -141,6 +148,7 @@ good.drive.nav.folders.ViewControl.prototype.buildPath =
 };
 
 /**
+ * 递归 构建一个从根节点开始 到当前节点的一个paht列表
  * @param {goog.ui.tree.TreeControl} parentNode
  * @param {Array.<Object>} paths
  * @private
@@ -155,6 +163,7 @@ good.drive.nav.folders.ViewControl.prototype.buildPath_ =
 };
 
 /**
+ * pahtlis是否是当前节点映射的paht的值 如果是 则返回true 不是则返回false
  * @param {good.realtime.CollaborativeList} pathlist
  * @param {string} mapid
  * @param {number} pathCount
@@ -177,6 +186,7 @@ good.drive.nav.folders.ViewControl.prototype.isCurrentPath =
 };
 
 /**
+ * 根据节点和数据添加事件
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeMap} map
  */
@@ -189,6 +199,7 @@ good.drive.nav.folders.ViewControl.prototype.addEvent = function(node, map) {
 };
 
 /**
+ * 数据事件的绑定
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeList} list
  */
@@ -239,6 +250,7 @@ good.drive.nav.folders.ViewControl.prototype.dataHandle = function(node, list) {
 };
 
 /**
+ * 节点事件的绑定
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeList} list
  */
@@ -281,6 +293,7 @@ good.drive.nav.folders.ViewControl.prototype.nodeHandle = function(node, list) {
 };
 
 /**
+ * 节点中的数据结构的时间绑定 主要是用来修改节点名称的时候实现同步
  * @param {goog.ui.tree.TreeControl} parentNode
  * @param {goog.ui.tree.TreeControl} selfNode
  * @param {good.realtime.CollaborativeMap} map
@@ -303,6 +316,7 @@ good.drive.nav.folders.ViewControl.prototype.mapHander =
 };
 
 /**
+ * 绑定数据和节点的映射
  * @param {goog.ui.tree.TreeControl} node
  * @param {good.realtime.CollaborativeMap} map
  * @return {boolean}
@@ -317,31 +331,7 @@ good.drive.nav.folders.ViewControl.prototype.bindData = function(node, map) {
 };
 
 /**
- * @param {string} id
- * @return {good.drive.nav.grid.View}
- */
-good.drive.nav.folders.ViewControl.prototype.getGridById =
-  function(id) {
-  var cells = goog.object.get(
-      good.drive.nav.grid.View.grids, this.model().docId());
-  if (!goog.object.containsKey(cells, id)) {
-    return null;
-  }
-  return goog.object.get(cells, id);
-};
-
-/**
- * @param {string} id
- * @return {good.drive.nav.grid.View}
- */
-good.drive.nav.folders.ViewControl.prototype.removeGridById =
-  function(id) {
-  var cells = goog.object.get(good.drive.nav.grid.View.grids,
-      this.model().docId());
-  return goog.object.remove(cells, id);
-};
-
-/**
+ * 添加节点 由View调用
  * @param {goog.ui.tree.TreeControl} node
  * @param {Object} param
  */
@@ -352,6 +342,7 @@ good.drive.nav.folders.ViewControl.prototype.addLeaf = function(node, param) {
 };
 
 /**
+ * 添加节点 根绝param提供的数据自动匹配并添加到List中
  * @param {good.realtime.CollaborativeMap} map
  * @param {Object} param
  * @return {good.realtime.CollaborativeMap}
@@ -387,6 +378,7 @@ good.drive.nav.folders.ViewControl.prototype.addLeafValue =
 };
 
 /**
+ * 根据idx修改一个节点的名字
  * @param {goog.ui.tree.TreeControl} node
  * @param {number} idx
  * @param {string} str
@@ -398,6 +390,7 @@ good.drive.nav.folders.ViewControl.prototype.renameLeaf =
 };
 
 /**
+ * 从一个节点移动到另一个节点
  * @param {good.realtime.CollaborativeMap} targetData
  * @param {Object} sourceData
  */
@@ -454,6 +447,7 @@ good.drive.nav.folders.ViewControl.prototype.moveToNode =
 };
 
 /**
+ * 根据idx删除一个节点
  * @param {goog.ui.tree.TreeControl} node
  * @param {number} idx
  */
@@ -462,6 +456,7 @@ good.drive.nav.folders.ViewControl.prototype.removeLeaf = function(node, idx) {
 };
 
 /**
+ * 设置书顶层节点的title
  * @param {string} title
  */
 good.drive.nav.folders.ViewControl.prototype.setTitle = function(title) {
@@ -469,6 +464,7 @@ good.drive.nav.folders.ViewControl.prototype.setTitle = function(title) {
 };
 
 /**
+ * 获取View
  * @return {Object}
  */
 good.drive.nav.folders.ViewControl.prototype.view = function() {
@@ -476,6 +472,7 @@ good.drive.nav.folders.ViewControl.prototype.view = function() {
 };
 
 /**
+ * 动态设置一个View
  * @param {Object} view
  */
 good.drive.nav.folders.ViewControl.prototype.setView = function(view) {
@@ -483,6 +480,7 @@ good.drive.nav.folders.ViewControl.prototype.setView = function(view) {
 };
 
 /**
+ * 获取一个节点绑定数据他的子节点数据
  * @param {good.realtime.CollaborativeMap} map
  * @return {Object}
  */
@@ -492,6 +490,7 @@ good.drive.nav.folders.ViewControl.prototype.getChildList =
 };
 
 /**
+ * 获取一个节点绑定数据他的子节点的标题信息
  * @param {good.realtime.CollaborativeMap} map
  * @return {string}
  */
@@ -501,6 +500,7 @@ good.drive.nav.folders.ViewControl.prototype.getLabel =
 };
 
 /**
+ * 默认获取了一个节点数据中用于申明子节点的字段名称
  * @return {string}
  */
 good.drive.nav.folders.ViewControl.prototype.getChildKey =
@@ -509,6 +509,7 @@ good.drive.nav.folders.ViewControl.prototype.getChildKey =
 };
 
 /**
+ * 默认获取一个节点数据中用于声明节点标题的名称
  * @return {string}
  */
 good.drive.nav.folders.ViewControl.prototype.getLabelKey =
@@ -517,6 +518,7 @@ good.drive.nav.folders.ViewControl.prototype.getLabelKey =
 };
 
 /**
+ * 节点的数据结构
  * @return {Object}
  */
 good.drive.nav.folders.ViewControl.prototype.getKeyType = function() {

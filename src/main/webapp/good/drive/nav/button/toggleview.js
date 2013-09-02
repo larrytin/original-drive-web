@@ -7,6 +7,7 @@ goog.require('goog.ui.ToggleButton');
 
 
 /**
+ * toggleButton的基类
  * @constructor
  * @param {goog.ui.ControlContent} content
  * @param {...Array.<string>} var_args

@@ -4,6 +4,7 @@ goog.provide('good.drive.nav.folders.Path');
 goog.require('good.drive.nav.folders.AbstractControl');
 
 /**
+ * Path Control 单例
  * @constructor
  * @param {string} str
  * @extends {good.drive.nav.folders.AbstractControl}
@@ -27,6 +28,7 @@ goog.inherits(good.drive.nav.folders.Path,
 good.drive.nav.folders.Path.INSTANCE;
 
 /**
+ * path的数据结构
  * @enum {string}
  */
 good.drive.nav.folders.Path.NameType = {
@@ -46,6 +48,7 @@ good.drive.nav.folders.Path.NameType = {
 };
 
 /**
+ * 获取一个Paht的实例
  * @return {good.drive.nav.folders.Path}
  */
 good.drive.nav.folders.Path.getINSTANCE = function() {
@@ -57,6 +60,7 @@ good.drive.nav.folders.Path.getINSTANCE = function() {
 };
 
 /**
+ * 初始化的回调
  * @override
  */
 good.drive.nav.folders.Path.prototype.connect = function(doc) {
@@ -82,15 +86,17 @@ good.drive.nav.folders.Path.prototype.connect = function(doc) {
   this.pathload();
   this.locationPath(path);
   this.dragdropEvent();
-  root.set(this.pathNameType().SELECT, false);
+  root.set(this.pathNameType().SELECT, 0);
 };
 
 /**
+ * 这个方法是在Path初始化结束后回调 用来保证某些依赖Path不会发生错误
  */
 good.drive.nav.folders.Path.prototype.pathload = function() {
 };
 
 /**
+ * 界面拖动处理
  */
 good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
   var that = this;
@@ -146,6 +152,7 @@ good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
 };
 
 /**
+ * 判断一个对象是否是包含在这个对象的中
  * @param {good.realtime.Model} mod
  * @param {string} id
  * @param {string} targetId
@@ -166,6 +173,7 @@ good.drive.nav.folders.Path.prototype.isParent = function(mod, id, targetId) {
 };
 
 /**
+ * 用来定位一个Path
  * @param {Object} path
  */
 good.drive.nav.folders.Path.prototype.locationPath = function(path) {
@@ -190,6 +198,7 @@ good.drive.nav.folders.Path.prototype.locationPath = function(path) {
 };
 
 /**
+ * 验证当前Path结构的有效性
  * @private
  */
 good.drive.nav.folders.Path.prototype.hasPathProperty_ = function() {
@@ -208,6 +217,7 @@ good.drive.nav.folders.Path.prototype.hasPathProperty_ = function() {
 };
 
 /**
+ * 获取当前的docid
  * @return {string}
  */
 good.drive.nav.folders.Path.prototype.getCurrentDocid = function() {
@@ -216,6 +226,7 @@ good.drive.nav.folders.Path.prototype.getCurrentDocid = function() {
 };
 
 /**
+ * 获取当前的path路劲
  * @return {Object}
  */
 good.drive.nav.folders.Path.prototype.getCurrentData = function() {
@@ -232,6 +243,7 @@ good.drive.nav.folders.Path.prototype.getCurrentData = function() {
 };
 
 /**
+ * 将一个docid和一个View绑定起来
  * @param {string} docId
  * @param {Object} view
  */
@@ -243,6 +255,7 @@ good.drive.nav.folders.Path.prototype.addPath = function(docId, view) {
 };
 
 /**
+ * 通过docid获取一个View
  * @param {string} docId
  * @return {Object}
  */
@@ -254,6 +267,7 @@ good.drive.nav.folders.Path.prototype.getViewBydocId = function(docId) {
 };
 
 /**
+ * 用于初始化后的回调
  * @param {string} docId
  */
 good.drive.nav.folders.Path.prototype.initCallBack = function(docId) {
@@ -266,6 +280,7 @@ good.drive.nav.folders.Path.prototype.initCallBack = function(docId) {
 };
 
 /**
+ * 通过一个docid返回这个docid是否有绑定的View
  * @param {string} docId
  * @return {boolean}
  */
@@ -277,6 +292,7 @@ good.drive.nav.folders.Path.prototype.containPathByDocId = function(docId) {
 };
 
 /**
+ * 通过一个docid获取View
  * @param {string} docId
  * @return {Object}
  */
@@ -288,6 +304,7 @@ good.drive.nav.folders.Path.prototype.getPathViewByDocId = function(docId) {
 };
 
 /**
+ * 将一个新的path替换原来旧的path
  * @param {Object} newPath
  */
 good.drive.nav.folders.Path.prototype.putNewPath =
@@ -296,6 +313,7 @@ good.drive.nav.folders.Path.prototype.putNewPath =
 };
 
 /**
+ * 通过docid和pathlist的方式来替换旧的path
  * @param {string} docid
  * @param {Object} pathlist
  */
@@ -308,6 +326,7 @@ good.drive.nav.folders.Path.prototype.putDocidAndPathList =
 };
 
 /**
+ * 初始化Path的数据
  * @override
  */
 good.drive.nav.folders.Path.prototype.initdata = function(mod) {
@@ -320,10 +339,11 @@ good.drive.nav.folders.Path.prototype.initdata = function(mod) {
   root.set(this.pathNameType().PATH, path);
   root.set(this.pathNameType().PLAYFILE, mod.createList());
   root.set(this.pathNameType().PATH, path);
-  root.set(this.pathNameType().SELECT, false);
+  root.set(this.pathNameType().SELECT, 0);
 };
 
 /**
+ * 初始化拖拽的数据
  * @return {good.realtime.CollaborativeMap}
  */
 good.drive.nav.folders.Path.prototype.initDragDrop = function() {

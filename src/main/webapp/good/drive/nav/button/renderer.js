@@ -5,6 +5,7 @@ goog.require('goog.ui.CustomButtonRenderer');
 
 
 /**
+ * Renderer的基类
  * @constructor
  */
 good.drive.nav.button.Renderer = function() {

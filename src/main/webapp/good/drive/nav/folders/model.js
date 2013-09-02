@@ -2,6 +2,7 @@
 goog.provide('good.drive.nav.folders.Model');
 
 /**
+ * 对Model进行封装的一个类
  * @constructor
  * @param {string} str
  */
@@ -33,12 +34,14 @@ good.drive.nav.folders.Model = function(str) {
 };
 
 /**
+ * Document加载时回调
  * @param {good.realtime.Document} doc
  */
 good.drive.nav.folders.Model.prototype.connect = function(doc) {
 };
 
 /**
+ * 是否加载完成
  * @return {boolean}
  */
 good.drive.nav.folders.Model.prototype.isloaded = function() {
@@ -46,12 +49,14 @@ good.drive.nav.folders.Model.prototype.isloaded = function() {
 };
 
 /**
+ * 首次加载Document时回调
  * @param {good.realtime.Model} mod
  */
 good.drive.nav.folders.Model.prototype.initdata = function(mod) {
 };
 
 /**
+ * 将一个Map数组放置到List中
  * @param {good.realtime.CollaborativeList} list
  * @param {Array.<good.realtime.CollaborativeMap>} children
  */
@@ -60,6 +65,7 @@ good.drive.nav.folders.Model.prototype.pushAll = function(list, children) {
 };
 
 /**
+ * 将一个Map放置到List中
  * @param {good.realtime.CollaborativeList} list
  * @param {good.realtime.CollaborativeMap} map
  */
@@ -68,6 +74,7 @@ good.drive.nav.folders.Model.prototype.push = function(list, map) {
 };
 
 /**
+ * 通过Id获取他的数据结构
  * @param {string} id
  * @return {Object}
  */
@@ -76,6 +83,7 @@ good.drive.nav.folders.Model.prototype.getObject = function(id) {
 };
 
 /**
+ * 根据Idx删除List中的对象
  * @param {good.realtime.CollaborativeList} list
  * @param {number} idx
  */
@@ -84,6 +92,7 @@ good.drive.nav.folders.Model.prototype.removeChildByIdx = function(list, idx) {
 };
 
 /**
+ * 创建一个List并返回
  * @return {good.realtime.CollaborativeList}
  */
 good.drive.nav.folders.Model.prototype.createList = function() {
@@ -91,6 +100,7 @@ good.drive.nav.folders.Model.prototype.createList = function() {
 };
 
 /**
+ * 获取一个List中idx的值
  * @param {good.realtime.CollaborativeList} list
  * @param {number} idx
  * @return {good.realtime.CollaborativeMap}
@@ -100,6 +110,7 @@ good.drive.nav.folders.Model.prototype.getChildByIdx = function(list, idx) {
 };
 
 /**
+ * 修改一个Map中Label字段的值
  * @param {good.realtime.CollaborativeMap} map
  * @param {string} str
  */
@@ -109,6 +120,7 @@ good.drive.nav.folders.Model.prototype.renameLabel = function(map, str) {
 };
 
 /**
+ * 清除List中的值
  * @param {good.realtime.CollaborativeList} list
  */
 good.drive.nav.folders.Model.prototype.clear = function(list) {
@@ -116,6 +128,7 @@ good.drive.nav.folders.Model.prototype.clear = function(list) {
 };
 
 /**
+ * 读取Document
  */
 good.drive.nav.folders.Model.prototype.load = function() {
   var that = this;
@@ -135,11 +148,13 @@ good.drive.nav.folders.Model.prototype.load = function() {
 };
 
 /**
+ * 读取其他的
  */
 good.drive.nav.folders.Model.prototype.loadOther = function() {
 };
 
 /**
+ * 根据Type获取一个构建好的有结构的Map
  * @param {Object} keyType
  * @return {good.realtime.CollaborativeMap}
  */
@@ -170,6 +185,7 @@ good.drive.nav.folders.Model.prototype.getLeaf =
 };
 
 /**
+ * 构建一个文件结构的Map
  * @param {string} name
  * @param {string} url
  * @param {string} type
@@ -188,6 +204,7 @@ good.drive.nav.folders.Model.prototype.getfileMap =
 };
 
 /**
+ * 拷贝一个Object
  * @param {string} model
  * @param {Object} data
  * @return {Object}
@@ -217,6 +234,7 @@ good.drive.nav.folders.Model.prototype.copy = function(model, data) {
 };
 
 /**
+ * 根据数据删除
  * @param {Object} data
  * @return {Object}
  */
@@ -241,6 +259,7 @@ good.drive.nav.folders.Model.prototype.remove = function(data) {
 };
 
 /**
+ * 获取Document id
  * @return {string}
  */
 good.drive.nav.folders.Model.prototype.docId = function() {
@@ -248,6 +267,7 @@ good.drive.nav.folders.Model.prototype.docId = function() {
 };
 
 /**
+ * 获取Model
  * @return {good.realtime.Model}
  */
 good.drive.nav.folders.Model.prototype.mod = function() {
@@ -255,6 +275,7 @@ good.drive.nav.folders.Model.prototype.mod = function() {
 };
 
 /**
+ * 获取初始化的Data数据
  * @return {good.realtime.CollaborativeMap}
  */
 good.drive.nav.folders.Model.prototype.getData = function() {

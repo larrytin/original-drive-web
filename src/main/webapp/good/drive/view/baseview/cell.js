@@ -172,7 +172,9 @@ good.drive.view.baseview.Cell.prototype.select = function() {
   view.setSelectedItem(this);
   this.getCheckStyle();
   var root = good.drive.nav.folders.Path.getINSTANCE().root;
-  root.set(good.drive.nav.folders.Path.NameType.SELECT, true);
+  var select = root.get(good.drive.nav.folders.Path.NameType.SELECT);
+  select++;
+  root.set(good.drive.nav.folders.Path.NameType.SELECT, select);
 };
 
 /**
@@ -184,9 +186,13 @@ good.drive.view.baseview.Cell.prototype.deSelect = function() {
   var view = this.getParent();
   view.setDeSelectedItem(this);
   this.getCheckStyle();
-  if (goog.array.isEmpty(this.getParent().checkList)) {
-    var root = good.drive.nav.folders.Path.getINSTANCE().root;
-    root.set(good.drive.nav.folders.Path.NameType.SELECT, false);
+  var root = good.drive.nav.folders.Path.getINSTANCE().root;
+  var select = root.get(good.drive.nav.folders.Path.NameType.SELECT);
+  select --;
+  root.set(good.drive.nav.folders.Path.NameType.SELECT, select);
+  if (select == 0) {
+    root.set(good.drive.nav.folders.Path.NameType.SELECT, 0);
+    return;
   }
 };
 

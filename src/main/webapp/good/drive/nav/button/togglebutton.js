@@ -6,6 +6,7 @@ goog.require('good.drive.nav.button.ToggleView');
 
 
 /**
+ * 获取自定义toggleButton
  * @constructor
  */
 good.drive.nav.button.ToggleButton = function() {
@@ -16,6 +17,7 @@ good.drive.nav.button.ToggleButton = function() {
 
 
 /**
+ * 获取list toggleButton
  * @return {good.drive.nav.button.ToggleView}
  */
 good.drive.nav.button.ToggleButton.prototype.createListBtn = function() {
@@ -30,6 +32,7 @@ good.drive.nav.button.ToggleButton.prototype.createListBtn = function() {
 };
 
 /**
+ * 获取Grid toggleButton
  * @return {good.drive.nav.button.ToggleView}
  */
 good.drive.nav.button.ToggleButton.prototype.createGridBtn = function() {
