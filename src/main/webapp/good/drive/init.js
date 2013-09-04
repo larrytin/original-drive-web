@@ -110,11 +110,11 @@ good.drive.init.init = function() {
         good.constants.MYCLASSRESDOCID);
   var myclass = new good.drive.nav.folders.Tree(myclassLabel,
       undefined, navFolderslist, myClassViewControl);
-  myclass.setDraggable();
+//  myclass.setDraggable();
   var myResLabel = '我的收藏夹';
   var myResTree = new good.drive.nav.folders.Tree(myResLabel,
       good.constants.MYRESDOCID, navFolderslist);
-  myResTree.setDraggable();
+//  myResTree.setDraggable();
   var puclicViewControl = new good.drive.nav.folders.PublicViewControl(
       good.constants.PUBLICRESDOCID);
   var publicResTree = new good.drive.nav.folders.Tree('公共资料库',

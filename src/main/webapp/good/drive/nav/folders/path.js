@@ -152,6 +152,14 @@ good.drive.nav.folders.Path.prototype.dragdropEvent = function() {
 };
 
 /**
+ * 返回当前的选中状态
+ * @return {number}
+ */
+good.drive.nav.folders.Path.prototype.getSelect = function() {
+  return this.root.get(this.pathNameType().SELECT);
+};
+
+/**
  * 判断一个对象是否是包含在这个对象的中
  * @param {good.realtime.Model} mod
  * @param {string} id
