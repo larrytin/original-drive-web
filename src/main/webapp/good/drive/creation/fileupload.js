@@ -42,7 +42,7 @@ good.drive.creation.Fileupload.FILEID = undefined;
  * @param {string} fileId
  */
 good.drive.creation.Fileupload.prototype.fileClick = function(str, fileId) {
-  good.drive.creation.Fileupload.TYPE = str;
+  good.drive.creation.Fileupload.NEWORUPDATE = str;
   good.drive.creation.Fileupload.FILEID = fileId;
   this._file.click();
 };
@@ -240,7 +240,7 @@ good.drive.creation.Fileupload.prototype.geturl = function(files) {
             delete insertJson['md5Hash'];
             delete insertJson['creation'];
             insertJson['blobKey'] = blobKey;
-            if (good.drive.creation.Fileupload.TYPE == 'new') {
+            if (good.drive.creation.Fileupload.NEWORUPDATE == 'new') {
               //上传新的文件
               var tags = that.getTags();
               insertJson['tags'] = tags;

@@ -96,7 +96,7 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
         if (data.get('type') !=
         'application/x-shockwave-flash' &&
         data.get('type').indexOf('image/') == -1) {
-        array.push(1);
+        array.push(0);
        }
         that._menu.hideItem(that._rightMenu, array);
       }
@@ -123,7 +123,7 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
        if (data.get('type') !=
           'application/x-shockwave-flash' &&
           data.get('type').indexOf('image/') == -1) {
-          array.push(1);
+          array.push(0);
          }
         that._menu.hideItem(that._rightMenu, array);
       }
@@ -140,7 +140,7 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
           data['contentType'].indexOf('image/') == -1 &&
           data['contentType'] !=
             'application/x-print') {
-          array.push(1);
+          array.push(0);
          }
         that._menu.hideItem(that._rightMenu, array);
       } else {
@@ -154,7 +154,7 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
           data['contentType'].indexOf('image/') == -1 &&
           data['contentType'] !=
             'application/x-print') {
-          array.push(1);
+          array.push(0);
         }
         that._menu.hideItem(that._rightMenu, array);
       }
