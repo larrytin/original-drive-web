@@ -178,7 +178,7 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
  * @param {string} subscribeId
  */
 good.drive.rightmenu.Rightmenu.prototype.send = function(fileId, subscribeId) {
-  var auth = good.auth.Auth.current;
+  var auth = good.drive.auth.Auth.current;
   var message = {'userId' : auth.userId,
                  'token' : auth.access_token,
                  'attachmentId' : fileId};
