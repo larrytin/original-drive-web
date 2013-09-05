@@ -1,8 +1,8 @@
 'use strict';
 goog.provide('good.drive.nav.editpwd');
 
-goog.require('good.auth.signup');
 goog.require('good.config');
+goog.require('good.drive.auth.signup');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
@@ -20,11 +20,11 @@ good.drive.nav.editpwd.start = function() {
 
   new good.drive.nav.userinfo.Headuserinfo();
   var array = new Array('OldPasswd', 'Passwd', 'PasswdAgain');
-  good.auth.signup.focus(array);
+  good.drive.auth.signup.focus(array);
 
   var submit = goog.dom.getElement('save');
   goog.events.listen(submit, goog.events.EventType.CLICK, function(e) {
-    if (!good.auth.signup.formCheck(array)) {
+    if (!good.drive.auth.signup.formCheck(array)) {
       return false;
     }
     var name = goog.dom.getElement('gbgs4dn').innerText;

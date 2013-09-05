@@ -2,7 +2,7 @@
 goog.provide('good.constants');
 
 /**@type {string} */
-good.constants.DRIVE_SERVER = 'http://192.168.1.15:8880';
+good.constants.DRIVE_SERVER = 'http://192.168.11.39:8880';
 //good.constants.DRIVE_SERVER = 'http://server.drive.goodow.com';
 
 /**@type {string} */
