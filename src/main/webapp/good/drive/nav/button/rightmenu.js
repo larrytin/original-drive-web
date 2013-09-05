@@ -29,6 +29,7 @@ good.drive.nav.button.rigthmenu = function() {
   this.listPerson = listPerson;
   var listdevice = new good.drive.device.Listdevice();
   this.listdevice = listdevice;
+  this.isInculdeFolder = false;
 };
 
 /**
@@ -47,15 +48,26 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
   var docId = path.getCurrentDocid();
   var grid = good.drive.view.baseview.View.currentGrid;
   var cell = grid.getSelectedItem();
+  var select = path.getSelect();
+  var array = undefined;
   switch (docId) {
   case good.constants.MYCLASSRESDOCID:
   case good.constants.MYRESDOCID:
     var cell = grid.getSelectedItem();
     if (cell.data.get('isfile') == undefined) {
-      var array = new Array(1, 3, 4, 5);
+      isInculdeFolder = true;
+      if (select > 1) {
+        array = new Array(1, 3, 4, 5, 6, 7);
+      } else {
+        array = new Array(1, 3, 4, 5);
+      }
       that._menu.hideItem(that._rightMenu, array);
     } else {
-      var array = new Array(3, 6);
+      if (select > 1) {
+        array = new Array(3, 6, 5);
+      } else {
+        array = new Array(3, 6);
+      }
       if (data.get('type') == 'application/x-print') {
         array.push(3);
       }
@@ -67,7 +79,7 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
     }
     break;
   case good.constants.PUBLICRESDOCID:
-    var array = new Array(3, 6, 7, 8);
+    array = new Array(3, 6, 7, 8);
     if (data.contentType == 'application/x-print') {
       array.push(3);
     }
@@ -78,7 +90,7 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
     that._menu.hideItem(that._rightMenu, array);
     break;
   case good.constants.OTHERDOCID:
-    var array = new Array(0, 1, 2, 3, 4, 5, 6, 7);
+    array = new Array(0, 1, 2, 3, 4, 5, 6, 7);
     that._menu.hideItem(that._rightMenu, array);
     break;
   default:

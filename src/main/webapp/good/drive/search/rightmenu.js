@@ -69,16 +69,26 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
     }
     var data = selectedElemnet.data;
     var path = good.drive.nav.folders.Path.getINSTANCE();
+    var select = path.getSelect();
     var docId = path.currentDocId;
     var grid = good.drive.view.baseview.View.currentGrid;
+    var array = undefined;
     switch (docId) {
     case good.constants.MYCLASSRESDOCID:
       var cell = grid.getSelectedItem();
       if (cell.data.get('isfile') == undefined) {
-        var array = new Array(0, 3, 4, 5, 6, 9);
+        if (select > 1) {
+          array = new Array(0, 3, 4, 5, 6, 7, 8, 9);
+        } else {
+          array = new Array(0, 3, 4, 5, 6, 9);
+        }
         that._menu.hideItem(that._rightMenu, array);
       } else {
-        var array = new Array(4, 7, 9);
+        if (select > 1) {
+          array = new Array(4, 6, 7, 9);
+        } else {
+          array = new Array(4, 6, 7, 9);
+        }
         if (data.get('type') ==
           'application/x-print') {
           array.push(3);
@@ -94,10 +104,18 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
     case good.constants.MYRESDOCID:
       var cell = grid.getSelectedItem();
       if (cell.data.get('isfile') == undefined) {
-        var array = new Array(0, 3, 4, 5, 6, 9);
+        if (select > 1) {
+          array = new Array(0, 3, 4, 5, 6, 7, 8, 9);
+        } else {
+          array = new Array(0, 3, 4, 5, 6, 9);
+        }
         that._menu.hideItem(that._rightMenu, array);
       } else {
-        var array = new Array(5, 7, 9);
+        if (select > 1) {
+          array = new Array(5, 6, 7, 9);
+        } else {
+          array = new Array(5, 6, 7, 9);
+        }
         if (data.get('type') ==
         'application/x-print') {
          array.push(3);
