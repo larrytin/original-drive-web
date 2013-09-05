@@ -44,7 +44,7 @@ good.drive.rightmenu.DetailInfo.prototype.update = function(handle) {
   var tags = new Array();
   var tagsdata = tags_text.value;
   if (tagsdata != null && tagsdata != '') {
-    tagsdata = tagsdata.split(',');
+    tagsdata = tagsdata.split(';');
     goog.array.forEach(tagsdata, function(item) {
       tags.push(item);
     });
@@ -152,9 +152,9 @@ good.drive.rightmenu.DetailInfo.PUBLICDETAIL = function(label,
   thumbnail.style.height = '80%';
   var tagdata = '';
   goog.array.forEach(tags.asArray(), function(item) {
-    tagdata += item + ',';
+    tagdata += item + ';';
   });
-  tags_text.value = tagdata.substr(0, tagdata.lastIndexOf(','));
+  tags_text.value = tagdata.substr(0, tagdata.lastIndexOf(';'));
   if (contentType != undefined) {
     if (contentType.indexOf('image/') != -1) {
       typecombo.value = 'image/';

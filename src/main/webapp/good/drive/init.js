@@ -1,8 +1,8 @@
  'use strict';
 goog.provide('good.drive.init');
 
-goog.require('good.auth');
 goog.require('good.config');
+goog.require('good.drive.auth');
 goog.require('good.drive.creation.fileupload');
 goog.require('good.drive.creation.mouserevent');
 goog.require('good.drive.device.listdevice');
@@ -47,7 +47,7 @@ good.drive.init.IsLoad = false;
 
 /** */
 good.drive.init.start = function() {
-  good.auth.check();
+  good.drive.auth.check();
   if (good.drive.init.IsLoad) {
     good.drive.init.init();
   } else {
@@ -92,7 +92,7 @@ good.drive.init.init = function() {
   var viewpanetoolbar = goog.dom.getElement('viewpane-toolbar');
   var isGridEvent = false;
   //这里给docid添加了用户的标识符  以保证他们的唯一性
-  var baseDocid = '@tmp/' + good.auth.Auth.current.userId + '/';
+  var baseDocid = '@tmp/' + good.drive.auth.Auth.current.userId + '/';
   good.constants.MYRESDOCID = baseDocid +
     good.constants.MYRESDOCID;
   good.constants.MYCLASSRESDOCID = baseDocid +
@@ -100,7 +100,7 @@ good.drive.init.init = function() {
   good.constants.PATHDOCID = baseDocid +
     good.constants.PATHDOCID;
   good.config.start();
-  var auth = good.auth.Auth.current;
+  var auth = good.drive.auth.Auth.current;
   good.realtime.authorize(auth.userId, auth.access_token);
   good.drive.init.buildIndexurl();
   //初始化Tree
