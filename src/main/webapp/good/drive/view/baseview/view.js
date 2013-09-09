@@ -478,8 +478,19 @@ good.drive.view.baseview.View.prototype.enterDocument = function() {
   good.drive.view.baseview.View.superClass_.enterDocument.call(this);
   var el = this.getElement();
   el.className = this.getConfig().cssRoot;
-  var scrollbarHeight = window.innerHeight - 156;
-  goog.style.setHeight(el, scrollbarHeight);
+  var pageHeight = window.innerHeight;
+  if (goog.userAgent.IE) {
+    if (typeof pageWidth != "number") {
+      if (document.compatMode == "number") {
+        pageHeight = document.documentElement.clientHeight;
+      } else {
+        pageHeight = document.body.clientHeight;
+      }
+    }
+    el.style.height = pageHeight - 250;
+  } else {
+    goog.style.setHeight(el, pageHeight - 156 + 'px');
+  }
 };
 
 
