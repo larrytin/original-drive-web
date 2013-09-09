@@ -480,8 +480,8 @@ good.drive.view.baseview.View.prototype.enterDocument = function() {
   el.className = this.getConfig().cssRoot;
   var pageHeight = window.innerHeight;
   if (goog.userAgent.IE) {
-    if (typeof pageWidth != "number") {
-      if (document.compatMode == "number") {
+    if (typeof pageWidth != 'number') {
+      if (document.compatMode == 'number') {
         pageHeight = document.documentElement.clientHeight;
       } else {
         pageHeight = document.body.clientHeight;
