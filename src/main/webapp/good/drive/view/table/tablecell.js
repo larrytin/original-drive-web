@@ -129,7 +129,7 @@ good.drive.view.table.TableCell.prototype.createImage = function(data) {
         } else {
           return 'good/images/icon_10_generic_list.png';
         }
-      } else {
+      } else if (docid == good.constants.OTHERDOCID) {
         var pathControl = good.drive.nav.folders.Path.getINSTANCE();
         var view = pathControl.getViewBydocId(docid);
         var curItem = view.getCurItem();
