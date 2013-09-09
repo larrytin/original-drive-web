@@ -163,8 +163,10 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
       if (json['contentType'] != undefined &&
           json['contentType'].indexOf('image/') != -1) {
         typecombo.value = 'image/';
+        typecombo.disabled = false;
       } else {
         typecombo.value = json['contentType'];
+        typecombo.disabled = true;
       }
       previewpane.style.display = 'block';
     }

@@ -109,7 +109,8 @@ good.drive.rightmenu.DetailInfo.prototype.updatefile = function(fileId,
          }*/
          json['tags'] = tags;
          if (content_Type != null && content_Type != '' &&
-             content_Type == 'application/x-print') {
+             content_Type == 'application/x-print' &&
+             json['contentType'].indexOf('image/') != -1) {
            json['contentType'] = content_Type;
          }
          var rpc = new good.net.CrossDomainRpc('POST',
@@ -142,6 +143,7 @@ good.drive.rightmenu.DetailInfo.PUBLICDETAIL = function(label,
   var update_info = goog.dom.getElement('update_info');
   filename.innerText = label;
   typecombo.value = '';
+  typecombo.disabled = false;
  if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
    tags_text.disabled = 'true';
    typecombo.disabled = 'ture';
