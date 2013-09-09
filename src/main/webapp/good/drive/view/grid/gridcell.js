@@ -45,11 +45,18 @@ good.drive.view.grid.GridCell.prototype.getImageData =
   if (data instanceof good.realtime.CollaborativeMap) {
     if (data.get('isfile') != undefined) {
       if (data.get('thumbnail') != null) {
-        return goog.dom.createDom('img', {
-          'class' : 'gv-image-el',
-          'src' : data.get('thumbnail') + '=s218',
-          'style': 'max-height: 205px;'
-        });
+        if (data.get('type') != 'application/x-print') {
+          return goog.dom.createDom('img', {
+            'class' : 'gv-image-el',
+            'src' : data.get('thumbnail') + '=s218',
+            'style' : 'max-height: 205px;'
+          });
+        } else {
+          return goog.dom.createDom('img', {
+            'class' : 'gv-image-el',
+            'src' : './good/images/print.png'
+          });
+        }
       } else if (data.get('type') == 'audio/mp3') {
         return goog.dom.createDom('img', {
           'class' : 'gv-image-el',
@@ -64,17 +71,25 @@ good.drive.view.grid.GridCell.prototype.getImageData =
     }
   } else {
     if (data['thumbnail'] != undefined) {
-      return goog.dom.createDom('img', {
-        'class' : 'gv-image-el',
-        'src' : data['thumbnail'] + '=s218',
-        'style': 'max-height: 205px;'
-      });
+      if (data.contentType != 'application/x-print') {
+        return goog.dom.createDom('img', {
+          'class' : 'gv-image-el',
+          'src' : data['thumbnail'] + '=s218',
+          'style' : 'max-height: 205px;'
+        });
+      } else {
+        return goog.dom.createDom('img', {
+          'class' : 'gv-image-el',
+          'src' : './good/images/print.png'
+        });
+      }
     } else if (data.contentType == 'audio/mp3') {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
         'src' : './good/images/icon_10_audio_xl128.png'
       });
-    } else {
+    }
+    else {
       return goog.dom.createDom('img', {
         'class' : 'gv-image-el',
         'src' : './good/images/icon_10_generic_xl128.png'
