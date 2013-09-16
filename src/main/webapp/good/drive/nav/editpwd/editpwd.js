@@ -2,7 +2,7 @@
 goog.provide('good.drive.nav.editpwd');
 
 goog.require('good.config');
-goog.require('good.drive.auth.signup');
+goog.require('good.drive.auth');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
@@ -14,10 +14,17 @@ goog.require('goog.events');
 good.drive.nav.editpwd.start = function() {
   good.config.start();
   var $ = goog.dom.getElement;
-  var query = new goog.Uri.QueryData(window.location.hash.substring(1));
-  var userId = query.get('userId');
-  var access_token = query.get('access_token');
-
+  var str = new RegExp('http');
+  var userId = undefined;
+  var access_token = undefined;
+  if (str.test(window.location.toString()) != true) {
+    var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+    userId = query.get('userId');
+    access_token = query.get('access_token');
+  } else {
+    userId = good.drive.auth.getCookie('userId');
+    access_token = good.drive.auth.getCookie('access_token');
+  }
   new good.drive.nav.userinfo.Headuserinfo();
   var array = new Array('OldPasswd', 'Passwd', 'PasswdAgain');
   good.drive.auth.signup.focus(array);
@@ -48,10 +55,16 @@ good.drive.nav.editpwd.start = function() {
         delete json['etag'];
         rpc.body = json;
         rpc.send(function(json) {
-          if (json && !json['error']) {
-            window.location.assign('index.html' + '#userId=' +
-                json['userId'] + '&access_token=' + json['token']);
-          }
+           if (json && !json['error']) {
+             var uri = new goog.Uri(window.location);
+             var str = new RegExp('http');
+             if (str.test(uri.toString()) != true) {
+                window.location.assign('index.html' + '#userId=' +
+                  + json['userId'] + '&access_token=' + json['token']);
+             } else {
+                 window.location.assign('index.html');
+             }
+           }
         });
       } else {
         var errormsg_0_Passwd = goog.dom.getElement('errormsg_0_OldPasswd');

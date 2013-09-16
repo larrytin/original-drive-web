@@ -63,14 +63,15 @@ good.drive.auth.login = function(name, pwd) {
     if (json && json['token']) {
       var uri = new goog.Uri(window.location);
       var redirect_uri = uri.getParameterValue('redirect_uri');
-
-      if (good.drive.auth.signup.isEmpty(redirect_uri)) {
+      var str = new RegExp('http');
+      if (str.test(redirect_uri) != true) {
         window.location.assign('../../../' + 'index.html' +
             '#userId=' + json['userId'] +
             '&access_token=' + json['token']);
-      }else {
-        window.location.assign(redirect_uri + '#userId=' + json['userId'] +
-            '&access_token=' + json['token']);
+      } else {
+        good.drive.auth.addCookie('userId', json['userId']);
+        good.drive.auth.addCookie('access_token', json['token']);
+        window.location.assign(redirect_uri);
       }
     } else {
       var errormsg_0_Passwd = goog.dom.getElement('errormsg_0_Passwd');
@@ -109,12 +110,19 @@ good.drive.auth.login.start = function() {
   });
 };
 
-
 /** */
 good.drive.auth.check = function() {
-  var query = new goog.Uri.QueryData(window.location.hash.substring(1));
-  var userId = query.get('userId');
-  var access_token = query.get('access_token');
+  var uri = new goog.Uri(window.location);
+  var userId = undefined;
+  var access_token = undefined;
+  if (uri.scheme_ != 'http') {
+    var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+    userId = query.get('userId');
+    access_token = query.get('access_token');
+  } else {
+    userId = good.drive.auth.getCookie('userId');
+    access_token = good.drive.auth.getCookie('access_token');
+  }
   if (!userId || !access_token) {
     var uri = new goog.Uri('good/drive/auth/ServiceLogin.html');
     uri.setParameterValue('redirect_uri', window.location);
@@ -122,6 +130,55 @@ good.drive.auth.check = function() {
   } else {
     var auth = new good.drive.auth.Auth(userId, access_token);
     good.drive.auth.Auth.current = auth;
+  }
+};
+
+/**
+ * @param {string} c_name
+ * @param {string} value
+ * @param {string} expiredays
+ */
+good.drive.auth.addCookie = function(c_name, value, expiredays) {
+  var exdate = new Date();
+  exdate.setDate(exdate.getDate() + expiredays);
+  var str = escape(value);
+  if (expiredays == null) {
+    str += '';
+  } else {
+    str += ';expires=' + exdate.toGMTString();
+  }
+  document.cookie = c_name + '=' + str + ';path=/';
+};
+
+ /**
+  * @param {string} c_name
+  * @return {string}
+  */
+ good.drive.auth.getCookie = function(c_name) {
+  var name = escape(c_name);
+  var allcookies = document.cookie;
+  name += '=';
+  var pos = allcookies.indexOf(name);
+  if (pos != -1) {
+    var start = pos + name.length;
+    var end = allcookies.indexOf(';', start);
+    if (end == -1) end = allcookies.length;
+    var value = allcookies.substring(start, end);
+    return (value);
+  } else {
+    return '';
+  }
+};
+
+/**
+ * @param {string} name
+ */
+good.drive.auth.delCookie = function(name) {
+  var exp = new Date();
+  var cval = good.drive.auth.getCookie(name);
+  exp.setTime(exp.getTime() - 1);
+  if (cval != null) {
+    document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString();
   }
 };
 

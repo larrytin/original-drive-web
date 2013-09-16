@@ -34,9 +34,17 @@ good.drive.nav.userinfo.Headuserinfo = function() {
  * 初始化方法
  */
 good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
-  var query = new goog.Uri.QueryData(window.location.hash.substring(1));
-  var userId = query.get('userId');
-
+  var str = new RegExp('http');
+  var userId = undefined;
+  var access_token = undefined;
+  if (str.test(window.location.toString()) != true) {
+    var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+    userId = query.get('userId');
+    access_token = query.get('access_token');
+  } else {
+    userId = good.drive.auth.getCookie('userId');
+    access_token = good.drive.auth.getCookie('access_token');
+  }
   var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
       good.config.VERSION, 'accountinfo/' + userId,
       good.config.SERVERADRESS);
@@ -75,13 +83,16 @@ good.drive.nav.userinfo.Headuserinfo.prototype.nameClick = function() {
 good.drive.nav.userinfo.Headuserinfo.prototype.accountClick = function() {
   var account = goog.dom.getElement('account');
   goog.events.listen(account, goog.events.EventType.CLICK, function(e) {
-    var query = new goog.Uri.QueryData(window.location.hash.substring(1));
-    var userId = query.get('userId');
-    var access_token = query.get('access_token');
-
-    var uri = new goog.Uri('EditPasswd.html' + '#userId=' +
-        userId + '&access_token=' + access_token);
-
+    var str = new RegExp('http');
+    if (str.test(window.location.toString()) != true) {
+      var query = new goog.Uri.QueryData(window.location.hash.substring(1));
+      var userId = query.get('userId');
+      var access_token = query.get('access_token');
+      var uri = new goog.Uri('EditPasswd.html' + '#userId=' +
+          userId + '&access_token=' + access_token);
+    } else {
+      var uri = new goog.Uri('EditPasswd.html');
+    }
     var pathname = window.location.pathname;
     if (pathname.indexOf('EditPasswd.html') != -1) {
       window.location.reload(uri.toString());
@@ -99,6 +110,11 @@ good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
   var cancel = goog.dom.getElement('cancel');
   goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
     var uri = new goog.Uri('index.html');
+    var str = new RegExp('http');
+    if (str.test(window.location.href) == true) {
+      good.drive.auth.delCookie('userId');
+      good.drive.auth.delCookie('access_token');
+    }
     window.location.assign(uri.toString());
   });
 };
