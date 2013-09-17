@@ -2,6 +2,7 @@
 goog.provide('good.drive.auth.signup');
 
 goog.require('good.config');
+goog.require('good.drive.auth');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
@@ -160,9 +161,16 @@ good.drive.auth.signup.start = function() {
     rpc.body = body;
     rpc.send(function(json) {
       if (json && !json['error']) {
-        window.location.assign('../../../index.html' +
-            '#userId=' + json['userId'] +
-            '&access_token=' + json['token']);
+        var uri = new goog.Uri(window.location);
+        if (uri.scheme_ != 'http') {
+          window.location.assign('../../../index.html' +
+              '#userId=' + json['userId'] +
+              '&access_token=' + json['token']);
+        } else {
+          good.drive.auth.addCookie('userId', json['userId']);
+          good.drive.auth.addCookie('access_token', json['token']);
+          window.location.assign('../../../index.html');
+        }
       }
     });
   });
