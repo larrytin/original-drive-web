@@ -487,9 +487,10 @@ good.drive.view.baseview.View.prototype.enterDocument = function() {
         pageHeight = document.body.clientHeight;
       }
     }
-    el.style.height = pageHeight - 250;
+//    el.style.height = pageHeight - 278;
+    el.style.height = pageHeight - 210;
   } else {
-    goog.style.setHeight(el, pageHeight - 156 + 'px');
+    goog.style.setHeight(el, pageHeight - 224 + 'px');
   }
 };
 
