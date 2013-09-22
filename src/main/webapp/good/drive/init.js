@@ -40,23 +40,11 @@ goog.require('good.drive.view.grid');
 goog.require('good.drive.view.table');
 goog.require('goog.dom');
 
-/**
- * @type {boolean}
- */
-good.drive.init.IsLoad = false;
-
 /** */
 good.drive.init.start = function() {
   good.drive.auth.check();
-  if (good.drive.init.IsLoad) {
-    good.drive.init.init();
-  } else {
-    good.drive.init.IsLoad = true;
-  }
+  good.drive.init.init();
 };
-
-/** */
-window.gdrOnLoad = good.drive.init.start;
 
 /**
  * @type {good.drive.nav.button.ToolBarView}
