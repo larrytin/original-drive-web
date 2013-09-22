@@ -2,12 +2,11 @@
 goog.provide('good.drive.nav.editpwd');
 
 goog.require('good.config');
-goog.require('good.drive.auth');
+goog.require('good.drive.auth.cookit');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
 goog.require('goog.events');
-
 /**
  * 修改用户信息类
  */
@@ -22,8 +21,8 @@ good.drive.nav.editpwd.start = function() {
     userId = query.get('userId');
     access_token = query.get('access_token');
   } else {
-    userId = good.drive.auth.getCookie('userId');
-    access_token = good.drive.auth.getCookie('access_token');
+    userId = good.drive.auth.cookit.getCookie('userId');
+    access_token = good.drive.auth.cookit.getCookie('access_token');
   }
   new good.drive.nav.userinfo.Headuserinfo();
   var array = new Array('OldPasswd', 'Passwd', 'PasswdAgain');

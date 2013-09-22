@@ -2,13 +2,14 @@
 goog.provide('good.drive.auth.signup');
 
 goog.require('good.config');
-goog.require('good.drive.auth');
+goog.require('good.drive.auth.cookit');
 goog.require('good.net.CrossDomainRpc');
+goog.require('goog.Uri');
+goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.FocusHandler');
 goog.require('goog.events.InputHandler');
-
 
 /**
  * 注册页面控制类
@@ -167,8 +168,8 @@ good.drive.auth.signup.start = function() {
               '#userId=' + json['userId'] +
               '&access_token=' + json['token']);
         } else {
-          good.drive.auth.addCookie('userId', json['userId']);
-          good.drive.auth.addCookie('access_token', json['token']);
+          good.drive.auth.cookit.addCookie('userId', json['userId']);
+          good.drive.auth.cookit.addCookie('access_token', json['token']);
           window.location.assign('../../../index.html');
         }
       }

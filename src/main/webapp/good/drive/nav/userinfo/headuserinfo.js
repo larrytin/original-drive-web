@@ -2,6 +2,7 @@
 goog.provide('good.drive.nav.userinfo');
 
 goog.require('good.config');
+goog.require('good.drive.auth.cookit');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.Uri');
 goog.require('goog.Uri.QueryData');
@@ -42,8 +43,8 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
     userId = query.get('userId');
     access_token = query.get('access_token');
   } else {
-    userId = good.drive.auth.getCookie('userId');
-    access_token = good.drive.auth.getCookie('access_token');
+    userId = good.drive.auth.cookit.getCookie('userId');
+    access_token = good.drive.auth.cookit.getCookie('access_token');
   }
   var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
       good.config.VERSION, 'accountinfo/' + userId,
@@ -52,10 +53,10 @@ good.drive.nav.userinfo.Headuserinfo.prototype.init = function() {
     if (json && json['token']) {
       var name = goog.dom.getElement('gbgs4dn');
       var popname = goog.dom.getElement('gbmpn');
-      var displayname = goog.dom.getElement('displayname');
+//      var displayname = goog.dom.getElement('displayname');
       name.innerText = json['name'];
-      popname.innerText = json['name'];
-      displayname.innerText = json['displayName'];
+//      popname.innerText = json['name'];
+//      displayname.innerText = json['displayName'];
     }
   });
 };
@@ -112,8 +113,8 @@ good.drive.nav.userinfo.Headuserinfo.prototype.cancelClick = function() {
     var uri = new goog.Uri('index.html');
     var str = new RegExp('http');
     if (str.test(window.location.href) == true) {
-      good.drive.auth.delCookie('userId');
-      good.drive.auth.delCookie('access_token');
+      good.drive.auth.cookit.delCookie('userId');
+      good.drive.auth.cookit.delCookie('access_token');
     }
     window.location.assign(uri.toString());
   });

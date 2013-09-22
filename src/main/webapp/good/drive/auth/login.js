@@ -3,6 +3,7 @@ goog.provide('good.drive.auth');
 goog.provide('good.drive.auth.login');
 
 goog.require('good.config');
+goog.require('good.drive.auth.cookit');
 goog.require('good.drive.auth.signup');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.Uri');
@@ -10,8 +11,6 @@ goog.require('goog.Uri.QueryData');
 goog.require('goog.dom');
 goog.require('goog.events');
 goog.require('goog.events.FocusHandler');
-
-
 
 /**
  * login登录控制类
@@ -69,8 +68,8 @@ good.drive.auth.login = function(name, pwd) {
             '#userId=' + json['userId'] +
             '&access_token=' + json['token']);
       } else {
-        good.drive.auth.addCookie('userId', json['userId']);
-        good.drive.auth.addCookie('access_token', json['token']);
+        good.drive.auth.cookit.addCookie('userId', json['userId']);
+        good.drive.auth.cookit.addCookie('access_token', json['token']);
         window.location.assign(redirect_uri);
       }
     } else {
@@ -120,8 +119,8 @@ good.drive.auth.check = function() {
     userId = query.get('userId');
     access_token = query.get('access_token');
   } else {
-    userId = good.drive.auth.getCookie('userId');
-    access_token = good.drive.auth.getCookie('access_token');
+    userId = good.drive.auth.cookit.getCookie('userId');
+    access_token = good.drive.auth.cookit.getCookie('access_token');
   }
   if (!userId || !access_token) {
     var uri = new goog.Uri('good/drive/auth/ServiceLogin.html');
@@ -130,55 +129,6 @@ good.drive.auth.check = function() {
   } else {
     var auth = new good.drive.auth.Auth(userId, access_token);
     good.drive.auth.Auth.current = auth;
-  }
-};
-
-/**
- * @param {string} c_name
- * @param {string} value
- * @param {string} expiredays
- */
-good.drive.auth.addCookie = function(c_name, value, expiredays) {
-  var exdate = new Date();
-  exdate.setDate(exdate.getDate() + expiredays);
-  var str = escape(value);
-  if (expiredays == null) {
-    str += '';
-  } else {
-    str += ';expires=' + exdate.toGMTString();
-  }
-  document.cookie = c_name + '=' + str + ';path=/';
-};
-
- /**
-  * @param {string} c_name
-  * @return {string}
-  */
- good.drive.auth.getCookie = function(c_name) {
-  var name = escape(c_name);
-  var allcookies = document.cookie;
-  name += '=';
-  var pos = allcookies.indexOf(name);
-  if (pos != -1) {
-    var start = pos + name.length;
-    var end = allcookies.indexOf(';', start);
-    if (end == -1) end = allcookies.length;
-    var value = allcookies.substring(start, end);
-    return (value);
-  } else {
-    return '';
-  }
-};
-
-/**
- * @param {string} name
- */
-good.drive.auth.delCookie = function(name) {
-  var exp = new Date();
-  var cval = good.drive.auth.getCookie(name);
-  exp.setTime(exp.getTime() - 1);
-  if (cval != null) {
-    document.cookie = name + '=' + cval + ';expires=' + exp.toGMTString();
   }
 };
 
