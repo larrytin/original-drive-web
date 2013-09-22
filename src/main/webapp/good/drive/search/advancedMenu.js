@@ -98,7 +98,7 @@ good.drive.search.AdvancedMenu.prototype.createPopMenu = function() {
     var renderer = this.getRenderer();
     var contentElements = this.getDomHelper().
     getElementsByTagNameAndClass('div',
-        goog.getCssName(renderer.getCssClass(), 'vertical'), element);
+        'select', element);
 
     // Some versions of IE do not like it when you access this nodeList
     // with invalid indices. See
