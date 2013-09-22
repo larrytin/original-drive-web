@@ -101,6 +101,7 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
       } else {
         var preview = new good.drive.preview.Control();
         preview.getselcetItem();
+        this.checkImage = false;
         return;
       }
     }
