@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta http-equiv="Content-type" content="text/html;charset=UTF-8">
-<meta http-equiv="X-UA-Compatible" content="IE= 8,chrome=1"> 
+<meta http-equiv="X-UA-Compatible" content="IE= 8,chrome=1">
 <title>早教平台</title>
 
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menu.css">
@@ -12,25 +12,38 @@
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/menubutton.css">
 <link rel="stylesheet" href="good.js/closure-library/closure/goog/css/checkbox.css">
 <link href='good/css/googdrive.css' type='text/css' rel='stylesheet'>
+<link href='good/css/drive.css' type='text/css' rel='stylesheet'>
 <noscript>
   <div class="loadingstatusbox" style="width: 325px">
     <br>Your browser must support JavaScript to display the Goodow Drive web user interface.
   </div>
 </noscript>
+<!-- 外网：realtime.goodow.com -->
 <script type="text/javascript" src="http://realtime.goodow.com/ah/channel/jsapi"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/realtime/realtime.js"></script>
 <script type="text/javascript" src="http://realtime.goodow.com/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script>
-<script type="text/javascript" src="good.js/closure-library/closure/goog/base.js"></script>
+
+<!-- 无锡内网 drive.retechcorp.com:8080 -->
+<!-- <script type="text/javascript" src="http://drive.retechcorp.com:8080/ah/channel/jsapi"></script> -->
+<!-- <script type="text/javascript" src="http://drive.retechcorp.com:8080/good/realtime/realtime.js"></script> -->
+<!-- <script type="text/javascript" src="http://drive.retechcorp.com:8080/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script> -->
+
+<!-- 无锡外网：61.177.139.216:8084 -->
+<!-- <script type="text/javascript" src="http://61.177.139.216:8084/ah/channel/jsapi"></script> -->
+<!-- <script type="text/javascript" src="http://61.177.139.216:8084/good/realtime/realtime.js"></script> -->
+<!-- <script type="text/javascript" src="http://61.177.139.216:8084/good/diff_match_patch/diff_match_patch-20121119.cache.js"></script> -->
+
+<!-- <script type="text/javascript" src="good.js/closure-library/closure/goog/base.js"></script>
 <script src="good/deps.js"></script>
 <script>
   goog.require('good.drive.init');
-</script>
-<!-- <script src="drive-compiled.js"></script> -->
-<style type="text/css">
+</script> -->
 
+<style type="text/css">
 </style>
 </head>
-<body oncontextmenu="window.event.returnValue=false" class="jfk-scrollbar goog-useragent-webkit" onLoad="good.drive.init.start()">
+<body oncontextmenu="window.event.returnValue=false" class="jfk-scrollbar goog-useragent-webkit"
+  onLoad="good.drive.init.start()">
   <div class="loadingstatusbox" id="loadingStatus">正在加载...</div>
   <div id="gb">
     <div id="gbw">
@@ -49,62 +62,69 @@
         <div id="gbq1" class="gbt">
           <a class=gbqla href="#" title="早教平台"><table id="gbqlt">
               <tr>
-                <td id="gbqlw" class="gbgt"><img src="good/images/logo.png" width="300" height="28" alt=""></td>
+                <td id="gbqlw" class="gbgt"><img src="good/images/logo.png" width="300"
+                  height="28" alt=""></td>
               </tr>
             </table>
             <div class="gbqlca"></div></a>
         </div>
         <div id="gbq2" class="gbt">
-          <div id="gbqfw">            
+          <div id="gbqfw">
             <fieldset class="gbxx">
-            <legend class="gbxx">隐藏字段</legend>
-            <div id="gbqffd"></div>
+              <legend class="gbxx">隐藏字段</legend>
+              <div id="gbqffd"></div>
             </fieldset>
-              <fieldset class="gbqff gbes" id="gbqff" style="max-width: 512px;">
-                <legend class="gbxx"></legend>
-                <div id="gbfwa" class="gbqfwa ">
-                  <div id="gbqfqw" class="gbqfqw">
-                    <div id="gbqfaa">
-                      <div class="goog-inline-block search-filters-container" id="search-filters-container">
-                        <table class="filter-banner-table">
-                          <tbody>
-                            <tr>
-                              <td>
-                               <div id="search_input" class="goog-inline-block filter-banner">                                 
-                                </div>
-                               </td>
-                            </tr>
-                          </tbody>
-                        </table>
+            <fieldset class="gbqff gbes" id="gbqff" style="max-width: 512px;">
+              <legend class="gbxx"></legend>
+              <div id="gbfwa" class="gbqfwa ">
+                <div id="gbqfqw" class="gbqfqw">
+                  <div id="gbqfaa">
+                    <div class="goog-inline-block search-filters-container"
+                      id="search-filters-container">
+                      <table class="filter-banner-table">
+                        <tbody>
+                          <tr>
+                            <td>
+                              <div id="search_input" class="goog-inline-block filter-banner">
+                              </div>
+                            </td>
+                          </tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                  <div id="gbqfqwb" class="gbqfqwb" style="left: 1px; right: 0px; width: 471px;">
+                    <input id="gbqfq" class="gbqfif" name="q" type="text" autocomplete="off"
+                      value="" aria-label="搜索云端硬盘" role="combobox" aria-autocomplete="list"
+                      aria-haspopup="false">
+                  </div>
+                  <div id="gbqfab">
+                    <div class="goog-inline-block search-input-clear-container"
+                      id="search-input-clear-container">
+                      <div class="goog-inline-block search-input-clear" aria-hidden="true"
+                        role="button" data-tooltip="清除搜索" aria-label="清除搜索"
+                        style="-webkit-user-select: none; display: none;">
+                        <div class="search-input-clear-icon"></div>
                       </div>
                     </div>
-                    <div id="gbqfqwb" class="gbqfqwb" style="left: 1px; right: 0px; width: 471px;">
-                      <input id="gbqfq" class="gbqfif" name="q" type="text" autocomplete="off" value="" aria-label="搜索云端硬盘" role="combobox"
-                        aria-autocomplete="list" aria-haspopup="false">
-                    </div>
-                    <div id="gbqfab">
-                      <div class="goog-inline-block search-input-clear-container" id="search-input-clear-container">
-                        <div class="goog-inline-block search-input-clear" aria-hidden="true" role="button" data-tooltip="清除搜索"
-                          aria-label="清除搜索" style="-webkit-user-select: none; display: none;">
-                          <div class="search-input-clear-icon"></div>
-                        </div>
-                      </div>
-                      <div class="goog-inline-block advanced-search-button-container" id="advanced-search-button-container">
-                        <div class="goog-inline-block goog-flat-menu-button advanced-search-button" role="button" tabindex="0"
-                          aria-haspopup="true" data-tooltip="高级搜索选项" aria-label="高级搜索选项" style="-webkit-user-select: none;">
-                          <div class="goog-inline-block goog-flat-menu-button-caption"></div>
-                          <div class="goog-inline-block goog-flat-menu-button-dropdown">&nbsp;</div>
-                        </div>
+                    <div class="goog-inline-block advanced-search-button-container"
+                      id="advanced-search-button-container">
+                      <div class="goog-inline-block goog-flat-menu-button advanced-search-button"
+                        role="button" tabindex="0" aria-haspopup="true" data-tooltip="高级搜索选项"
+                        aria-label="高级搜索选项" style="-webkit-user-select: none;">
+                        <div class="goog-inline-block goog-flat-menu-button-caption"></div>
+                        <div class="goog-inline-block goog-flat-menu-button-dropdown">&nbsp;</div>
                       </div>
                     </div>
                   </div>
                 </div>
-              </fieldset>
-              <div id="gbqfbw">
-                <button id="gbqfb" aria-label="搜索" class="gbqfb">
-                  <span class="gbqfi"></span>
-                </button>
-              </div>            
+              </div>
+            </fieldset>
+            <div id="gbqfbw">
+              <button id="gbqfb" aria-label="搜索" class="gbqfb">
+                <span class="gbqfi"></span>
+              </button>
+            </div>
           </div>
         </div>
       </div>
@@ -114,34 +134,33 @@
           <span class="gbtcb"></span>
           <ol class="gbtc gbsr">
             <li class="gbt"></li>
-            <li class="gbt" guidedhelpid="gbacsw"><a class="gbgt gbg4p" id="gbg4" href="javaScript:void(0);" aria-haspopup=true
-              aria-owns="gbd4"> <span id="gbgs4d" style="text-align: left;"> <span id="gbgs4dn"
-                  style="max-width: 652px; text-align: left;">我的帐户</span> <span class="gbmai"></span> <span class="gbmab"></span> <span
-                  class="gbmac"></span>
+            <li class="gbt" guidedhelpid="gbacsw"><a class="gbgt gbg4p" id="gbg4"
+              href="javaScript:void(0);" aria-haspopup=true aria-owns="gbd4"> <span id="gbgs4d"
+                style="text-align: left;"> <span id="gbgs4dn"
+                  style="max-width: 652px; text-align: left;">我的帐户</span> <span class="gbmai"></span>
+                  <span class="gbmab"></span> <span class="gbmac"></span>
               </span>
             </a></li>
             <div class="gbm gbes gbm02" id="gbd4" aria-owner="gbg4" guidedhelpid="gbd4">
               <table>
                 <tr>
-                  <td>
-                      <a role="button" id="account" style="border-bottom:1px solid #e5e5e5" class="btn"><i class="icon-c"></i>帐户修改</a>
-                  </td>
+                  <td><a role="button" id="account" style="border-bottom: 1px solid #e5e5e5"
+                    class="btn"><i class="icon-c"></i>帐户修改</a></td>
                 </tr>
                 <tr>
-                  <td>
-                     <a role="button" id="cancel" href="" class="btn"> <i class="icon-o"></i>退出</a>
-                  </td>
+                  <td><a role="button" id="cancel" href="" class="btn"> <i class="icon-o"></i>退出
+                  </a></td>
                 </tr>
               </table>
             </div>
           </ol>
         </div>
-          <div id="gbdw"></div>
-        </div>
+        <div id="gbdw"></div>
       </div>
     </div>
-    <div id="gbx1"></div>
-    <div id="gbx3"></div>
+  </div>
+  <div id="gbx1"></div>
+  <div id="gbx3"></div>
   <div style="clear: both"></div>
   <div id="doclist">
     <div class="doclistappview" id="doclistappview">
@@ -149,13 +168,17 @@
         <table cellspacing="0" cellpadding="0" border="0">
           <tbody>
             <tr>
-              <td id="goog-splitpane-first-container" class="goog-splitpane-first-container navpane-resize-transition" valign="top"
-                style="-moz-box-sizing: border-box; width: 204px; height: 424px;background:#f5f5f5"><div id="navpane" class="navpane sc-navpane">
-                 <!--  <div class="product-logo density-normal density-tiny">
+              <td id="goog-splitpane-first-container"
+                class="goog-splitpane-first-container navpane-resize-transition" valign="top"
+                style="-moz-box-sizing: border-box; width: 204px; height: 424px; background: #f5f5f5"><div
+                  id="navpane" class="navpane sc-navpane">
+                  <!--  <div class="product-logo density-normal density-tiny">
                     <a class="gbqla" href="#">早教平台</a>
                   </div> -->
-                  <div id="contentcreationpane" class="contentcreationpane mini-imagelessbutton-container density-tiny"></div>
-                  <div id="navpane-container-scrollable" class="navpane-container-scrollable jfk-scrollbar jfk-scrollbar-borderless">
+                  <div id="contentcreationpane"
+                    class="contentcreationpane mini-imagelessbutton-container density-tiny"></div>
+                  <div id="navpane-container-scrollable"
+                    class="navpane-container-scrollable jfk-scrollbar jfk-scrollbar-borderless">
                     <div id="navfoldersview" class="nav-tree-folder-view">
                       <div class="goog-list density-normal">
                         <div id="navfolderslist"></div>
@@ -185,7 +208,8 @@
                     </div>
                   </div>
                 </div></td>
-              <td id="goog-splitpane-second-container" class="goog-splitpane-second-container navpane-resize-transition" valign="top"
+              <td id="goog-splitpane-second-container"
+                class="goog-splitpane-second-container navpane-resize-transition" valign="top"
                 style="-moz-box-sizing: border-box; width: 1280px; height: 313px;">
                 <div id="viewpane" class="viewpane">
                   <div id="viewpane-toolbar" class="viewpane-toolbar density-tiny">
@@ -200,18 +224,21 @@
                           <div class="previewpane-header">
                             <div class="previewpane-component">
                               <div class="previewpane-header-title">
-                               <span id="filename" class="previewpane-header-name goog-inline-block">需求整理</span>
+                                <span id="filename"
+                                  class="previewpane-header-name goog-inline-block">需求整理</span>
                               </div>
                             </div>
                           </div>
-                          <div class="previewpane-single-container jfk-scrollbar" style="height: 450px;">
+                          <div class="previewpane-single-container jfk-scrollbar"
+                            style="height: 450px;">
                             <div class="previewpane-single-contents">
                               <div class="previewpane-single-thumbnail">
                                 <div class="previewpane-component">
-                                  <div class="previewpane-header-thumbnail-container">                                    
-                                      <div class="previewpane-header-thumbnail-mask">
-                                        <img id="thumbnail" class="previewpane-header-thumbnail" style="max-height: 218px;">
-                                      </div>
+                                  <div class="previewpane-header-thumbnail-container">
+                                    <div class="previewpane-header-thumbnail-mask">
+                                      <img id="thumbnail" class="previewpane-header-thumbnail"
+                                        style="max-height: 218px;">
+                                    </div>
                                   </div>
                                 </div>
                               </div>
@@ -229,53 +256,61 @@
                               </div>
                               <div class="previewpane-subpanelmanager">
                                 <div class="previewpane-component">
-                                <div class="previewpane-component previewpane-subpanel">
-                                    <div class="previewpane-subpanel-header">
-                                      <span class="goog-inline-block previewpane-subpanel-title"><strong style="color: black;">标签</strong>（多个用“；”分开）</span>                                      
-                                    </div>
-                                    <div class="description-subpanel">
-                                      <div class="description-subpanel-view">
-                                        <div class="description-subpanel-contents description-subpanel-no-description">
-                                        <textarea id="tags" class="goog-textarea" style="width:200px; height: 36px;"></textarea>                                        
-                                        </div>
-                                      </div>
-                                    </div>
-                                  </div>                                  
                                   <div class="previewpane-component previewpane-subpanel">
                                     <div class="previewpane-subpanel-header">
-                                      <span class="goog-inline-block previewpane-subpanel-title"><strong style="color: black;">类型</strong></span>                                                                          
+                                      <span class="goog-inline-block previewpane-subpanel-title"><strong
+                                        style="color: black;">标签</strong>（多个用“；”分开）</span>
                                     </div>
                                     <div class="description-subpanel">
                                       <div class="description-subpanel-view">
-                                        <div class="description-subpanel-contents description-subpanel-no-description">                                          
-                                            <select id="typecombo" style="width: 210px;">
-                                            <option value ="">选择类型</option>
-                                                <option value ="application/x-shockwave-flash">动画</option>
-                                                <option value ="video/mpeg">视频</option>
-                                                <option value="audio/mp3">音频</option>
-                                                <option value="image/">图片</option>
-                                                <option value="text/plain">文本</option>
-                                                <option value="application/x-print">手偶</option>
-                                              </select>                                          
+                                        <div
+                                          class="description-subpanel-contents description-subpanel-no-description">
+                                          <textarea id="tags" class="goog-textarea"
+                                            style="width: 200px; height: 36px;"></textarea>
                                         </div>
                                       </div>
                                     </div>
                                   </div>
-                                    <div class="previewpane-component previewpane-subpanel">                                    
+                                  <div class="previewpane-component previewpane-subpanel">
+                                    <div class="previewpane-subpanel-header">
+                                      <span class="goog-inline-block previewpane-subpanel-title"><strong
+                                        style="color: black;">类型</strong></span>
+                                    </div>
                                     <div class="description-subpanel">
                                       <div class="description-subpanel-view">
-                                        <div class="description-subpanel-contents description-subpanel-no-description">
-                                             <div class="folders-subpanel-row">
-                                            <div id="update_info" class="goog-inline-block jfk-button jfk-button-primary goog-toolbar-item-new" role="button"
-                                              tabindex="0" style="-webkit-user-select: none;">
+                                        <div
+                                          class="description-subpanel-contents description-subpanel-no-description">
+                                          <select id="typecombo" style="width: 210px;">
+                                            <option value="">选择类型</option>
+                                            <option value="application/x-shockwave-flash">动画</option>
+                                            <option value="video/mpeg">视频</option>
+                                            <option value="audio/mp3">音频</option>
+                                            <option value="image/">图片</option>
+                                            <option value="text/plain">文本</option>
+                                            <option value="application/x-print">手偶</option>
+                                          </select>
+                                        </div>
+                                      </div>
+                                    </div>
+                                  </div>
+                                  <div class="previewpane-component previewpane-subpanel">
+                                    <div class="description-subpanel">
+                                      <div class="description-subpanel-view">
+                                        <div
+                                          class="description-subpanel-contents description-subpanel-no-description">
+                                          <div class="folders-subpanel-row">
+                                            <div id="update_info"
+                                              class="goog-inline-block jfk-button jfk-button-primary goog-toolbar-item-new"
+                                              role="button" tabindex="0"
+                                              style="-webkit-user-select: none;">
                                               <div class="goog-inline-block jfk-button-outer-box">
                                                 <div class="goog-inline-block jfk-button-inner-box">
                                                   <div class="goog-inline-block jfk-button-caption">确定</div>
                                                   <div class="goog-inline-block jfk-button-caption"></div>
                                                 </div>
                                               </div>
-                                            </div>                                            
-                                             </div>       
+                                            </div>
+                                          </div>
                                         </div>
                                       </div>
                                     </div>
@@ -287,8 +322,9 @@
                         </div>
                       </div>
                     </div>
-                    <div id="previewpane-closer" class="previewpane-closer search-input-clear goog-inline-block" 
-                      role="button" style="-webkit-user-select: none;">
+                    <div id="previewpane-closer"
+                      class="previewpane-closer search-input-clear goog-inline-block" role="button"
+                      style="-webkit-user-select: none;">
                       <div class="search-input-clear-icon doclist-small-light-x"></div>
                     </div>
                   </div>
@@ -310,7 +346,9 @@
         </table>
       </div>
       <!-- 上传信息系显示  start-->
-      <div class="doclistmole" style="right: 45px; left: auto; width: 493px; bottom: 0px; display: none;" dlrc="true" dlcmt="n">
+      <div class="doclistmole"
+        style="right: 45px; left: auto; width: 493px; bottom: 0px; display: none;" dlrc="true"
+        dlcmt="n">
         <div class="doclistmole-headercontainer">
           <div class="doclistmoleheader">
             ‎
@@ -321,8 +359,10 @@
               ‎<span class="goog-inline-block doclistmoleheader-title">文件上传</span>
             </div>
             <div class="doclistmoleheader-viewcontrols">
-             <!--  ‎<span class="goog-inline-block doclistmoleheader-icon doclistmoleheader-icon-minimize" actiontype="toggle-minimize"></span> -->
-              <span id="close_upload" class="goog-inline-block doclistmoleheader-icon doclistmoleheader-icon-close" actiontype="close"></span>
+              <!--  ‎<span class="goog-inline-block doclistmoleheader-icon doclistmoleheader-icon-minimize" actiontype="toggle-minimize"></span> -->
+              <span id="close_upload"
+                class="goog-inline-block doclistmoleheader-icon doclistmoleheader-icon-close"
+                actiontype="close"></span>
             </div>
           </div>
         </div>
@@ -357,17 +397,18 @@
                 <div class="upload-uploader-inner">
                   <div class="upload-uploader-file-list">
                     <table class="upload-uploader-table">
-                      <tbody>                        
+                      <tbody>
                       </tbody>
                     </table>
                   </div>
-                  <div class="upload-uploader-footer goog-control" style="-webkit-user-select: none;"></div>
+                  <div class="upload-uploader-footer goog-control"
+                    style="-webkit-user-select: none;"></div>
                 </div>
               </div>
             </div>
             <div class="uploadmole-quotainfo">
-              <span class="uploadmole-usage"></span><span class="uploadmole-purchase-link decorated-link"
-                tabindex="0"></span>
+              <span class="uploadmole-usage"></span><span
+                class="uploadmole-purchase-link decorated-link" tabindex="0"></span>
             </div>
           </div>
         </div>
@@ -385,8 +426,9 @@
         <div class="detroit-createmenu-entries-col">
           <div class="detroit-createmenuitem">
             <div class="detroit-createmenuitem-icon goog-inline-block">
-              <img class="detroit-createmenuitem-icon-image" src="good/images/icon_11_collection_email.png"
-                role="presentation" style="-webkit-user-select: none;">
+              <img class="detroit-createmenuitem-icon-image"
+                src="good/images/icon_11_collection_email.png" role="presentation"
+                style="-webkit-user-select: none;">
             </div>
             <div class="detroit-createmenuitem-name goog-inline-block">文件夹</div>
           </div>
@@ -467,10 +509,12 @@
     </div> -->
   </div>
 
-  <div id="leftsubmenu" class="goog-menu goog-menu-vertical detroit-contextmenu density-tiny" style="display: none;">
+  <div id="leftsubmenu" class="goog-menu goog-menu-vertical detroit-contextmenu density-tiny"
+    style="display: none;">
     <div class="goog-menuitem">
       <div class="goog-menuitem-content">
-        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span> <span class="goog-menuitem-container goog-inline-block"> <span
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span> <span
+          class="goog-menuitem-container goog-inline-block"> <span
           class="goog-menuitem-caption goog-inline-block">
             <div>打开</div>
         </span> <span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
@@ -479,20 +523,26 @@
     <div class="goog-menuseparator" role="separator"></div>
     <div class="goog-menuitem">
       <div class="goog-menuitem-content">
-        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span class="goog-menuitem-container goog-inline-block"><span
-          class="goog-menuitem-caption goog-inline-block"><div>新建文件夹...</div></span><span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span
+          class="goog-menuitem-container goog-inline-block"><span
+          class="goog-menuitem-caption goog-inline-block"><div>新建文件夹...</div></span><span
+          class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
       </div>
     </div>
     <div class="goog-menuitem">
       <div class="goog-menuitem-content">
-        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span class="goog-menuitem-container goog-inline-block"><span
-          class="goog-menuitem-caption goog-inline-block"><div>重命名...</div></span><span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span
+          class="goog-menuitem-container goog-inline-block"><span
+          class="goog-menuitem-caption goog-inline-block"><div>重命名...</div></span><span
+          class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
       </div>
     </div>
     <div class="goog-menuitem">
       <div class="goog-menuitem-content">
-        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span class="goog-menuitem-container goog-inline-block"><span
-          class="goog-menuitem-caption goog-inline-block"><div>详细信息</div></span><span class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
+        <span class="goog-menuitem-icon goog-inline-block">&nbsp;</span><span
+          class="goog-menuitem-container goog-inline-block"><span
+          class="goog-menuitem-caption goog-inline-block"><div>详细信息</div></span><span
+          class="goog-menuitem-subcaption goog-inline-block"><div></div></span></span>
       </div>
     </div>
     <div class="goog-menuseparator" role="separator"></div>
@@ -510,64 +560,73 @@
     <table>
       <tbody>
         <tr>
-          <td style="border-right:1px solid #E5E5E5">
+          <td style="border-right: 1px solid #E5E5E5">
             <div class="filter-selector-section">
               <div class="filter-menu">
                 <div class="goog-menu goog-menu-vertical">
                   <div class="filter-menu-label">
                     <div class="goog-menuitem-content tc">
-                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
+                      <span
+                        class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption">
                           <div>类型</div>
-                      </span><span class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption"><div></div></span></span>
+                      </span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption"><div></div></span></span>
                     </div>
                   </div>
                   <div class="select">
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>动画</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>视频</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>音频</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>图片</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content" style="-webkit-user-select: none;">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>文本</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>手偶</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>电子书</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
@@ -612,13 +671,14 @@
               </div>
             </div>
           </td>
-          <td style="border-right:1px solid #E5E5E5">
+          <td style="border-right: 1px solid #E5E5E5">
             <div class="filter-selector-section">
               <div class="filter-menu">
                 <div class="goog-menu goog-menu-vertical" role="menu" aria-haspopup="true">
                   <div class="filter-menu-label">
                     <div class="goog-menuitem-content tc">
-                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
+                      <span
+                        class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption"><div>领域</div></span><span
                         class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption"><div></div></span></span>
                     </div>
@@ -626,49 +686,56 @@
                   <div class="select">
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>语言</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>数学</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>科学</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content" style="-webkit-user-select: none;">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>社会</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content" style="-webkit-user-select: none;">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>健康</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content" style="-webkit-user-select: none;">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>艺术</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content" style="-webkit-user-select: none;">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>默认</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
@@ -731,36 +798,41 @@
               </div>
             </div>
           </td>
-          <td style="border-right:1px solid #E5E5E5">
+          <td style="border-right: 1px solid #E5E5E5">
             <div class="filter-selector-section">
               <div class="filter-menu">
                 <div class="goog-menu goog-menu-vertical">
                   <div class="filter-menu-label">
                     <div class="goog-menuitem-content tc">
-                      <span class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
+                      <span
+                        class="goog-menuitem-container goog-inline-block  filter-menu-label-container"><span
                         class="goog-menuitem-caption goog-inline-block  filter-menu-label-caption">
                           <div>年级</div>
-                      </span><span class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption"><div></div></span></span>
+                      </span><span
+                        class="goog-menuitem-subcaption goog-inline-block  filter-menu-label-subcaption"><div></div></span></span>
                     </div>
                   </div>
                   <div class="select">
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>小班</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>中班</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
                     </div>
                     <div class="goog-menuitem filter-menu-item">
                       <div class="goog-menuitem-content">
-                        <span class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
+                        <span
+                          class="goog-menuitem-container goog-inline-block  filter-menu-item-container"><span
                           class="goog-menuitem-caption goog-inline-block  filter-menu-item-caption"><div>大班</div></span><span
                           class="goog-menuitem-subcaption goog-inline-block  filter-menu-item-subcaption"><div></div></span></span>
                       </div>
@@ -774,72 +846,78 @@
       </tbody>
     </table>
   </div>
-<!-- 预览 -->
-  <div id="previewdiv" class="drive-viewer drive-viewer-focus-outlines-disabled" tabindex="0" style="opacity: 1; display: none;">
-    <div class="OVERLAY-DRIVE_VIEWER_SHADOW"></div>   
-    <div id="preview_close" class="drive-viewer-close-button goog-inline-block drive-viewer-button" aria-label="关闭" role="button" tabindex="0"
-      style="-webkit-user-select: none; right: 12px;">
+  <!-- 预览 -->
+  <div id="previewdiv" class="drive-viewer drive-viewer-focus-outlines-disabled" tabindex="0"
+    style="opacity: 1; display: none;">
+    <div class="OVERLAY-DRIVE_VIEWER_SHADOW"></div>
+    <div id="preview_close" class="drive-viewer-close-button goog-inline-block drive-viewer-button"
+      aria-label="关闭" role="button" tabindex="0" style="-webkit-user-select: none; right: 12px;">
       <div class="drive-viewer-nav-icon"></div>
     </div>
     <div class="drive-viewer-carousel" style="bottom: 67px;">
-      <div id="prev_button" class="drive-viewer-prev-button goog-inline-block drive-viewer-button" aria-label="上一项" role="button"
-        style="-webkit-user-select: none;" aria-disabled="false" tabindex="0">
+      <div id="prev_button" class="drive-viewer-prev-button goog-inline-block drive-viewer-button"
+        aria-label="上一项" role="button" style="-webkit-user-select: none;" aria-disabled="false"
+        tabindex="0">
         <div class="drive-viewer-nav-icon"></div>
       </div>
-      <div id="next_button" class="drive-viewer-next-button goog-inline-block drive-viewer-button" aria-label="下一项" role="button" tabindex="0"
-        style="-webkit-user-select: none; right: 12px;">
+      <div id="next_button" class="drive-viewer-next-button goog-inline-block drive-viewer-button"
+        aria-label="下一项" role="button" tabindex="0" style="-webkit-user-select: none; right: 12px;">
         <div class="drive-viewer-nav-icon"></div>
       </div>
-      <div id="unknown_div" class="drive-viewer-carousel-slide drive-viewer-close-enabled" style="display: none;">
+      <div id="unknown_div" class="drive-viewer-carousel-slide drive-viewer-close-enabled"
+        style="display: none;">
         <div class="drive-viewer-unknown" style="left: 630.5px; top: 155px;">
           <div class="drive-viewer-unknown-has-apps">
             <div class="drive-viewer-unknown-no-preview-msg">糟糕！无法预览。</div>
-            <div class="drive-viewer-unknown-no-preview-msg">请使用打开方式查看。</div>                        
+            <div class="drive-viewer-unknown-no-preview-msg">请使用打开方式查看。</div>
           </div>
         </div>
         <div class="drive-viewer-minibar" style=""></div>
       </div>
       <div class="drive-viewer-carousel-slide drive-viewer-close-enabled">
-        <div id="imgplayer" class="drive-viewer-microscope-overlay" style="right: 52px; overflow: hidden; direction: ltr; display: none;">          
+        <div id="imgplayer" class="drive-viewer-microscope-overlay"
+          style="right: 52px; overflow: hidden; direction: ltr; display: none;">
           <div style="margin: 20px 0px 0px 249px;">
-            <div id="print_div" class="m2-tileLayer" style="z-index: 0; width: 851px; height: 638px;">
+            <div id="print_div" class="m2-tileLayer"
+              style="z-index: 0; width: 851px; height: 638px;">
               <img id="imgpreview" class="m2-tileLayerImg m2-noTransition"
                 style="left: 0px; top: 0px; width: 851px; height: 638px;">
-            </div>            
-        </div>
+            </div>
+          </div>
         </div>
         <div id="flashplayer" class="drive-viewer-video drive-viewer-video-transition" tabindex="0"
           style="width: 540px; height: 360px; left: 430px; top: 83px;">
-            <div id="objectplay"></div>
-            <div id="control" >
-            <input id="PlayFlash" type="button" value="播放"/>
-            <input id="StopFlash" type="button" value="暂停"/>
-            <input id="RewindFlash" type="button" value="停止"/>
-            <input id="NextFrameFlash" type="button" value="下一帧"/>
-            <input id="ZoominFlash" type="button" value="放大"/>
-            <input id="ZoomoutFlash" type="button" value="缩小"/>
+          <div id="objectplay"></div>
+          <div id="control">
+            <input id="PlayFlash" type="button" value="播放" /> <input id="StopFlash" type="button"
+              value="暂停" /> <input id="RewindFlash" type="button" value="停止" /> <input
+              id="NextFrameFlash" type="button" value="下一帧" /> <input id="ZoominFlash" type="button"
+              value="放大" /> <input id="ZoomoutFlash" type="button" value="缩小" />
             <!-- <input type="button" value="发送数据" onclick="SendDataToFlashMovie()" />
             <input type="button" value="接收数据" onclick="ReceiveDataFromFlashMovie()" />
             <input type="text" id="data" />  -->
-            </div>            
+          </div>
         </div>
-        <div class="drive-viewer-minibar" id="view_print">         
-          <div id="print_button" class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button" aria-label="打印" tabindex="0">
+        <div class="drive-viewer-minibar" id="view_print">
+          <div id="print_button"
+            class="drive-viewer-print drive-viewer-dark-button goog-inline-block drive-viewer-button"
+            aria-label="打印" tabindex="0">
             <div class="drive-viewer-minibar-icon"></div>
           </div>
-        </div>   
+        </div>
       </div>
-    </div>   
-  </div>
-  <input type="file" id="file" multiple style="height: 0px; visibility: hidden; position: absolute; -webkit-user-select: none; width: 0px; font-size: inherit;">
-  <div class="footer">
-    <p>
-    北京科睿星数字科技有限公司<br />
-    Copyright © 2005 - 2013 Retech.All Rights Reserved.
-    </p>
-    <div>
-     <span class="retech-logo"></span>
     </div>
   </div>
+  <input type="file" id="file" multiple
+    style="height: 0px; visibility: hidden; position: absolute; -webkit-user-select: none; width: 0px; font-size: inherit;">
+  <div class="footer">
+    <p>
+      北京科睿星数字科技有限公司<br /> Copyright © 2005 - 2013 Retech.All Rights Reserved.
+    </p>
+    <div>
+      <span class="retech-logo"></span>
+    </div>
+  </div>
+  <script src="drive-compiled.js"></script>
 </body>
 </html>
