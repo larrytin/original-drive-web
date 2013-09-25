@@ -3,6 +3,7 @@ goog.provide('good.drive.nav.editpwd');
 
 goog.require('good.config');
 goog.require('good.drive.auth.cookit');
+goog.require('good.drive.auth.signup');
 goog.require('good.drive.nav.userinfo');
 goog.require('good.net.CrossDomainRpc');
 goog.require('goog.dom');
@@ -61,7 +62,11 @@ good.drive.nav.editpwd.start = function() {
                 window.location.assign('index.html' + '#userId=' +
                   + json['userId'] + '&access_token=' + json['token']);
              } else {
-                 window.location.assign('index.html');
+               good.drive.auth.cookit.delCookie('userId');
+               good.drive.auth.cookit.delCookie('access_token');
+               good.drive.auth.cookit.addCookie('userId', json['userId']);
+               good.drive.auth.cookit.addCookie('access_token', json['token']);
+               window.location.assign('index.html');
              }
            }
         });
@@ -76,12 +81,14 @@ good.drive.nav.editpwd.start = function() {
 
   var cancel = goog.dom.getElement('edit_cancel');
   goog.events.listen(cancel, goog.events.EventType.CLICK, function(e) {
-
-    var uri = new goog.Uri('index.html' + '#userId=' +
-        userId + '&access_token=' + access_token);
-
-    window.location.assign(uri.toString());
-
+    var str1 = new RegExp('http');
+    if (str1.test(window.location.toString()) != true) {
+      var uri = new goog.Uri('index.html' + '#userId=' +
+          userId + '&access_token=' + access_token);
+      window.location.assign(uri.toString());
+    } else {
+      window.location.assign('index.html');
+    }
     //    var rpc = new good.net.CrossDomainRpc('GET', good.config.ACCOUNT,
     //        good.config.VERSION, 'accountinfo/' + userId);
     //    rpc.send(function(json) {
