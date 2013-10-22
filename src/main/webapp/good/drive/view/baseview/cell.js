@@ -92,18 +92,43 @@ good.drive.view.baseview.Cell.prototype.clickImageHandle = function(e) {
  * 点击Cell后触发的事件
  */
 good.drive.view.baseview.Cell.prototype.openCell = function() {
+//  if (this.data instanceof good.realtime.CollaborativeMap) {
+//    if (this.data.get('isfile') != undefined) {
+//      if (this.checkImage != true) {
+//        good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
+//        this.buildPlayPath();
+//        return;
+//      } else {
+//        var preview = new good.drive.preview.Control();
+//        preview.getselcetItem();
+//        this.checkImage = false;
+//        return;
+//      }
+//    }
+//    var newPath = {};
+//    var path = good.drive.nav.folders.Path.getINSTANCE().path;
+//    var pathlist = path[good.drive.nav.folders.Path.NameType.CURRENTPATH];
+//    var docid = path[good.drive.nav.folders.Path.NameType.CURRENTDOCID];
+//    pathlist.push(this.data.getId());
+//    newPath[good.drive.nav.folders.Path.NameType.CURRENTPATH] = pathlist;
+//    newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
+//    good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
+//  } else {
+//    if (this.checkImage != true) {
+//      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
+//      this.buildPlayPath();
+//      return;
+//    } else {
+//      var preview = new good.drive.preview.Control();
+//      preview.getselcetItem();
+//      this.checkImage = false;
+//      return;
+//    }
+//  }
   if (this.data instanceof good.realtime.CollaborativeMap) {
     if (this.data.get('isfile') != undefined) {
-      if (this.checkImage != true) {
-        good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
-        this.buildPlayPath();
-        return;
-      } else {
-        var preview = new good.drive.preview.Control();
-        preview.getselcetItem();
-        this.checkImage = false;
-        return;
-      }
+      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.get('id'));
+      return;
     }
     var newPath = {};
     var path = good.drive.nav.folders.Path.getINSTANCE().path;
@@ -114,16 +139,7 @@ good.drive.view.baseview.Cell.prototype.openCell = function() {
     newPath[good.drive.nav.folders.Path.NameType.CURRENTDOCID] = docid;
     good.drive.nav.folders.Path.getINSTANCE().putNewPath(newPath);
   } else {
-    if (this.checkImage != true) {
-      good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
-      this.buildPlayPath();
-      return;
-    } else {
-      var preview = new good.drive.preview.Control();
-      preview.getselcetItem();
-      this.checkImage = false;
-      return;
-    }
+    good.drive.rightmenu.Rightmenu.PREVIEW(this.data.id);
   }
 };
 

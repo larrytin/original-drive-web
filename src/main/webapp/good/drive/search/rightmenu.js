@@ -85,19 +85,19 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
         that._menu.hideItem(that._rightMenu, array);
       } else {
         if (select > 1) {
-          array = new Array(4, 6, 7, 9);
+          array = new Array(0, 4, 6, 7, 9);
         } else {
-          array = new Array(4, 6, 7, 9);
+          array = new Array(0, 4, 6, 7, 9);
         }
         if (data.get('type') ==
           'application/x-print') {
           array.push(3);
          }
-        if (data.get('type') !=
-        'application/x-shockwave-flash' &&
-        data.get('type').indexOf('image/') == -1) {
-        array.push(0);
-       }
+//        if (data.get('type') !=
+//        'application/x-shockwave-flash' &&
+//        data.get('type').indexOf('image/') == -1) {
+//        array.push(0);
+//       }
         that._menu.hideItem(that._rightMenu, array);
       }
       break;
@@ -112,50 +112,50 @@ good.drive.search.Rightmenu.prototype.hideMenuItem = function() {
         that._menu.hideItem(that._rightMenu, array);
       } else {
         if (select > 1) {
-          array = new Array(5, 6, 7, 9);
+          array = new Array(0, 5, 6, 7, 9);
         } else {
-          array = new Array(5, 6, 7, 9);
+          array = new Array(0, 5, 6, 7, 9);
         }
         if (data.get('type') ==
         'application/x-print') {
          array.push(3);
        }
-       if (data.get('type') !=
-          'application/x-shockwave-flash' &&
-          data.get('type').indexOf('image/') == -1) {
-          array.push(0);
-         }
+//       if (data.get('type') !=
+//          'application/x-shockwave-flash' &&
+//          data.get('type').indexOf('image/') == -1) {
+//          array.push(0);
+//         }
         that._menu.hideItem(that._rightMenu, array);
       }
       break;
     case good.constants.PUBLICRESDOCID:
       if (good.drive.role.Role.USERNAME != good.constants.ADMIN) {
-        var array = new Array(7, 8, 9, 10);
+        var array = new Array(0, 7, 8, 9, 10);
         if (data.contentType ==
         'application/x-print') {
           array.push(3);
         }
-        if (data['contentType'] !=
-          'application/x-shockwave-flash' &&
-          data['contentType'].indexOf('image/') == -1 &&
-          data['contentType'] !=
-            'application/x-print') {
-          array.push(0);
-         }
+//        if (data['contentType'] !=
+//          'application/x-shockwave-flash' &&
+//          data['contentType'].indexOf('image/') == -1 &&
+//          data['contentType'] !=
+//            'application/x-print') {
+//          array.push(0);
+//         }
         that._menu.hideItem(that._rightMenu, array);
       } else {
-        var array = new Array(7, 10);
+        var array = new Array(0, 7, 10);
         if (data['contentType'] ==
         'application/x-print') {
         array.push(3);
        }
-       if (data['contentType'] !=
-          'application/x-shockwave-flash' &&
-          data['contentType'].indexOf('image/') == -1 &&
-          data['contentType'] !=
-            'application/x-print') {
-          array.push(0);
-        }
+//       if (data['contentType'] !=
+//          'application/x-shockwave-flash' &&
+//          data['contentType'].indexOf('image/') == -1 &&
+//          data['contentType'] !=
+//            'application/x-print') {
+//          array.push(0);
+//        }
         that._menu.hideItem(that._rightMenu, array);
       }
       break;
@@ -183,14 +183,14 @@ good.drive.search.Rightmenu.prototype.onSelectedHandle = function(items) {
     var preview = new good.drive.preview.Control();
     var action = e.target.getCaption();
     switch (action) {
-      case '预览':
-        /*if (data instanceof good.realtime.CollaborativeMap) {
-          rightmenusource.preview2(data.get('id'));
-        } else {
-          rightmenusource.preview2(data.id);
-        }*/
-        preview.getselcetItem();
-        break;
+//      case '预览':
+//        if (data instanceof good.realtime.CollaborativeMap) {
+//          rightmenusource.preview2(data.get('id'));
+//        } else {
+//          rightmenusource.preview2(data.id);
+//        }
+//        preview.getselcetItem();
+//        break;
       case '详细信息':
         if (data instanceof good.realtime.CollaborativeMap) {
           rightmenusource.detailInfo(data.get('id'), function() {

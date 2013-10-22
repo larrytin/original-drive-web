@@ -25,7 +25,7 @@ goog.addDependency('../../../../good/drive/nav/button/toolbarbutton.js', ['good.
 goog.addDependency('../../../../good/drive/nav/button/toolbarview.js', ['good.drive.nav.button.ToolBarView'], ['good.drive.nav.button', 'good.drive.nav.button.Renderer', 'goog.dom']);
 goog.addDependency('../../../../good/drive/nav/button/view.js', ['good.drive.nav.button'], ['good.drive.nav.button.Renderer', 'goog.dom', 'goog.ui.CustomButton']);
 goog.addDependency('../../../../good/drive/nav/dialog/view.js', ['good.drive.nav.dialog'], ['goog.dom', 'goog.string.StringBuffer', 'goog.ui.Dialog']);
-goog.addDependency('../../../../good/drive/nav/editpwd/editpwd.js', ['good.drive.nav.editpwd'], ['good.config', 'good.drive.auth.cookit', 'good.drive.nav.userinfo', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
+goog.addDependency('../../../../good/drive/nav/editpwd/editpwd.js', ['good.drive.nav.editpwd'], ['good.config', 'good.drive.auth.cookit', 'good.drive.auth.signup', 'good.drive.nav.userinfo', 'good.net.CrossDomainRpc', 'goog.dom', 'goog.events']);
 goog.addDependency('../../../../good/drive/nav/folders/abstractcontrol.js', ['good.drive.nav.folders.AbstractControl'], ['good.drive.nav.folders.Model']);
 goog.addDependency('../../../../good/drive/nav/folders/model.js', ['good.drive.nav.folders.Model'], []);
 goog.addDependency('../../../../good/drive/nav/folders/myclassviewcontrol.js', ['good.drive.nav.folders.MyClassViewControl'], ['good.drive.nav.folders.ViewControl']);
