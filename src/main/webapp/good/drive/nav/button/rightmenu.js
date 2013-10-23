@@ -64,29 +64,29 @@ good.drive.nav.button.rigthmenu.prototype.hideMenuItem = function(e) {
       that._menu.hideItem(that._rightMenu, array);
     } else {
       if (select > 1) {
-        array = new Array(3, 6, 5);
+        array = new Array(1, 3, 6, 5);
       } else {
-        array = new Array(3, 6);
+        array = new Array(1, 3, 6);
       }
       if (data.get('type') == 'application/x-print') {
         array.push(3);
       }
-      if (data.get('type') != 'application/x-shockwave-flash' &&
-          data.get('type').indexOf('image/') == -1) {
-        array.push(1);
-      }
+//      if (data.get('type') != 'application/x-shockwave-flash' &&
+//          data.get('type').indexOf('image/') == -1) {
+//        array.push(1);
+//      }
       that._menu.hideItem(that._rightMenu, array);
     }
     break;
   case good.constants.PUBLICRESDOCID:
-    array = new Array(3, 6, 7, 8);
+    array = new Array(1, 3, 6, 7, 8);
     if (data.contentType == 'application/x-print') {
       array.push(3);
     }
-    if (data['contentType'] != 'application/x-shockwave-flash' &&
-        data['contentType'].indexOf('image/') == -1) {
-      array.push(1);
-    }
+//    if (data['contentType'] != 'application/x-shockwave-flash' &&
+//        data['contentType'].indexOf('image/') == -1) {
+//      array.push(1);
+//    }
     that._menu.hideItem(that._rightMenu, array);
     break;
   case good.constants.OTHERDOCID:
@@ -115,13 +115,13 @@ good.drive.nav.button.rigthmenu.prototype.onSelectedHandle = function(e) {
   var rightmenusource = new good.drive.rightmenu.Rightmenu();
   var action = e.target.getCaption();
   switch (action) {
-  case '预览':
-    if (data instanceof good.realtime.CollaborativeMap) {
-      rightmenusource.preview2(data.get('id'));
-    } else {
-      rightmenusource.preview2(data.id);
-    }
-    break;
+//  case '预览':
+//    if (data instanceof good.realtime.CollaborativeMap) {
+//      rightmenusource.preview2(data.get('id'));
+//    } else {
+//      rightmenusource.preview2(data.id);
+//    }
+//    break;
   case '详细信息':
     switch (docId) {
       case good.constants.OTHERDOCID:
