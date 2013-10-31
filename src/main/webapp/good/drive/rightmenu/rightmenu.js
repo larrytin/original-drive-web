@@ -157,9 +157,9 @@ good.drive.rightmenu.Rightmenu.prototype.detailInfo = function(fileId, fn) {
       var tags = json['tags'];
       var tagdata = '';
       goog.array.forEach(tags, function(item) {
-        tagdata += item + ',';
+        tagdata += item + ';';
       });
-      tags_text.value = tagdata.substr(0, tagdata.lastIndexOf(','));
+      tags_text.value = tagdata.substr(0, tagdata.lastIndexOf(';'));
       if (json['contentType'] != undefined &&
           json['contentType'].indexOf('image/') != -1) {
         typecombo.value = 'image/';
