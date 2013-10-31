@@ -60,7 +60,7 @@ good.constants.GRADEARRAY = new Array('大班', '中班', '小班');
 
 /** @type {JSON} */
 good.constants.TYPE = {'动画': 'application/x-shockwave-flash',
-    '视频': 'video/mpeg',
+    '视频': 'video/mp4',
     '音频': 'audio/mp3',
     '图片': 'image/',
     '文本': 'text/plain',
@@ -69,7 +69,7 @@ good.constants.TYPE = {'动画': 'application/x-shockwave-flash',
 
 /** @type {JSON} */
 good.constants.REVERSETYPE = {'application/x-shockwave-flash': '动画',
-    'video/mpeg': '视频',
+    'video/mp4': '视频',
     'audio/mp3': '音频',
     'image/': '图片',
     'text/plain': '文本',
